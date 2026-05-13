@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Theater Design — Tym | SmartHome Brothers</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --max-width: 1180px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 13, 16, 0.85);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  /* HERO */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-trust {
+    margin-top: 50px;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .trust-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    color: var(--text-soft);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .trust-row span::before { content: "✓ "; color: var(--accent); margin-right: 4px; }
+
+  /* PRESS STRIP */
+  .press {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .press-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .press-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .press-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+  .press-logo.thx {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* SECTION BASE */
+  .section { padding: 90px 0; border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* PROBLEM */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .problem-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .problem-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 22px;
+  }
+  .problem-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .problem-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* DELIVERABLES SHOWCASE */
+  .deliverables {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  @media (max-width: 800px) { .deliverables { grid-template-columns: 1fr; gap: 32px; } }
+  .deliverables-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.1), rgba(11, 13, 16, 0.5)),
+      #1c2128;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 16px;
+  }
+  .deliverables-list {
+    list-style: none;
+  }
+  .deliverables-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .deliverables-list li:last-child { border-bottom: none; }
+  .del-icon {
+    background: var(--accent-soft);
+    color: var(--accent);
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .del-text h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .del-text p {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #1d1812 0%, var(--bg-card) 35%);
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px -20px rgba(245, 165, 36, 0.25);
+  }
+  @media (max-width: 900px) { .price-card.featured { transform: none; } }
+  .badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #1a1207;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tier-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .tier-tag {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+    min-height: 42px;
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .price .amount {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .price .currency {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .price-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .feature-list {
+    list-style: none;
+    margin-bottom: 32px;
+    flex-grow: 1;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-list li.bonus { color: var(--text); font-weight: 500; }
+  .feature-list li.bonus::before { content: "★"; }
+
+  /* DESIGN-CREDIT CALLOUT */
+  .credit-callout {
+    margin-top: 50px;
+    background: linear-gradient(135deg, rgba(245, 165, 36, 0.08), rgba(245, 165, 36, 0.02));
+    border: 1px solid var(--accent-soft);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .credit-callout { flex-direction: column; text-align: center; } }
+  .credit-icon {
+    width: 56px; height: 56px;
+    background: var(--accent);
+    color: #1a1207;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .credit-callout h3 { font-size: 19px; margin-bottom: 4px; }
+  .credit-callout p { color: var(--text-muted); font-size: 15px; }
+
+  /* WHOLE-HOME UPSELL */
+  .whole-home {
+    margin-top: 22px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .whole-home strong { color: var(--text); }
+  .whole-home p { color: var(--text-muted); font-size: 15px; margin: 0; }
+
+  /* CASE STUDY */
+  .case-study {
+    background: linear-gradient(135deg, #14181d 0%, #1c2128 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  @media (max-width: 800px) { .case-study { grid-template-columns: 1fr; } }
+  .case-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.15), rgba(11, 13, 16, 0.6)),
+      #2a3340;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 800px) { .case-img { border-right: none; border-bottom: 1px solid var(--border); } }
+  .case-body { padding: 50px 44px; }
+  .case-location {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .case-body h3 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .case-body p {
+    color: var(--text-soft);
+    font-size: 16px;
+    margin-bottom: 22px;
+  }
+  .case-quote {
+    border-left: 3px solid var(--accent);
+    padding: 12px 0 12px 18px;
+    color: var(--text);
+    font-style: italic;
+    font-size: 16px;
+  }
+  .case-quote .author {
+    display: block;
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  /* COMPARISON */
+  .compare-table {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .compare-table table { width: 100%; border-collapse: collapse; }
+  .compare-table th, .compare-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .compare-table th {
+    background: #1c2128;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .compare-table th:not(:first-child),
+  .compare-table td:not(:first-child) { text-align: center; }
+  .compare-table td:first-child { color: var(--text-soft); }
+  .compare-table .check { color: var(--accent); font-weight: 700; font-size: 18px; }
+  .compare-table .dash { color: #4a5563; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 0 24px;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 30px; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 80px;
+  }
+  footer .wrap > div { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/design-service">Design Service</a>
+      <a href="#deliverables">What You Get</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing" class="btn">Design My Theater</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HOME THEATER DESIGN</div>
+    <h1>Design your theater <span class="accent">before</span> you frame the walls.</h1>
+    <p class="hero-sub">Sight lines, Atmos speaker positions, screen sizing, seating, and an itemized equipment quote — built to your room, by THX-certified integrators. From $497.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-lg">See the Plans</a>
+      <a href="#deliverables" class="btn btn-secondary btn-lg">What You Get</a>
+    </div>
+    <div class="hero-trust">
+      Built by THX-certified designers
+      <div class="trust-row">
+        <span>True Atmos position calculations</span>
+        <span>Sight line + screen size analysis</span>
+        <span>Equipment + seating quote included</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS STRIP -->
+<section class="press">
+  <div class="wrap">
+    <div class="press-label">As Seen In · Certified By</div>
+    <div class="press-row">
+      <div class="press-logo thx">THX CERTIFIED</div>
+      <div class="press-logo">KSL TV</div>
+      <div class="press-logo">CE Pro</div>
+      <div class="press-logo">Residential Tech Today</div>
+      <div class="press-logo">Stereophile</div>
+      <div class="press-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Why Most Home Theaters Disappoint</div>
+      <h2>You'll watch one bad movie in there and never sit down again.</h2>
+      <p class="section-sub">Most home theaters fail in the same three ways. All three are decided before the first stud goes up.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">📺</div>
+        <h3>The screen is wrong for the room</h3>
+        <p>A 110" screen in a room that demands 135". A 4K projector throwing onto a wall that can't handle the brightness. A seating row at the wrong distance for the panel size. All math, all preventable.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔊</div>
+        <h3>Atmos speakers in fake positions</h3>
+        <p>Heights pointed at the wrong seat. Surrounds at the wrong elevation. A subwoofer in the corner because that's where the cable was. Atmos is unforgiving — and most installs get the geometry wrong.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💺</div>
+        <h3>Seating you'll regret</h3>
+        <p>Sight lines blocked by the row in front. Recline depth that puts row two into the back wall. A second row riser that wasn't planned at framing. Fixable for $200 if you catch it now. $20,000 if you don't.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section" id="deliverables">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What You Get</div>
+      <h2>A real, dimensioned design — not a Pinterest board.</h2>
+      <p class="section-sub">Documents you can hand to your builder, electrician, and AV installer on day one.</p>
+    </div>
+
+    <div class="deliverables">
+      <div class="deliverables-img">[Sample theater design — sight lines, Atmos positions, seating layout]</div>
+      <ul class="deliverables-list">
+        <li>
+          <div class="del-icon">1</div>
+          <div class="del-text">
+            <h4>Dimensioned room layout</h4>
+            <p>Top-down plan with seating rows, screen wall, projector throw, and equipment locations.</p>
+          </div>
+        </li>
+        <li>
+          <div class="del-icon">2</div>
+          <div class="del-text">
+            <h4>Atmos speaker position diagram</h4>
+            <p>Every speaker placement calculated for your room height, length, and seating configuration.</p>
+          </div>
+        </li>
+        <li>
+          <div class="del-icon">3</div>
+          <div class="del-text">
+            <h4>Sight line + screen size analysis</h4>
+            <p>Exact screen size and seating distance, so every seat sees the picture the way it's meant to be seen.</p>
+          </div>
+        </li>
+        <li>
+          <div class="del-icon">4</div>
+          <div class="del-text">
+            <h4>Itemized equipment quote</h4>
+            <p>Speakers, processor, projector, screen, seating, and cabling — sized to your room and budget.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-bottom: 60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Pick Your Plan</div>
+      <h2>Three depths of theater design.</h2>
+      <p class="section-sub">Most clients pick Theater + Strategy — the visualization, the equipment quote, and an hour with us to make sure the whole thing actually works.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- TIER 1 -->
+      <div class="price-card">
+        <div class="tier-name">Theater Visualization</div>
+        <div class="tier-tag">For builders, designers, and homeowners who already know what equipment they want.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">497</span>
+        </div>
+        <div class="price-note">One-time · 7–10 day delivery</div>
+        <ul class="feature-list">
+          <li>Dimensioned room layout</li>
+          <li>Atmos speaker position diagram</li>
+          <li>Sight line + screen size analysis</li>
+          <li>Seating arrangement + riser geometry</li>
+          <li>PDF deliverables you own forever</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-block btn-lg">Start Visualization</a>
+      </div>
+
+      <!-- TIER 2 - FEATURED -->
+      <div class="price-card featured">
+        <div class="badge">MOST POPULAR</div>
+        <div class="tier-name">Theater + Strategy</div>
+        <div class="tier-tag">Visualization + the equipment quote and a real conversation about getting it right.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">997</span>
+        </div>
+        <div class="price-note">One-time · 7–10 day delivery</div>
+        <ul class="feature-list">
+          <li>Everything in Visualization</li>
+          <li class="bonus">Itemized equipment quote (speakers, projector, screen, seating)</li>
+          <li class="bonus">Brand recommendations sized to your budget</li>
+          <li class="bonus">Acoustic treatment recommendations</li>
+          <li class="bonus">60-min strategy call with Greg or Matt</li>
+          <li>Email Q&amp;A for 14 days after delivery</li>
+        </ul>
+        <a href="#" class="btn btn-block btn-lg">Start Theater + Strategy</a>
+      </div>
+
+      <!-- TIER 3 -->
+      <div class="price-card">
+        <div class="tier-name">Theater Build Plan</div>
+        <div class="tier-tag">For dedicated builds and renovations where the theater room is being framed from scratch.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">1,497</span>
+        </div>
+        <div class="price-note">One-time · 14 day delivery</div>
+        <ul class="feature-list">
+          <li>Everything in Theater + Strategy</li>
+          <li class="bonus">Builder/contractor handoff notes (framing, soffit, electrical)</li>
+          <li class="bonus">HVAC + acoustic isolation recommendations</li>
+          <li class="bonus">Riser construction details</li>
+          <li class="bonus">Two strategy calls — design review + pre-install</li>
+          <li class="bonus">30 days of "ask anything" support during build</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-block btn-lg">Start Build Plan</a>
+      </div>
+
+    </div>
+
+    <!-- DESIGN CREDIT -->
+    <div class="credit-callout">
+      <div class="credit-icon">↻</div>
+      <div>
+        <h3>Your design fee credits 100% toward equipment.</h3>
+        <p>If you order any of the gear in your quote through us within 60 days (over $5,000), we credit your full design fee back. The design pays for itself the moment you start the build.</p>
+      </div>
+    </div>
+
+    <!-- WHOLE HOME UPSELL -->
+    <div class="whole-home">
+      <div>
+        <strong>Building or renovating a whole home with a theater inside?</strong>
+        <p>Our Whole-Home Plan ($1,997) bundles a complete smart home design + dedicated theater design in one — usually the better value.</p>
+      </div>
+      <a href="/design-service#pricing" class="btn btn-secondary">See Whole-Home Plan</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Real Project</div>
+      <h2>The hidden home theater inside a Lutron-controlled luxury build.</h2>
+    </div>
+    <div class="case-study">
+      <div class="case-img">[Boca Raton hidden home theater photo]</div>
+      <div class="case-body">
+        <div class="case-location">Boca Raton, Florida</div>
+        <h3>A motorized, hidden theater inside a USAI-lit, Savant-controlled custom home.</h3>
+        <p>Started as a simple system quote. Once our client fell in love with the lighting design, we hired on to coordinate with his builder, designer, and electricians. The theater itself disappears into the architecture — JBL audio, motorized shades, projection screen on a Cisco/Ruckus network, all controlled by Savant.</p>
+        <div class="case-quote">
+          "The thing about the Tym guys, they actually care, and I know I can trust them."
+          <span class="author">— Boca Raton client</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Side by Side</div>
+      <h2>What's in each plan</h2>
+    </div>
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Deliverable</th>
+            <th>Visualization<br><span style="color: var(--text-muted); font-weight: 400; font-size: 13px;">$497</span></th>
+            <th>Theater + Strategy<br><span style="color: var(--accent); font-weight: 600; font-size: 13px;">$997</span></th>
+            <th>Build Plan<br><span style="color: var(--text-muted); font-weight: 400; font-size: 13px;">$1,497</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dimensioned room layout</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Atmos speaker position diagram</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Sight line + screen sizing</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Seating + riser geometry</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Itemized equipment quote</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Brand recommendations</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Acoustic treatment recs</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>60-min strategy call</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓ ×2</td></tr>
+          <tr><td>Builder/contractor handoff notes</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>HVAC + isolation recommendations</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>Email Q&amp;A after delivery</td><td class="dash">—</td><td>14 days</td><td>30 days</td></tr>
+          <tr><td>Design fee credits toward gear</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">My room is awkward — odd shape, low ceiling, or it's a basement. Will this still work?</div>
+        <div class="faq-a">Yes. Most rooms we design for aren't perfect cubes. Awkward dimensions are exactly where a real design earns its money — speaker positions and sight lines that compensate for the constraints, not pretend they don't exist.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I have to use Atmos? What about a simpler 5.1 or 7.1 setup?</div>
+        <div class="faq-a">No, we design for whatever configuration fits your goals and budget. Atmos is great when the room and budget support it. We'll be honest about whether your room is worth the extra speakers.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">I want a media room, not a dedicated theater — does this still apply?</div>
+        <div class="faq-a">Yes. Half of what we design is multi-use media rooms — TV during the day, theater at night. We'll tell you what compromises that costs you and design for the priority you want.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I'm building a whole home with a theater inside it?</div>
+        <div class="faq-a">Our <a href="/design-service#pricing" style="color: var(--accent); text-decoration: none;">Whole-Home Plan ($1,997)</a> includes both a complete smart home design and a dedicated theater design — usually the better value if both apply.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How long does it take?</div>
+        <div class="faq-a">7–10 business days for Visualization and Theater + Strategy. 14 days for Build Plan. Rush available — message us.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I'm not happy with the design?</div>
+        <div class="faq-a">We revise it. The design isn't done until you're confident handing it to your builder. If we genuinely can't get there together, we'll refund the design fee.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding: 60px 0;">
+  <div class="final-cta">
+    <h2>Design the theater before you frame the walls.</h2>
+    <p>Most clients start with Theater + Strategy. Five minutes to start, 7–10 days to deliver, and the design fee credits back the moment you order equipment.</p>
+    <a href="#pricing" class="btn btn-lg">Design My Theater</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · design@tymhomes.com · 1-855-743-3168</div>
+    <div>Smart Home Design Done Right. THX Certified.</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealer Design Service — Tym | For Integrators &amp; Installers</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --max-width: 1180px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 13, 16, 0.85);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  /* HERO */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-trust {
+    margin-top: 50px;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .trust-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    color: var(--text-soft);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .trust-row span::before { content: "✓ "; color: var(--accent); margin-right: 4px; }
+
+  /* PRESS STRIP */
+  .press {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .press-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .press-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .press-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+
+  /* SECTION */
+  .section { padding: 90px 0; border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* PROBLEM */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .problem-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .problem-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 22px;
+  }
+  .problem-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .problem-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* HOW IT WORKS */
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  @media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
+  .how-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+  }
+  .how-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .how-num {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    color: #1a1207;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .how-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .how-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .how-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 22px;
+    align-items: stretch;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr; max-width: 480px; } }
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #1d1812 0%, var(--bg-card) 35%);
+    box-shadow: 0 20px 50px -20px rgba(245, 165, 36, 0.25);
+  }
+  .badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #1a1207;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tier-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .tier-tag {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+    min-height: 42px;
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .price .amount {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .price .currency {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .price .per {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .price-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .feature-list {
+    list-style: none;
+    margin-bottom: 32px;
+    flex-grow: 1;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-list li.bonus { color: var(--text); font-weight: 500; }
+  .feature-list li.bonus::before { content: "★"; }
+
+  /* PROGRAMMING ADDON */
+  .addon-band {
+    margin-top: 30px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px 32px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .addon-band { grid-template-columns: 1fr; text-align: center; } }
+  .addon-icon {
+    width: 56px; height: 56px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  @media (max-width: 700px) { .addon-icon { margin: 0 auto; } }
+  .addon-band h3 { font-size: 19px; margin-bottom: 4px; }
+  .addon-band p { color: var(--text-muted); font-size: 15px; }
+  .addon-band .price-tag {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  /* CASE STUDY / TESTIMONIAL */
+  .testimonial {
+    background: linear-gradient(135deg, #14181d 0%, #1c2128 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 60px 50px;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .testimonial { padding: 40px 30px; } }
+  .testimonial .quote {
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 26px;
+    color: var(--text);
+  }
+  .testimonial .quote::before { content: "\201C"; color: var(--accent); font-size: 1.2em; }
+  .testimonial .quote::after { content: "\201D"; color: var(--accent); font-size: 1.2em; }
+  .testimonial .author {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* DELIVERABLES */
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .deliverables-grid { grid-template-columns: 1fr; } }
+  .del-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 30px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .del-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .del-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .del-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* WHO IT'S FOR */
+  .who-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .who-item {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    color: var(--text-soft);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .who-item::before { content: "✓ "; color: var(--accent); margin-right: 6px; font-weight: 700; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 0 24px;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 30px; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 80px;
+  }
+  footer .wrap > div { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/design-service">Design Service</a>
+      <a href="/theater">Theater</a>
+      <a href="/club">Club</a>
+      <a href="#pricing">Dealer Pricing</a>
+      <a href="#contact" class="btn">Become a Dealer Partner</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">DEALER DESIGN SERVICE · FOR INTEGRATORS</div>
+    <h1>Close more bids without <span class="accent">hiring a designer.</span></h1>
+    <p class="hero-sub">Outsource your designs, prewire specs, and quotes to the SmartHome Brothers. White-label or branded. Built for integrators, low-voltage installers, lighting dealers, and builders who run their own AV.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-lg">See Dealer Pricing</a>
+      <a href="#contact" class="btn btn-secondary btn-lg">Start a Project</a>
+    </div>
+    <div class="hero-trust">
+      The inside-sales team you've never had to hire
+      <div class="trust-row">
+        <span>3–5 day turnaround on most projects</span>
+        <span>White-label or branded — your call</span>
+        <span>Programming support available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS STRIP -->
+<section class="press">
+  <div class="wrap">
+    <div class="press-label">As Seen In</div>
+    <div class="press-row">
+      <div class="press-logo">KSL TV</div>
+      <div class="press-logo">Residential Tech Today</div>
+      <div class="press-logo">Technology Integrator</div>
+      <div class="press-logo">Stereophile</div>
+      <div class="press-logo">CE Pro</div>
+      <div class="press-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Why Dealers Lose Bids</div>
+      <h2>It's almost never about the price.</h2>
+      <p class="section-sub">It's almost always about the speed and quality of the bid itself. Most one-shop integrators can't keep up with the design pace the market demands.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <h3>The bid takes too long</h3>
+        <p>By the time you've laid out the system, run the numbers, and built the proposal, the homeowner has talked to two other dealers. Speed wins more bids than price does.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🧩</div>
+        <h3>New categories you don't bid often</h3>
+        <p>Panelized lighting. Acoustic theater. Network design at scale. The categories you don't quote weekly are the ones that take twice as long and look half as polished when you do.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔌</div>
+        <h3>Programming is the real bottleneck</h3>
+        <p>Install is fast. Programming is what kills the schedule. One integrator does the install in a week, then spends three weeks finishing the programming on a Crestron or Control4 system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">How It Works</div>
+      <h2>Three steps. 3–5 business days.</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-step">
+          <div class="how-num">1</div>
+          <div class="how-label">SUBMIT</div>
+        </div>
+        <h3>Send us the project</h3>
+        <p>Floor plan, scope, budget range, and your preferred brands. PDF, images, even a phone call — whatever you've got.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">
+          <div class="how-num">2</div>
+          <div class="how-label">DESIGN</div>
+        </div>
+        <h3>We design and quote</h3>
+        <p>Floor plan with tech locations, prewire spec, itemized system quote — all delivered in 3–5 business days. Branded with your logo if you want.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">
+          <div class="how-num">3</div>
+          <div class="how-label">CLOSE</div>
+        </div>
+        <h3>You take it to the client</h3>
+        <p>You present the design like it's yours, close the bid, and we're done. Or hire us for programming when it's time to install.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="section">
+  <div class="wrap">
+    <div class="testimonial">
+      <div class="quote">The time savings was ridiculous! The time it would have taken me to do the research and lay it all out is too much. It's a great price, and I highly recommend the Tym team!</div>
+      <div class="author">— Aussie K Lighting</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-bottom: 60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Dealer Pricing</div>
+      <h2>Per-project, or partner with us monthly.</h2>
+      <p class="section-sub">Most dealers start per-project to test the workflow, then move to monthly once it's part of how they bid.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- PER-PROJECT -->
+      <div class="price-card">
+        <div class="tier-name">Per-Project</div>
+        <div class="tier-tag">For dealers testing the workflow or running occasional bigger jobs.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">797</span>
+          <span class="per">/ project</span>
+        </div>
+        <div class="price-note">Flat fee · 3–5 business day turnaround</div>
+        <ul class="feature-list">
+          <li>Annotated floor plan with tech locations</li>
+          <li>Custom prewire spec by room</li>
+          <li>Itemized system quote (your distributors)</li>
+          <li>Brand-agnostic or to your spec</li>
+          <li>White-label or co-branded delivery</li>
+          <li>One revision included</li>
+        </ul>
+        <a href="#contact" class="btn btn-secondary btn-block btn-lg">Submit a Project</a>
+      </div>
+
+      <!-- MONTHLY PARTNER - FEATURED -->
+      <div class="price-card featured">
+        <div class="badge">★ DEALER PARTNER</div>
+        <div class="tier-name">Monthly Partner</div>
+        <div class="tier-tag">For active integrators bidding multiple projects per month.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">1,997</span>
+          <span class="per">/ month</span>
+        </div>
+        <div class="price-note">5 projects/mo included · additional at $397 each</div>
+        <ul class="feature-list">
+          <li>5 designs per month included (~$400/each)</li>
+          <li class="bonus">Priority queue — 48-hour turnaround</li>
+          <li class="bonus">Branded deliverables in your template</li>
+          <li class="bonus">Dedicated point of contact</li>
+          <li class="bonus">2 hours of programming support included</li>
+          <li class="bonus">Quarterly bid-review call with Matt or Greg</li>
+          <li>Cancel any time, no annual commitment</li>
+        </ul>
+        <a href="#contact" class="btn btn-block btn-lg">Apply for Partnership</a>
+      </div>
+
+    </div>
+
+    <!-- PROGRAMMING ADD-ON -->
+    <div class="addon-band">
+      <div class="addon-icon">⚙️</div>
+      <div>
+        <h3>Programming Support — when install is the bottleneck.</h3>
+        <p>Crestron, Control4, Savant, Lutron, and Josh.ai programming. Remote, hourly, billed weekly. Free up your team to install while we close out the system config.</p>
+      </div>
+      <div class="price-tag">$197/hr</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What You Get Per Project</div>
+      <h2>The same docs your sales team would build — except you didn't build them.</h2>
+    </div>
+    <div class="deliverables-grid">
+      <div class="del-card">
+        <div class="del-icon">1</div>
+        <div>
+          <h3>Annotated floor plan (PDF)</h3>
+          <p>Tech locations marked clearly: TVs, speakers, displays, network drops, cameras, control panels.</p>
+        </div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">2</div>
+        <div>
+          <h3>Custom prewire spec</h3>
+          <p>Room-by-room spreadsheet with wire type, gauge, run counts. Hand it straight to your sub or low-voltage crew.</p>
+        </div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">3</div>
+        <div>
+          <h3>Itemized system quote</h3>
+          <p>Bill of materials in the brands you carry (or platform-agnostic). Easy to import into D-Tools, OneVision, or whatever you use.</p>
+        </div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">4</div>
+        <div>
+          <h3>Branded or white-labeled</h3>
+          <p>Delivered with your logo and contact info — your client never knows we touched it. Or co-branded if you'd rather lean on the SmartHome Brothers name.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Who It's For</div>
+      <h2>Built for the people doing the actual work.</h2>
+    </div>
+    <div class="who-list">
+      <div class="who-item">Custom AV integrators</div>
+      <div class="who-item">Low-voltage contractors</div>
+      <div class="who-item">Lighting dealers</div>
+      <div class="who-item">Custom home builders</div>
+      <div class="who-item">Architects &amp; designers</div>
+      <div class="who-item">Security/access integrators</div>
+      <div class="who-item">Network/IT installers expanding into AV</div>
+      <div class="who-item">Solar/EV installers expanding into smart home</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Won't my client know you designed it instead of me?</div>
+        <div class="faq-a">Not unless you tell them. White-label is the default — your logo, your contact info, your brand on every deliverable. We've been doing this for dealers for years; nobody's ever flagged it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What brands do you design around?</div>
+        <div class="faq-a">All of them. Control4, Crestron, Savant, Josh.ai, Lutron, RTI, Apple Home, Home Assistant. We design to your brand stack, your distributor relationships, and your install team's strengths.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How does the Monthly Partner billing work if I don't use all 5 designs?</div>
+        <div class="faq-a">Unused designs roll over one month. Beyond that, they reset — but most Partners are running through their 5 by week three. If you're consistently using fewer, we'll talk about a smaller plan.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can you handle commercial projects too?</div>
+        <div class="faq-a">Small/mid commercial yes. Boardrooms, restaurants, retail, training facilities. Large-scale commercial integration we'd refer out — that's a different beast.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What about programming — Crestron, Control4, Lutron?</div>
+        <div class="faq-a">$197/hr remote programming on Crestron, Control4, Savant, Lutron, RTI, Josh.ai. Monthly Partners get 2 hours included. Most install jobs need 8–20 hours of programming — outsource it and free up your install team.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is there a contract?</div>
+        <div class="faq-a">No annual contracts. Per-project is per-project. Monthly Partner is month-to-month — cancel any time, no penalty.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding: 60px 0;" id="contact">
+  <div class="final-cta">
+    <h2>Get a project designed this week.</h2>
+    <p>Submit a project file, or apply for the Monthly Partner program. We'll respond within one business day.</p>
+    <a href="mailto:dealers@tymhomes.com" class="btn btn-lg">dealers@tymhomes.com</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · Dealer Inquiries: dealers@tymhomes.com · 1-855-743-3168</div>
+    <div>Smart Home Design Done Right.</div>
+  </div>
+</footer>
+
+</body>
+</html>

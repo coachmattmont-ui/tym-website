@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home Design Service — Tym | SmartHome Brothers</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --success: #3ec48a;
+    --max-width: 1180px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 13, 16, 0.85);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  /* HERO */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-trust {
+    margin-top: 50px;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .trust-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    color: var(--text-soft);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .trust-row span::before { content: "✓ "; color: var(--accent); margin-right: 4px; }
+
+  /* PRESS STRIP */
+  .press {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .press-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .press-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .press-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+
+  /* SECTION BASE */
+  .section { padding: 90px 0; border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* PROBLEM */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .problem-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .problem-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 22px;
+  }
+  .problem-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .problem-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #1d1812 0%, var(--bg-card) 35%);
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px -20px rgba(245, 165, 36, 0.25);
+  }
+  @media (max-width: 900px) { .price-card.featured { transform: none; } }
+  .badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #1a1207;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tier-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .tier-tag {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+    min-height: 42px;
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .price .amount {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .price .currency {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .price-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .feature-list {
+    list-style: none;
+    margin-bottom: 32px;
+    flex-grow: 1;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-list li.bonus { color: var(--text); font-weight: 500; }
+  .feature-list li.bonus::before { content: "★"; }
+
+  /* DESIGN-CREDIT CALLOUT */
+  .credit-callout {
+    margin-top: 50px;
+    background: linear-gradient(135deg, rgba(245, 165, 36, 0.08), rgba(245, 165, 36, 0.02));
+    border: 1px solid var(--accent-soft);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .credit-callout { flex-direction: column; text-align: center; } }
+  .credit-icon {
+    width: 56px; height: 56px;
+    background: var(--accent);
+    color: #1a1207;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .credit-callout h3 { font-size: 19px; margin-bottom: 4px; }
+  .credit-callout p { color: var(--text-muted); font-size: 15px; }
+
+  /* CASE STUDIES */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 900px) { .cases-grid { grid-template-columns: 1fr; } }
+  .case-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+  .case-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .case-img {
+    aspect-ratio: 4/3;
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.5)),
+      #2a3340;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 16px;
+  }
+  .case-body {
+    padding: 26px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .case-eyebrow {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .case-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .case-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 18px;
+    flex-grow: 1;
+  }
+  .case-quote {
+    border-left: 2px solid var(--accent);
+    padding: 8px 0 8px 14px;
+    color: var(--text-soft);
+    font-style: italic;
+    font-size: 14px;
+  }
+  .case-quote .author {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-style: normal;
+    font-size: 12px;
+  }
+
+  /* COMPARISON */
+  .compare-table {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .compare-table table { width: 100%; border-collapse: collapse; }
+  .compare-table th, .compare-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .compare-table th {
+    background: #1c2128;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .compare-table th:not(:first-child),
+  .compare-table td:not(:first-child) { text-align: center; }
+  .compare-table td:first-child { color: var(--text-soft); }
+  .compare-table .check { color: var(--accent); font-weight: 700; font-size: 18px; }
+  .compare-table .dash { color: #4a5563; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* ADD-ONS */
+  .addon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .addon-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .addon-card .addon-price {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .addon-card h4 {
+    font-size: 16px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .addon-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* BIO */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 800px) { .bio-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .bio-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.4)),
+      #2a3340;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    aspect-ratio: 4/5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 16px;
+  }
+  .bio h2 { margin-bottom: 16px; }
+  .bio p { color: var(--text-muted); margin-bottom: 14px; font-size: 16px; line-height: 1.6; }
+  .bio-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .bio-stat .num {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .bio-stat .label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* "NOT READY" CALLOUT */
+  .not-ready {
+    margin-top: 40px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .not-ready strong { color: var(--text); }
+  .not-ready p { color: var(--text-muted); font-size: 15px; margin: 0; }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 0 24px;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 30px; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 80px;
+  }
+  footer .wrap > div { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="#how">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#cases">Case Studies</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing" class="btn">Start Your Design</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">SMART HOME DESIGN SERVICE</div>
+    <h1>Smart Home Design <span class="accent">Done Right</span> — the first time.</h1>
+    <p class="hero-sub">A floor plan, a Custom Prewire Checklist for your home, and an itemized system quote — built by integrators, delivered in 7–10 business days. From $497.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-lg">See the Plans</a>
+      <a href="#how" class="btn btn-secondary btn-lg">How It Works</a>
+    </div>
+    <div class="hero-trust">
+      Trusted by homeowners and builders nationwide
+      <div class="trust-row">
+        <span>Works with Josh.ai, Control4, Savant &amp; more</span>
+        <span>Built by working integrators, not theorists</span>
+        <span>Design fee credits 100% toward hardware</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS STRIP -->
+<section class="press">
+  <div class="wrap">
+    <div class="press-label">As Seen In</div>
+    <div class="press-row">
+      <div class="press-logo">KSL TV</div>
+      <div class="press-logo">Residential Tech Today</div>
+      <div class="press-logo">Technology Integrator</div>
+      <div class="press-logo">Stereophile</div>
+      <div class="press-logo">CE Pro</div>
+      <div class="press-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">The Problem</div>
+      <h2>The $40,000 mistake we see every week</h2>
+      <p class="section-sub">Most smart home projects don't fail at install. They fail at the prewire — months before anyone shows up with a screwdriver. By then, the drywall is up and your options are gone.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🔌</div>
+        <h3>Wrong wire in the walls</h3>
+        <p>Cat5 where you needed Cat6A. Speaker wire in the wrong locations. Conduit pulled to nowhere. Re-running anything later means tearing out drywall — or living with the limitation.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🧱</div>
+        <h3>Speakers and screens in the wrong spots</h3>
+        <p>Atmos heights aimed at a couch you'll never sit on. A TV mount where the morning sun glares right onto the panel. Decisions a professional integrator would catch in 90 seconds.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <h3>$40k of gear that doesn't talk to itself</h3>
+        <p>You bought the lights, the locks, the thermostat, the camera, the speakers — and now you have five apps, three remotes, and a system that fights you every day instead of disappearing into the background.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-bottom: 60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Pick Your Plan</div>
+      <h2>One design service. Three depths.</h2>
+      <p class="section-sub">Most clients start with Blueprint + Strategy — the floor plan, the Custom Prewire Checklist, the system quote, and an hour with us to make sure it all makes sense for your home and budget.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- TIER 1 -->
+      <div class="price-card">
+        <div class="tier-name">Blueprint</div>
+        <div class="tier-tag">For DIYers and budget-conscious renovators who already know what they want.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">497</span>
+        </div>
+        <div class="price-note">One-time · 7–10 day delivery</div>
+        <ul class="feature-list">
+          <li>Annotated floor plan with recommended tech locations</li>
+          <li>Custom Prewire Checklist — every wire, every drop, by room</li>
+          <li>Bulk wire estimate so you can buy it yourself</li>
+          <li>Itemized system quote matching the design</li>
+          <li>PDF deliverables you own forever</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-block btn-lg">Start Blueprint</a>
+      </div>
+
+      <!-- TIER 2 - FEATURED -->
+      <div class="price-card featured">
+        <div class="badge">MOST POPULAR</div>
+        <div class="tier-name">Blueprint + Strategy</div>
+        <div class="tier-tag">The one most people actually need. Plan + a real conversation with the people who designed it.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">997</span>
+        </div>
+        <div class="price-note">One-time · 7–10 day delivery</div>
+        <ul class="feature-list">
+          <li>Everything in Blueprint</li>
+          <li class="bonus">60-minute strategy call with Greg or Matt</li>
+          <li class="bonus">Personalized brand recommendations (Josh, Control4, Savant, etc.)</li>
+          <li class="bonus">Phased build plan — what to do now vs. in 2 years</li>
+          <li class="bonus">Builder/electrician handoff notes</li>
+          <li>Email Q&amp;A for 14 days after delivery</li>
+        </ul>
+        <a href="#" class="btn btn-block btn-lg">Start Blueprint + Strategy</a>
+      </div>
+
+      <!-- TIER 3 -->
+      <div class="price-card">
+        <div class="tier-name">Whole-Home Plan</div>
+        <div class="tier-tag">For new builds, full renovations, and theater rooms. The full integrator-level package.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">1,997</span>
+        </div>
+        <div class="price-note">One-time · 14 day delivery</div>
+        <ul class="feature-list">
+          <li>Everything in Blueprint + Strategy</li>
+          <li class="bonus">Dedicated theater design (sight lines, Atmos positions, screen sizing)</li>
+          <li class="bonus">Two strategy calls — design review + pre-install</li>
+          <li class="bonus">Builder Pack: rough-in coordination docs for your electrician/GC</li>
+          <li class="bonus">30 days of "ask anything" Loom &amp; email support during install</li>
+          <li class="bonus">Priority response, same-day turnaround on revisions</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-block btn-lg">Start Whole-Home</a>
+      </div>
+
+    </div>
+
+    <!-- DESIGN CREDIT -->
+    <div class="credit-callout">
+      <div class="credit-icon">↻</div>
+      <div>
+        <h3>Your design fee credits 100% toward hardware.</h3>
+        <p>If you order any of the gear in your quote through us within 60 days (over $5,000), we credit your full design fee back. The design pays for itself the moment you start the build.</p>
+      </div>
+    </div>
+
+    <!-- NOT READY YET -->
+    <div class="not-ready">
+      <div>
+        <strong>Not ready for the full Design Service?</strong>
+        <p>Start with the free Smart Home Wiring Bundle — Quick Guide + Ebook. No upsell, just a solid foundation.</p>
+      </div>
+      <a href="/free-bundle" class="btn btn-secondary">Get the Free Bundle</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="section" id="cases">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Real Projects</div>
+      <h2>What clients have actually built with this.</h2>
+      <p class="section-sub">A high-end Florida theater. A real-estate entrepreneur installing it himself. A Tennessee dad wiring his home with his sons. Same Design Service, different outcomes.</p>
+    </div>
+
+    <div class="cases-grid">
+
+      <!-- BOCA RATON -->
+      <div class="case-card">
+        <div class="case-img">[Boca Raton theater install photo]</div>
+        <div class="case-body">
+          <div class="case-eyebrow">Boca Raton, FL</div>
+          <h3>A hidden home theater inside a Lutron-controlled luxury build.</h3>
+          <p>Started as a simple system quote. Once our client fell in love with USAI Lighting and Savant control, we hired on to work with his builder, designer, and electricians — Lutron motorized shades, Josh.ai voice, JBL audio, Cisco/Ruckus network, all controlled by Savant.</p>
+          <div class="case-quote">
+            "The thing about the Tym guys, they actually care, and I know I can trust them."
+            <span class="author">— Boca Raton client</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAX MAXWELL -->
+      <div class="case-card">
+        <div class="case-img">[Max Maxwell — install / behind the scenes]</div>
+        <div class="case-body">
+          <div class="case-eyebrow">Max Maxwell · Real Estate Entrepreneur</div>
+          <h3>A DIY install for a popular real estate entrepreneur and tech enthusiast.</h3>
+          <p>Max wanted to design the tech for his dream home — and install it himself. We helped design the smart home, shipped his gear, and walked him through the install. We even flew out to see how it was going.</p>
+          <div class="case-quote">
+            "One of the most genuine people we've had the privilege to work with."
+            <span class="author">— Matt &amp; Greg, on Max</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TENNESSEE -->
+      <div class="case-card">
+        <div class="case-img">[Tennessee — DIY prewire photo]</div>
+        <div class="case-body">
+          <div class="case-eyebrow">Tennessee</div>
+          <h3>A dad and his sons, wiring the whole house themselves — with no dealers required.</h3>
+          <p>One of our original Design Clients. He wanted to wire and install his own home with his boys, on a system that didn't require a dealer to maintain. We built the original "How To Wire Your Smart Home" video course around his project. Today his system runs entirely on its own — Alexa- and HomeKit-friendly, with the option to integrate into Control4 down the road.</p>
+          <div class="case-quote">
+            "He could install it himself, have the freedom he wanted today, and the option to upgrade tomorrow."
+            <span class="author">— Tennessee project recap</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Side by Side</div>
+      <h2>What's in each plan</h2>
+    </div>
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Deliverable</th>
+            <th>Blueprint<br><span style="color: var(--text-muted); font-weight: 400; font-size: 13px;">$497</span></th>
+            <th>Blueprint + Strategy<br><span style="color: var(--accent); font-weight: 600; font-size: 13px;">$997</span></th>
+            <th>Whole-Home<br><span style="color: var(--text-muted); font-weight: 400; font-size: 13px;">$1,997</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Annotated floor plan (PDF)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Custom Prewire Checklist (built for your home)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Bulk wire estimate</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Itemized system quote</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>60-min strategy call</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓ ×2</td></tr>
+          <tr><td>Brand recommendations (Josh/Control4/etc.)</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Builder/electrician handoff notes</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Theater design (sight lines + Atmos)</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>Builder Pack rough-in coordination</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>Email Q&amp;A after delivery</td><td class="dash">—</td><td>14 days</td><td>30 days</td></tr>
+          <tr><td>Design fee credits toward hardware</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">À La Carte</div>
+      <h2>Add to any plan</h2>
+      <p class="section-sub">Extra services you can bolt on now, or come back for later.</p>
+    </div>
+    <div class="addon-grid">
+      <div class="addon-card">
+        <div class="addon-price">+ $497</div>
+        <h4>Theater Add-On</h4>
+        <p>Add a dedicated theater design to Blueprint or Blueprint + Strategy.</p>
+      </div>
+      <div class="addon-card">
+        <div class="addon-price">$297/hr</div>
+        <h4>Programming &amp; Setup</h4>
+        <p>Remote help configuring your system once the gear is installed.</p>
+      </div>
+      <div class="addon-card">
+        <div class="addon-price">+ $297</div>
+        <h4>Builder Pack</h4>
+        <p>Convert your design into rough-in coordination docs for your electrician.</p>
+      </div>
+      <div class="addon-card">
+        <div class="addon-price">$497/yr</div>
+        <h4>Annual Tech Tune-Up</h4>
+        <p>Yearly system check, firmware updates, and recommendations as new gear lands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIO -->
+<section class="section">
+  <div class="wrap">
+    <div class="bio-grid">
+      <div class="bio-img">[Photo of Greg + Matt]</div>
+      <div class="bio">
+        <div class="section-tag">Why Us</div>
+        <h2>Built by integrators who actually wire houses.</h2>
+        <p>We're Greg and Matt Montgomery — the SmartHome Brothers™. We started Tym in 2009 after years of doing custom AV the traditional way: trucks, ladders, drywall dust, the whole thing.</p>
+        <p>Somewhere along the way we figured out that the most valuable hour we spent on any project was the planning hour. So we productized it. Today we design smart homes, theaters, and lighting systems for homeowners and builders across all 50 states — without ever having to be on site.</p>
+        <div class="bio-stats">
+          <div class="bio-stat">
+            <div class="num">15+</div>
+            <div class="label">Years installing</div>
+          </div>
+          <div class="bio-stat">
+            <div class="num">All 50</div>
+            <div class="label">States we've designed in</div>
+          </div>
+          <div class="bio-stat">
+            <div class="num">28M+</div>
+            <div class="label">YouTube views</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">I'm not building yet — am I too early?</div>
+        <div class="faq-a">No, you're early at the perfect time. The best version of this work happens 3–6 months before drywall. If you're further along, we'll meet you where you are and tell you what's still possible.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Will this work with [Josh.ai / Control4 / Crestron / Savant / Apple Home]?</div>
+        <div class="faq-a">Yes. We design platform-agnostic — we'll recommend the platform that fits your goals, budget, and tolerance for tinkering. We have strong opinions but we're not married to any one brand.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What's the difference between this and the free Wiring Bundle?</div>
+        <div class="faq-a">The free Wiring Bundle (Quick Guide + Ebook) is general — it covers common runs and use cases for most homes. The Design Service includes a <strong>Custom Prewire Checklist</strong> built specifically for your floor plan, plus an itemized system quote matched to your goals. Different tools for different stages.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I have to buy hardware from you?</div>
+        <div class="faq-a">Not at all. The design is yours to take wherever you want. We DO offer hardware fulfillment with full design-fee credit if you go that route, because most clients find it easier than running it down themselves.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I just want one room — a theater, or a media room?</div>
+        <div class="faq-a">Add the Theater Add-On to a Blueprint, or upgrade to Whole-Home which includes a full theater design. If it's just one room and nothing else, message us and we'll quote it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How long does it take?</div>
+        <div class="faq-a">7–10 business days for Blueprint and Blueprint + Strategy. 14 days for Whole-Home. Rush available — message us.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What happens if I'm not happy with the design?</div>
+        <div class="faq-a">We revise it. The design isn't done until you're confident handing it to your builder. If we genuinely can't get there together, we'll refund the design fee.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding: 60px 0;">
+  <div class="final-cta">
+    <h2>Get the design done right, once.</h2>
+    <p>Most clients start with Blueprint + Strategy. Five minutes to start, 7–10 days to deliver, and the design fee credits back the moment you start the build.</p>
+    <a href="#pricing" class="btn btn-lg">Start Your Design</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · design@tymhomes.com · 1-855-743-3168</div>
+    <div>Smart Home Design Done Right.</div>
+  </div>
+</footer>
+
+</body>
+</html>

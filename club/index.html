@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home Club™ — Tym | SmartHome Brothers</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --max-width: 1180px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 13, 16, 0.85);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  /* HERO */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+  .hero-stat .num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero-stat .label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* PRESS STRIP */
+  .press {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .press-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .press-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .press-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+
+  /* SECTION BASE */
+  .section { padding: 90px 0; border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* PROBLEM */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .problem-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .problem-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 22px;
+  }
+  .problem-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .problem-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* WHAT'S INSIDE */
+  .inside-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 800px) { .inside-grid { grid-template-columns: 1fr; } }
+  .inside-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .inside-icon {
+    width: 48px; height: 48px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .inside-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .inside-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 22px;
+    align-items: stretch;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr; max-width: 480px; } }
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #1d1812 0%, var(--bg-card) 35%);
+    box-shadow: 0 20px 50px -20px rgba(245, 165, 36, 0.25);
+  }
+  .badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #1a1207;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tier-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .tier-tag {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .price .amount {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .price .currency {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .price .per {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .price-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .save-badge {
+    display: inline-block;
+    background: rgba(62, 196, 138, 0.12);
+    color: #6fe2ad;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .feature-list {
+    list-style: none;
+    margin-bottom: 32px;
+    flex-grow: 1;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-list li.bonus { color: var(--text); font-weight: 500; }
+  .feature-list li.bonus::before { content: "★"; }
+
+  /* TESTIMONIAL */
+  .testimonial {
+    background: linear-gradient(135deg, #14181d 0%, #1c2128 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 60px 50px;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .testimonial { padding: 40px 30px; } }
+  .testimonial .quote {
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 26px;
+    color: var(--text);
+  }
+  .testimonial .quote::before { content: "\201C"; color: var(--accent); font-size: 1.2em; }
+  .testimonial .quote::after { content: "\201D"; color: var(--accent); font-size: 1.2em; }
+  .testimonial .author {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* BROTHERS */
+  .brothers {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 800px) { .brothers { grid-template-columns: 1fr; gap: 32px; } }
+  .brothers-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.4)),
+      #2a3340;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    aspect-ratio: 4/5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 16px;
+  }
+  .brothers h2 { margin-bottom: 16px; }
+  .brothers p { color: var(--text-muted); margin-bottom: 14px; font-size: 16px; line-height: 1.6; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 0 24px;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 30px; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 80px;
+  }
+  footer .wrap > div { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/design-service">Design Service</a>
+      <a href="/theater">Theater</a>
+      <a href="#inside">What's Inside</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#pricing" class="btn">Join the Club</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">SMART HOME CLUB™</div>
+    <h1>Build it right — with the SmartHome Brothers <span class="accent">in your corner.</span></h1>
+    <p class="hero-sub">A private community of homeowners building, renovating, and dreaming about smart homes — with weekly live office hours, member-only courses, and direct access to Matt and Greg.</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-lg">Join the Club</a>
+      <a href="#inside" class="btn btn-secondary btn-lg">See What's Inside</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">500+</div>
+        <div class="label">Members</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">Weekly</div>
+        <div class="label">Live office hours</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">15+</div>
+        <div class="label">Years of installs behind it</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS STRIP -->
+<section class="press">
+  <div class="wrap">
+    <div class="press-label">As Seen In</div>
+    <div class="press-row">
+      <div class="press-logo">KSL TV</div>
+      <div class="press-logo">Residential Tech Today</div>
+      <div class="press-logo">Technology Integrator</div>
+      <div class="press-logo">Stereophile</div>
+      <div class="press-logo">CE Pro</div>
+      <div class="press-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Why The Club Exists</div>
+      <h2>Because YouTube alone won't get you across the finish line.</h2>
+      <p class="section-sub">There's plenty of free content out there. The hard part is knowing what applies to <em>your</em> home, your budget, and your stage of build.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🌀</div>
+        <h3>Information overload</h3>
+        <p>Hundreds of YouTube videos, dozens of forums, ten different "best of" lists for every product category. You don't need more information — you need someone to tell you which information matters for your situation.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <h3>Decisions you can't take back</h3>
+        <p>Most smart home questions have a 48-hour shelf life. The drywall is going up Friday. The electrician is here Tuesday. By the time you find the right answer in a forum thread, it's too late.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💬</div>
+        <h3>Nobody to ask</h3>
+        <p>Your friends and family don't know this stuff. Integrators won't return your calls unless you're hiring them. Manufacturers want to sell you the most expensive option. There's no "third-party tech-savvy uncle" — until now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="section" id="inside">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What's Inside</div>
+      <h2>What you get the day you join.</h2>
+    </div>
+    <div class="inside-grid">
+
+      <div class="inside-card">
+        <div class="inside-icon">📅</div>
+        <div>
+          <h3>Weekly Live Office Hours</h3>
+          <p>Every week, Matt and Greg jump on a live call. Bring any question — wire, gear, build sequencing, integrators — and get a real answer. Recorded for members who can't make it live.</p>
+        </div>
+      </div>
+
+      <div class="inside-card">
+        <div class="inside-icon">💬</div>
+        <div>
+          <h3>Direct Access to Greg &amp; Matt</h3>
+          <p>Private members-only channel. Post your floor plan, your project photo, the wire your electrician is about to run — get a direct response from us, usually within 24 hours.</p>
+        </div>
+      </div>
+
+      <div class="inside-card">
+        <div class="inside-icon">🎓</div>
+        <div>
+          <h3>Member-Only Courses</h3>
+          <p>"How To Wire Your Smart Home," "Theater Design Fundamentals," "Lighting 101," and more — added monthly. Member-only library that grows over time.</p>
+        </div>
+      </div>
+
+      <div class="inside-card">
+        <div class="inside-icon">🤝</div>
+        <div>
+          <h3>The Member Community</h3>
+          <p>500+ homeowners and builders going through the same thing you are. Find someone who already solved your problem — or compare notes mid-build.</p>
+        </div>
+      </div>
+
+      <div class="inside-card">
+        <div class="inside-icon">🎬</div>
+        <div>
+          <h3>Early Access to Content</h3>
+          <p>New YouTube videos, gear reviews, and project breakdowns drop inside the Club a week before they go public. See it first, ask questions before everyone else.</p>
+        </div>
+      </div>
+
+      <div class="inside-card">
+        <div class="inside-icon">🎁</div>
+        <div>
+          <h3>20% Off the Design Service</h3>
+          <p>Members get 20% off the Smart Home Design Service ($497–$1,997) and Theater Design Service. The discount alone pays for almost a full year of membership.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-bottom: 60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Membership</div>
+      <h2>One membership. Two ways to pay.</h2>
+      <p class="section-sub">Save almost two months when you go annual.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- MONTHLY -->
+      <div class="price-card">
+        <div class="tier-name">Monthly</div>
+        <div class="tier-tag">Try it month-to-month, cancel any time.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">47</span>
+          <span class="per">/ month</span>
+        </div>
+        <div class="price-note">Cancel any time, keep what you've downloaded</div>
+        <ul class="feature-list">
+          <li>Weekly Live Office Hours</li>
+          <li>Direct Access to Matt &amp; Greg</li>
+          <li>Member-Only Courses</li>
+          <li>500+ Member Community</li>
+          <li>Early Access to YouTube Content</li>
+          <li>20% off the Design Service</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-block btn-lg">Start Monthly</a>
+      </div>
+
+      <!-- ANNUAL - FEATURED -->
+      <div class="price-card featured">
+        <div class="badge">SAVE $167</div>
+        <div class="tier-name">Annual</div>
+        <div class="tier-tag">Best value. Two-month savings, plus a bonus 1-on-1 with Matt or Greg.</div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">397</span>
+          <span class="per">/ year</span>
+          <span class="save-badge">~$33/mo</span>
+        </div>
+        <div class="price-note">Equivalent to 8.4 months of monthly. 30-day money-back guarantee.</div>
+        <ul class="feature-list">
+          <li>Everything in Monthly</li>
+          <li class="bonus">Save $167 vs. paying monthly</li>
+          <li class="bonus">Bonus: 30-min 1-on-1 onboarding call with Matt or Greg</li>
+          <li class="bonus">Lock in the rate — no annual price increases</li>
+          <li class="bonus">Early access to new courses as they launch</li>
+          <li class="bonus">Founding member badge in the community</li>
+        </ul>
+        <a href="#" class="btn btn-block btn-lg">Start Annual — Save $167</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="section">
+  <div class="wrap">
+    <div class="testimonial">
+      <div class="quote">After hours of searching the web, I can honestly say the amount of knowledge gained for the price is a no-brainer.</div>
+      <div class="author">— Jesse S., Smart Home Club Member</div>
+    </div>
+  </div>
+</section>
+
+<!-- BROTHERS -->
+<section class="section">
+  <div class="wrap">
+    <div class="brothers">
+      <div class="brothers-img">[Photo of Greg + Matt]</div>
+      <div>
+        <div class="section-tag">Who Runs It</div>
+        <h2>Two brothers, 15 years of installs, 28 million YouTube views.</h2>
+        <p>We're Greg and Matt Montgomery — the SmartHome Brothers™. We've spent 15 years installing custom smart homes and theaters across all 50 states. We've made every mistake you're about to make. We've fixed every system that came in mid-disaster.</p>
+        <p>The Club is the closest thing we've built to "having us in your corner without hiring us for a full design." Most members use it to make better gear decisions, avoid 3-figure (or 5-figure) mistakes, and feel less alone in the middle of a build that's harder than the YouTube videos made it look.</p>
+        <p style="color: var(--text); font-weight: 500;">If it's not worth way more than $47 to you in your first month, just cancel. We'll refund anyone who asks. No hard feelings, ever.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">How is this different from your YouTube channel?</div>
+        <div class="faq-a">YouTube is one-way: we publish, you watch. The Club is two-way and personalized. We answer YOUR question about YOUR house, on a live call or in the community channel. The Design Service is even more custom (we build a Custom Prewire Checklist for your home), but the Club is where you go for ongoing help and learning.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">I'm not building yet — I'm still researching. Is this for me?</div>
+        <div class="faq-a">Absolutely. About a third of our members aren't actively building yet. They join to learn the landscape, narrow down what they want, and have a place to ask questions as they research. Better to start in the Club than to start three months into a build.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I cancel any time?</div>
+        <div class="faq-a">Yes. Monthly is month-to-month, cancel in one click. Annual has a 30-day money-back guarantee — full refund, no questions asked, if it's not what you hoped for.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I need to be technical to get value?</div>
+        <div class="faq-a">No. The Club is built for homeowners, not engineers. We explain everything in plain English — and the community is full of people at every level, including total beginners.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I want a full custom design for my home?</div>
+        <div class="faq-a">That's the <a href="/design-service" style="color: var(--accent); text-decoration: none;">Design Service</a> ($497–$1,997). The Club gives you ongoing help; the Design Service gives you a custom plan. They work great together — and members get 20% off the Design Service.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Where does the community live?</div>
+        <div class="faq-a">On Skool — easy to use, mobile app, no Slack/Discord noise. Everything (community, courses, live calls) is in one place.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding: 60px 0;">
+  <div class="final-cta">
+    <h2>Get the SmartHome Brothers in your corner.</h2>
+    <p>Most members start with Annual to lock in the rate and save $167. Cancel any time within 30 days for a full refund.</p>
+    <a href="#pricing" class="btn btn-lg">Join the Club</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · Smart Home Club™ · design@tymhomes.com · 1-855-743-3168</div>
+    <div>Smart Home Design Done Right.</div>
+  </div>
+</footer>
+
+</body>
+</html>

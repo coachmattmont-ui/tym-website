@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Smart Home Wiring Bundle — Tym | SmartHome Brothers</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --success: #3ec48a;
+    --max-width: 1140px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* MINIMAL HEADER — no nav, this is a single-purpose page */
+  header {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .header-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-lg { padding: 16px 28px; font-size: 16px; }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  /* HERO */
+  .hero {
+    padding: 70px 0 60px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(34px, 4.5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+  }
+  h1 .accent { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 19px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.55;
+  }
+
+  .hero-list {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+  .hero-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--text-soft);
+    font-size: 16px;
+    padding: 9px 0;
+  }
+  .hero-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    background: var(--accent-soft);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 30px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
+  }
+  .form-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .form-card .form-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+  .form-row { margin-bottom: 14px; }
+  .form-row label {
+    display: block;
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .form-row input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .form-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-fineprint {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* COVER MOCKUP — alternative visual instead of form */
+  .deliverable-preview {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.1), rgba(11, 13, 16, 0.4)),
+      #2a3340;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px 24px;
+    margin-bottom: 22px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .deliverable-preview .preview-headline {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  /* PRESS / TRUST STRIP */
+  .trust-strip {
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .trust-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .trust-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .trust-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+
+  /* WHAT'S INSIDE */
+  .section { padding: 80px 0; }
+  .section + .section { border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .inside-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .inside-grid { grid-template-columns: 1fr; } }
+  .inside-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .inside-num {
+    background: var(--accent-soft);
+    color: var(--accent);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .inside-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .inside-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* AUTHOR / TRUST */
+  .author {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 48px;
+    align-items: center;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+  }
+  @media (max-width: 800px) { .author { grid-template-columns: 1fr; gap: 28px; } }
+  .author-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.4)),
+      #2a3340;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 16px;
+  }
+  .author h3 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .author p {
+    color: var(--text-soft);
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  /* SECONDARY CTA */
+  .cta-band {
+    background:
+      radial-gradient(ellipse at 80% 0%, rgba(245, 165, 36, 0.15), transparent 55%),
+      linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 18px;
+    padding: 56px 40px;
+    text-align: center;
+  }
+  .cta-band h2 { margin-bottom: 14px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .cta-band p { color: var(--text-soft); font-size: 17px; margin-bottom: 28px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .cta-form {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (max-width: 600px) { .cta-form { flex-direction: column; } }
+  .cta-form input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+  }
+  .cta-form input:focus { outline: none; border-color: var(--accent); }
+
+  /* FAQ */
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 60px;
+  }
+  footer .wrap > div + div { margin-top: 6px; }
+
+</style>
+</head>
+<body>
+
+<!-- MINIMAL HEADER -->
+<header>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="header-meta">Free Download · Instant Delivery</div>
+  </div>
+</header>
+
+<!-- HERO + FORM -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Free Bundle · Two Downloads</div>
+        <h1>How To Wire Your <span class="accent">Smart Home</span> — free guide + ebook.</h1>
+        <p class="hero-sub">Two free resources we put together for anyone planning a smart home build or renovation: the Prewire Quick Guide for the most common runs, and the full <em>How To Wire Your Smart Home</em> ebook. No upsell, no paywall.</p>
+        <ul class="hero-list">
+          <li>The Prewire Quick Guide — major runs by use case (TV, speakers, network, more)</li>
+          <li><em>How To Wire Your Smart Home</em> ebook — the long-form companion</li>
+          <li>Wire type, gauge, and use-case explanations in plain English</li>
+          <li>Useful for new construction, renovations, and retrofits</li>
+        </ul>
+      </div>
+
+      <div class="form-card">
+        <div class="deliverable-preview">
+          <div class="preview-headline">SMART HOME WIRING BUNDLE</div>
+          <div>Quick Guide + Ebook · The SmartHome Brothers™</div>
+        </div>
+        <h3>Get the free bundle</h3>
+        <div class="form-sub">Both PDFs sent to your inbox in under 60 seconds.</div>
+        <form action="#" method="post">
+          <div class="form-row">
+            <label for="first">First Name</label>
+            <input type="text" id="first" name="first_name" placeholder="Matt" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <button type="submit" class="btn btn-block btn-lg">Send Me The Free Bundle →</button>
+          <div class="form-fineprint">No spam. Unsubscribe in one click. We hate that stuff too.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+  <div class="wrap">
+    <div class="trust-label">As Seen In</div>
+    <div class="trust-row">
+      <div class="trust-logo">KSL TV</div>
+      <div class="trust-logo">Residential Tech Today</div>
+      <div class="trust-logo">Technology Integrator</div>
+      <div class="trust-logo">Stereophile</div>
+      <div class="trust-logo">CE Pro</div>
+      <div class="trust-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What's Inside</div>
+      <h2>Two resources, bundled into one free download.</h2>
+      <p class="section-sub">A quick reference for the most common runs, plus the long-form ebook for anyone who wants to go deeper.</p>
+    </div>
+    <div class="inside-grid">
+      <div class="inside-card">
+        <div class="inside-num">1</div>
+        <div>
+          <h4>The Prewire Quick Guide</h4>
+          <p>Major runs by use case — TV locations, speakers, network drops, cameras, lighting control. Skim it in 10 minutes.</p>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-num">2</div>
+        <div>
+          <h4>How To Wire Your Smart Home (Ebook)</h4>
+          <p>The long-form companion — wire types, gauges, system explanations, and the principles behind every recommendation.</p>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-num">3</div>
+        <div>
+          <h4>Wire type cheat sheet</h4>
+          <p>Cat6A vs. Cat5e, 16/2 vs. 16/4 speaker, RG6 vs. fiber — when each applies and why.</p>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-num">4</div>
+        <div>
+          <h4>System-by-system breakdown</h4>
+          <p>Audio, video, network, lighting control, shades, cameras, access control, and Wi-Fi backbone.</p>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-num">5</div>
+        <div>
+          <h4>"Future you will thank past you"</h4>
+          <p>The low-cost runs that matter most when tech upgrades in 5 years.</p>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-num">6</div>
+        <div>
+          <h4>Common mistakes</h4>
+          <p>The prewire mistakes we see almost every week — and how to avoid them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<section class="section">
+  <div class="wrap">
+    <div class="author">
+      <div class="author-img">[Photo of Greg + Matt]</div>
+      <div>
+        <div class="section-tag">Written By</div>
+        <h3>The SmartHome Brothers™ — Matt &amp; Greg Montgomery.</h3>
+        <p>15+ years installing smart homes across all 50 states. 28 million+ views on YouTube. Featured in CE Pro, Residential Tech Today, and KSL.</p>
+        <p>These two resources are the starting point. When clients hire us for the paid Design Service, we go further and build a <strong>Custom Prewire Checklist</strong> mapped to their actual floor plan — but most people just need a solid foundation, and that's what this bundle is for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Quick Answers</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Is it really free? What's the catch?</div>
+        <div class="faq-a">Really free. The "catch" is we'll email you occasionally with smart home tips, video links, and the occasional offer for our paid Design Service. Unsubscribe any time, one click.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">I'm not building a new house — is this still useful?</div>
+        <div class="faq-a">Yes. About half our readers are renovating or retrofitting. The checklist flags which prewires are still possible in an existing home (and which require ripping drywall).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I have to be technical to use it?</div>
+        <div class="faq-a">No. It's written for homeowners. The terminology is explained, and the goal is that you can hand it to your electrician on day one.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I want help going beyond the bundle?</div>
+        <div class="faq-a">Our paid Design Service (from $497) includes a Custom Prewire Checklist built specifically for your floor plan — every wire, every drop, every device, by room. It's the version of the checklist tailored to your home, not a general guide. Linked in the welcome email.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECONDARY CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>Last chance — grab the free bundle.</h2>
+      <p>Quick Guide + the full ebook. Free. We'll never sell your email, and you can unsubscribe with one click.</p>
+      <form class="cta-form" action="#" method="post">
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit" class="btn btn-lg">Send It To Me</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>© 2026 Tym, LLC · SmartHome Brothers™ · design@tymhomes.com</div>
+    <div><a href="/" style="color: var(--text-muted); text-decoration: none;">Back to tymhomes.com</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

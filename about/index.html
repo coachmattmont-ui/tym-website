@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Tym — The SmartHome Brothers Story</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #f5a524;
+    --accent-soft: #f5a52415;
+    --accent-strong: #ffb840;
+    --max-width: 1180px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 13, 16, 0.85);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1207;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
+  .btn-lg { padding: 15px 28px; font-size: 16px; }
+
+  /* HERO */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      var(--bg);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* PRESS STRIP */
+  .press {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .press-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .press-row {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0.7;
+  }
+  .press-logo {
+    color: var(--text-soft);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+  }
+
+  /* SECTION */
+  .section { padding: 90px 0; border-top: 1px solid var(--border); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* FOUNDERS */
+  .founders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .founders { grid-template-columns: 1fr; } }
+  .founder-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    text-align: center;
+  }
+  .founder-img {
+    background:
+      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.4)),
+      #2a3340;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 12px;
+  }
+  .founder-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .founder-role {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .founder-bio {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* MEMORIAL */
+  .memorial {
+    margin-top: 40px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    text-align: center;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .memorial p {
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .memorial p::before { content: "✦ "; color: var(--accent); }
+
+  /* STORY / NARRATIVE */
+  .story {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .story p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-soft);
+    margin-bottom: 24px;
+  }
+  .story p:first-of-type::first-letter {
+    font-size: 60px;
+    font-weight: 700;
+    color: var(--accent);
+    float: left;
+    line-height: 0.85;
+    margin: 8px 12px 0 0;
+    letter-spacing: -0.02em;
+  }
+  .story em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  /* TIMELINE */
+  .timeline {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 100px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--border);
+  }
+  @media (max-width: 700px) { .timeline::before { left: 70px; } }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 32px;
+    padding: 18px 0;
+    position: relative;
+  }
+  @media (max-width: 700px) { .timeline-item { grid-template-columns: 70px 1fr; gap: 20px; } }
+  .timeline-year {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+    padding-right: 12px;
+    line-height: 1.3;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 96px;
+    top: 24px;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  @media (max-width: 700px) { .timeline-item::before { left: 66px; } }
+  .timeline-body h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .timeline-body p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* WHAT WE BELIEVE */
+  .beliefs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+  }
+  .belief-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px 26px;
+  }
+  .belief-num {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .belief-card h3 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .belief-card p {
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 10px;
+    letter-spacing: -0.025em;
+  }
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  /* SERVICES OVERVIEW */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  .service-tile {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    color: var(--text-soft);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin: 0 24px;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 30px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 80px;
+  }
+  footer .wrap > div { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/design-service">Design Service</a>
+      <a href="/theater">Theater</a>
+      <a href="/club">Smart Home Club</a>
+      <a href="/about" style="color: var(--accent);">About</a>
+      <a href="/design-service" class="btn">Start Your Design</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">OUR STORY</div>
+    <h1>Two brothers, 15 years of installs, and a stubborn belief that <span class="accent">the planning hour matters most.</span></h1>
+    <p class="hero-sub">We started Tym in 2009 as installers. We turned it into a design firm because the planning hour was always where the project was won or lost. This is how we got here.</p>
+  </div>
+</section>
+
+<!-- PRESS -->
+<section class="press">
+  <div class="wrap">
+    <div class="press-label">As Seen In</div>
+    <div class="press-row">
+      <div class="press-logo">KSL TV</div>
+      <div class="press-logo">Residential Tech Today</div>
+      <div class="press-logo">Technology Integrator</div>
+      <div class="press-logo">Stereophile</div>
+      <div class="press-logo">CE Pro</div>
+      <div class="press-logo">Connected Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY NARRATIVE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">The Beginning</div>
+      <h2>From trucks and ladders to floor plans.</h2>
+    </div>
+    <div class="story">
+      <p>Tym (pronounced "time") was founded in 2009 by three brothers — Matt, Greg, and the late Scott Montgomery. We started where most integrators start: trucks, ladders, drywall dust, and long days running wire through other people's houses. We were good at it. We were also fast at it, mostly because we'd been doing it together since we were kids.</p>
+      <p>Somewhere around year five, we noticed something. The projects that went smoothly all had one thing in common — <em>somebody had thought through the design properly before we showed up.</em> The disasters all looked the same too: rushed prewires, missing data drops, speakers in the wrong walls, theaters that sounded like cardboard boxes. Every fix was 10x more expensive than getting it right the first time.</p>
+      <p>So we started selling the planning. Floor plans, prewire checklists, system quotes. At first it was a side service for friends building homes far away. Then it was a side service for strangers building homes far away. Then YouTube took off, and the side service became the whole business.</p>
+      <p>Today we design smart homes, theaters, and lighting systems for homeowners and builders across all 50 states. We almost never put on a tool belt anymore. The work we do now is the work we wished someone had done <em>for us</em> on every install we ever ran in the field.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">The Brothers</div>
+      <h2>The two of us, plus one in memory.</h2>
+    </div>
+    <div class="founders">
+      <div class="founder-card">
+        <div class="founder-img">[Photo of Matt]</div>
+        <div class="founder-name">Matt Montgomery</div>
+        <div class="founder-role">Co-Founder · Design Lead</div>
+        <p class="founder-bio">Lead designer on Tym's residential and theater projects. Spends most days in floor plans and customer calls. Hosts the SmartHome Brothers YouTube channel and writes most of what you read on this site.</p>
+      </div>
+      <div class="founder-card">
+        <div class="founder-img">[Photo of Greg]</div>
+        <div class="founder-name">Greg Montgomery</div>
+        <div class="founder-role">Co-Founder · Operations</div>
+        <p class="founder-bio">Runs the back end of Tym — fulfillment, dealer relationships, builder coordination, and most of the in-the-field experience that makes our designs realistic instead of theoretical.</p>
+      </div>
+    </div>
+    <div class="memorial">
+      <p>In memory of our brother Scott Montgomery, co-founder of Tym. The work we do today carries his fingerprints on it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">How We Got Here</div>
+      <h2>15 years, in 7 chapters.</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2009</div>
+        <div class="timeline-body">
+          <h4>Tym is founded</h4>
+          <p>Matt, Greg, and Scott Montgomery start a custom AV installation business in Utah.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2014</div>
+        <div class="timeline-body">
+          <h4>The YouTube channel launches</h4>
+          <p>SmartHome Brothers goes live. Project tours, gear reviews, install walkthroughs. The audience grows quietly.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2017</div>
+        <div class="timeline-body">
+          <h4>The first remote design</h4>
+          <p>A YouTube viewer in Tennessee asks if we'd design his home from across the country. We say yes. He wires it himself with his sons. The Design Service is born.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2019</div>
+        <div class="timeline-body">
+          <h4>Tym goes national</h4>
+          <p>Design clients in 30+ states. Featured in Residential Tech Today and Technology Integrator. Theater Design becomes its own service.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-body">
+          <h4>10M+ YouTube views</h4>
+          <p>The channel crosses 10 million views. KSL TV and CE Pro features. Smart Home Club™ launches as a private community for builders and homeowners.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-body">
+          <h4>All 50 states</h4>
+          <p>Designs delivered in every U.S. state. Dealer Design Service expands the offering to integrators who want inside-sales support.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-body">
+          <h4>28M+ views and counting</h4>
+          <p>YouTube channel passes 28 million views. Design Service tiered into Blueprint, Blueprint+Strategy, and Whole-Home Plan. New site you're reading right now.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BELIEVE -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What We Believe</div>
+      <h2>The opinions baked into every project.</h2>
+    </div>
+    <div class="beliefs-grid">
+      <div class="belief-card">
+        <div class="belief-num">01</div>
+        <h3>Plan twice, wire once.</h3>
+        <p>Every dollar spent on planning saves ten on the back end. The cheapest hour of your project is the design hour.</p>
+      </div>
+      <div class="belief-card">
+        <div class="belief-num">02</div>
+        <h3>Brand-agnostic by default.</h3>
+        <p>We have favorites. We don't have allegiances. The right system is the one that fits your goals, your budget, and your tolerance for tinkering.</p>
+      </div>
+      <div class="belief-card">
+        <div class="belief-num">03</div>
+        <h3>If it doesn't disappear, it failed.</h3>
+        <p>Smart home tech should fade into the background. If you're thinking about your system, your system isn't doing its job.</p>
+      </div>
+      <div class="belief-card">
+        <div class="belief-num">04</div>
+        <h3>Money should serve the priority.</h3>
+        <p>We'd rather see a $5k system done right than a $50k system that overshoots the brief. We'll tell you when you're spending more than you need to.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">By The Numbers</div>
+      <h2>What 15 years looks like in stats.</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">28M+</div>
+        <div class="stat-label">YouTube views</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">All 50</div>
+        <div class="stat-label">States we've designed in</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Years installing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Smart Home Club members</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES OVERVIEW -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What We Do Today</div>
+      <h2>Design across the smart home stack.</h2>
+      <p class="section-sub">We design every category we used to install — and a few new ones the industry is still figuring out.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-tile">LED Lighting Design</div>
+      <div class="service-tile">Motorized Shades</div>
+      <div class="service-tile">Network &amp; Wi-Fi</div>
+      <div class="service-tile">Home Theater</div>
+      <div class="service-tile">Whole-Home Audio</div>
+      <div class="service-tile">Home Automation</div>
+      <div class="service-tile">Outdoor AV</div>
+      <div class="service-tile">Security &amp; Cameras</div>
+      <div class="service-tile">Voice Control</div>
+      <div class="service-tile">Access Control</div>
+      <div class="service-tile">Builder Coordination</div>
+      <div class="service-tile">Dealer Inside Sales</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="padding: 60px 0;">
+  <div class="final-cta">
+    <h2>Want to work with us?</h2>
+    <p>Most clients start with the Design Service. If you're earlier in your journey, the Smart Home Club or the free Wiring Bundle is where to begin.</p>
+    <div class="cta-row">
+      <a href="/design-service" class="btn btn-lg">See the Design Service</a>
+      <a href="/club" class="btn btn-secondary btn-lg">Join the Club</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · design@tymhomes.com · 1-855-743-3168</div>
+    <div>Smart Home Design Done Right.</div>
+  </div>
+</footer>
+
+</body>
+</html>
