@@ -196,6 +196,16 @@
     font-size: 12px;
     text-align: center;
     padding: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .founder-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .founder-name {
     font-size: 22px;
@@ -484,13 +494,17 @@
     </div>
     <div class="founders">
       <div class="founder-card">
-        <div class="founder-img">[Photo of Matt]</div>
+        <div class="founder-img">
+          <img src="/images/Matt.webp" alt="Matt Montgomery — Co-Founder, Design Lead" loading="lazy">
+        </div>
         <div class="founder-name">Matt Montgomery</div>
         <div class="founder-role">Co-Founder · Design Lead</div>
         <p class="founder-bio">Lead designer on Tym's residential and theater projects. Spends most days in floor plans and customer calls. Hosts the SmartHome Brothers YouTube channel and writes most of what you read on this site.</p>
       </div>
       <div class="founder-card">
-        <div class="founder-img">[Photo of Greg]</div>
+        <div class="founder-img">
+          <img src="/images/Greg.webp" alt="Greg Montgomery — Co-Founder, Operations" loading="lazy">
+        </div>
         <div class="founder-name">Greg Montgomery</div>
         <div class="founder-role">Co-Founder · Operations</div>
         <p class="founder-bio">Runs the back end of Tym — fulfillment, dealer relationships, builder coordination, and most of the in-the-field experience that makes our designs realistic instead of theoretical.</p>
