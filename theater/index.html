@@ -440,6 +440,16 @@
     text-align: center;
     padding: 20px;
     border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .case-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   @media (max-width: 800px) { .case-img { border-right: none; border-bottom: 1px solid var(--border); } }
   .case-body { padding: 50px 44px; }
@@ -774,7 +784,9 @@
       <h2>The hidden home theater inside a Lutron-controlled luxury build.</h2>
     </div>
     <div class="case-study">
-      <div class="case-img">[Boca Raton hidden home theater photo]</div>
+      <div class="case-img">
+        <img src="/images/bocaraton.webp" alt="Boca Raton hidden home theater install — Lutron, Savant, JBL audio" loading="lazy">
+      </div>
       <div class="case-body">
         <div class="case-location">Boca Raton, Florida</div>
         <h3>A motorized, hidden theater inside a USAI-lit, Savant-controlled custom home.</h3>
