@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design My Theater — Quick Qualifier | Tym</title>
+<meta name="description" content="Answer three quick questions so we can make sure we're the right fit for your theater project.">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #2563EB;
+    --accent-soft: #2563EB25;
+    --accent-strong: #3B7AFF;
+    --max-width: 720px;
+    --gutter: clamp(18px, 5vw, 24px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); width: 100%; }
+
+  /* HEADER */
+  header {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: clamp(14px, 3.4vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+  .header-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  @media (max-width: 480px) { .header-meta { display: none; } }
+
+  /* HERO */
+  .hero {
+    padding: clamp(40px, 8vw, 60px) 0 clamp(30px, 6vw, 40px);
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin: 0 auto 16px;
+    max-width: 600px;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* FORM */
+  main {
+    flex: 1;
+    padding-bottom: 60px;
+  }
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 40px);
+    margin: 0 auto;
+    max-width: 600px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
+  }
+  .question {
+    margin-bottom: 32px;
+  }
+  .question:last-of-type { margin-bottom: 24px; }
+  .question-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .radio-group.horizontal {
+    flex-direction: row;
+    gap: 10px;
+  }
+  @media (max-width: 480px) {
+    .radio-group.horizontal { flex-direction: column; }
+  }
+  .radio-card {
+    display: block;
+    cursor: pointer;
+    flex: 1;
+  }
+  .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+  .radio-card span {
+    display: block;
+    padding: 14px 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    transition: all 0.15s ease;
+    color: var(--text-soft);
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--bg);
+    text-align: center;
+  }
+  .radio-card:hover span {
+    border-color: var(--accent);
+    background: var(--bg-elev);
+    color: var(--text);
+  }
+  .radio-card input:checked + span {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .radio-card input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  input[type="email"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+  input[type="email"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #ffffff;
+    padding: 16px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    width: 100%;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .fineprint {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: var(--bg-elev);
+  }
+  footer a { color: var(--text-muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/" class="logo" style="text-decoration:none;">Tym <span>·</span> SmartHome Brothers</a>
+    <div class="header-meta">30-second qualifier</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Design My Theater</div>
+      <h1>Let's make sure we're <span class="accent">a fit</span>.</h1>
+      <p class="hero-sub">Three quick questions. If we're the right fit for your project, you'll go straight to booking a call.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <form class="form-card" id="qualify-form" novalidate>
+
+      <div class="question">
+        <label class="question-label">Are you ready to move forward on a theater project in the next 30 days?</label>
+        <div class="radio-group horizontal">
+          <label class="radio-card">
+            <input type="radio" name="q1" value="yes" required>
+            <span>Yes</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q1" value="no">
+            <span>No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">What's your budget for theater equipment?</label>
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="q2" value="under25" required>
+            <span>Under $25,000</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q2" value="25k">
+            <span>$25,000 – $50,000</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q2" value="50k">
+            <span>$50,000+</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">Where are you in your project?</label>
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="q3" value="researching" required>
+            <span>Just researching</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q3" value="planning">
+            <span>Actively planning</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q3" value="ready">
+            <span>Ready to buy</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label" for="email">Your best email</label>
+        <input type="email" name="email_address" id="email" placeholder="you@example.com" required autocomplete="email">
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">Continue</button>
+      <p class="fineprint">We respect your inbox. No spam, ever.</p>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="/">← Back to home</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('qualify-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submit-btn');
+  const q1 = this.querySelector('input[name="q1"]:checked');
+  const q2 = this.querySelector('input[name="q2"]:checked');
+  const q3 = this.querySelector('input[name="q3"]:checked');
+  const emailInput = this.querySelector('input[name="email_address"]');
+
+  if (!q1 || !q2 || !q3 || !emailInput.value) {
+    alert('Please answer all three questions and provide your email.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'One moment…';
+
+  const email = emailInput.value.trim();
+  const qualified =
+    q1.value === 'yes' &&
+    (q2.value === '25k' || q2.value === '50k') &&
+    (q3.value === 'planning' || q3.value === 'ready');
+
+  if (qualified) {
+    // Fire-and-forget to Kit — no-cors means we can't read the response, but the submission goes through
+    try {
+      await fetch('https://app.kit.com/forms/9445280/subscriptions', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'email_address=' + encodeURIComponent(email) + '&fields[source]=theater-qualified'
+      });
+    } catch (err) {
+      // Even if Kit fails, continue to Calendly
+      console.error('Kit submission error:', err);
+    }
+    // Redirect to Calendly with email pre-filled
+    window.location.href =
+      'https://calendly.com/smartdesigns/quick-call-project-review?email=' +
+      encodeURIComponent(email) +
+      '&utm_source=qualifier';
+  } else {
+    window.location.href = '/not-a-fit/';
+  }
+});
+</script>
+
+</body>
+</html>
