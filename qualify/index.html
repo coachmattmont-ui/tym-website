@@ -168,7 +168,8 @@
     outline-offset: 2px;
   }
 
-  input[type="email"] {
+  input[type="email"],
+  input[type="text"] {
     width: 100%;
     background: var(--bg);
     border: 1px solid var(--border-strong);
@@ -179,7 +180,8 @@
     font-family: inherit;
     transition: border-color 0.15s ease;
   }
-  input[type="email"]:focus {
+  input[type="email"]:focus,
+  input[type="text"]:focus {
     outline: none;
     border-color: var(--accent);
   }
@@ -249,6 +251,11 @@
     <form class="form-card" id="qualify-form" novalidate>
 
       <div class="question">
+        <label class="question-label" for="first_name">First name</label>
+        <input type="text" name="first_name" id="first_name" placeholder="Matt" required autocomplete="given-name">
+      </div>
+
+      <div class="question">
         <label class="question-label">Are you ready to move forward on a theater project in the next 30 days?</label>
         <div class="radio-group horizontal">
           <label class="radio-card">
@@ -316,49 +323,83 @@
 </footer>
 
 <script>
+// Kit form IDs
+const KIT_FORM_QUALIFIED = '9802203';
+const KIT_FORM_WARMUP    = '9802227';
+const CALENDLY_URL       = 'https://calendly.com/smartdesigns/quick-call-project-review';
+const NOT_A_FIT_URL      = '/not-a-fit/';
+
+// Human-readable labels for the answer values (used in custom fields sent to Kit)
+const BUDGET_LABELS = {
+  'under25': 'Under $25k',
+  '25k':     '$25k–$50k',
+  '50k':     '$50k+'
+};
+const STAGE_LABELS = {
+  'researching': 'Just researching',
+  'planning':    'Actively planning',
+  'ready':       'Ready to buy'
+};
+
 document.getElementById('qualify-form').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const btn = document.getElementById('submit-btn');
-  const q1 = this.querySelector('input[name="q1"]:checked');
-  const q2 = this.querySelector('input[name="q2"]:checked');
-  const q3 = this.querySelector('input[name="q3"]:checked');
-  const emailInput = this.querySelector('input[name="email_address"]');
+  const btn        = document.getElementById('submit-btn');
+  const firstName  = this.querySelector('input[name="first_name"]').value.trim();
+  const q1         = this.querySelector('input[name="q1"]:checked');
+  const q2         = this.querySelector('input[name="q2"]:checked');
+  const q3         = this.querySelector('input[name="q3"]:checked');
+  const email      = this.querySelector('input[name="email_address"]').value.trim();
 
-  if (!q1 || !q2 || !q3 || !emailInput.value) {
-    alert('Please answer all three questions and provide your email.');
+  if (!firstName || !q1 || !q2 || !q3 || !email) {
+    alert('Please fill out all fields.');
     return;
   }
 
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'One moment…';
 
-  const email = emailInput.value.trim();
   const qualified =
     q1.value === 'yes' &&
     (q2.value === '25k' || q2.value === '50k') &&
     (q3.value === 'planning' || q3.value === 'ready');
 
+  const budgetLabel = BUDGET_LABELS[q2.value] || q2.value;
+  const stageLabel  = STAGE_LABELS[q3.value]  || q3.value;
+
+  // Build POST body for Kit — includes first name + custom fields for budget/stage
+  const body = new URLSearchParams({
+    'email_address':      email,
+    'fields[first_name]': firstName,
+    'fields[budget]':     budgetLabel,
+    'fields[stage]':      stageLabel,
+    'fields[source]':     qualified ? 'Theater Qualified' : 'Theater Warm-Up'
+  }).toString();
+
+  const kitFormId = qualified ? KIT_FORM_QUALIFIED : KIT_FORM_WARMUP;
+
+  // Fire-and-forget to the right Kit form (no-cors mode; submission works even though we can't read response)
+  try {
+    await fetch('https://app.kit.com/forms/' + kitFormId + '/subscriptions', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    });
+  } catch (err) {
+    // Even if Kit fails, continue with the redirect
+    console.error('Kit submission error:', err);
+  }
+
   if (qualified) {
-    // Fire-and-forget to Kit — no-cors means we can't read the response, but the submission goes through
-    try {
-      await fetch('https://app.kit.com/forms/9445280/subscriptions', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email_address=' + encodeURIComponent(email) + '&fields[source]=theater-qualified'
-      });
-    } catch (err) {
-      // Even if Kit fails, continue to Calendly
-      console.error('Kit submission error:', err);
-    }
-    // Redirect to Calendly with email pre-filled
-    window.location.href =
-      'https://calendly.com/smartdesigns/quick-call-project-review?email=' +
-      encodeURIComponent(email) +
+    // Pre-fill Calendly with name + email so the booking form is one field shorter
+    const calendlyURL = CALENDLY_URL +
+      '?name=' + encodeURIComponent(firstName) +
+      '&email=' + encodeURIComponent(email) +
       '&utm_source=qualifier';
+    window.location.href = calendlyURL;
   } else {
-    window.location.href = '/not-a-fit/';
+    window.location.href = NOT_A_FIT_URL;
   }
 });
 </script>
