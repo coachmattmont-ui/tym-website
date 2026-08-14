@@ -206,7 +206,63 @@
     line-height: 1.55;
   }
 
-  /* RECENT THEATERS */
+  /* THEATER TYPES SHOWCASE */
+  .theaters-showcase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 900px) { .theaters-showcase { grid-template-columns: 1fr; gap: 32px; } }
+  .theater-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .theater-title {
+    font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .theater-photo {
+    aspect-ratio: 4/3;
+    background: #1c2128;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.25s ease;
+  }
+  .theater-photo:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+  .theater-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .theaters-tagline {
+    text-align: center;
+    font-size: clamp(20px, 2.2vw, 26px);
+    color: var(--text-soft);
+    max-width: 820px;
+    margin: 0 auto;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .theaters-tagline .accent-word {
+    color: var(--accent-strong);
+    font-weight: 700;
+  }
+
+  /* RECENT THEATERS (legacy — no longer used) */
   .work-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -380,66 +436,30 @@
   </div>
 </section>
 
-<!-- CREDIBILITY / PRESS -->
-<section class="press">
-  <div class="wrap">
-    <div class="press-label">As Seen In · Certified By</div>
-    <div class="press-row">
-      <div class="press-logo thx">THX CERTIFIED</div>
-      <div class="press-logo">KSL TV</div>
-      <div class="press-logo">CE Pro</div>
-      <div class="press-logo">Residential Tech Today</div>
-      <div class="press-logo">Technology Integrator</div>
-      <div class="press-logo">Stereophile</div>
-      <div class="press-logo">Connected Design</div>
-    </div>
-  </div>
-</section>
-
-<!-- RECENT THEATERS -->
+<!-- THEATER TYPES SHOWCASE -->
 <section class="section">
   <div class="wrap">
-    <div class="section-head">
-      <div class="section-tag">Recently Delivered</div>
-      <h2>Real theaters. Real rooms. Real clients.</h2>
-      <p class="section-sub">Every theater we design is built to the exact dimensions of your room — sight lines, Atmos speaker positions, seating, and screen size all calculated to fit.</p>
+    <div class="theaters-showcase">
+      <div class="theater-item">
+        <div class="theater-title">Lofts</div>
+        <div class="theater-photo">
+          <img src="/images/theater-loft.webp" alt="Loft-style home theater — Silo — with LED accent lighting and modern industrial design" loading="lazy">
+        </div>
+      </div>
+      <div class="theater-item">
+        <div class="theater-title">Open</div>
+        <div class="theater-photo">
+          <img src="/images/theater-open.webp" alt="Open-concept home theater — Starlight Theatre — with star ceiling and stone details" loading="lazy">
+        </div>
+      </div>
+      <div class="theater-item">
+        <div class="theater-title">Dedicated</div>
+        <div class="theater-photo">
+          <img src="/images/theater-dedicated.webp" alt="Dedicated home theater — Midway Cinema — with star ceiling and sectional seating" loading="lazy">
+        </div>
+      </div>
     </div>
-    <div class="work-grid">
-
-      <div class="work-tile">
-        <div class="work-img">
-          <img src="/images/HolladayTheater.webp" alt="Holladay theater install — dedicated home theater with tiered seating" loading="lazy">
-        </div>
-        <div class="work-body">
-          <div class="work-location">Holladay, UT</div>
-          <h3>Dedicated theater with tiered seating.</h3>
-          <p>Full dark theater, riser-mounted second row, Atmos-configured for 11 seats.</p>
-        </div>
-      </div>
-
-      <div class="work-tile">
-        <div class="work-img">
-          <img src="/images/theater-hero.webp" alt="Studio theater with dual subwoofers and blue LED accent lighting" loading="lazy">
-        </div>
-        <div class="work-body">
-          <div class="work-location">Utah</div>
-          <h3>Modern media room with LED accents.</h3>
-          <p>Ultra-short-throw projector, dual subwoofers, LED wall lighting integrated with content mode.</p>
-        </div>
-      </div>
-
-      <div class="work-tile">
-        <div class="work-img">
-          <img src="/images/bocaraton.webp" alt="Boca Raton hidden home theater with Lutron and Savant control" loading="lazy">
-        </div>
-        <div class="work-body">
-          <div class="work-location">Boca Raton, FL</div>
-          <h3>A hidden theater in a luxury build.</h3>
-          <p>JBL audio, motorized shades, Lutron lighting, Savant control — all disappearing into the architecture.</p>
-        </div>
-      </div>
-
-    </div>
+    <p class="theaters-tagline">Award-winning theaters designed and installed for clients <span class="accent-word">all over the U.S.</span></p>
   </div>
 </section>
 
