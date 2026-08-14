@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're Booked — Tym</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #2563EB;
+    --accent-soft: #2563EB25;
+    --accent-strong: #3B7AFF;
+    --max-width: 720px;
+    --gutter: clamp(18px, 5vw, 24px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); width: 100%; }
+
+  /* HEADER */
+  header {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-weight: 700;
+    font-size: clamp(14px, 3.4vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  /* MAIN */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: clamp(60px, 12vw, 100px) 0;
+  }
+  .message-card {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .checkmark {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 28px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-strong);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin: 0 auto 20px;
+    max-width: 560px;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--accent); }
+  .lead {
+    color: var(--text-soft);
+    font-size: clamp(17px, 2vw, 19px);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.55;
+  }
+
+  /* WHAT'S NEXT box */
+  .whats-next {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    text-align: left;
+    max-width: 520px;
+    margin: 0 auto 40px;
+  }
+  .whats-next h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent-strong);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .whats-next ol {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+  }
+  .whats-next li {
+    counter-increment: step;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15px;
+  }
+  .whats-next li:last-child { border-bottom: none; }
+  .whats-next li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn:hover {
+    border-color: var(--accent);
+    background: var(--bg-elev);
+    transform: translateY(-1px);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: var(--bg-elev);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="message-card">
+      <div class="checkmark">✓</div>
+      <div class="eyebrow">You're Booked</div>
+      <h1>You're on the calendar. <span class="accent">Can't wait to talk.</span></h1>
+      <p class="lead">A confirmation with the meeting link is on its way to your inbox. We'll see you at the scheduled time — bring your questions, your floor plan if you have one, and any brands or budget ranges you're already thinking about.</p>
+
+      <div class="whats-next">
+        <h3>What Happens Next</h3>
+        <ol>
+          <li>Check your email — calendar invite + meeting link should arrive within a minute.</li>
+          <li>If you have a floor plan or photos of your space, have them handy for the call.</li>
+          <li>We'll spend 30 minutes learning about your room and goals — no sales pitch.</li>
+          <li>Within 48 hours after the call, you'll get a written recap and next-step recommendation.</li>
+        </ol>
+      </div>
+
+      <div class="cta-row">
+        <a href="/" class="btn">← Back to home</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Tym · SmartHome Brothers™
+  </div>
+</footer>
+
+</body>
+</html>
