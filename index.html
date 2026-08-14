@@ -100,6 +100,20 @@
     justify-content: center;
     overflow: hidden;
   }
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 78svh;
+      background-size: auto 100%, auto 100%, cover;
+      background-position: center, center, 50% 42%;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero {
+      min-height: 72svh;
+      padding: 100px var(--gutter) 60px;
+      background-position: center, center, 50% 40%;
+    }
+  }
   .hero .wrap { position: relative; z-index: 2; }
   .hero-eyebrow {
     display: inline-block;
@@ -286,14 +300,21 @@
   /* FOOTER */
   footer {
     border-top: 1px solid var(--border);
-    padding: 32px 0;
+    padding: clamp(24px, 5vw, 32px) 0;
     text-align: center;
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: clamp(12px, 2.6vw, 14px);
     background: var(--bg-elev);
+    line-height: 1.6;
   }
-  footer .wrap { display: flex; flex-direction: column; gap: 6px; }
+  footer .wrap { display: flex; flex-direction: column; gap: 8px; }
   footer strong { color: var(--text); }
+  footer .nowrap { white-space: nowrap; }
+  @media (max-width: 480px) {
+    footer .wrap { gap: 6px; }
+    footer .stack-mobile { display: flex; flex-direction: column; gap: 4px; }
+    footer .sep-mobile-hide { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -414,8 +435,18 @@
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
-    <div><strong>Tym</strong> · SmartHome Brothers™ · Smart Home Design Done Right.</div>
-    <div>© 2026 Tym, LLC · design@tymhomes.com · 1-855-743-3168</div>
+    <div class="stack-mobile">
+      <span class="nowrap"><strong>Tym</strong> · SmartHome Brothers™</span>
+      <span class="sep-mobile-hide"> · </span>
+      <span>Smart Home Design Done Right.</span>
+    </div>
+    <div class="stack-mobile">
+      <span class="nowrap">© 2026 Tym, LLC</span>
+      <span class="sep-mobile-hide"> · </span>
+      <span class="nowrap">design@tymhomes.com</span>
+      <span class="sep-mobile-hide"> · </span>
+      <span class="nowrap">1-855-743-3168</span>
+    </div>
   </div>
 </footer>
 
