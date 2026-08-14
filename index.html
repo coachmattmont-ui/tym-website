@@ -15,9 +15,9 @@
     --text: #f2f4f7;
     --text-muted: #9aa4b2;
     --text-soft: #c8cfd8;
-    --accent: #f5a524;
-    --accent-soft: #f5a52415;
-    --accent-strong: #ffb840;
+    --accent: #2563EB;
+    --accent-soft: #2563EB15;
+    --accent-strong: #3B7AFF;
     --success: #3ec48a;
     --max-width: 1180px;
   }
@@ -51,7 +51,7 @@
   .btn {
     display: inline-block;
     background: var(--accent);
-    color: #1a1207;
+    color: #ffffff;
     padding: 11px 20px;
     border-radius: 8px;
     font-weight: 600;
@@ -78,7 +78,7 @@
     text-align: center;
     overflow: hidden;
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.08), transparent 60%),
+      radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.08), transparent 60%),
       var(--bg);
   }
   .eyebrow {
@@ -209,12 +209,12 @@
   }
   .service-card.featured {
     grid-row: span 2;
-    background: linear-gradient(180deg, #1d1812 0%, var(--bg-card) 35%);
+    background: linear-gradient(180deg, #121828 0%, var(--bg-card) 35%);
     border-color: var(--accent);
     padding: 40px;
   }
   @media (max-width: 900px) { .service-card.featured { grid-row: auto; } }
-  .service-card.featured .service-tag { background: var(--accent); color: #1a1207; }
+  .service-card.featured .service-tag { background: var(--accent); color: #ffffff; }
   .service-tag {
     display: inline-block;
     background: var(--bg-soft);
@@ -279,7 +279,7 @@
   @media (max-width: 800px) { .case-study { grid-template-columns: 1fr; } }
   .case-img {
     background:
-      linear-gradient(135deg, rgba(245, 165, 36, 0.15), rgba(11, 13, 16, 0.6)),
+      linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(11, 13, 16, 0.6)),
       #2a3340;
     min-height: 360px;
     display: flex;
@@ -350,7 +350,7 @@
   @media (max-width: 800px) { .brothers { grid-template-columns: 1fr; gap: 32px; } }
   .brothers-img {
     background:
-      linear-gradient(135deg, rgba(245, 165, 36, 0.12), rgba(11, 13, 16, 0.4)),
+      linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(11, 13, 16, 0.4)),
       #1c2128;
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -416,7 +416,7 @@
   .yt-thumb {
     aspect-ratio: 16/9;
     background:
-      linear-gradient(135deg, rgba(245, 165, 36, 0.1), rgba(11, 13, 16, 0.6)),
+      linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(11, 13, 16, 0.6)),
       #2a3340;
     display: flex;
     align-items: center;
@@ -440,8 +440,8 @@
   /* CLUB BANNER */
   .club {
     background:
-      radial-gradient(ellipse at 80% 0%, rgba(245, 165, 36, 0.18), transparent 55%),
-      linear-gradient(135deg, #1c1610 0%, #14181d 100%);
+      radial-gradient(ellipse at 80% 0%, rgba(37, 99, 235, 0.18), transparent 55%),
+      linear-gradient(135deg, #12182a 0%, #14181d 100%);
     border: 1px solid var(--accent-soft);
     border-radius: 18px;
     padding: 60px 50px;
@@ -469,7 +469,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(245, 165, 36, 0.1), transparent 60%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.1), transparent 60%);
     pointer-events: none;
   }
   .magnet > * { position: relative; }
