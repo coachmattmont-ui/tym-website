@@ -107,6 +107,30 @@
     line-height: 1.55;
   }
 
+  /* SCHEDULED CARD */
+  .scheduled-card {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 24px;
+    max-width: 460px;
+    margin: 0 auto 32px;
+  }
+  .scheduled-label {
+    color: var(--accent-strong);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scheduled-time {
+    color: var(--text);
+    font-size: clamp(17px, 2.5vw, 20px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
   /* WHAT'S NEXT box */
   .whats-next {
     background: var(--bg-card);
@@ -205,8 +229,14 @@
     <div class="message-card">
       <div class="checkmark">✓</div>
       <div class="eyebrow">You're Booked</div>
-      <h1>You're on the calendar. <span class="accent">Can't wait to talk.</span></h1>
-      <p class="lead">A confirmation with the meeting link is on its way to your inbox. We'll see you at the scheduled time — bring your questions, your floor plan if you have one, and any brands or budget ranges you're already thinking about.</p>
+      <h1>You're on the calendar<span id="name-slot"></span>. <span class="accent">Can't wait to talk.</span></h1>
+
+      <div class="scheduled-card" id="scheduled-card" style="display:none;">
+        <div class="scheduled-label">Scheduled for</div>
+        <div class="scheduled-time" id="scheduled-time"></div>
+      </div>
+
+      <p class="lead">A confirmation with the meeting link is on its way to your inbox. Bring your questions, your floor plan if you have one, and any brands or budget ranges you're already thinking about.</p>
 
       <div class="whats-next">
         <h3>What Happens Next</h3>
@@ -230,6 +260,44 @@
     Tym · SmartHome Brothers™
   </div>
 </footer>
+
+<script>
+// Parse Calendly's URL params to personalize the confirmation page
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const fullName = params.get('invitee_full_name');
+  const startTime = params.get('event_start_time');
+
+  // Personalize headline with first name
+  if (fullName) {
+    const firstName = fullName.trim().split(' ')[0];
+    if (firstName) {
+      document.getElementById('name-slot').textContent = ', ' + firstName;
+    }
+  }
+
+  // Show scheduled date/time card if present
+  if (startTime) {
+    try {
+      const date = new Date(startTime);
+      if (!isNaN(date)) {
+        const dateStr = date.toLocaleDateString(undefined, {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
+        });
+        const timeStr = date.toLocaleTimeString(undefined, {
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        });
+        document.getElementById('scheduled-time').textContent = dateStr + ' · ' + timeStr;
+        document.getElementById('scheduled-card').style.display = 'block';
+      }
+    } catch (e) { /* silently fall back to generic view */ }
+  }
+})();
+</script>
 
 </body>
 </html>
