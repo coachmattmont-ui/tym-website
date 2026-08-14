@@ -252,26 +252,25 @@
     background: var(--bg-soft);
   }
   .step-copy { display: flex; flex-direction: column; gap: 14px; }
-  .step-meta { display: flex; align-items: baseline; gap: 16px; }
+  .step-heading {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(12px, 2vw, 18px);
+    line-height: 1;
+  }
   .step-num {
-    font-size: clamp(44px, 9vw, 64px);
+    font-size: clamp(34px, 5vw, 46px);
     font-weight: 800;
-    line-height: 0.8;
-    letter-spacing: -0.04em;
-    color: var(--border);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--text-muted);
   }
-  .step-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--accent-strong);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .step-copy h3 {
-    font-size: clamp(26px, 3vw, 34px);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+  .step-name {
+    font-size: clamp(34px, 5vw, 46px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent);
   }
   .step-copy p {
     color: var(--text-muted);
@@ -381,22 +380,20 @@
           <img src="/images/GrayscaleSitelines.webp" alt="Sight-line diagram from a Tym theater design showing seating rows and screen geometry" loading="lazy">
         </div>
         <div class="step-copy">
-          <div class="step-meta">
-            <div class="step-num">01</div>
-            <div class="step-label">Custom Design</div>
+          <div class="step-heading">
+            <span class="step-num">01</span>
+            <span class="step-name">Design</span>
           </div>
-          <h3>Design</h3>
           <p>We design the theater to your space — sight lines, Atmos speaker positions, screen sizing, seating, and an itemized equipment quote.</p>
         </div>
       </div>
 
       <div class="step-row reverse">
         <div class="step-copy">
-          <div class="step-meta">
-            <div class="step-num">02</div>
-            <div class="step-label">You Sign Off</div>
+          <div class="step-heading">
+            <span class="step-num">02</span>
+            <span class="step-name">Approve</span>
           </div>
-          <h3>Approve</h3>
           <p>Review the design and quote. You approve, we finalize the order.</p>
         </div>
         <div class="step-photo">
@@ -409,11 +406,10 @@
           <img src="/images/theater-hero.webp" alt="Finished Studio Theater with LED accent lighting" loading="lazy">
         </div>
         <div class="step-copy">
-          <div class="step-meta">
-            <div class="step-num">03</div>
-            <div class="step-label">Shipped To Your Door</div>
+          <div class="step-heading">
+            <span class="step-num">03</span>
+            <span class="step-name">Deliver</span>
           </div>
-          <h3>Deliver</h3>
           <p>Every component drop-shipped to your door — speakers, projector, screen, seating, cabling — coordinated and ready to install.</p>
         </div>
       </div>
