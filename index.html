@@ -79,6 +79,9 @@
     flex-shrink: 0;
   }
   .btn:hover { background: var(--accent-strong); color: #ffffff; transform: translateY(-1px); }
+  .nav-right { display: flex; align-items: center; gap: clamp(12px, 3vw, 22px); flex-shrink: 0; }
+  .nav-link { color: #ffffff; font-weight: 600; font-size: clamp(13px, 2.9vw, 15px); text-decoration: none; text-shadow: 0 1px 12px rgba(0,0,0,0.4); white-space: nowrap; transition: color 0.15s ease; }
+  .nav-link:hover { color: var(--accent-strong); }
   .btn-lg {
     padding: 18px 34px;
     font-size: 17px;
@@ -347,7 +350,10 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 <nav>
   <div class="wrap">
     <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
-    <a href="/qualify/" class="btn">Design My Theater</a>
+    <div class="nav-right">
+      <a href="/learn/" class="nav-link">Learn</a>
+      <a href="/qualify/" class="btn">Design My Theater</a>
+    </div>
   </div>
 </nav>
 
