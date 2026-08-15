@@ -1,0 +1,44 @@
+# Tym — Cloudflare Pages redirects (old WordPress URLs -> new site)
+# Format: /old-path  /new-path  301   (301 = permanent, passes SEO value)
+
+# --- Old blog / how-to / article posts -> Free Guides page ---
+/how-to-prewire-a-smart-home/                               /guides/  301
+/how-to-prewire-surround-sound/                             /guides/  301
+/how-to-prewire-distributed-home-audio/                     /guides/  301
+/how-to-wire-speakers-for-your-home-audio/                  /guides/  301
+/how-much-does-home-audio-cost/                             /guides/  301
+/building-a-home-what-should-i-pre-wire/                    /guides/  301
+/blog/how-to-prewire/                                       /guides/  301
+/three-common-questions-about-home-theaters/               /guides/  301
+/smart-home-integration-how-does-it-work/                   /guides/  301
+/home-automation-for-beginners/                             /guides/  301
+/what-is-home-automation/                                   /guides/  301
+/try-the-newest-in-soundbars/                               /guides/  301
+/home-theater-projectors/                                   /guides/  301
+/video-mapping-projection-as-art/                           /guides/  301
+/over-the-rooftops-video-projection-for-stage-production-of-mary-poppins/  /guides/  301
+/news/                                                      /guides/  301
+/thank-you/purchasing-ebook/                                /guides/  301
+/blog/                                                      /guides/  301
+/blog/*                                                     /guides/  301
+
+# --- Old prewire PDF (still linked from YouTube) -> new hosted Quick Guide ---
+/wp-content/uploads/2018/01/TYM-Prewire-Quick-Guide-3-D.pdf  /downloads/prewire-quick-guide.pdf  301
+
+# --- Award / project / portfolio pages -> homepage (theater offer, most relevant) ---
+/portfolio/                                                 /  301
+/project/*                                                  /  301
+/tym-receives-award-for-home-theater-design-from-the-consumer-technology-association-at-ces-2018/  /  301
+
+# --- Old company / nav pages ---
+/about-us/                                                  /about/  301
+/start-here/                                                /  301
+/commercial/                                                /  301
+/builders/                                                  /  301
+/buildyoursmarthome/                                        /  301
+/home-security-systems/                                     /  301
+/smart-home-automation/media-distribution/                 /  301
+/divi_bars/tym-u/                                           /  301
+
+# --- Optional safety net: uncomment to send ANY unmatched old URL to the guides page ---
+# /*   /guides/   301
