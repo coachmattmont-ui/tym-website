@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Learn — Home Theater, MicroLED &amp; Media Room Guides | Tym</title>
-<meta name="description" content="We're relearning what's new in home tech, out loud — theaters, MicroLED walls, media rooms, and everything we figure out along the way. Real guides from THX-certified designers.">
+<meta name="description" content="We're relearning what's new in home tech, out loud — MicroLED walls, custom theaters, media rooms. Real guides from THX-certified designers who install them.">
 <link rel="canonical" href="https://tymhomes.com/learn/">
-
 <meta property="og:type" content="website">
-<meta property="og:title" content="Learn — Home Theater, MicroLED & Media Room Guides">
-<meta property="og:description" content="We're relearning what's new in home tech, out loud. Theaters, MicroLED, media rooms — real guides from designers who install them.">
+<meta property="og:title" content="Learn — MicroLED, Theaters & Media Rooms | Tym">
+<meta property="og:description" content="We're relearning what's new in home tech, out loud. Real guides from designers who install them.">
 <meta property="og:url" content="https://tymhomes.com/learn/">
 <meta property="og:image" content="https://tymhomes.com/images/learn/smarthome-brothers-back.jpg">
 <meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <!-- Meta Pixel -->
 <script>
@@ -20,102 +23,272 @@
 fbq('init','522485526738484');fbq('track','PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"/></noscript>
-
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C44FWQVXVS');</script>
 
 <style>
-  :root{--bg:#0b0d10;--bg-elev:#14181d;--bg-card:#181d24;--bg-soft:#1c2128;--border:#232a34;--border-strong:#2f3845;--text:#f2f4f7;--text-muted:#9aa4b2;--text-soft:#c8cfd8;--accent:#2563EB;--accent-soft:#2563EB25;--accent-strong:#3B7AFF;--max:1080px;--gutter:clamp(18px,5vw,24px);}
+  :root{
+    --bg:#100f0e; --surface:#191816; --surface2:#1d1b19;
+    --text:#f3efe8; --body:rgba(243,239,232,.82); --sec:rgba(243,239,232,.6); --ter:rgba(243,239,232,.4); --faint:rgba(243,239,232,.32);
+    --line:rgba(243,239,232,.09); --line2:rgba(243,239,232,.14); --line3:rgba(243,239,232,.18);
+    --accent:#e2a45c; --accent-tint:rgba(226,164,92,.07); --accent-bd:rgba(226,164,92,.22);
+    --max:1320px; --gut:clamp(20px,5vw,40px);
+    --sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --serif:"Instrument Serif",Georgia,serif;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
-  a{color:var(--accent-strong)}
-  header{padding:20px 0;border-bottom:1px solid var(--border)}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .logo{font-weight:700;font-size:clamp(14px,3.4vw,19px);color:var(--text);text-decoration:none}
-  .logo span{color:var(--accent)}
-  .nav-right{display:flex;align-items:center;gap:clamp(12px,3vw,22px)}
-  .nav-link{color:var(--text);font-weight:600;font-size:14px;text-decoration:none}
-  .nav-link:hover{color:var(--accent-strong)}
-  .nav-cta{background:var(--accent);color:#fff;padding:10px 18px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none;transition:color .18s ease,opacity .18s ease,border-color .18s ease,background .18s ease}
+  a:hover{color:var(--accent)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+  .serif-i{font-family:var(--serif);font-style:italic;font-weight:400}
 
-  .hero{padding:clamp(44px,7vw,72px) 0 clamp(28px,4vw,40px);text-align:center}
-  .eyebrow{display:inline-block;background:var(--accent-soft);color:var(--accent-strong);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;border:1px solid var(--accent-soft)}
-  h1{font-size:clamp(32px,5vw,50px);font-weight:800;letter-spacing:-0.03em;line-height:1.05;margin-bottom:16px;text-wrap:balance}
-  h1 .accent{color:var(--accent)}
-  .hero p{color:var(--text-muted);font-size:clamp(16px,2vw,19px);max-width:600px;margin:0 auto;line-height:1.55;text-wrap:pretty}
+  /* HEADER */
+  header{position:sticky;top:0;z-index:80;height:60px;display:flex;align-items:center;
+    background:rgba(16,15,14,.72);backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);
+    border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .brand{display:flex;align-items:baseline;gap:8px}
+  .brand b{font-size:15px;font-weight:600;letter-spacing:-0.01em}
+  .brand span{font-size:13px;color:var(--sec)}
+  nav.top{display:flex;align-items:center;gap:34px}
+  nav.top a{font-size:13.5px;color:var(--body)}
+  nav.top a:hover{color:var(--accent)}
+  .pill-cta{height:32px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;background:var(--text);color:#100f0e !important;font-size:13.5px;font-weight:600;white-space:nowrap}
+  .pill-cta:hover{background:var(--accent);color:#100f0e !important}
+  @media(max-width:640px){nav.top a.hide-sm{display:none}}
 
-  .posts{padding:clamp(20px,3vw,32px) 0 clamp(50px,7vw,72px)}
-  .post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:clamp(18px,2.5vw,26px)}
-  .post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:all .2s ease;text-decoration:none}
-  .post-card:hover{border-color:var(--accent);transform:translateY(-4px)}
-  .post-thumb{aspect-ratio:16/10;background:var(--bg-soft);overflow:hidden}
-  .post-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .post-body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
-  .post-cat{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-strong);margin-bottom:10px}
-  .post-card h2{font-size:20px;font-weight:700;letter-spacing:-0.01em;line-height:1.25;color:var(--text);margin-bottom:10px}
-  .post-card p{color:var(--text-muted);font-size:14.5px;line-height:1.55;flex:1;margin-bottom:16px}
-  .post-meta{color:var(--text-muted);font-size:13px}
+  /* PAGE HEAD */
+  .head{padding:clamp(64px,10vw,104px) 0 0}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1.title{font-size:clamp(44px,8vw,76px);line-height:.98;letter-spacing:-0.035em;font-weight:500;max-width:15ch;margin:20px 0 22px}
+  .dek{font-size:clamp(17px,2.2vw,19px);line-height:1.55;color:var(--sec);max-width:52ch}
 
-  .cta{margin:0 0 clamp(40px,6vw,60px);text-align:center;background:linear-gradient(135deg,rgba(37,99,235,.15),transparent),var(--bg-card);border:1px solid var(--border-strong);border-radius:16px;padding:34px 28px}
-  .cta h2{font-size:clamp(22px,3vw,28px);font-weight:800;letter-spacing:-0.02em;margin-bottom:10px}
-  .cta p{color:var(--text-muted);margin:0 auto 22px;max-width:460px}
-  .cta a{display:inline-block;background:var(--accent);color:#fff;padding:15px 30px;border-radius:10px;font-weight:700;text-decoration:none;font-size:16px}
-  footer{border-top:1px solid var(--border);padding:24px 0;text-align:center;color:var(--text-muted);font-size:13px;background:var(--bg-elev)}
+  /* FEATURED CARD */
+  .featured{display:block;position:relative;border-radius:22px;overflow:hidden;margin-top:clamp(32px,5vw,48px)}
+  .featured:hover{opacity:.96}
+  .featured .img{aspect-ratio:21/9;width:100%;overflow:hidden;background:var(--surface)}
+  .featured .img img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
+  .featured .scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,8,.92) 0%,rgba(9,9,8,.45) 42%,transparent 72%)}
+  .featured .content{position:absolute;left:0;right:0;bottom:0;padding:clamp(28px,4vw,48px) clamp(24px,4vw,52px);display:flex;flex-direction:column;gap:16px}
+  .metarow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--sec)}
+  .latest{background:var(--accent);color:#100f0e;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:999px}
+  .featured h2{font-size:clamp(30px,4.6vw,48px);line-height:1.04;letter-spacing:-0.03em;font-weight:500;max-width:22ch}
+  .featured .fdek{font-size:17px;line-height:1.5;color:var(--body);max-width:58ch}
+
+  /* FILTER BAR */
+  .filterbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:clamp(40px,6vw,56px) 0 22px;margin-top:8px;border-bottom:1px solid var(--line)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{height:36px;display:inline-flex;align-items:center;padding:0 17px;border-radius:999px;font-size:13.5px;cursor:pointer;
+    background:transparent;border:1px solid var(--line2);color:var(--body);font-family:inherit;transition:all .18s ease}
+  .chip:hover{border-color:var(--accent);color:var(--text)}
+  .chip.active{background:var(--text);border-color:var(--text);color:#100f0e;font-weight:600}
+  .search{height:36px;min-width:220px;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:999px;border:1px solid var(--line2)}
+  .search input{background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13.5px;width:100%}
+  .search input::placeholder{color:var(--ter)}
+  .search svg{opacity:.5;flex-shrink:0}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding-top:40px}
+  @media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{display:flex;flex-direction:column;gap:14px;animation:rise .5s ease both}
+  .card.link{cursor:pointer}
+  .card.link:hover{opacity:.88}
+  .card .thumb{position:relative;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--surface)}
+  .card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .soon{position:absolute;top:12px;left:12px;height:24px;display:inline-flex;align-items:center;padding:0 11px;border-radius:999px;
+    background:rgba(16,15,14,.72);backdrop-filter:blur(8px);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--body)}
+  .card .cmeta{display:flex;align-items:center;gap:12px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+  .card .topic{color:var(--accent);font-weight:600}
+  .card .rt{color:var(--faint)}
+  .card h3{font-size:23px;line-height:1.18;letter-spacing:-0.02em;font-weight:500;color:var(--text)}
+  .card p{font-size:15px;line-height:1.5;color:var(--sec)}
+  .empty{grid-column:1/-1;text-align:center;color:var(--ter);padding:90px 0;font-size:16px;display:none}
+
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* VIDEO LIBRARY BAND */
+  .library{margin-top:clamp(64px,10vw,104px);border:1px solid var(--line);border-radius:22px;padding:clamp(30px,5vw,52px);
+    display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,56px);align-items:center}
+  @media(max-width:860px){.library{grid-template-columns:1fr;gap:32px}}
+  .library h2{font-size:clamp(28px,4vw,40px);line-height:1.06;letter-spacing:-0.03em;font-weight:500;margin:14px 0 16px;max-width:16ch}
+  .library .dek{font-size:16.5px;max-width:46ch;margin-bottom:24px}
+  .light-pill{display:inline-flex;align-items:center;height:44px;padding:0 22px;border-radius:999px;background:var(--text);color:#100f0e !important;font-weight:600;font-size:14.5px}
+  .light-pill:hover{background:var(--accent);color:#100f0e !important}
+  .vtiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .vtiles .vt{aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:var(--surface);position:relative}
+  .vtiles .vt img{width:100%;height:100%;object-fit:cover}
+  .playdot{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .playdot span{width:40px;height:40px;border-radius:999px;background:rgba(243,239,232,.92);display:flex;align-items:center;justify-content:center}
+  .playdot span::after{content:"";border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #100f0e;margin-left:2px}
+
+  /* CTA */
+  .cta{padding:clamp(64px,10vw,120px) 0 0}
+  .cta .inner{border-top:1px solid var(--line);padding-top:64px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .cta h2{font-size:clamp(30px,4.4vw,44px);line-height:1.04;letter-spacing:-0.032em;font-weight:500;max-width:34ch}
+  .cta .cdek{font-size:17px;color:var(--sec);margin-top:14px;max-width:44ch}
+  .cta-pill{display:inline-flex;align-items:center;height:54px;padding:0 30px;border-radius:999px;background:var(--accent);color:#100f0e !important;font-weight:600;font-size:16px;white-space:nowrap}
+  .cta-pill:hover{background:var(--text);color:#100f0e !important}
+
+  /* FOOTER */
+  footer{margin-top:clamp(64px,10vw,120px);border-top:1px solid var(--line)}
+  footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:30px;padding-bottom:30px;font-size:12.5px;color:var(--faint)}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
-    <div class="nav-right">
-      <a href="/learn/" class="nav-link">Learn</a>
-      <a href="/qualify/" class="nav-cta">Design My Theater</a>
-    </div>
+    <a class="brand" href="/"><b>Tym</b> <span>SmartHome Brothers</span></a>
+    <nav class="top">
+      <a href="/learn/" class="hide-sm">Learn</a>
+      <a href="#library" class="hide-sm">Video Library</a>
+      <a href="/qualify/" class="pill-cta">Design My Theater</a>
+    </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div class="wrap">
+<main class="wrap">
+
+  <section class="head">
     <div class="eyebrow">Learn</div>
-    <h1>We're figuring out what's new — <span class="accent">out loud</span>.</h1>
-    <p>Theaters, MicroLED walls, media rooms, and everything we relearn along the way. Real guides from designers who actually install this stuff.</p>
-  </div>
-</section>
+    <h1 class="title">We're figuring out what's new — <span class="serif-i">out loud</span>.</h1>
+    <p class="dek">MicroLED walls, custom theaters, media rooms, and everything we relearn along the way. Real guides from designers who actually install this stuff — and bring you along for the ride.</p>
 
-<section class="posts">
-  <div class="wrap">
-    <div class="post-grid">
+    <!-- FEATURED / LATEST POST -->
+    <a class="featured" href="/learn/whats-next-for-tym/">
+      <div class="img"><img src="/images/learn/smarthome-brothers-back.webp" alt="The SmartHome Brothers back with a stack of TruAudio landscape speaker boxes"></div>
+      <div class="scrim"></div>
+      <div class="content">
+        <div class="metarow"><span class="latest">Latest</span><span>Studio Notes</span><span>Aug 15, 2026 · 2 min read</span></div>
+        <h2>We took a few years off. Now we're back.</h2>
+        <p class="fdek">Where we've been, why we paused, and what's next — simpler, more fun, and all about sharing with you.</p>
+      </div>
+    </a>
+  </section>
 
-      <!-- ===== POST CARD — duplicate this block for each new post ===== -->
-      <a class="post-card" href="/learn/whats-next-for-tym/">
-        <div class="post-thumb">
-          <img src="/images/learn/smarthome-brothers-back.webp" alt="The SmartHome Brothers with a stack of TruAudio landscape speaker boxes" loading="lazy">
-        </div>
-        <div class="post-body">
-          <div class="post-cat">We're Back</div>
-          <h2>We took a few years off. Now we're back.</h2>
-          <p>Where we've been, why we burned out, and what's next — simpler, more fun, and all about sharing what we learn.</p>
-          <div class="post-meta">Aug 15, 2026 · 2 min read</div>
-        </div>
-      </a>
-      <!-- ===== end post card ===== -->
-
+  <!-- FILTER + SEARCH -->
+  <section class="filterbar">
+    <div class="chips" id="chips">
+      <button class="chip active" data-topic="All">All</button>
+      <button class="chip" data-topic="MicroLED">MicroLED</button>
+      <button class="chip" data-topic="Custom Theaters">Custom Theaters</button>
+      <button class="chip" data-topic="Media Rooms">Media Rooms</button>
+      <button class="chip" data-topic="Smart Home">Smart Home</button>
     </div>
-  </div>
-</section>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search guides" autocomplete="off">
+    </label>
+  </section>
 
-<div class="wrap">
-  <div class="cta">
-    <h2>Ready to build, not just read?</h2>
-    <p>Book a quick 15-minute call and we'll talk through your theater or media room — then design it and drop-ship every piece.</p>
-    <a href="/qualify/">Design My Theater →</a>
-  </div>
-</div>
+  <!-- POST GRID (roadmap — coming soon) -->
+  <section class="grid" id="grid">
+    <div class="card" data-topic="MicroLED" data-title="MicroLED vs Projector which wins comparison">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/theater-dedicated.webp" alt="Dedicated home theater with a large bright screen" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">MicroLED</span><span class="rt">Coming soon</span></div>
+      <h3>MicroLED vs Projector: Which Actually Wins?</h3>
+      <p>Brightness, size, and price compared — from designers who install both.</p>
+    </div>
+    <div class="card" data-topic="MicroLED" data-title="How much does a microLED video wall cost price">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/theater-hero.webp" alt="Home theater with LED accent lighting" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">MicroLED</span><span class="rt">Coming soon</span></div>
+      <h3>How Much Does a MicroLED Wall Really Cost?</h3>
+      <p>Real 2026 numbers, including the $249K wall we filmed.</p>
+    </div>
+    <div class="card" data-topic="Media Rooms" data-title="AWOL UST ultra short throw projector review worth it">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/theater-loft.webp" alt="Loft-style media room" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">Media Rooms</span><span class="rt">Coming soon</span></div>
+      <h3>AWOL UST Projector: Is It Worth It?</h3>
+      <p>A big screen without construction — here's the honest take.</p>
+    </div>
+    <div class="card" data-topic="Media Rooms" data-title="no construction wireless surround sound existing room retrofit">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/theater-open.webp" alt="Open-concept media room with seating" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">Media Rooms</span><span class="rt">Coming soon</span></div>
+      <h3>The No-Construction Home Theater</h3>
+      <p>UST projector plus wireless sound in a room you already have.</p>
+    </div>
+    <div class="card" data-topic="Custom Theaters" data-title="media room vs dedicated theater difference which">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/bocaraton.webp" alt="Custom dedicated home theater" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">Custom Theaters</span><span class="rt">Coming soon</span></div>
+      <h3>Media Room vs Dedicated Theater</h3>
+      <p>Which one do you actually want? How to decide before you build.</p>
+    </div>
+    <div class="card" data-topic="Custom Theaters" data-title="home theater design mistakes cost twenty thousand to fix">
+      <div class="thumb"><span class="soon">Coming soon</span><img src="/images/HolladayTheater.webp" alt="Finished custom home theater" loading="lazy"></div>
+      <div class="cmeta"><span class="topic">Custom Theaters</span><span class="rt">Coming soon</span></div>
+      <h3>5 Theater Mistakes That Cost $20k to Fix</h3>
+      <p>The design errors we catch before a wall ever goes up.</p>
+    </div>
+    <div class="empty" id="empty">Nothing here yet. Try another topic.</div>
+  </section>
 
-<footer><div class="wrap">Tym · SmartHome Brothers™ · Smart Home Design Done Right.</div></footer>
+  <!-- VIDEO LIBRARY -->
+  <section class="library" id="library">
+    <div>
+      <div class="eyebrow">Video Library</div>
+      <h2>Watch it get built, <span class="serif-i">start to finish</span>.</h2>
+      <p class="dek">Twenty-eight million views and counting. Room tours, install walk-throughs, and honest gear breakdowns — the fun part of the job, on camera.</p>
+      <!-- EDIT: confirm YouTube channel URL -->
+      <a class="light-pill" href="https://www.youtube.com/@smarthomebrothers" target="_blank" rel="noopener">Open the library →</a>
+    </div>
+    <div class="vtiles">
+      <div class="vt"><img src="/images/theater-open.webp" alt="Theater build video thumbnail" loading="lazy"><div class="playdot"><span></span></div></div>
+      <div class="vt"><img src="/images/theater-approve.webp" alt="Design walk-through video thumbnail" loading="lazy"><div class="playdot"><span></span></div></div>
+      <div class="vt"><img src="/images/theater-dedicated.webp" alt="MicroLED wall video thumbnail" loading="lazy"><div class="playdot"><span></span></div></div>
+      <div class="vt"><img src="/images/theater-loft.webp" alt="Media room tour video thumbnail" loading="lazy"><div class="playdot"><span></span></div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="inner">
+      <div>
+        <h2>Reading is the start. <span class="serif-i">Building</span> is the fun part.</h2>
+        <p class="cdek">Book a quick 15-minute call and we'll talk through your theater or media room — then design it and drop-ship every piece.</p>
+      </div>
+      <a class="cta-pill" href="/qualify/">Design My Theater →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Tym · SmartHome Brothers™</span>
+    <span>Smart Home Design Done Right.</span>
+  </div>
+</footer>
+
+<script>
+// Topic filter + search over the grid
+(function(){
+  var topic="All", q="";
+  var chips=document.querySelectorAll("#chips .chip");
+  var cards=document.querySelectorAll("#grid .card");
+  var empty=document.getElementById("empty");
+  function apply(){
+    var shown=0;
+    cards.forEach(function(c){
+      var t=c.getAttribute("data-topic")||"";
+      var hay=((c.getAttribute("data-title")||"")+" "+t+" "+c.textContent).toLowerCase();
+      var ok=(topic==="All"||t===topic)&&(q===""||hay.indexOf(q)>-1);
+      c.style.display=ok?"":"none";
+      if(ok)shown++;
+    });
+    empty.style.display=shown?"none":"block";
+  }
+  chips.forEach(function(ch){ch.addEventListener("click",function(){
+    chips.forEach(function(x){x.classList.remove("active")});
+    ch.classList.add("active"); topic=ch.getAttribute("data-topic"); apply();
+  });});
+  document.getElementById("search").addEventListener("input",function(e){q=e.target.value.trim().toLowerCase();apply();});
+})();
+</script>
 
 </body>
 </html>
