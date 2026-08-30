@@ -658,8 +658,8 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 </footer>
 
 <script>
-// Kit Warm-Up form ID — using the same form Matt already set up. Segmentation via source field.
-const KIT_FORM_WARMUP = '9802227';
+// Kit form ID — dedicated Package Orders form
+const KIT_FORM_ORDER = '9860945';
 
 document.getElementById('order-form').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -680,17 +680,17 @@ document.getElementById('order-form').addEventListener('submit', async function(
   btn.textContent = 'Sending…';
 
   const body = new URLSearchParams({
-    'email_address':         email,
-    'fields[first_name]':    name,
-    'fields[phone]':         phone,
-    'fields[zip]':           zip,
-    'fields[quote_details]': notes || '(no notes)',
-    'fields[package]':       'AWOL Aetherion Max — $9,997',
-    'fields[source]':        'Package Order — Aetherion Max'
+    'email_address':      email,
+    'fields[first_name]': name,
+    'fields[phone]':      phone,
+    'fields[zip_code]':   zip,
+    'fields[note]':       notes || '(no notes)',
+    'fields[package]':    'AWOL Aetherion Max — $9,997',
+    'fields[source]':     'Package Order — Aetherion Max'
   }).toString();
 
   try {
-    await fetch('https://app.kit.com/forms/' + KIT_FORM_WARMUP + '/subscriptions', {
+    await fetch('https://app.kit.com/forms/' + KIT_FORM_ORDER + '/subscriptions', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
