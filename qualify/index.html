@@ -430,7 +430,11 @@ document.getElementById('qualify-form').addEventListener('submit', async functio
       '&utm_source=qualifier';
     window.location.href = calendlyURL;
   } else {
-    window.location.href = NOT_A_FIT_URL;
+    // Pass name + email through so the quote form on /not-a-fit is pre-filled
+    window.location.href = NOT_A_FIT_URL +
+      '?name=' + encodeURIComponent(firstName) +
+      '&email=' + encodeURIComponent(email) +
+      '&budget=' + encodeURIComponent(budgetLabel);
   }
 });
 </script>

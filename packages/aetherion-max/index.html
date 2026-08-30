@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWOL Aetherion Max Theater Package — Tym</title>
+<meta name="description" content="Turnkey 4K laser home theater package. AWOL Aetherion Max projector, 120-inch ALR floor rise screen, Thunder Beat 5.1 surround sound. $9,997, shipped nationwide.">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #2563EB;
+    --accent-soft: #2563EB25;
+    --accent-strong: #3B7AFF;
+    --max-width: 1180px;
+    --gutter: clamp(18px, 5vw, 24px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* NAV */
+  nav {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: clamp(14px, 3.4vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .nav-link:hover { color: var(--text); }
+  @media (max-width: 480px) { .nav-link { display: none; } }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #ffffff;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
+  .btn-lg {
+    padding: 18px 34px;
+    font-size: 17px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn-outline:hover { border-color: var(--accent); background: var(--bg-elev); }
+
+  /* HERO */
+  .hero {
+    padding: clamp(50px, 8vw, 80px) 0 clamp(40px, 6vw, 60px);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(30px, 5vw, 60px);
+    align-items: center;
+  }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+
+  .hero-image {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .hero-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .breadcrumb {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { color: var(--accent); }
+
+  .hero-eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+    text-wrap: balance;
+  }
+  .hero-tagline {
+    color: var(--text-muted);
+    font-size: clamp(17px, 2vw, 20px);
+    margin-bottom: 26px;
+    line-height: 1.5;
+  }
+
+  .price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .price {
+    font-size: clamp(36px, 4.5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .price-note {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .hero-actions .btn { flex: 1 1 auto; text-align: center; }
+
+  .hero-microcopy {
+    color: var(--text-muted);
+    font-size: 13px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .hero-microcopy span::before {
+    content: "✓ ";
+    color: var(--accent-strong);
+    font-weight: 700;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: clamp(60px, 9vw, 90px) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head {
+    text-align: center;
+    margin-bottom: clamp(36px, 6vw, 56px);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-tag {
+    color: var(--accent-strong);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    text-wrap: balance;
+  }
+  h2 .accent { color: var(--accent); }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: clamp(16px, 1.8vw, 18px);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* WHAT'S INCLUDED */
+  .includes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 20px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .include-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 26px;
+    transition: border-color 0.2s ease;
+  }
+  .include-card:hover { border-color: var(--accent); }
+  .include-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  .include-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .include-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* WHY SECTION */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: 20px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .why-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .why-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .why-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* CUSTOMIZE CALLOUT */
+  .customize {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 40px);
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(20px, 4vw, 32px);
+    align-items: center;
+  }
+  @media (max-width: 700px) { .customize { grid-template-columns: 1fr; text-align: center; } }
+  .customize h3 {
+    font-size: clamp(20px, 2.5vw, 24px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .customize p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .customize-action { display: flex; justify-content: flex-end; }
+  @media (max-width: 700px) { .customize-action { justify-content: center; } }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .faq-a {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* STICKY MOBILE CTA */
+  .sticky-cta {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    z-index: 40;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .sticky-cta .price-mini {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .sticky-cta .btn { padding: 12px 18px; font-size: 14px; }
+  @media (max-width: 700px) { .sticky-cta { display: flex; } }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: var(--bg-elev);
+    padding-bottom: clamp(32px, 6vw, 80px);
+  }
+  footer .wrap { display: flex; flex-direction: column; gap: 8px; }
+  footer strong { color: var(--text); }
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '522485526738484');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C44FWQVXVS');
+</script>
+<!-- End Google tag -->
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
+    <div class="nav-right">
+      <a href="/qualify/" class="nav-link">Design Custom</a>
+      <a href="#order" class="btn">Get This Setup</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-image">
+        <img src="/images/theater-hero.webp" alt="AWOL Aetherion Max 4K Laser projector theater with 120-inch ALR floor rise screen, 5.1 surround sound, and LED accent lighting" loading="eager">
+      </div>
+
+      <div class="hero-copy">
+        <div class="breadcrumb">
+          <a href="/">Home</a> &nbsp;/&nbsp; Packages &nbsp;/&nbsp; Aetherion Max
+        </div>
+        <div class="hero-eyebrow">Signature Package · Turnkey</div>
+        <h1>AWOL Aetherion Max Theater.</h1>
+        <p class="hero-tagline">A serious cinematic setup — 4K laser projection, 120" ALR screen, immersive 5.1 surround. Everything you need, drop-shipped to your door.</p>
+
+        <div class="price-block">
+          <div class="price">$9,997</div>
+          <div class="price-note">Nationwide shipping included</div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#order" class="btn btn-lg">Get This Setup</a>
+          <a href="#includes" class="btn-outline">What's Included</a>
+        </div>
+
+        <div class="hero-microcopy">
+          <span>Ships in 7–10 days</span>
+          <span>Install support included</span>
+          <span>THX-certified designers</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section" id="includes">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What's Included</div>
+      <h2>Everything you need to <span class="accent">watch tonight</span>.</h2>
+      <p class="section-sub">No hunting for compatible parts. No configuration guesswork. Every component chosen to work perfectly together.</p>
+    </div>
+
+    <div class="includes-grid">
+      <div class="include-card">
+        <div class="include-num">1</div>
+        <h3>AWOL Aetherion Max Projector</h3>
+        <p>4K UHD triple-laser projection at 3,300 lumens. Ultra-short throw — sits on a low console, no ceiling mount. Rec.2020 color, HDR10+ and Dolby Vision ready.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-num">2</div>
+        <h3>120" ALR Floor Rise Screen</h3>
+        <p>Ambient light-rejecting fabric so the picture pops even with lights on. Motorized floor-rise deployment — pulls up out of the console when it's showtime, disappears the rest of the time.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-num">3</div>
+        <h3>Thunder Beat 5.1 Surround Sound</h3>
+        <p>Full 5.1 immersive audio — left, center, right, two surrounds, and a subwoofer that shakes the room. Sized to fit a 200–400 sq ft space perfectly.</p>
+      </div>
+      <div class="include-card">
+        <div class="include-num">4</div>
+        <h3>Setup Guide + Install Support</h3>
+        <p>Step-by-step install docs written for homeowners, not integrators. Plus direct email + phone support with Matt and Greg during your build. Not stuck at 11 PM the night before movie night.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY / TRUST -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Why This Setup</div>
+      <h2>Real cinema at home <span class="accent">without</span> the custom-build price tag.</h2>
+      <p class="section-sub">This is the exact system in our hero image — because it's the one we recommend for most rooms that don't need a $50k+ custom build.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>4K laser, not projector-lamp legacy</h3>
+        <p>Laser projection has better contrast, deeper blacks, and 20,000+ hours of bulb life. No annual lamp replacement.</p>
+      </div>
+      <div class="why-card">
+        <h3>ALR screen — daylight-viewable</h3>
+        <p>Standard projection screens wash out with room lights on. ALR screens don't. You can watch a game at 2 PM.</p>
+      </div>
+      <div class="why-card">
+        <h3>Ultra-short throw — no ceiling drilling</h3>
+        <p>Sits on a console or coffee table. No ceiling mount, no long HDMI runs, no drywall damage.</p>
+      </div>
+      <div class="why-card">
+        <h3>5.1 that's actually 5.1</h3>
+        <p>Real physical speakers in real positions, not a soundbar pretending. Matched drivers, matched crossovers, real theater sound.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMIZE CALLOUT -->
+<section class="section">
+  <div class="wrap">
+    <div class="customize">
+      <div>
+        <h3>Want to customize the package?</h3>
+        <p>Fixed screen instead of a roll-up? Bigger screen? Different subwoofer? We can swap components and re-quote. Just ask.</p>
+      </div>
+      <div class="customize-action">
+        <a href="#order" class="btn-outline">Ask a Question</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="section" id="order">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Order</div>
+      <h2>Get the Aetherion Max <span class="accent">for your room</span>.</h2>
+      <p class="section-sub">Fill this out and we'll reach out within 24 hours to confirm your details, finalize the order, and get it shipped.</p>
+    </div>
+
+    <form class="form-card" id="order-form" novalidate style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: clamp(28px, 5vw, 36px); max-width: 560px; margin: 0 auto; box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);">
+      <div style="margin-bottom: 18px;">
+        <label for="o_name" style="display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 8px;">First name</label>
+        <input type="text" name="first_name" id="o_name" placeholder="Matt" required autocomplete="given-name"
+          style="width: 100%; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; font-family: inherit;">
+      </div>
+      <div style="margin-bottom: 18px;">
+        <label for="o_email" style="display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Email</label>
+        <input type="email" name="email_address" id="o_email" placeholder="you@example.com" required autocomplete="email"
+          style="width: 100%; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; font-family: inherit;">
+      </div>
+      <div style="margin-bottom: 18px;">
+        <label for="o_phone" style="display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Phone</label>
+        <input type="tel" name="phone" id="o_phone" placeholder="(555) 555-5555" required autocomplete="tel"
+          style="width: 100%; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; font-family: inherit;">
+      </div>
+      <div style="margin-bottom: 18px;">
+        <label for="o_zip" style="display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Shipping ZIP code</label>
+        <input type="text" name="zip" id="o_zip" placeholder="84121" required autocomplete="postal-code" inputmode="numeric"
+          style="width: 100%; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; font-family: inherit;">
+      </div>
+      <div style="margin-bottom: 24px;">
+        <label for="o_notes" style="display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Anything we should know? <span style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+        <textarea name="notes" id="o_notes" placeholder="Room dimensions, install timing, customization requests…"
+          style="width: 100%; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; font-family: inherit; min-height: 100px; resize: vertical; line-height: 1.5;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-lg" id="order-submit" style="width: 100%;">Order the Aetherion Max</button>
+      <p style="color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 14px;">We'll reach out within 24 hours to confirm details and finalize payment.</p>
+    </form>
+
+    <!-- Success state -->
+    <div id="order-success" style="display: none; text-align: center; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+      <div style="width: 72px; height: 72px; margin: 0 auto 24px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-strong); font-size: 36px; font-weight: 700;">✓</div>
+      <h2 style="margin-bottom: 12px;">Got it — we'll be in touch.</h2>
+      <p style="color: var(--text-muted); font-size: 16px;">Expect an email or call from Matt or Greg within 24 hours to confirm your order details and finalize payment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">How long until it arrives?</div>
+        <div class="faq-a">Typically 7–10 business days from order confirmation. We'll give you an exact ETA once we confirm inventory.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I install it myself?</div>
+        <div class="faq-a">Yes. This package is designed for DIY install — no drywall work, no ceiling mount, no professional required. Setup takes 2–4 hours with the included guide. We're available by email and phone during your install.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Will it work in my room?</div>
+        <div class="faq-a">The 120" screen works best in rooms 12–20 feet wide with a viewing distance of 10–16 feet. If you're outside that range, tell us in the notes and we'll suggest an alternative screen size or configuration before you order.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I customize the package?</div>
+        <div class="faq-a">Yes — fixed screen instead of roll-up, different screen size, upgraded subwoofer, added components. Note your changes in the order form and we'll re-quote before payment.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I need something bigger — MicroLED, dedicated room, custom design?</div>
+        <div class="faq-a">That's our <a href="/qualify/" style="color: var(--accent-strong); text-decoration: none;">Custom Design</a> service — theaters from $25k to $500k+, designed to your exact space. Book a discovery call.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Payment terms?</div>
+        <div class="faq-a">50% at order confirmation, 50% before shipment. Credit card or ACH. We'll send an invoice with payment options after you submit the form.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-cta">
+  <div class="price-mini">$9,997</div>
+  <a href="#order" class="btn">Get This Setup</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div><strong>Tym</strong> · SmartHome Brothers™ · Smart Home Design Done Right.</div>
+    <div>© 2026 Tym, LLC · design@tymhomes.com · 1-855-743-3168</div>
+  </div>
+</footer>
+
+<script>
+// Kit Warm-Up form ID — using the same form Matt already set up. Segmentation via source field.
+const KIT_FORM_WARMUP = '9802227';
+
+document.getElementById('order-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn     = document.getElementById('order-submit');
+  const name    = this.querySelector('input[name="first_name"]').value.trim();
+  const email   = this.querySelector('input[name="email_address"]').value.trim();
+  const phone   = this.querySelector('input[name="phone"]').value.trim();
+  const zip     = this.querySelector('input[name="zip"]').value.trim();
+  const notes   = this.querySelector('textarea[name="notes"]').value.trim();
+
+  if (!name || !email || !phone || !zip) {
+    alert('Please fill out all required fields.');
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = 'Sending…';
+
+  const body = new URLSearchParams({
+    'email_address':         email,
+    'fields[first_name]':    name,
+    'fields[phone]':         phone,
+    'fields[zip]':           zip,
+    'fields[quote_details]': notes || '(no notes)',
+    'fields[package]':       'AWOL Aetherion Max — $9,997',
+    'fields[source]':        'Package Order — Aetherion Max'
+  }).toString();
+
+  try {
+    await fetch('https://app.kit.com/forms/' + KIT_FORM_WARMUP + '/subscriptions', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    });
+  } catch (err) {
+    console.error('Kit submission error:', err);
+  }
+
+  document.getElementById('order-form').style.display = 'none';
+  document.getElementById('order-success').style.display = 'block';
+
+  if (typeof fbq === 'function') { try { fbq('track', 'InitiateCheckout'); } catch (e) {} }
+  if (typeof gtag === 'function') { try { gtag('event', 'package_order', { package: 'Aetherion Max', value: 9997 }); } catch (e) {} }
+
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+
+</body>
+</html>

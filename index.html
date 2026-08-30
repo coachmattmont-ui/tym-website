@@ -188,6 +188,189 @@
     text-wrap: pretty;
   }
 
+  /* FEATURED PACKAGE */
+  .package-featured {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: stretch;
+    max-width: 1080px;
+    margin: 0 auto;
+    transition: border-color 0.2s ease;
+  }
+  .package-featured:hover { border-color: var(--accent); }
+  @media (max-width: 800px) { .package-featured { grid-template-columns: 1fr; } }
+  .package-img {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--bg-soft);
+    overflow: hidden;
+    min-height: 300px;
+  }
+  .package-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .package-body {
+    padding: clamp(28px, 4vw, 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .package-tag {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    border: 1px solid var(--accent-soft);
+    align-self: flex-start;
+  }
+  .package-name {
+    font-size: clamp(26px, 3.4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .package-desc {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .package-includes {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .package-includes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .package-includes li::before {
+    content: "✓";
+    color: var(--accent-strong);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .package-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+  .package-price {
+    font-size: clamp(28px, 3.6vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .package-price-note {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .package-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* CUSTOM DESIGN CALLOUT */
+  .custom-callout {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+    border: 1px solid var(--accent-soft);
+    border-radius: 18px;
+    padding: clamp(32px, 5vw, 48px);
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: center;
+  }
+  @media (max-width: 800px) { .custom-callout { grid-template-columns: 1fr; text-align: center; } }
+  .custom-callout .callout-tag {
+    color: var(--accent-strong);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .custom-callout h2 {
+    font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    max-width: none;
+  }
+  .custom-callout p {
+    color: var(--text-muted);
+    font-size: clamp(15px, 1.7vw, 17px);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .custom-callout .callout-action { display: flex; justify-content: flex-end; }
+  @media (max-width: 800px) { .custom-callout .callout-action { justify-content: center; } }
+
+  /* SECONDARY BUTTON STYLE */
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    padding: clamp(10px, 2.4vw, 13px) clamp(14px, 3.4vw, 26px);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: clamp(12px, 2.9vw, 15px);
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: #ffffff;
+    background: var(--bg-elev);
+    transform: translateY(-1px);
+  }
+  .btn-outline.on-hero {
+    background: rgba(255,255,255,0.08);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.4);
+    backdrop-filter: blur(6px);
+  }
+  .btn-outline.on-hero:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.7);
+  }
+  .btn-outline.btn-lg {
+    padding: 18px 34px;
+    font-size: 17px;
+  }
+
   /* THEATER TYPES SHOWCASE */
   .theaters-showcase {
     display: grid;
@@ -351,8 +534,8 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
     <div class="nav-right">
-      <a href="/learn/" class="nav-link">Learn</a>
-      <a href="/qualify/" class="btn">Design My Theater</a>
+      <a href="/packages/aetherion-max/" class="nav-link">Packages</a>
+      <a href="/qualify/" class="btn">Design Custom</a>
     </div>
   </div>
 </nav>
@@ -362,9 +545,61 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="hero-eyebrow">Home Theater · Designed · Delivered</div>
     <h1>Design Your Theater <span class="accent">Today</span>.</h1>
-    <p class="hero-sub">Custom-designed for your room. Every component sized, spec'd, and drop-shipped to your door. Nationwide.</p>
+    <p class="hero-sub">Turnkey packages from $9,997. Custom designs from $25k. Drop-shipped to your door — nationwide.</p>
     <div class="hero-cta">
-      <a href="/qualify/" class="btn btn-lg">Design My Theater</a>
+      <a href="#packages" class="btn btn-lg">Browse Packages</a>
+      <a href="/qualify/" class="btn-outline on-hero btn-lg">Design Custom</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PACKAGE -->
+<section class="section" id="packages">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Turnkey Theater Packages</div>
+      <h2>Ready-to-order theaters, <span class="accent">drop-shipped</span> to your door.</h2>
+      <p class="section-sub">Everything included. Designed by us, easy to install yourself in a weekend.</p>
+    </div>
+
+    <div class="package-featured">
+      <div class="package-img">
+        <img src="/images/theater-hero.webp" alt="AWOL Aetherion Max 4K Laser projector theater with 120-inch ALR floor rise screen and 5.1 surround" loading="lazy">
+      </div>
+      <div class="package-body">
+        <div class="package-tag">Signature Package</div>
+        <div class="package-name">AWOL Aetherion Max</div>
+        <p class="package-desc">A serious cinematic setup that won't kill the budget. Everything shown in the hero — this is the real thing.</p>
+        <ul class="package-includes">
+          <li>AWOL Aetherion Max 4K Laser Projector · 3,300 Lumens</li>
+          <li>120" ALR Floor Rise Screen</li>
+          <li>Thunder Beat 5.1 Surround Sound System</li>
+          <li>Full setup guide + install support</li>
+        </ul>
+        <div class="package-price-row">
+          <div class="package-price">$9,997</div>
+          <div class="package-price-note">Nationwide shipping included</div>
+        </div>
+        <div class="package-actions">
+          <a href="/packages/aetherion-max/" class="btn btn-lg">Get This Setup</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM DESIGN CALLOUT -->
+<section class="section">
+  <div class="wrap">
+    <div class="custom-callout">
+      <div>
+        <div class="callout-tag">Custom Design</div>
+        <h2>Looking for something bigger?</h2>
+        <p>MicroLED, laser projection, pre-pros, separates, dedicated theater rooms — theaters from $25k to $500k+, designed for your space. Book a custom design call.</p>
+      </div>
+      <div class="callout-action">
+        <a href="/qualify/" class="btn btn-lg">Design Custom</a>
+      </div>
     </div>
   </div>
 </section>
@@ -453,9 +688,12 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 <section class="final-cta" id="get-started">
   <div class="wrap">
     <div class="section-tag">Get Started</div>
-    <h2>Design your theater <span class="accent">today</span>.</h2>
-    <p class="section-sub">Book a free discovery call. We'll talk through your room, your goals, and whether a custom theater is right for you.</p>
-    <a href="/qualify/" class="btn btn-lg">Design My Theater</a>
+    <h2>Pick a package. Or design your <span class="accent">own</span>.</h2>
+    <p class="section-sub">Turnkey packages ship in 7–10 days. Custom designs take about 6 weeks. Either way, we'll get you to movie night.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="#packages" class="btn btn-lg">Browse Packages</a>
+      <a href="/qualify/" class="btn-outline btn-lg">Design Custom</a>
+    </div>
   </div>
 </section>
 

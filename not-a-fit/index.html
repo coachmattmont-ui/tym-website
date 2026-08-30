@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Not a Fit Right Now — Tym</title>
+<title>Get a Quick Quote — Tym</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root {
@@ -52,67 +52,163 @@
   /* MAIN */
   main {
     flex: 1;
-    display: flex;
-    align-items: center;
-    padding: clamp(60px, 12vw, 100px) 0;
+    padding: clamp(50px, 10vw, 80px) 0;
   }
-  .message-card {
+  .hero-block {
     text-align: center;
     max-width: 560px;
-    margin: 0 auto;
+    margin: 0 auto clamp(32px, 6vw, 48px);
   }
   .eyebrow {
     display: inline-block;
-    background: var(--bg-elev);
-    color: var(--text-muted);
+    background: var(--accent-soft);
+    color: var(--accent-strong);
     padding: 6px 14px;
     border-radius: 999px;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
     margin-bottom: 22px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--accent-soft);
     text-transform: uppercase;
   }
   h1 {
-    font-size: clamp(28px, 5vw, 44px);
+    font-size: clamp(28px, 5vw, 42px);
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.1;
-    margin: 0 auto 20px;
-    max-width: 500px;
+    margin: 0 auto 18px;
+    max-width: 520px;
     text-wrap: balance;
   }
+  h1 .accent { color: var(--accent); }
   .lead {
     color: var(--text-soft);
-    font-size: clamp(17px, 2vw, 19px);
-    max-width: 480px;
-    margin: 0 auto 36px;
+    font-size: clamp(16px, 2vw, 18px);
+    max-width: 520px;
+    margin: 0 auto;
     line-height: 1.55;
+    text-wrap: pretty;
   }
-  .cta-row {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
+
+  /* QUOTE FORM */
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 36px);
+    max-width: 560px;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
   }
-  .btn {
-    display: inline-block;
-    padding: 13px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 15px;
-    text-decoration: none;
-    border: 1px solid var(--border-strong);
-    background: transparent;
+  .form-row { margin-bottom: 18px; }
+  .form-row label {
+    display: block;
     color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .form-row input,
+  .form-row textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .form-row input:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-row textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #ffffff;
+    padding: 16px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
     transition: all 0.15s ease;
     font-family: inherit;
+    text-align: center;
   }
-  .btn:hover {
-    border-color: var(--accent);
-    background: var(--bg-elev);
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-strong);
     transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .fineprint {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 14px;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 28px;
+  }
+  .back-link a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .back-link a:hover { color: var(--accent); }
+
+  /* SUCCESS STATE */
+  .success-state {
+    display: none;
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vw, 60px) 0;
+  }
+  .success-state .checkmark {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 24px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-strong);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .success-state h2 {
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .success-state p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 440px;
+    margin: 0 auto 30px;
   }
 
   /* FOOTER */
@@ -162,14 +258,45 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 
 <main>
   <div class="wrap">
-    <div class="message-card">
-      <div class="eyebrow">Thanks for reaching out</div>
-      <h1>Sounds like this isn't the right fit just yet.</h1>
-      <p class="lead">Our design + delivery service is built for projects with a specific budget and timeline. If either shifts down the road, we'd love to hear from you.</p>
-      <div class="cta-row">
-        <a href="/" class="btn">← Back to home</a>
+
+    <!-- Form + copy state (default) -->
+    <div id="form-state">
+      <div class="hero-block">
+        <div class="eyebrow">Sounds like a quick quote is what you need</div>
+        <h1>Skip the call. Get a <span class="accent">quick quote</span> instead.</h1>
+        <p class="lead">Most sub-$25k projects — a Sonos setup, a simple speaker package, a TV mount and soundbar — don't need a full discovery call. Tell us what you're looking for and we'll email you a quote, usually within 24 hours.</p>
+      </div>
+
+      <form class="form-card" id="quote-form" novalidate>
+        <div class="form-row">
+          <label for="q_name">First name</label>
+          <input type="text" name="first_name" id="q_name" placeholder="Matt" required autocomplete="given-name">
+        </div>
+        <div class="form-row">
+          <label for="q_email">Email</label>
+          <input type="email" name="email_address" id="q_email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-row">
+          <label for="q_details">What are you looking for?</label>
+          <textarea name="quote_details" id="q_details" placeholder="e.g., Sonos system for my main floor, Atmos speaker package for a media room, TV mount + soundbar for the family room. Include a rough budget or room size if you know it." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" id="quote-submit">Get My Quote</button>
+        <p class="fineprint">We'll email your quote within 24 hours. No spam, ever.</p>
+      </form>
+
+      <div class="back-link">
+        <a href="/">← Back to home</a>
       </div>
     </div>
+
+    <!-- Success state (hidden by default, shown after successful submit) -->
+    <div class="success-state" id="success-state">
+      <div class="checkmark">✓</div>
+      <h2>Got it — thanks!</h2>
+      <p>We'll email your quote within 24 hours. In the meantime, check your inbox for a confirmation from Kit.</p>
+      <a href="/" style="color: var(--accent-strong); text-decoration: none; font-weight: 600;">← Back to home</a>
+    </div>
+
   </div>
 </main>
 
@@ -178,6 +305,72 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     Tym · SmartHome Brothers™
   </div>
 </footer>
+
+<script>
+// Kit form (reusing Warm-Up leads form; distinguished via source field)
+const KIT_FORM_WARMUP = '9802227';
+
+// Pre-fill name / email from URL params (passed from qualifier)
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  const email = params.get('email');
+  if (name)  document.getElementById('q_name').value  = name;
+  if (email) document.getElementById('q_email').value = email;
+})();
+
+// Handle form submission
+document.getElementById('quote-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn      = document.getElementById('quote-submit');
+  const name     = this.querySelector('input[name="first_name"]').value.trim();
+  const email    = this.querySelector('input[name="email_address"]').value.trim();
+  const details  = this.querySelector('textarea[name="quote_details"]').value.trim();
+
+  if (!name || !email || !details) {
+    alert('Please fill out all fields.');
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = 'Sending…';
+
+  // Read previously-captured budget (from qualifier redirect) if present
+  const params = new URLSearchParams(window.location.search);
+  const budget = params.get('budget') || '';
+
+  const body = new URLSearchParams({
+    'email_address':         email,
+    'fields[first_name]':    name,
+    'fields[quote_details]': details,
+    'fields[budget]':        budget,
+    'fields[quote_request]': 'Yes',
+    'fields[source]':        'Quote Request'
+  }).toString();
+
+  try {
+    await fetch('https://app.kit.com/forms/' + KIT_FORM_WARMUP + '/subscriptions', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    });
+  } catch (err) {
+    console.error('Kit submission error:', err);
+  }
+
+  // Show success state
+  document.getElementById('form-state').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+
+  // Fire Meta and Google conversion events if available
+  if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch (e) {} }
+  if (typeof gtag === 'function') { try { gtag('event', 'quote_request'); } catch (e) {} }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
 
 </body>
 </html>
