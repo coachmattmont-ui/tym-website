@@ -31,44 +31,40 @@
   }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 
-  /* NAV */
+  /* NAV — universal, sticky, with mobile hamburger */
   nav {
-    padding: 22px 0;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(11, 13, 16, 0.85);
-    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(11, 13, 16, 0.72);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid rgba(35, 42, 52, 0.4);
   }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+  .logo { font-weight: 700; font-size: clamp(14px, 3.4vw, 19px); line-height: 1.2; letter-spacing: -0.01em; color: #ffffff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,0,0,0.3); flex-shrink: 0; }
   .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 28px; align-items: center; }
-  .nav-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; font-weight: 500; }
-  .nav-links a:hover { color: var(--text); }
-  @media (max-width: 800px) { .nav-links a:not(.btn) { display: none; } }
-  .btn {
-    display: inline-block;
-    background: var(--accent);
-    color: #ffffff;
-    padding: 11px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
+  .nav-menu { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 28px); list-style: none; margin: 0; padding: 0; flex: 1; justify-content: center; }
+  .nav-menu a { color: rgba(255, 255, 255, 0.85); font-weight: 500; font-size: 14px; text-decoration: none; white-space: nowrap; transition: color 0.15s ease; letter-spacing: -0.005em; }
+  .nav-menu a:hover { color: #ffffff; }
+  .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .nav-toggle { display: none; background: transparent; border: none; padding: 8px; cursor: pointer; width: 42px; height: 42px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; border-radius: 8px; }
+  .nav-toggle:hover { background: rgba(255,255,255,0.08); }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: #ffffff; border-radius: 2px; transition: transform 0.25s ease, opacity 0.15s ease; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 900px) {
+    .nav-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(11, 13, 16, 0.97); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); flex-direction: column; padding: 8px 24px 20px; gap: 0; border-bottom: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); justify-content: flex-start; }
+    .nav-menu.open { display: flex; }
+    .nav-menu li { width: 100%; }
+    .nav-menu a { display: block; padding: 16px 0; border-bottom: 1px solid rgba(35, 42, 52, 0.5); font-size: 17px; color: #ffffff; font-weight: 500; }
+    .nav-menu li:last-child a { border-bottom: none; }
+    .nav-toggle { display: flex; }
   }
-  .btn:hover { background: var(--accent-strong); transform: translateY(-1px); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border-strong);
-  }
-  .btn-secondary:hover { background: var(--bg-elev); border-color: var(--accent); }
-  .btn-lg { padding: 15px 28px; font-size: 16px; }
-  .btn-block { display: block; width: 100%; text-align: center; }
+  @media (max-width: 480px) { .nav-right .btn { padding: 9px 14px; font-size: 13px; } }
 
   /* HERO */
   .hero {
@@ -498,17 +494,24 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 </head>
 <body>
 
-<!-- NAV -->
+<!-- NAV (universal, sticky, hamburger on mobile) -->
 <nav>
   <div class="wrap">
-    <div class="logo">Tym <span>·</span> SmartHome Brothers</div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/design-service">Design Service</a>
-      <a href="/theater">Theater</a>
-      <a href="#inside">What's Inside</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#pricing" class="btn">Join the Club</a>
+    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="/packages/aetherion-max/">Packages</a></li>
+      <li><a href="/qualify/">Custom Design</a></li>
+      <li><a href="/learn/">Blog</a></li>
+      <li><a href="/guides/">Guides</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/qualify/" class="btn">Design My Theater</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
 </nav>
@@ -783,6 +786,20 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     <div>Smart Home Design Done Right.</div>
   </div>
 </footer>
+
+<script>
+// Universal nav — mobile hamburger toggle
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var menu   = document.getElementById('nav-menu');
+  if (!toggle || !menu) return;
+  function closeMenu() { menu.classList.remove('open'); toggle.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+  function openMenu()  { menu.classList.add('open'); toggle.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
+  toggle.addEventListener('click', function() { menu.classList.contains('open') ? closeMenu() : openMenu(); });
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+})();
+</script>
 
 </body>
 </html>

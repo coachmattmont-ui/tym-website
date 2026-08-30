@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Tym | SmartHome Brothers</title>
+<meta name="description" content="Common questions about theater packages, custom design, drop shipping, install support, and how the SmartHome Brothers do things.">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #2563EB;
+    --accent-soft: #2563EB25;
+    --accent-strong: #3B7AFF;
+    --max-width: 1180px;
+    --gutter: clamp(18px, 5vw, 24px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+  a { color: var(--accent-strong); text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  /* NAV — universal, sticky, with mobile hamburger */
+  nav {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(11, 13, 16, 0.72);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid rgba(35, 42, 52, 0.4);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+  .logo { font-weight: 700; font-size: clamp(14px, 3.4vw, 19px); line-height: 1.2; letter-spacing: -0.01em; color: #ffffff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,0,0,0.3); flex-shrink: 0; }
+  .logo span { color: var(--accent); }
+  .btn { display: inline-block; background: var(--accent); color: #ffffff; padding: clamp(10px, 2.4vw, 13px) clamp(14px, 3.4vw, 26px); border-radius: 8px; font-weight: 700; font-size: clamp(12px, 2.9vw, 15px); text-decoration: none; border: none; cursor: pointer; transition: all 0.15s ease; font-family: inherit; letter-spacing: -0.005em; white-space: nowrap; flex-shrink: 0; }
+  .btn:hover { background: var(--accent-strong); color: #ffffff; transform: translateY(-1px); }
+  .btn-lg { padding: 18px 34px; font-size: 17px; box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+  .nav-menu { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 28px); list-style: none; margin: 0; padding: 0; flex: 1; justify-content: center; }
+  .nav-menu a { color: rgba(255, 255, 255, 0.85); font-weight: 500; font-size: 14px; text-decoration: none; white-space: nowrap; transition: color 0.15s ease; letter-spacing: -0.005em; }
+  .nav-menu a:hover { color: #ffffff; }
+  .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .nav-toggle { display: none; background: transparent; border: none; padding: 8px; cursor: pointer; width: 42px; height: 42px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; border-radius: 8px; }
+  .nav-toggle:hover { background: rgba(255,255,255,0.08); }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: #ffffff; border-radius: 2px; transition: transform 0.25s ease, opacity 0.15s ease; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 900px) {
+    .nav-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(11, 13, 16, 0.97); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); flex-direction: column; padding: 8px 24px 20px; gap: 0; border-bottom: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); justify-content: flex-start; }
+    .nav-menu.open { display: flex; }
+    .nav-menu li { width: 100%; }
+    .nav-menu a { display: block; padding: 16px 0; border-bottom: 1px solid rgba(35, 42, 52, 0.5); font-size: 17px; color: #ffffff; font-weight: 500; }
+    .nav-menu li:last-child a { border-bottom: none; }
+    .nav-toggle { display: flex; }
+  }
+  @media (max-width: 480px) { .nav-right .btn { padding: 9px 14px; font-size: 13px; } }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding: clamp(60px, 8vw, 90px) 0 clamp(40px, 6vw, 60px);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin: 0 auto 18px;
+    max-width: 720px;
+    text-wrap: balance;
+  }
+  .page-hero-sub {
+    color: var(--text-muted);
+    font-size: clamp(17px, 2vw, 20px);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* FAQ SECTION */
+  .faq-section {
+    padding: clamp(50px, 8vw, 80px) 0 clamp(60px, 10vw, 100px);
+  }
+  .faq-list {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+    scroll-margin-top: 90px;
+  }
+  .faq-item:hover { border-color: var(--border-strong); }
+  .faq-item[open] { border-color: var(--accent); }
+  .faq-item summary {
+    padding: 22px 26px;
+    cursor: pointer;
+    font-size: clamp(16px, 2vw, 19px);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    list-style: none;
+    line-height: 1.35;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+";
+    color: var(--accent-strong);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+  .faq-item[open] summary::after {
+    content: "×";
+    transform: rotate(0deg);
+  }
+  .faq-body {
+    padding: 0 26px 24px;
+    color: var(--text-soft);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .faq-body p { margin-bottom: 12px; }
+  .faq-body p:last-child { margin-bottom: 0; }
+  .faq-body a {
+    color: var(--accent-strong);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(59, 122, 255, 0.4);
+    padding-bottom: 1px;
+  }
+  .faq-body a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MID-PAGE CTA */
+  .faq-cta {
+    max-width: 820px;
+    margin: clamp(48px, 7vw, 72px) auto 0;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+    border: 1px solid var(--accent-soft);
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 40px);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(20px, 4vw, 32px);
+    align-items: center;
+  }
+  @media (max-width: 700px) { .faq-cta { grid-template-columns: 1fr; text-align: center; } }
+  .faq-cta h3 {
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .faq-cta p { color: var(--text-muted); font-size: 15px; line-height: 1.5; }
+  .faq-cta-action { display: flex; justify-content: flex-end; }
+  @media (max-width: 700px) { .faq-cta-action { justify-content: center; } }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: clamp(50px, 8vw, 72px) 0 clamp(24px, 4vw, 32px);
+    background: var(--bg-elev);
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: clamp(24px, 4vw, 48px); margin-bottom: clamp(40px, 6vw, 56px); }
+  @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
+  .footer-brand-name { font-size: 22px; font-weight: 800; letter-spacing: 0.12em; color: var(--text); margin-bottom: 16px; text-transform: uppercase; }
+  .footer-tagline { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; max-width: 300px; line-height: 1.55; }
+  .footer-contact { display: flex; flex-direction: column; gap: 6px; }
+  .footer-contact a { color: var(--text-soft); text-decoration: none; font-size: 14px; }
+  .footer-contact a:hover { color: var(--accent-strong); }
+  .footer-heading { color: var(--accent-strong); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 20px; }
+  .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a { color: var(--text-soft); text-decoration: none; font-size: 15px; transition: color 0.15s ease; }
+  .footer-links a:hover { color: var(--accent-strong); }
+  .footer-social { display: flex; gap: 12px; flex-wrap: wrap; }
+  .footer-social a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); transition: all 0.15s ease; }
+  .footer-social a:hover { color: var(--accent-strong); border-color: var(--accent); transform: translateY(-1px); }
+  .footer-social svg { width: 18px; height: 18px; }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; color: var(--text-muted); font-size: 13px; }
+  @media (max-width: 600px) { .footer-bottom { flex-direction: column; text-align: center; } }
+  .footer-bottom .nowrap { white-space: nowrap; }
+  footer strong { color: var(--text); }
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '522485526738484');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C44FWQVXVS');
+</script>
+<!-- End Google tag -->
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="/packages/aetherion-max/">Packages</a></li>
+      <li><a href="/qualify/">Custom Design</a></li>
+      <li><a href="/learn/">Blog</a></li>
+      <li><a href="/guides/">Guides</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/qualify/" class="btn">Design My Theater</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">FAQ</div>
+    <h1>Common Questions</h1>
+    <p class="page-hero-sub">Everything you'd think to ask about theater packages, custom design, drop shipping, and how we do things.</p>
+  </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section">
+  <div class="wrap">
+    <div class="faq-list">
+
+      <details class="faq-item" id="drop-shipping">
+        <summary>How does drop shipping work?</summary>
+        <div class="faq-body">
+          <p>Just like it sounds — when you purchase a theater or a smart home from us, we drop-ship it to you. You, a friend, or a handyman can install it yourselves. It takes a couple of days longer than a typical Amazon shipment, but assuming products are in stock, it gets to you pretty fast.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="install-yourself">
+        <summary>Can I really install it myself?</summary>
+        <div class="faq-body">
+          <p>Yes — and we've had clients doing it for years. We carefully select products that meet our standards, and that can be easily installed by anyone. Our most popular theater package, the <a href="/packages/aetherion-max/">Aetherion Max</a>, I set up with my son and no tools in about 30 minutes.</p>
+          <p>And don't worry — we've got a team here ready to walk you through setup and support the install. It isn't something you need to be afraid of.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="do-we-install">
+        <summary>Do you still install?</summary>
+        <div class="faq-body">
+          <p>We get out to a few projects every year. Normally for larger projects like a large MicroLED screen or a really advanced theater setup. Most of the time, if it requires install, we coordinate with local dealers, trades, and handymen — or we send our <a href="#jump-team">Jump Team</a> for things like a quick 3-day theater install.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="design-service">
+        <summary>Do you still offer the Design Service?</summary>
+        <div class="faq-body">
+          <p>Yes — but we've simplified it. Most people don't need a full Design Service, and we don't want to charge you for it if you don't. Most of the time, you need one or two simple questions answered and some direction within your budget. We can do that on a free 15-minute phone call, and get you a quote for gear.</p>
+          <p>If during that call we discover you're looking for something more involved, we'll kick it over to our full Design Service, which starts at $997.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="custom-theaters">
+        <summary>Do you sell custom theaters?</summary>
+        <div class="faq-body">
+          <p>Yes. We still love designing a high-end theater with custom Fortress seating, a killer laser projector or MicroLED, separate amplifiers, a pre-pro, and hi-fi sound. If that's what you're looking for, we'd love to help you design it — and we'll send our Jump Team to install.</p>
+          <p>What we've found is that a lot of clients just need something simple — one or two questions answered and a cool setup they can install themselves. But if you want to go big time, we're here for it.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="smart-homes">
+        <summary>Do you sell smart homes?</summary>
+        <div class="faq-body">
+          <p>Yes. Our focus has changed a lot — we're a "Do It With You" model now. We design smart homes to be efficient and easy to maintain. We want the system to work for you and minimize your dependence on a dealer or certified programmer to keep it up to date.</p>
+          <p>If you're looking for a high-end, fully custom, Crestron-like solution, we're not your guys — we'd refer you to dealers in the market we know and trust.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="jump-team">
+        <summary>What does the Jump Team cost?</summary>
+        <div class="faq-body">
+          <p>If we send our Jump Team out, it's a $5,000 minimum. That includes travel and time for 3 days. We'll send two experienced service professionals and dedicate one virtual support person full-time to assist with programming. We mostly see this on high-end theaters, MicroLED installs, and the occasional smart home build.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" id="tym-vs-brothers">
+        <summary>Is it Tym or SmartHome Brothers?</summary>
+        <div class="faq-body">
+          <p>It's both. Our company is officially called Tym — just Tym. A few years ago, a team member wanted to rebrand and create a channel kind of like the Property Brothers but for smart homes. We never finished that transition. Maybe some day.</p>
+          <p>For now, most of our social media handles say SmartHome Brothers, and our website says Tym.</p>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- Mid-page CTA -->
+    <div class="faq-cta">
+      <div>
+        <h3>Still have questions?</h3>
+        <p>The fastest way to get answers is a 15-minute call. Free. No pitch — just a real conversation about your room and your goals.</p>
+      </div>
+      <div class="faq-cta-action">
+        <a href="/qualify/" class="btn btn-lg">Book a Call</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">TYM</div>
+        <p class="footer-tagline">Custom home theaters, designed and delivered nationwide.</p>
+        <div class="footer-contact">
+          <a href="mailto:design@tymhomes.com">design@tymhomes.com</a>
+          <a href="tel:+18557433168">1-855-743-3168</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Products</div>
+        <ul class="footer-links">
+          <li><a href="/packages/aetherion-max/">DIY Theater Packages</a></li>
+          <li><a href="/qualify/">Custom Theater Design</a></li>
+          <li><a href="/faq/#drop-shipping">Drop Shipping</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Learn More</div>
+        <ul class="footer-links">
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/learn/">Blog</a></li>
+          <li><a href="/guides/">Free Guides</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Follow</div>
+        <div class="footer-social">
+          <a href="https://www.youtube.com/channel/UCb_jwxnmrG9EHU0sQDaAfgg" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@smarthomebrothers" aria-label="TikTok" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/smarthomebrothers" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="https://x.com/Smart_Home_Bros" aria-label="X (Twitter)" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/smarthomebrothers" aria-label="Facebook" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.pinterest.com/smarthomebrothers/" aria-label="Pinterest" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div><span class="nowrap">© 2026 Tym, LLC</span> · <span class="nowrap">SmartHome Brothers™</span></div>
+      <div>Smart Home Design Done Right.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Universal nav — mobile hamburger toggle
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var menu   = document.getElementById('nav-menu');
+  if (!toggle || !menu) return;
+  function closeMenu() { menu.classList.remove('open'); toggle.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+  function openMenu()  { menu.classList.add('open'); toggle.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
+  toggle.addEventListener('click', function() { menu.classList.contains('open') ? closeMenu() : openMenu(); });
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+})();
+</script>
+
+</body>
+</html>
