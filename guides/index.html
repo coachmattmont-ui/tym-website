@@ -228,19 +228,30 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   /* EBOOK GRID */
   .guides { padding: clamp(10px, 3vw, 24px) 0 clamp(40px, 6vw, 60px); }
   .guides-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
-    gap: clamp(16px, 2.5vw, 22px);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 3vw, 28px);
+    max-width: 1000px; margin: 0 auto;
   }
+  @media (max-width: 800px) { .guides-grid { grid-template-columns: 1fr; max-width: 380px; } }
   .guide-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 26px 24px; display: flex; flex-direction: column; transition: all .2s ease;
+    padding: 0; display: flex; flex-direction: column; transition: all .2s ease;
+    overflow: hidden;
   }
   .guide-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-  .guide-icon {
-    width: 46px; height: 46px; border-radius: 10px; background: var(--accent-soft);
-    border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center;
-    color: var(--accent-strong); font-size: 22px; margin-bottom: 18px;
+  .guide-cover {
+    aspect-ratio: 3/4;
+    background: var(--bg-soft);
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--border);
   }
+  .guide-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .guide-body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
   .guide-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 8px; }
   .guide-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 10px; line-height: 1.2; }
   .guide-card p { color: var(--text-muted); font-size: 14.5px; line-height: 1.55; flex: 1; margin-bottom: 20px; }
@@ -332,35 +343,39 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
       <div class="guides-grid">
 
         <div class="guide-card">
-          <div class="guide-icon">🎬</div>
-          <div class="guide-tag">Home Theater</div>
-          <h3>The Home Theater Guide</h3>
-          <p>Screens vs. projectors vs. MicroLED, seating geometry, true Atmos placement, and how a proper theater actually gets planned — before the walls go up.</p>
-          <a class="dl-btn" href="/downloads/home-theater-guide.pdf" download data-guide="home-theater">↓ Download</a>
+          <div class="guide-cover">
+            <img src="/images/guides/how-to-prewire.webp" alt="How To Prewire Your Smart Home — a guide by Matt Montgomery" loading="lazy">
+          </div>
+          <div class="guide-body">
+            <div class="guide-tag">Prewire</div>
+            <h3>How To Prewire Your Smart Home</h3>
+            <p>The complete prewire playbook — what to run, where, and why, so your walls are ready for anything you add down the road.</p>
+            <a class="dl-btn" href="/downloads/wire-your-smart-home.pdf" download data-guide="prewire-full">↓ Download</a>
+          </div>
         </div>
 
         <div class="guide-card">
-          <div class="guide-icon">🏠</div>
-          <div class="guide-tag">Smart Home</div>
-          <h3>Designing a Smart Home</h3>
-          <p>How a modern smart home comes together: lighting, control, automation, and the decisions that matter most before you build or remodel.</p>
-          <a class="dl-btn" href="/downloads/designing-a-smart-home.pdf" download data-guide="smart-home">↓ Download</a>
+          <div class="guide-cover">
+            <img src="/images/guides/home-theater-pro-tips.webp" alt="Home Theater Pro Tips — a reference for designing your dream home theater" loading="lazy">
+          </div>
+          <div class="guide-body">
+            <div class="guide-tag">Home Theater</div>
+            <h3>Home Theater Pro Tips</h3>
+            <p>Screens vs. projectors vs. MicroLED, seating geometry, true Atmos placement, and how a proper theater actually gets planned — before the walls go up.</p>
+            <a class="dl-btn" href="/downloads/home-theater-guide.pdf" download data-guide="home-theater">↓ Download</a>
+          </div>
         </div>
 
         <div class="guide-card">
-          <div class="guide-icon">🔌</div>
-          <div class="guide-tag">Prewire</div>
-          <h3>Wire Your Smart Home</h3>
-          <p>The complete prewire playbook — what to run, where, and why, so your walls are ready for anything you add down the road.</p>
-          <a class="dl-btn" href="/downloads/wire-your-smart-home.pdf" download data-guide="prewire-full">↓ Download</a>
-        </div>
-
-        <div class="guide-card">
-          <div class="guide-icon">📋</div>
-          <div class="guide-tag">Fan Favorite</div>
-          <h3>Prewire Quick Guide</h3>
-          <p>The one everyone asks for: a fast, printable low-voltage wiring reference. Perfect to hand your builder or electrician.</p>
-          <a class="dl-btn" href="/downloads/prewire-quick-guide.pdf" download data-guide="quick-guide">↓ Download</a>
+          <div class="guide-cover">
+            <img src="/images/guides/prewire-quick-guide.webp" alt="Prewire Quick Guide 2025 — printable low-voltage wiring reference" loading="lazy">
+          </div>
+          <div class="guide-body">
+            <div class="guide-tag">Fan Favorite</div>
+            <h3>Prewire Quick Guide</h3>
+            <p>The one everyone asks for: a fast, printable low-voltage wiring reference. Perfect to hand your builder or electrician.</p>
+            <a class="dl-btn" href="/downloads/prewire-quick-guide.pdf" download data-guide="quick-guide">↓ Download</a>
+          </div>
         </div>
 
       </div>
@@ -371,7 +386,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     <div class="wrap">
       <div class="email-card">
         <h2>Want them emailed to you?</h2>
-        <p>Drop your email and we'll send all four links so they're saved in your inbox — plus the occasional theater tip. No spam, unsubscribe anytime.</p>
+        <p>Drop your email and we'll send all three links so they're saved in your inbox — plus the occasional theater tip. No spam, unsubscribe anytime.</p>
 
         <form class="email-form" id="guides-form" novalidate>
           <input type="text" name="first_name" id="first_name" placeholder="First name" autocomplete="given-name" required>
