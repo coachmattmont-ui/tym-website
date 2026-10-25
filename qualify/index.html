@@ -1019,6 +1019,8 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
 
 (function () {
   'use strict';
+  const SUPABASE_URL = 'https://ayvfwykxpvmmmvakhlcf.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5dmZ3eWt4cHZtbW12YWtobGNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5NjQ4ODUsImV4cCI6MjEwNjU0MDg4NX0.mWo2Giajm75HWxDUCg7PJC5cEg454YdgZTj6GSV80DU';
   const LEAD_WEBHOOK_URL = '';
   const CALL_BOOKING_URL = 'https://calendly.com/smartdesigns/quick-call-project-review';
   const AB_LARGE_CTA = 'call_primary';
@@ -1233,11 +1235,28 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
     }
     return lead;
   }
-  function storeAndPost(lead, setCurrent) {
+  function leadRow(lead, res) {
+    const T = res.totals || {}, R = res.range || {};
+    const est = res.band === 'stark' && R.low != null ? Math.round((R.low + R.high) / 2) : Math.round(T.yourPrice || 0);
+    const num = (x) => { const n = parseInt(x, 10); return isNaN(n) ? null : n; };
+    return { email: lead.email || null, name: lead.name || null, route: lead.route || null, band: lead.band || null, path: lead.path || null,
+      sqft: num(lead.sqft), estimate: est, payload: lead };
+  }
+  function supabaseRequest(row) {
+    return { url: SUPABASE_URL + '/rest/v1/leads', init: { method: 'POST', keepalive: true,
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify(row) } };
+  }
+  function postSupabase(lead, res) {
+    if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('__') === 0 || !res) return;
+    try { const q = supabaseRequest(leadRow(lead, res)); fetch(q.url, q.init).catch(() => {}); } catch (e) {}
+  }
+  function storeAndPost(lead, setCurrent, res) {
     try {
       if (setCurrent) localStorage.setItem(LS_LEAD, JSON.stringify(lead));
       const all = JSON.parse(localStorage.getItem(LS_LEADS) || '[]'); all.push(lead); localStorage.setItem(LS_LEADS, JSON.stringify(all));
     } catch (e) {}
+    postSupabase(lead, res || calc());
     if (LEAD_WEBHOOK_URL) {
       try { fetch(LEAD_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(lead) }).catch(() => {}); } catch (e) {}
     }
@@ -1245,14 +1264,14 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
   function submitLead(name, email, res, route) {
     const lead = leadPayload(route, res, { name: name, email: email });
     state.lead = lead;
-    storeAndPost(lead, true);
+    storeAndPost(lead, true, res);
   }
   function bindCall(res, where) {
     $$('.js-call').forEach((a) => a.addEventListener('click', (ev) => {
       ev.preventDefault();
       const sk = null;
       if (sk === '1' || (sk !== '0' && TEST_SKIP_CALENDLY)) {
-        storeAndPost(leadPayload('call_cta_clicked', res, { where: where, testSkip: true }), false);
+        storeAndPost(leadPayload('call_cta_clicked', res, { where: where, testSkip: true }), false, res);
         state.testSkipped = true;
         if (!state.lead) state.lead = { name: '', email: '' };
         if (res.band === 'stark') state.thanks = true;
@@ -1261,7 +1280,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
       }
       const known = state.lead && state.lead.email ? { name: state.lead.name, email: state.lead.email } : (state.callContact || {});
       if (known.email) {
-        storeAndPost(leadPayload('call_cta_clicked', res, Object.assign({ where: where }, known)), false);
+        storeAndPost(leadPayload('call_cta_clicked', res, Object.assign({ where: where }, known)), false, res);
         openScheduler(res, where, known);
       } else openCallStep(res, where);
     }));
@@ -1283,7 +1302,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
       if (!name) { $('#cerr').textContent = 'Please add your first name.'; $('#cname').focus(); return; }
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('#cerr').textContent = 'Please enter a valid email address.'; $('#cemail').focus(); return; }
       state.callContact = { name: name, email: email };
-      storeAndPost(leadPayload('call_cta_clicked', res, { where: where, name: name, email: email }), false);
+      storeAndPost(leadPayload('call_cta_clicked', res, { where: where, name: name, email: email }), false, res);
       openScheduler(res, where, state.callContact);
     };
     setTimeout(() => { const n = $('#cname'); if (n) n.focus(); }, 50);
@@ -1316,7 +1335,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
   window.addEventListener('message', (e) => {
     if (!e.data || e.data.event !== 'calendly.event_scheduled' || !schedCtx) return;
     if (e.origin.indexOf('calendly.com') === -1) return;
-    storeAndPost(leadPayload('call_booked', schedCtx.res, Object.assign({ where: schedCtx.where }, schedCtx.known)), false);
+    storeAndPost(leadPayload('call_booked', schedCtx.res, Object.assign({ where: schedCtx.where }, schedCtx.known)), false, schedCtx.res);
     onBooked(schedCtx);
   });
   function onBooked(ctx) {
@@ -1452,7 +1471,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
   function finishFT() {
     const res = calc();
     const known = state.lead && state.lead.email ? { name: state.lead.name, email: state.lead.email } : (state.callContact || {});
-    storeAndPost(leadPayload('finetune_done', res, Object.assign({ where: 'finetune' }, known)), false);
+    storeAndPost(leadPayload('finetune_done', res, Object.assign({ where: 'finetune' }, known)), false, res);
     go(3);
   }
   function mountS3() {
@@ -1612,7 +1631,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
   function mattSummaryBlock() { return ''; }
   function mattFull() { return ''; }
   function bindMatt() {}
-  window.YT_APP = { state: state, go: go, calc: calc };
+  window.YT_APP = { state: state, go: go, calc: calc, leadRow: leadRow, supabaseRequest: supabaseRequest };
   go(state.step || 1);
 })();
 
