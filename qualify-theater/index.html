@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design My Theater — Quick Qualifier | Tym</title>
+<meta name="description" content="Answer three quick questions so we can make sure we're the right fit for your theater project.">
+<style>
+  /* NAV — universal, sticky, with mobile hamburger */
+  nav {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(11, 13, 16, 0.72);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid rgba(35, 42, 52, 0.4);
+  }
+  nav > .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 16px;
+    padding: 14px 24px !important;
+    max-width: 1180px !important;
+    width: 100%;
+    margin: 0 auto !important;
+  }
+  nav a.logo {
+    font-weight: 700;
+    font-size: clamp(14px, 3.4vw, 19px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+  }
+  nav a.logo span { color: var(--accent, #2563EB); }
+  nav ul.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2.4vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+  }
+  nav ul.nav-menu a {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+    letter-spacing: -0.005em;
+    border-bottom: none;
+    padding: 0;
+  }
+  nav ul.nav-menu a:hover { color: #ffffff; }
+  nav .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  nav .nav-right a.btn,
+  nav a.btn {
+    display: inline-block !important;
+    background: var(--accent, #2563EB) !important;
+    color: #ffffff !important;
+    padding: clamp(10px, 2.4vw, 13px) clamp(14px, 3.4vw, 26px) !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: clamp(12px, 2.9vw, 15px) !important;
+    text-decoration: none !important;
+    border: none !important;
+    border-bottom: none !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    font-family: inherit !important;
+    letter-spacing: -0.005em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    line-height: 1.2 !important;
+  }
+  nav .nav-right a.btn:hover,
+  nav a.btn:hover {
+    background: var(--accent-strong, #3B7AFF) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+  }
+  nav .nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 8px;
+  }
+  nav .nav-toggle:hover { background: rgba(255,255,255,0.08); }
+  nav .nav-toggle span { display: block; width: 22px; height: 2px; background: #ffffff; border-radius: 2px; transition: transform 0.25s ease, opacity 0.15s ease; }
+  nav .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  nav .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  nav .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 900px) {
+    nav ul.nav-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(11, 13, 16, 0.97);
+      backdrop-filter: saturate(180%) blur(16px);
+      -webkit-backdrop-filter: saturate(180%) blur(16px);
+      flex-direction: column;
+      padding: 8px 24px 20px;
+      gap: 0;
+      border-bottom: 1px solid var(--border, #232a34);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      justify-content: flex-start;
+    }
+    nav ul.nav-menu.open { display: flex; }
+    nav ul.nav-menu li { width: 100%; }
+    nav ul.nav-menu a { display: block; padding: 16px 0; border-bottom: 1px solid rgba(35, 42, 52, 0.5); font-size: 17px; color: #ffffff; font-weight: 500; }
+    nav ul.nav-menu li:last-child a { border-bottom: none; }
+    nav .nav-toggle { display: flex; }
+  }
+  @media (max-width: 480px) {
+    nav .nav-right a.btn, nav a.btn { padding: 9px 14px !important; font-size: 13px !important; }
+  }
+
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #14181d;
+    --bg-card: #181d24;
+    --bg-soft: #1c2128;
+    --border: #232a34;
+    --border-strong: #2f3845;
+    --text: #f2f4f7;
+    --text-muted: #9aa4b2;
+    --text-soft: #c8cfd8;
+    --accent: #2563EB;
+    --accent-soft: #2563EB25;
+    --accent-strong: #3B7AFF;
+    --max-width: 720px;
+    --gutter: clamp(18px, 5vw, 24px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); width: 100%; }
+
+  /* HEADER */
+  header {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: clamp(14px, 3.4vw, 19px);
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+  .header-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  @media (max-width: 480px) { .header-meta { display: none; } }
+
+  /* HERO */
+  .hero {
+    padding: clamp(40px, 8vw, 60px) 0 clamp(30px, 6vw, 40px);
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    border: 1px solid var(--accent-soft);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin: 0 auto 16px;
+    max-width: 600px;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* FORM */
+  main {
+    flex: 1;
+    padding-bottom: 60px;
+  }
+  .form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(28px, 5vw, 40px);
+    margin: 0 auto;
+    max-width: 600px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
+  }
+  .question {
+    margin-bottom: 32px;
+  }
+  .question:last-of-type { margin-bottom: 24px; }
+  .question-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .radio-group.horizontal {
+    flex-direction: row;
+    gap: 10px;
+  }
+  @media (max-width: 480px) {
+    .radio-group.horizontal { flex-direction: column; }
+  }
+  .radio-card {
+    display: block;
+    cursor: pointer;
+    flex: 1;
+  }
+  .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+  .radio-card span {
+    display: block;
+    padding: 14px 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    transition: all 0.15s ease;
+    color: var(--text-soft);
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--bg);
+    text-align: center;
+  }
+  .radio-card:hover span {
+    border-color: var(--accent);
+    background: var(--bg-elev);
+    color: var(--text);
+  }
+  .radio-card input:checked + span {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .radio-card input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  input[type="email"],
+  input[type="text"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+  input[type="email"]:focus,
+  input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #ffffff;
+    padding: 16px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    width: 100%;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .fineprint {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: var(--bg-elev);
+  }
+  footer a { color: var(--text-muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '522485526738484');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C44FWQVXVS');
+</script>
+<!-- End Google tag -->
+</head>
+<body>
+
+<!-- NAV (universal, sticky, hamburger on mobile) -->
+<nav>
+  <div class="wrap">
+    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="/packages/aetherion-max/">Packages</a></li>
+      <li><a href="/qualify/">Custom Design</a></li>
+      <li><a href="/learn/">Blog</a></li>
+      <li><a href="/guides/">Guides</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/qualify/" class="btn">Design My Theater</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Design My Theater</div>
+      <h1>Let's make sure we're <span class="accent">a fit</span>.</h1>
+      <p class="hero-sub">Three quick questions. If we're the right fit for your project, you'll go straight to booking a call.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <form class="form-card" id="qualify-form" novalidate>
+
+      <div class="question">
+        <label class="question-label" for="first_name">First name</label>
+        <input type="text" name="first_name" id="first_name" placeholder="Matt" required autocomplete="given-name">
+      </div>
+
+      <div class="question">
+        <label class="question-label">Are you ready to move forward on a theater project in the next 30 days?</label>
+        <div class="radio-group horizontal">
+          <label class="radio-card">
+            <input type="radio" name="q1" value="yes" required>
+            <span>Yes</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q1" value="no">
+            <span>No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">What's your budget for theater equipment?</label>
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="q2" value="under25" required>
+            <span>Under $25,000</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q2" value="25k">
+            <span>$25,000 – $50,000</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q2" value="50k">
+            <span>$50,000+</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">Where are you in your project?</label>
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="q3" value="researching" required>
+            <span>Just researching</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q3" value="planning">
+            <span>Actively planning</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="q3" value="ready">
+            <span>Ready to buy</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label" for="email">Your best email</label>
+        <input type="email" name="email_address" id="email" placeholder="you@example.com" required autocomplete="email">
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">Continue</button>
+      <p class="fineprint">We respect your inbox. No spam, ever.</p>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="/">← Back to home</a>
+  </div>
+</footer>
+
+<script>
+// Kit form IDs
+const KIT_FORM_QUALIFIED = '9802203';
+const KIT_FORM_WARMUP    = '9802227';
+const CALENDLY_URL       = 'https://calendly.com/smartdesigns/quick-call-project-review';
+const NOT_A_FIT_URL      = '/not-a-fit/';
+
+// Human-readable labels for the answer values (used in custom fields sent to Kit)
+const BUDGET_LABELS = {
+  'under25': 'Under $25k',
+  '25k':     '$25k–$50k',
+  '50k':     '$50k+'
+};
+const STAGE_LABELS = {
+  'researching': 'Just researching',
+  'planning':    'Actively planning',
+  'ready':       'Ready to buy'
+};
+
+document.getElementById('qualify-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn        = document.getElementById('submit-btn');
+  const firstName  = this.querySelector('input[name="first_name"]').value.trim();
+  const q1         = this.querySelector('input[name="q1"]:checked');
+  const q2         = this.querySelector('input[name="q2"]:checked');
+  const q3         = this.querySelector('input[name="q3"]:checked');
+  const email      = this.querySelector('input[name="email_address"]').value.trim();
+
+  if (!firstName || !q1 || !q2 || !q3 || !email) {
+    alert('Please fill out all fields.');
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = 'One moment…';
+
+  const qualified =
+    q1.value === 'yes' &&
+    (q2.value === '25k' || q2.value === '50k') &&
+    (q3.value === 'planning' || q3.value === 'ready');
+
+  // Meta Pixel — fire Lead when a prospect qualifies (before Calendly redirect)
+  if (qualified && typeof fbq === 'function') {
+    fbq('track', 'Lead', { content_name: 'Theater Qualifier' });
+  }
+
+  const budgetLabel = BUDGET_LABELS[q2.value] || q2.value;
+  const stageLabel  = STAGE_LABELS[q3.value]  || q3.value;
+
+  // Build POST body for Kit — includes first name + custom fields for budget/stage
+  const body = new URLSearchParams({
+    'email_address':      email,
+    'fields[first_name]': firstName,
+    'fields[budget]':     budgetLabel,
+    'fields[stage]':      stageLabel,
+    'fields[source]':     qualified ? 'Theater Qualified' : 'Theater Warm-Up'
+  }).toString();
+
+  const kitFormId = qualified ? KIT_FORM_QUALIFIED : KIT_FORM_WARMUP;
+
+  // Fire-and-forget to the right Kit form (no-cors mode; submission works even though we can't read response)
+  try {
+    await fetch('https://app.kit.com/forms/' + kitFormId + '/subscriptions', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    });
+  } catch (err) {
+    // Even if Kit fails, continue with the redirect
+    console.error('Kit submission error:', err);
+  }
+
+  if (qualified) {
+    // Pre-fill Calendly with name + email so the booking form is one field shorter
+    const calendlyURL = CALENDLY_URL +
+      '?name=' + encodeURIComponent(firstName) +
+      '&email=' + encodeURIComponent(email) +
+      '&utm_source=qualifier';
+    window.location.href = calendlyURL;
+  } else {
+    // Pass name + email through so the quote form on /not-a-fit is pre-filled
+    window.location.href = NOT_A_FIT_URL +
+      '?name=' + encodeURIComponent(firstName) +
+      '&email=' + encodeURIComponent(email) +
+      '&budget=' + encodeURIComponent(budgetLabel);
+  }
+});
+</script>
+
+<script>
+// Universal nav — mobile hamburger toggle
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var menu   = document.getElementById('nav-menu');
+  if (!toggle || !menu) return;
+  function closeMenu() { menu.classList.remove('open'); toggle.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+  function openMenu()  { menu.classList.add('open'); toggle.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
+  toggle.addEventListener('click', function() { menu.classList.contains('open') ? closeMenu() : openMenu(); });
+  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+})();
+</script>
+
+</body>
+</html>

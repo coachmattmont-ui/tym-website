@@ -1,601 +1,1621 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Design My Theater — Quick Qualifier | Tym</title>
-<meta name="description" content="Answer three quick questions so we can make sure we're the right fit for your theater project.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>YourTech | Smart home &amp; theater estimate</title>
 <style>
-  /* NAV — universal, sticky, with mobile hamburger */
-  nav {
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(11, 13, 16, 0.72);
-    backdrop-filter: saturate(180%) blur(16px);
-    -webkit-backdrop-filter: saturate(180%) blur(16px);
-    border-bottom: 1px solid rgba(35, 42, 52, 0.4);
-  }
-  nav > .wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 16px;
-    padding: 14px 24px !important;
-    max-width: 1180px !important;
-    width: 100%;
-    margin: 0 auto !important;
-  }
-  nav a.logo {
-    font-weight: 700;
-    font-size: clamp(14px, 3.4vw, 19px);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: #ffffff;
-    text-decoration: none;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.3);
-    flex-shrink: 0;
-  }
-  nav a.logo span { color: var(--accent, #2563EB); }
-  nav ul.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: clamp(18px, 2.4vw, 28px);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex: 1;
-    justify-content: center;
-  }
-  nav ul.nav-menu a {
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: 500;
-    font-size: 14px;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.15s ease;
-    letter-spacing: -0.005em;
-    border-bottom: none;
-    padding: 0;
-  }
-  nav ul.nav-menu a:hover { color: #ffffff; }
-  nav .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  nav .nav-right a.btn,
-  nav a.btn {
-    display: inline-block !important;
-    background: var(--accent, #2563EB) !important;
-    color: #ffffff !important;
-    padding: clamp(10px, 2.4vw, 13px) clamp(14px, 3.4vw, 26px) !important;
-    border-radius: 8px !important;
-    font-weight: 700 !important;
-    font-size: clamp(12px, 2.9vw, 15px) !important;
-    text-decoration: none !important;
-    border: none !important;
-    border-bottom: none !important;
-    cursor: pointer !important;
-    transition: all 0.15s ease !important;
-    font-family: inherit !important;
-    letter-spacing: -0.005em !important;
-    white-space: nowrap !important;
-    flex-shrink: 0 !important;
-    line-height: 1.2 !important;
-  }
-  nav .nav-right a.btn:hover,
-  nav a.btn:hover {
-    background: var(--accent-strong, #3B7AFF) !important;
-    color: #ffffff !important;
-    transform: translateY(-1px);
-  }
-  nav .nav-toggle {
-    display: none;
-    background: transparent;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    width: 42px;
-    height: 42px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    border-radius: 8px;
-  }
-  nav .nav-toggle:hover { background: rgba(255,255,255,0.08); }
-  nav .nav-toggle span { display: block; width: 22px; height: 2px; background: #ffffff; border-radius: 2px; transition: transform 0.25s ease, opacity 0.15s ease; }
-  nav .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  nav .nav-toggle.open span:nth-child(2) { opacity: 0; }
-  nav .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  @media (max-width: 900px) {
-    nav ul.nav-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: rgba(11, 13, 16, 0.97);
-      backdrop-filter: saturate(180%) blur(16px);
-      -webkit-backdrop-filter: saturate(180%) blur(16px);
-      flex-direction: column;
-      padding: 8px 24px 20px;
-      gap: 0;
-      border-bottom: 1px solid var(--border, #232a34);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      justify-content: flex-start;
-    }
-    nav ul.nav-menu.open { display: flex; }
-    nav ul.nav-menu li { width: 100%; }
-    nav ul.nav-menu a { display: block; padding: 16px 0; border-bottom: 1px solid rgba(35, 42, 52, 0.5); font-size: 17px; color: #ffffff; font-weight: 500; }
-    nav ul.nav-menu li:last-child a { border-bottom: none; }
-    nav .nav-toggle { display: flex; }
-  }
-  @media (max-width: 480px) {
-    nav .nav-right a.btn, nav a.btn { padding: 9px 14px !important; font-size: 13px !important; }
-  }
+:root{
+  --bg:#f4f6fb; --card:#fff; --ink:#0f172a; --ink2:#475569; --ink3:#94a3b8; --line:#e2e8f0;
+  --brand:#4f6ef7; --brand2:#22c3a6; --brand-soft:#eaefff; --navy:#0b1220; --navy2:#16233f;
+  --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --radius:18px;
+  --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.45}
+button{font-family:inherit}
+html{scrollbar-gutter:stable;overflow-x:hidden}
 
-  :root {
-    --bg: #0b0d10;
-    --bg-elev: #14181d;
-    --bg-card: #181d24;
-    --bg-soft: #1c2128;
-    --border: #232a34;
-    --border-strong: #2f3845;
-    --text: #f2f4f7;
-    --text-muted: #9aa4b2;
-    --text-soft: #c8cfd8;
-    --accent: #2563EB;
-    --accent-soft: #2563EB25;
-    --accent-strong: #3B7AFF;
-    --max-width: 720px;
-    --gutter: clamp(18px, 5vw, 24px);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); width: 100%; }
+#app{width:100%;max-width:520px;overflow-x:clip;margin:0 auto;min-height:100vh;position:relative;background:var(--bg)}
+@media(min-width:760px){#app{margin:24px auto;min-height:calc(100vh - 48px);border-radius:28px;box-shadow:0 30px 80px rgba(15,23,42,.18);overflow:hidden}
+}
+.hero{background:linear-gradient(160deg,var(--navy),var(--navy2) 60%,#223a6b);color:#fff;padding:22px 20px 56px;position:relative}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px;font-size:18px;user-select:none}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-size:16px}
+.brand small{font-weight:600;opacity:.6;font-size:12px;margin-left:auto}
+.hero h1{font-size:27px;line-height:1.12;margin:20px 0 6px;letter-spacing:-.4px}
+.hero p{margin:0;opacity:.75;font-size:14.5px}
+.steps{display:flex;gap:6px;margin-top:16px}
+.steps i{height:4px;flex:1;border-radius:3px;background:rgba(255,255,255,.2)}
+.steps i.on{background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.sheet{margin-top:-34px;padding:0 14px 120px;position:relative}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.card h2{font-size:15px;margin:0 0 2px;letter-spacing:-.1px}
+.card .hint{color:var(--ink2);font-size:13px;margin:0 0 12px}
+.big-val{font-size:30px;font-weight:800;letter-spacing:-.6px}
+.big-val small{font-size:14px;color:var(--ink2);font-weight:600;letter-spacing:0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:6px;background:var(--line);outline:none;margin:14px 0 4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 2px 8px rgba(79,110,247,.5);cursor:pointer;border:3px solid #fff}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--brand);border:3px solid #fff;cursor:pointer}
+.ticks{display:flex;justify-content:space-between;color:var(--ink3);font-size:11px}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:44px;height:44px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-size:22px;color:var(--ink);cursor:pointer}
+.stepper button:active{background:var(--brand-soft)}
+.stepper .n{font-size:28px;font-weight:800;min-width:34px;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:14.5px;font-weight:600;color:var(--ink2);cursor:pointer;transition:all .12s;user-select:none}
+.chip .e{font-size:17px}
+.chip.on{background:var(--brand-soft);border-color:var(--brand);color:#2740c9}
+.chip.add{border-style:dashed}
+.chip .x{margin-left:2px;opacity:.6;font-weight:800}
+.other-row{display:flex;gap:8px;margin-top:10px}
+input[type=text],input[type=email]{width:100%;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line);font-size:16px;background:#fff;color:var(--ink);outline:none}
+input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.btn{appearance:none;border:0;border-radius:16px;padding:16px 20px;font-size:16.5px;font-weight:700;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--brand),#6a4cf0);box-shadow:0 8px 20px rgba(79,110,247,.35);width:100%}
+.btn:active{transform:translateY(1px)}
+.btn.alt{background:#fff;color:var(--ink);box-shadow:none;border:1.5px solid var(--line)}
+.btn.green{background:linear-gradient(135deg,#17b897,#12a07f);box-shadow:0 8px 20px rgba(18,160,127,.3)}
+.btn.sm{padding:10px 14px;font-size:14px;border-radius:12px;width:auto}
+.btn:disabled{opacity:.5;box-shadow:none}
+.linkbtn{background:none;border:0;color:var(--brand);font-weight:700;cursor:pointer;font-size:14px;padding:6px 0}
+.cta-bar{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(244,246,251,0),var(--bg) 35%)}
+.cta-bar .in{max-width:520px;margin:0 auto}
+.range-card{background:linear-gradient(160deg,var(--navy),#1c2f57);color:#fff;border-radius:22px;padding:24px 20px;box-shadow:var(--shadow);text-align:center;margin-bottom:14px}
+.range-card .lbl{font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;opacity:.65;font-weight:700}
+.range-card .rng{font-size:clamp(26px,8vw,38px);white-space:nowrap;font-weight:800;letter-spacing:-1px;margin:8px 0 4px;background:linear-gradient(90deg,#fff,#b8f3e6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.range-card .sub{font-size:13px;opacity:.7}
+.bullets{list-style:none;margin:0;padding:0}
+.bullets li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px;font-weight:600}
+.bullets li:last-child{border:0}
+.bullets .ic{width:30px;height:30px;border-radius:10px;background:var(--brand-soft);display:grid;place-items:center;font-size:15px;flex:none}
+.gate{border:2px solid var(--brand);background:linear-gradient(180deg,#fff,#f5f7ff)}
+.gate .tag{display:inline-block;background:var(--brand2);color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:8px}
+.gate h2{font-size:19px}
+.field{margin:10px 0}
+.fine{font-size:12px;color:var(--ink3);margin-top:8px}
+.tabs{display:flex;background:#e6eaf4;border-radius:16px;padding:4px;margin-bottom:14px;position:sticky;top:8px;z-index:5}
+.tabs button{flex:1;border:0;background:none;padding:12px 6px;border-radius:12px;font-weight:700;font-size:15px;color:var(--ink2);cursor:pointer;line-height:1.2}
+.tabs button small{display:block;font-size:11.5px;font-weight:600;opacity:.7;margin-top:2px}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(15,23,42,.1)}
+.price-card .row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:15px;color:var(--ink2)}
+.price-card .row b{color:var(--ink);white-space:nowrap;margin-left:10px}
+.price-card .row.save b{color:var(--ok)}
+.price-card .total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);margin-top:8px;padding-top:12px}
+.price-card .total span{font-weight:700}
+.price-card .total b{font-size:32px;letter-spacing:-.8px}
+.pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--brand-soft);color:#2740c9;margin-left:6px;vertical-align:middle}
+.pill.g{background:#dcfce7;color:#15803d}
+.pill.o{background:#ffedd5;color:#b45309}
+.labor{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.labor div{background:var(--bg);border-radius:14px;padding:12px}
+.labor span{display:block;font-size:12px;color:var(--ink2);font-weight:600}
+.labor b{font-size:16.5px}
+.swap{display:grid;gap:10px}
+.swap.two{grid-template-columns:1fr 1fr}
+.opt{border:2px solid var(--line);border-radius:16px;padding:13px;background:#fff;cursor:pointer;text-align:left;transition:all .12s;position:relative}
+.opt.on{border-color:var(--brand);background:var(--brand-soft)}
+.opt h3{margin:0 0 3px;font-size:15px}
+.opt p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.35}
+.opt .d{display:block;margin-top:8px;font-weight:800;font-size:14px;color:var(--ink)}
+.opt .d.up{color:#b45309}.opt .d.dn{color:var(--ok)}
+.opt .rec{position:absolute;top:-9px;right:12px;background:var(--brand2);color:#fff;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.5px}
+.toggle{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.toggle:last-child{border:0}
+.toggle .tx{flex:1}
+.toggle .tx b{display:block;font-size:14.5px}
+.toggle .tx span{font-size:12.5px;color:var(--ink2)}
+.sw{width:50px;height:30px;border-radius:999px;background:#cbd5e1;position:relative;flex:none;cursor:pointer;border:0;transition:.15s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25);transition:.15s}
+.sw.on{background:var(--brand)}
+.sw.on::after{left:23px}
+.mini-step{display:flex;align-items:center;gap:8px}
+.mini-step button{width:34px;height:34px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:18px;cursor:pointer}
+.mini-step b{min-width:28px;text-align:center}
+.sub-opts{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.sub-opts .lbl{font-size:12px;font-weight:700;color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.chip.sm{padding:7px 11px;font-size:13px}
+.chip .dd{font-size:11.5px;opacity:.75;font-weight:700}
+.group{margin-bottom:10px}
+.group h3{margin:0;padding:12px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.9px;color:var(--ink2);display:flex;align-items:center}
+.items{list-style:none;margin:0;padding:0}
+.items li{padding:9px 0;border-top:1px solid var(--line);display:flex;gap:10px;font-size:14.5px}
+.items .q{font-weight:800;color:#2740c9;min-width:28px}
+.items .note{display:block;font-size:12px;color:var(--ink3)}
+.disc{font-size:12px;color:var(--ink3);line-height:1.5}
+.callout{background:linear-gradient(135deg,#ecfdf5,#eaf0ff);border:1.5px solid #bfe9dc;border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.callout h2{font-size:18px;margin:0 0 4px}
+.callout p{margin:0 0 12px;color:var(--ink2);font-size:14px}
+.notice{background:#fff7ed;border:1.5px solid #fed7aa;color:#9a3412;border-radius:14px;padding:12px 14px;font-size:13.5px;margin-bottom:12px}
+.hidden{display:none!important}
+.fade{animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  /* HEADER */
-  header {
-    padding: 22px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  header .wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .logo {
-    font-weight: 700;
-    font-size: clamp(14px, 3.4vw, 19px);
-    letter-spacing: -0.01em;
-    color: var(--text);
-  }
-  .logo span { color: var(--accent); }
-  .header-meta {
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  @media (max-width: 480px) { .header-meta { display: none; } }
 
-  /* HERO */
-  .hero {
-    padding: clamp(40px, 8vw, 60px) 0 clamp(30px, 6vw, 40px);
-    text-align: center;
-  }
-  .eyebrow {
-    display: inline-block;
-    background: var(--accent-soft);
-    color: var(--accent-strong);
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    margin-bottom: 20px;
-    border: 1px solid var(--accent-soft);
-    text-transform: uppercase;
-  }
-  h1 {
-    font-size: clamp(30px, 5vw, 46px);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.08;
-    margin: 0 auto 16px;
-    max-width: 600px;
-    text-wrap: balance;
-  }
-  h1 .accent { color: var(--accent); }
-  .hero-sub {
-    font-size: clamp(16px, 2vw, 18px);
-    color: var(--text-muted);
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.55;
-  }
+.quiet-wrap{text-align:center;margin-top:12px}
+.quiet{background:none;border:0;padding:4px 6px;font-size:12.5px;font-weight:500;color:var(--ink2);text-decoration:underline;cursor:pointer;opacity:.8}
+.quiet:hover{opacity:1}
 
-  /* FORM */
-  main {
-    flex: 1;
-    padding-bottom: 60px;
-  }
-  .form-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: clamp(28px, 5vw, 40px);
-    margin: 0 auto;
-    max-width: 600px;
-    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
-  }
-  .question {
-    margin-bottom: 32px;
-  }
-  .question:last-of-type { margin-bottom: 24px; }
-  .question-label {
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 12px;
-    letter-spacing: -0.005em;
-  }
-  .radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .radio-group.horizontal {
-    flex-direction: row;
-    gap: 10px;
-  }
-  @media (max-width: 480px) {
-    .radio-group.horizontal { flex-direction: column; }
-  }
-  .radio-card {
-    display: block;
-    cursor: pointer;
-    flex: 1;
-  }
-  .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
-  .radio-card span {
-    display: block;
-    padding: 14px 18px;
-    border: 1px solid var(--border-strong);
-    border-radius: 10px;
-    transition: all 0.15s ease;
-    color: var(--text-soft);
-    font-size: 15px;
-    font-weight: 500;
-    background: var(--bg);
-    text-align: center;
-  }
-  .radio-card:hover span {
-    border-color: var(--accent);
-    background: var(--bg-elev);
-    color: var(--text);
-  }
-  .radio-card input:checked + span {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    color: var(--text);
-    font-weight: 600;
-  }
-  .radio-card input:focus-visible + span {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+.sched-ov{position:fixed;inset:0;background:rgba(15,20,40,.55);z-index:1000;display:flex;align-items:flex-end;justify-content:center}
+.sched-box{background:#fff;width:100%;max-width:560px;max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:10px 8px 14px}
+.sched-top{display:flex;justify-content:space-between;align-items:center;padding:6px 10px}
+.sched-x{border:0;background:#eef0f6;border-radius:50%;width:32px;height:32px;font-size:15px;cursor:pointer}
+.sched-fallback{text-align:center;margin-top:6px}
+@media(min-width:700px){.sched-ov{align-items:center}.sched-box{border-radius:20px}}
 
-  input[type="email"],
-  input[type="text"] {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border-strong);
-    border-radius: 10px;
-    padding: 14px 16px;
-    color: var(--text);
-    font-size: 15px;
-    font-family: inherit;
-    transition: border-color 0.15s ease;
-  }
-  input[type="email"]:focus,
-  input[type="text"]:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
 
-  .btn {
-    display: inline-block;
-    background: var(--accent);
-    color: #ffffff;
-    padding: 16px 28px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 16px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
-    width: 100%;
-  }
-  .btn:hover:not(:disabled) {
-    background: var(--accent-strong);
-    transform: translateY(-1px);
-  }
-  .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  .fineprint {
-    color: var(--text-muted);
-    font-size: 12px;
-    text-align: center;
-    margin-top: 14px;
-  }
+.ft-bar{position:sticky;top:8px;z-index:8;display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:18px;box-shadow:0 2px 6px rgba(15,23,42,.08),0 10px 28px rgba(15,23,42,.12);padding:11px 14px;margin-bottom:6px}
+.ft-tot{min-width:0;display:flex;flex-direction:column}
+.ft-tot .l{font-size:11.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2)}
+.ft-tot .l i{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink3)}
+.ft-tot b{font-size:27px;line-height:1.1;letter-spacing:-.7px;white-space:nowrap}
+.ft-delta{font-style:normal;font-size:11.5px;font-weight:700;color:var(--ink3)}
+.ft-delta.up{color:#b45309}.ft-delta.dn{color:var(--ok)}
+.ft-meter{flex:none;width:112px;display:flex;flex-direction:column;gap:4px}
+.ft-meter .l{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2)}
+.ft-meter .bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden}
+.ft-meter .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .35s ease}
+.ft-meter .p{font-size:12px;font-weight:800;color:var(--ink)}
+.ft-labor{margin:0 6px 12px;font-size:12.5px;color:var(--ink2)}
+.ft-labor b{color:var(--ink)}
+.ft-intro p{margin:0;font-size:14px;color:var(--ink2)}
+.quietlink{display:inline-block;margin-top:8px;font-size:13.5px;font-weight:700;color:var(--brand);text-decoration:none}
+.rc{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:10px;border:2px solid transparent;overflow:hidden}
+.rc.open{border-color:var(--brand)}
+.rc.custom:not(.open){border-color:#fed7aa}
+.rc-h{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;padding:13px 14px;text-align:left;cursor:pointer;color:var(--ink)}
+.rc-h .e{width:38px;height:38px;border-radius:12px;background:var(--brand-soft);display:grid;place-items:center;font-size:19px;flex:none}
+.rc-h .t{flex:1;min-width:0}
+.rc-h .t b{display:block;font-size:15.5px}
+.rc-h .t small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;color:var(--ink2);line-height:1.35}
+.rc-h .ch{color:var(--ink3);font-size:16px;transition:transform .15s}
+.rc.open .ch{transform:rotate(180deg)}
+.rc-b{padding:2px 12px 12px}
+.sys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sy{appearance:none;border:2px solid var(--line);background:#fff;border-radius:14px;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;color:var(--ink);min-height:68px;transition:all .12s;position:relative}
+.sy .e{font-size:19px;line-height:1.2}
+.sy .n{font-size:13px;font-weight:700}
+.sy .d{font-size:11.5px;font-weight:700;color:var(--ink3)}
+.sy.on{border-color:var(--brand);background:var(--brand-soft)}
+.sy.on .d{color:#2740c9}
+.sy:active{transform:scale(.97)}
+.sy.dis{opacity:.5;cursor:not-allowed}
+.sy .mflag{position:absolute;top:-7px;right:4px;background:#be123c;color:#fff;font-size:8.5px;font-weight:800;letter-spacing:.4px;padding:1px 5px;border-radius:6px}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:1200;background:#0f172a;color:#fff;border-radius:16px;padding:12px 18px;box-shadow:0 14px 40px rgba(15,23,42,.35);display:flex;flex-direction:column;align-items:center;gap:2px;max-width:calc(100vw - 28px);text-align:center;animation:fade .25s ease;transition:opacity .35s}
+.toast b{font-size:16px}.toast span{font-size:12.5px;opacity:.8}
+.toast.out{opacity:0}
+.ft-tot .ft-count{font-size:19px;line-height:1.25;letter-spacing:-.3px}
 
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 0;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 13px;
-    background: var(--bg-elev);
-  }
-  footer a { color: var(--text-muted); text-decoration: none; }
-  footer a:hover { color: var(--accent); }
+.confirm{background:#ecfdf5;border:1.5px solid #a7f3d0;color:#065f46;border-radius:var(--radius);padding:14px 16px;font-size:15px;margin-bottom:14px}
+.confirm b{font-size:16px}
+.card.more .btn{margin-top:4px}
+.chip .pill{font-size:10.5px;padding:1px 6px;margin-left:4px}
+
 </style>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '522485526738484');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-C44FWQVXVS');
-</script>
-<!-- End Google tag -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C44FWQVXVS');</script>
 </head>
 <body>
-
-<!-- NAV (universal, sticky, hamburger on mobile) -->
-<nav>
-  <div class="wrap">
-    <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
-    <ul class="nav-menu" id="nav-menu">
-      <li><a href="/packages/aetherion-max/">Packages</a></li>
-      <li><a href="/qualify/">Custom Design</a></li>
-      <li><a href="/learn/">Blog</a></li>
-      <li><a href="/guides/">Guides</a></li>
-      <li><a href="/about/">About</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="/qualify/" class="btn">Design My Theater</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </div>
-</nav>
-
-<main>
-  <section class="hero">
-    <div class="wrap">
-      <div class="eyebrow">Design My Theater</div>
-      <h1>Let's make sure we're <span class="accent">a fit</span>.</h1>
-      <p class="hero-sub">Three quick questions. If we're the right fit for your project, you'll go straight to booking a call.</p>
-    </div>
-  </section>
-
-  <div class="wrap">
-    <form class="form-card" id="qualify-form" novalidate>
-
-      <div class="question">
-        <label class="question-label" for="first_name">First name</label>
-        <input type="text" name="first_name" id="first_name" placeholder="Matt" required autocomplete="given-name">
-      </div>
-
-      <div class="question">
-        <label class="question-label">Are you ready to move forward on a theater project in the next 30 days?</label>
-        <div class="radio-group horizontal">
-          <label class="radio-card">
-            <input type="radio" name="q1" value="yes" required>
-            <span>Yes</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="q1" value="no">
-            <span>No</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="question">
-        <label class="question-label">What's your budget for theater equipment?</label>
-        <div class="radio-group">
-          <label class="radio-card">
-            <input type="radio" name="q2" value="under25" required>
-            <span>Under $25,000</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="q2" value="25k">
-            <span>$25,000 – $50,000</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="q2" value="50k">
-            <span>$50,000+</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="question">
-        <label class="question-label">Where are you in your project?</label>
-        <div class="radio-group">
-          <label class="radio-card">
-            <input type="radio" name="q3" value="researching" required>
-            <span>Just researching</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="q3" value="planning">
-            <span>Actively planning</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="q3" value="ready">
-            <span>Ready to buy</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="question">
-        <label class="question-label" for="email">Your best email</label>
-        <input type="email" name="email_address" id="email" placeholder="you@example.com" required autocomplete="email">
-      </div>
-
-      <button type="submit" class="btn" id="submit-btn">Continue</button>
-      <p class="fineprint">We respect your inbox. No spam, ever.</p>
-    </form>
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    <a href="/">← Back to home</a>
-  </div>
-</footer>
-
+<div id="app"></div>
+<script type="application/json" id="yt-catalog">{"items":{"Sonos-Amp":{"sku":"Sonos-Amp","name":"Sonos Amp","brand":"Sonos","cat":"audio","key":"Sonos-Amp","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":799},"fr":0.85,"nodisc":true},"Sonos-Port":{"sku":"Sonos-Port","name":"Sonos Port","brand":"Sonos","cat":"audio","key":"Sonos-Port","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":499},"fr":0.85,"nodisc":true},"SONOS-ARC-2-BL":{"sku":"SONOS-ARC-2-BL","name":"Sonos Arc Ultra soundbar","brand":"Sonos","cat":"audio","key":"SONOS-ARC-2-BL","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":1099},"fr":0.85,"nodisc":true},"SONOS-SUB-M-BL":{"sku":"SONOS-SUB-M-WH","name":"Sonos Sub Mini","brand":"Sonos","cat":"audio","key":"SONOS-SUB-M-BL","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":499},"fr":0.85,"nodisc":true},"SONOS-ERA-100-BL":{"sku":"SONOS-ERA-100-BL","name":"Sonos Era 100 (wireless surround)","brand":"Sonos","cat":"audio","key":"SONOS-ERA-100-BL","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":219},"fr":0.86,"nodisc":true},"SONOS-ARC-2-WM":{"sku":"SONOS-ARC-2-WM","name":"Sonos Arc Ultra wall mount set","brand":"Sonos","cat":"mount","key":"SONOS-ARC-2-WM","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":79},"fr":0.67},"SAN-WSSCAM1-B2":{"sku":"SAN-WSSCAM1-B2","name":"Sanus slim wall mount for Sonos Amp","brand":"Sanus","cat":"mount","key":"SAN-WSSCAM1-B2","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":65.99},"fr":0.52},"SP-6":{"sku":"SP-6","name":"TruAudio Shadow 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","key":"SP-6","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":93},"fr":0.48},"PG-6":{"sku":"PG-6","name":"TruAudio Phantom 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","key":"PG-6","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":374},"fr":0.27},"PG-8":{"sku":"PG-8","name":"TruAudio Phantom 8\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","key":"PG-8","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":467},"fr":0.27},"RC-6":{"sku":"RC-6","name":"TruAudio speaker ring (pre-construction bracket) 6.5\"","brand":"TruAudio","cat":"accessory","key":"RC-6","labor":{"trim":0,"rough":0.1},"listPolicy":{"type":"fixed","list":34},"fr":0.39},"RC-879":{"sku":"RC-879","name":"TruAudio speaker ring (pre-construction bracket) 8\"","brand":"TruAudio","cat":"accessory","key":"RC-879","labor":{"trim":0,"rough":0.1},"listPolicy":{"type":"fixed","list":34},"fr":0.39},"GHT-66P":{"sku":"GHT-66P","name":"TruAudio Ghost HT in-wall LCR speaker","brand":"TruAudio","cat":"speaker","key":"GHT-66P","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":826.5},"fr":0.38},"GHT-SUR-P":{"sku":"GHT-SUR-P","name":"TruAudio Ghost HT in-wall surround speaker","brand":"TruAudio","cat":"speaker","key":"GHT-SUR-P","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":652.5},"fr":0.44},"DFS-10BK":{"sku":"DFS-10BK","name":"TruAudio 10\" powered down-firing subwoofer","brand":"TruAudio","cat":"speaker","key":"DFS-10BK","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":1334},"fr":0.33},"RW-G66":{"sku":"RW-G66","name":"TruAudio rough-in ring for Ghost HT LCR","brand":"TruAudio","cat":"accessory","key":"RW-G66","labor":{"trim":0,"rough":0.1},"listPolicy":{"type":"fixed","list":65},"fr":0.34},"RW-GSUR":{"sku":"RW-GSUR","name":"TruAudio rough-in ring for Ghost HT surround","brand":"TruAudio","cat":"accessory","key":"RW-GSUR","labor":{"trim":0,"rough":0.1},"listPolicy":{"type":"fixed","list":63},"fr":0.34},"OP6-BK":{"sku":"OP6-BK","name":"TruAudio 6.5\" outdoor speaker (black)","brand":"TruAudio","cat":"speaker","key":"OP6-BK","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":580},"fr":0.37},"SM-RBX-14-WH":{"sku":"SM-RBX-14-WH","name":"Strong VersaBox recessed box (behind TV, houses Sonos Amp)","brand":"Strong","cat":"mount","key":"SM-RBX-14-WH","labor":{"trim":0.5,"rough":0.5},"listPolicy":{"type":"fixed","list":139.98},"fr":0.5},"SM-RBX-14-BKT":{"sku":"SM-RBX-14-BKT","name":"VersaBox pre-construction bracket","brand":"Strong","cat":"accessory","key":"SM-RBX-14-BKT","labor":{"trim":0,"rough":0.1},"listPolicy":{"type":"fixed","list":27.98},"fr":0.5},"CHF-MTM1U":{"sku":"CHF-MTM1U","name":"Chief Fusion tilt TV mount 32-65\"","brand":"Chief","cat":"mount","key":"CHF-MTM1U","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":279},"fr":0.63},"CHF-LTM1U":{"sku":"CHF-LTM1U","name":"Chief Fusion tilt TV mount 42-86\"","brand":"Chief","cat":"mount","key":"CHF-LTM1U","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":438},"fr":0.63},"CHF-XTM1U":{"sku":"CHF-XTM1U","name":"Chief Fusion tilt TV mount 55-100\"","brand":"Chief","cat":"mount","key":"CHF-XTM1U","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":519},"fr":0.63},"SAN-VMPL50A-B1":{"sku":"SAN-VMPL50A-B1","name":"Sanus tilting TV wall mount","brand":"Sanus","cat":"mount","key":"SAN-VMPL50A-B1","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":189.99},"fr":0.54},"SM-PROJ-XL-BLK":{"sku":"SM-PROJ-XL-BLK","name":"Strong projector ceiling mount","brand":"Strong","cat":"mount","key":"SM-PROJ-XL-BLK","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":399.99},"fr":0.41},"B6-4K2-1":{"sku":"B6-4K2-1","name":"Binary 4K HDMI cable 1 m","brand":"Binary","cat":"cable","key":"B6-4K2-1","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":19.99},"fr":0.5},"B6-4K2-2":{"sku":"B6-4K2-2","name":"Binary 4K HDMI cable 2 m","brand":"Binary","cat":"cable","key":"B6-4K2-2","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":31.99},"fr":0.5},"B6A-4K2-10":{"sku":"B6A-4K2-10","name":"Binary active 4K HDMI cable 10 m (projector run)","brand":"Binary","cat":"cable","key":"B6A-4K2-10","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":145.99},"fr":0.5},"B6-XLR-3FM-2FT":{"sku":"B6-XLR-3FM-2FT","name":"Binary XLR patch cable","brand":"Binary","cat":"cable","key":"B6-XLR-3FM-2FT","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":17.99},"fr":0.49},"SR-SHELF-FIXED-4U":{"sku":"SR-SHELF-FIXED-4U","name":"Strong rack shelf 4U","brand":"Strong","cat":"rack","key":"SR-SHELF-FIXED-4U","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":149.98},"fr":0.5},"SR-SHELF-FIXED-2U":{"sku":"SR-SHELF-FIXED-2U","name":"Strong rack shelf 2U","brand":"Strong","cat":"rack","key":"SR-SHELF-FIXED-2U","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":109.98},"fr":0.5},"SR-CS-RACK-21U":{"sku":"SR-CS-RACK-21U","name":"Strong 21U equipment rack","brand":"Strong","cat":"rack","key":"SR-CS-RACK-21U","labor":{"trim":4,"rough":0},"listPolicy":{"type":"fixed","list":599.98},"fr":0.5},"WB-150-IPW-1B-2":{"sku":"WB-150-IPW-1B-2","name":"WattBox IP power outlet (OvrC)","brand":"WattBox","cat":"power","key":"WB-150-IPW-1B-2","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":268.79},"fr":0.61},"WB-700CH-IPV-12":{"sku":"WB-700CH-IPV-12","name":"WattBox IP power conditioner, 12 outlets (OvrC)","brand":"WattBox","cat":"power","key":"WB-700CH-IPV-12","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":1241.99},"fr":0.55},"NST-162-500-WH":{"sku":"NST-162-500-WH","name":"Wirepath 16/2 speaker wire, 500 ft","brand":"Wirepath","cat":"cable","key":"NST-162-500-WH","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":147.95},"fr":0.94},"YA-RX-V6A":{"sku":"YA-RX-V6A","name":"Yamaha 7.2-ch AV receiver (RX-V6A)","brand":"Yamaha","cat":"av","key":"YA-RX-V6A","labor":{"trim":1.5,"rough":0},"listPolicy":{"type":"fixed","list":849.95},"fr":0.65},"YA-RX-A4A":{"sku":"YA-RX-A4A","name":"Yamaha AVENTAGE 7.2-ch AV receiver (RX-A4A)","brand":"Yamaha","cat":"av","key":"YA-RX-A4A","labor":{"trim":1.5,"rough":0},"listPolicy":{"type":"fixed","list":1599.95},"fr":0.65},"VPLXW5000ES":{"sku":"VPLXW5000ES","name":"Sony VPL-XW5000ES 4K laser projector (2,000 lm)","brand":"Sony","cat":"projector","key":"VPLXW5000ES","labor":{"trim":3,"rough":0.5},"listPolicy":{"type":"fixed","list":5999.99},"fr":0.76},"VPLXW5100ES":{"sku":"VPLXW5100ES","name":"Sony VPL-XW5100ES 4K laser projector (2,200 lm)","brand":"Sony","cat":"projector","key":"VPLXW5100ES","labor":{"trim":3,"rough":0.5},"listPolicy":{"type":"fixed","list":9999.99},"fr":0.61},"V11HA47020MB":{"sku":"V11HA47020MB","name":"Epson Pro Cinema LS12000 4K laser projector (2,700 lm)","brand":"Epson","cat":"projector","key":"V11HA47020MB","labor":{"trim":3,"rough":0.5},"listPolicy":{"type":"fixed","list":4999},"fr":0.78},"DF-SL-92-UAW":{"sku":"DF-SL-92-UAW","name":"Dragonfly 92\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","key":"DF-SL-92-UAW","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":3168.99},"fr":0.36,"size":92},"DF-SL-100-UAW":{"sku":"DF-SL-100-UAW","name":"Dragonfly 100\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","key":"DF-SL-100-UAW","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":1816.29},"fr":0.34,"size":100},"DF-SL-106-UAW":{"sku":"DF-SL-106-UAW","name":"Dragonfly 106\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","key":"DF-SL-106-UAW","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":1925.91},"fr":0.34,"size":106},"DF-TB-110-UAW":{"sku":"DF-TB-110-UAW","name":"Dragonfly 110\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","key":"DF-TB-110-UAW","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":4308.99},"fr":0.46,"size":110},"Aetherion Max":{"sku":"Aetherion Max","name":"AWOL Vision Aetherion Max 4K triple-laser UST projector (3,300 lm)","brand":"AWOL Vision","cat":"projector","key":"Aetherion Max","labor":{"trim":3,"rough":0.5},"listPolicy":{"type":"fixed","list":3999},"fr":0.6},"Aetherion Pro":{"sku":"Aetherion Pro","name":"AWOL Vision Aetherion Pro 4K triple-laser UST projector (2,600 lm)","brand":"AWOL Vision","cat":"projector","key":"Aetherion Pro","labor":{"trim":3,"rough":0.5},"listPolicy":{"type":"fixed","list":2999},"fr":0.7},"ALR-F220C Pro":{"sku":"ALR-F220C Pro","name":"AWOL Vision 120\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","key":"ALR-F220C Pro","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":2999},"fr":0.67},"ALR-F230C Pro":{"sku":"ALR-F230C Pro","name":"AWOL Vision 130\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","key":"ALR-F230C Pro","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":3799},"fr":0.64},"AS-S120":{"sku":"AS-S120","name":"AWOL Smart Station cabinet 120\"","brand":"AWOL Vision","cat":"cabinet","key":"AS-S120","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":749},"fr":0.75},"AS-S130":{"sku":"AS-S130","name":"AWOL Smart Station cabinet 130\"","brand":"AWOL Vision","cat":"cabinet","key":"AS-S130","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":849},"fr":0.77},"TB-412":{"sku":"TB-412","name":"AWOL ThunderBeat 4.1.2 surround system","brand":"AWOL Vision","cat":"audio","key":"TB-412","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":1199},"fr":0.7},"LUT-PD-6WCL-WH":{"sku":"LUT-PD-6WCL-WH","name":"Lutron Caseta smart dimmer","brand":"Lutron","cat":"lighting","key":"LUT-PD-6WCL-WH","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":79.3},"fr":0.65},"LUT-P-PKG1W-WH":{"sku":"LUT-P-PKG1W-WH","name":"Lutron Caseta dimmer + Pico 3-way kit","brand":"Lutron","cat":"lighting","key":"LUT-P-PKG1W-WH","labor":{"trim":0.4,"rough":0},"listPolicy":{"type":"fixed","list":96.3},"fr":0.65},"LUT-L-BDGPRO2-WH":{"sku":"LUT-L-BDGPRO2-WH","name":"Lutron Caseta Smart Bridge PRO","brand":"Lutron","cat":"lighting","key":"LUT-L-BDGPRO2-WH","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":180},"fr":0.65},"LUT-PD-REP-WH":{"sku":"LUT-PD-REP-WH","name":"Lutron Caseta wireless repeater","brand":"Lutron","cat":"lighting","key":"LUT-PD-REP-WH","labor":{"trim":0.1,"rough":0},"listPolicy":{"type":"fixed","list":110},"fr":0.65},"RRD-PRO":{"sku":"RRD-PRO","name":"Lutron Select smart dimmer (Maestro PRO LED+, neutral optional)","brand":"Lutron","cat":"lighting","key":"RRD-PRO","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":219.5},"fr":0.63,"nodisc":true},"PJ2-WALL-WH-L01":{"sku":"PJ2-WALL-WH-L01","name":"Lutron Pico remote + wall-mount kit (3-way / multi-location)","brand":"Lutron","cat":"lighting","key":"PJ2-WALL-WH-L01","labor":{"trim":0.15,"rough":0},"listPolicy":{"type":"fixed","list":39.95},"fr":0.81,"nodisc":true},"RR-SEL-REP2":{"sku":"RR-SEL-REP2","name":"Lutron Select main repeater","brand":"Lutron","cat":"lighting","key":"RR-SEL-REP2","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":384},"fr":0.63,"nodisc":true},"L-REPPRO":{"sku":"L-REPPRO","name":"Lutron wireless repeater (Select / RA3)","brand":"Lutron","cat":"lighting","key":"L-REPPRO","labor":{"trim":0.15,"rough":0},"listPolicy":{"type":"fixed","list":252},"fr":0.63,"nodisc":true},"RR-PROC3-KIT1":{"sku":"RR-PROC3-KIT1","name":"Lutron RadioRA 3 processor kit (with PoE injector)","brand":"Lutron","cat":"lighting","key":"RR-PROC3-KIT1","labor":{"trim":0.75,"rough":0.25},"listPolicy":{"type":"fixed","list":548.64},"fr":0.63,"nodisc":true},"ROUTE10":{"sku":"ROUTE10","name":"Alta Labs Route10 router","brand":"Alta Labs","cat":"network","key":"ROUTE10","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":318.99},"fr":0.79,"nodisc":true},"AP6":{"sku":"AP6","name":"Alta Labs AP6 Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","key":"AP6","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":120.25},"fr":0.8,"nodisc":true},"AP6-PRO-OUTDOOR":{"sku":"AP6-PRO-OUTDOOR","name":"Alta Labs outdoor Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","key":"AP6-PRO-OUTDOOR","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":284.81},"fr":0.8,"nodisc":true},"S8-POE":{"sku":"S8-POE","name":"Alta Labs 8-port PoE switch","brand":"Alta Labs","cat":"network","key":"S8-POE","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":164.56},"fr":0.79,"nodisc":true},"S16-POE":{"sku":"S16-POE","name":"Alta Labs 16-port PoE switch","brand":"Alta Labs","cat":"network","key":"S16-POE","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":436.71},"fr":0.79,"nodisc":true},"S24-POE":{"sku":"S24-POE","name":"Alta Labs 24-port PoE switch","brand":"Alta Labs","cat":"network","key":"S24-POE","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":588.61},"fr":0.79,"nodisc":true},"S48-APOE":{"sku":"S48-APOE","name":"Alta Labs 48-port PoE+ switch","brand":"Alta Labs","cat":"network","key":"S48-APOE","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":1125.32},"fr":0.79,"nodisc":true},"0E-CAT6RGN":{"sku":"0E-CAT6RGN","name":"Cat6 network cable (1,000 ft reel)","brand":"ADI PRO","cat":"cable","key":"0E-CAT6RGN","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":359.98},"fr":0.5},"K43XR30M2":{"sku":"K43XR30M2","name":"Sony BRAVIA 43\" 4K TV (K43XR30M2)","brand":"Sony","cat":"tv","key":"K43XR30M2","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":638.27},"fr":0.86,"nodisc":true,"size":43},"K50S30":{"sku":"K50S30","name":"Sony BRAVIA 50\" 4K TV (K50S30)","brand":"Sony","cat":"tv","key":"K50S30","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":698.04},"fr":0.85,"nodisc":true,"size":50},"K55XR30M2":{"sku":"K55XR30M2","name":"Sony BRAVIA 55\" 4K TV (K55XR30M2)","brand":"Sony","cat":"tv","key":"K55XR30M2","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":851.02},"fr":0.86,"nodisc":true,"size":55},"K65XR30M2":{"sku":"K65XR30M2","name":"Sony BRAVIA 65\" 4K TV (K65XR30M2)","brand":"Sony","cat":"tv","key":"K65XR30M2","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":899.99},"fr":0.92,"nodisc":true,"size":65},"K65XR50":{"sku":"K65XR50","name":"Sony BRAVIA 65\" 4K TV (K65XR50)","brand":"Sony","cat":"tv","key":"K65XR50","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":1499.99},"fr":0.88,"nodisc":true,"size":65},"K75XR30M2":{"sku":"K75XR30M2","name":"Sony BRAVIA 75\" 4K TV (K75XR30M2)","brand":"Sony","cat":"tv","key":"K75XR30M2","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":1246.53},"fr":0.85,"nodisc":true,"size":75},"K75XR50":{"sku":"K75XR50","name":"Sony BRAVIA 75\" 4K TV (K75XR50)","brand":"Sony","cat":"tv","key":"K75XR50","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":2040.82},"fr":0.86,"nodisc":true,"size":75},"K85XR50":{"sku":"K85XR50","name":"Sony BRAVIA 85\" 4K TV (K85XR50)","brand":"Sony","cat":"tv","key":"K85XR50","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":2485.88},"fr":0.86,"nodisc":true,"size":85},"K98XR50":{"sku":"K98XR50","name":"Sony BRAVIA 98\" 4K TV (K98XR50)","brand":"Sony","cat":"tv","key":"K98XR50","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":4744.19},"fr":0.85,"nodisc":true,"size":98},"K100XR30M2":{"sku":"K100XR30M2","name":"Sony BRAVIA 100\" 4K TV (K100XR30M2)","brand":"Sony","cat":"tv","key":"K100XR30M2","labor":{"trim":2,"rough":0.5},"listPolicy":{"type":"fixed","list":2685.05},"fr":0.85,"nodisc":true,"size":100},"J-ON-100":{"sku":"J-ON-100","name":"Josh One processor","brand":"Josh.ai","cat":"control","key":"J-ON-100","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":1000},"fr":0.6,"nodisc":true},"J-CR-BLK-100":{"sku":"J-CR-BLK-100","name":"Josh Core processor","brand":"Josh.ai","cat":"control","key":"J-CR-BLK-100","labor":{"trim":1.5,"rough":0},"listPolicy":{"type":"fixed","list":3500},"fr":0.6,"nodisc":true},"J-WHT-100":{"sku":"J-WHT-100","name":"Josh Micro (room voice endpoint)","brand":"Josh.ai","cat":"control","key":"J-WHT-100","labor":{"trim":0.5,"rough":0.25},"listPolicy":{"type":"fixed","list":899},"fr":0.6,"nodisc":true},"J-EDG-1":{"sku":"J-EDG-1","name":"Josh Edge remote","brand":"Josh.ai","cat":"control","key":"J-EDG-1","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":599},"fr":0.6,"nodisc":true},"AVA-RM-RX2-US-AL":{"sku":"AVA-RM-RX2-US-AL","name":"Josh AVA Cinema remote","brand":"Josh.ai","cat":"control","key":"AVA-RM-RX2-US-AL","labor":{"trim":0.5,"rough":0},"listPolicy":{"type":"fixed","list":1299},"fr":0.5,"nodisc":true},"J-ACC-MNT-CR-S":{"sku":"J-ACC-MNT-CR-S","name":"Josh Core 1U rack mount","brand":"Josh.ai","cat":"control","key":"J-ACC-MNT-CR-S","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":248},"fr":0.58,"nodisc":true},"J-SFT-ON1:Y":{"sku":"J-SFT-ON1","name":"Josh One software plan, year 1","brand":"Josh.ai","cat":"control","key":"J-SFT-ON1:Y","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":220},"fr":0.6,"nodisc":true},"J-SFT-ON1:5Y":{"sku":"J-SFT-ON1","name":"Josh One software plan, 5 years","brand":"Josh.ai","cat":"control","key":"J-SFT-ON1:5Y","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":1100},"fr":0.6,"nodisc":true},"J-SFT-CR1:Y":{"sku":"J-SFT-CR1","name":"Josh Core software plan, year 1","brand":"Josh.ai","cat":"control","key":"J-SFT-CR1:Y","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":720},"fr":0.6,"nodisc":true},"J-SFT-CR1:5Y":{"sku":"J-SFT-CR1","name":"Josh Core software plan, 5 years","brand":"Josh.ai","cat":"control","key":"J-SFT-CR1:5Y","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":3600},"fr":0.6,"nodisc":true},"AC-MAX-24":{"sku":"AC-MAX-24","name":"AVPro 24x24 audio matrix","brand":"AVPro Edge","cat":"audio","key":"AC-MAX-24","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":3017},"fr":0.46},"TS-PAMP8-125-V2":{"sku":"TS-PAMP8-125-V2","name":"Triad 8-zone power amplifier (16 ch x 125 W)","brand":"Triad","cat":"audio","key":"TS-PAMP8-125-V2","labor":{"trim":1.5,"rough":0},"listPolicy":{"type":"fixed","list":2498.99},"fr":0.51},"C4-CORE-LITE-RSK":{"sku":"C4-CORE-LITE-RSK","name":"Control4 CORE lite + SR260 remote bundle","brand":"Control4","cat":"control","key":"C4-CORE-LITE-RSK","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":936.35},"fr":0.59},"PH-APPLETV":{"sku":"PH-APPLETV","name":"Apple TV 4K","brand":"Apple","cat":"source","key":"PH-APPLETV","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":149},"fr":0.91,"nodisc":true},"PH-SUBCABLE":{"sku":"PH-SUBCABLE","name":"Subwoofer cable (RCA)","brand":"","cat":"cable","key":"PH-SUBCABLE","labor":{"trim":0.1,"rough":0},"listPolicy":{"type":"fixed","list":35.71},"fr":0.71},"PH-SALAMANDER":{"sku":"PH-SALAMANDER","name":"Salamander cabinet for AWOL UST (C2/AWOL/245CH/BK)","brand":"Salamander","cat":"cabinet","key":"PH-SALAMANDER","labor":{"trim":1.5,"rough":0},"listPolicy":{"type":"fixed","list":3799},"fr":0.65},"PH-DF120-AT":{"sku":"PH-DF120-AT","name":"Dragonfly 120\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","key":"PH-DF120-AT","labor":{"trim":2,"rough":0},"listPolicy":{"type":"fixed","list":4181.82},"fr":0.55},"PH-C4-LIC":{"sku":"PH-C4-LIC","name":"Control4 licenses / drivers","brand":"","cat":"control","key":"PH-C4-LIC","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":571.43},"fr":0.7},"PH-STARK-ALLOW":{"sku":"PH-STARK-ALLOW","name":"Custom-design scope allowance (premium lighting, shades, security, premium AV)","brand":"","cat":"allowance","key":"PH-STARK-ALLOW","labor":{"trim":0,"rough":0},"listPolicy":{"type":"fixed","list":0},"fr":1},"PH-SHADE":{"sku":"PH-SHADE","name":"Motorized window shade (estimate)","brand":"Lutron","cat":"shades","key":"PH-SHADE","labor":{"trim":1,"rough":0},"listPolicy":{"type":"fixed","list":850},"fr":0.6},"PH-ECHODOT":{"sku":"PH-ECHODOT","name":"Alexa smart speaker (Echo Dot)","brand":"Amazon","cat":"voice","key":"PH-ECHODOT","labor":{"trim":0.25,"rough":0},"listPolicy":{"type":"fixed","list":50},"fr":0.6,"nodisc":true}}}</script>
 <script>
-// Kit form IDs
-const KIT_FORM_QUALIFIED = '9802203';
-const KIT_FORM_WARMUP    = '9802227';
-const CALENDLY_URL       = 'https://calendly.com/smartdesigns/quick-call-project-review';
-const NOT_A_FIT_URL      = '/not-a-fit/';
 
-// Human-readable labels for the answer values (used in custom fields sent to Kit)
-const BUDGET_LABELS = {
-  'under25': 'Under $25k',
-  '25k':     '$25k–$50k',
-  '50k':     '$50k+'
-};
-const STAGE_LABELS = {
-  'researching': 'Just researching',
-  'planning':    'Actively planning',
-  'ready':       'Ready to buy'
-};
-
-document.getElementById('qualify-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const btn        = document.getElementById('submit-btn');
-  const firstName  = this.querySelector('input[name="first_name"]').value.trim();
-  const q1         = this.querySelector('input[name="q1"]:checked');
-  const q2         = this.querySelector('input[name="q2"]:checked');
-  const q3         = this.querySelector('input[name="q3"]:checked');
-  const email      = this.querySelector('input[name="email_address"]').value.trim();
-
-  if (!firstName || !q1 || !q2 || !q3 || !email) {
-    alert('Please fill out all fields.');
-    return;
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.YTEngine = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+  function discountExcluded(it, key, cfg) {
+    const X = cfg.DISCOUNT_EXCLUDE || {};
+    const b = String(it.brand || '').toLowerCase(), c = String(it.cat || '').toLowerCase();
+    if ((X.keys || []).indexOf(key) >= 0) return true;
+    if ((X.brands || []).some((x) => x.toLowerCase() === b)) return true;
+    return (X.brandCats || []).some((bc) => bc[0].toLowerCase() === b && bc[1].toLowerCase() === c);
   }
-
-  btn.disabled    = true;
-  btn.textContent = 'One moment…';
-
-  const qualified =
-    q1.value === 'yes' &&
-    (q2.value === '25k' || q2.value === '50k') &&
-    (q3.value === 'planning' || q3.value === 'ready');
-
-  // Meta Pixel — fire Lead when a prospect qualifies (before Calendly redirect)
-  if (qualified && typeof fbq === 'function') {
-    fbq('track', 'Lead', { content_name: 'Theater Qualifier' });
-  }
-
-  const budgetLabel = BUDGET_LABELS[q2.value] || q2.value;
-  const stageLabel  = STAGE_LABELS[q3.value]  || q3.value;
-
-  // Build POST body for Kit — includes first name + custom fields for budget/stage
-  const body = new URLSearchParams({
-    'email_address':      email,
-    'fields[first_name]': firstName,
-    'fields[budget]':     budgetLabel,
-    'fields[stage]':      stageLabel,
-    'fields[source]':     qualified ? 'Theater Qualified' : 'Theater Warm-Up'
-  }).toString();
-
-  const kitFormId = qualified ? KIT_FORM_QUALIFIED : KIT_FORM_WARMUP;
-
-  // Fire-and-forget to the right Kit form (no-cors mode; submission works even though we can't read response)
-  try {
-    await fetch('https://app.kit.com/forms/' + kitFormId + '/subscriptions', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body
+  const CONFIG = {
+    DISCOUNT_PCT: 10,
+    MARGIN_FLOOR: 0.30,
+    EXTRA_CALL_DISCOUNT: 5,
+    DISCOUNT_MAX: 20,
+    DISCOUNT_EXCLUDE: {
+      brands: ['Alta Labs'],
+      brandCats: [['Ubiquiti', 'camera'], ['Ubiquiti', 'nvr']],
+      keys: []
+    },
+    JOSH_DEFAULT_ABOVE: 25000,
+    MARGIN_TARGET: 0.30,
+    LIST_FALLBACK_DIV: 0.70,
+    TV_LIST_FROM_COST: 0.85,
+    DRAGONFLY_LIST_CAP: 3.0,
+    MATRIX_ZONE_THRESHOLD: 8,
+    LIGHTING_MIN_DIMMERS: 3,
+    LIGHTING_KIT_SHARE: 0.30,
+    JOSH_ONE_MAX_DEVICES: 80,
+    JOSH_CORE_SQFT: 5500,
+    BAND_MID: 50000,
+    BAND_STARK: 150000,
+    STARK_SQFT: 6000,
+    STARK_TOTAL: 200000,
+    STARK_ALLOWANCE_PER_SF: 50,
+    STARK_ALLOWANCE_COST_RATIO: 0.65,
+    STARK_ALLOWANCE_SHARES: { lighting: 0.45, av: 0.40, fixed: 0.15 },
+    STARK_ALLOWANCE_UNIT: { lighting: 4500, tv: 2500, audio: 750 },
+    STARK_RANGE: { WIDTH: 0.10, STEP_SMALL: 5000, STEP_LARGE: 10000, SWITCH_AT: 300000 },
+    MID_BREAKDOWN: 'summary',
+    MEDIA_TARGET: 15000,
+    MEDIA_TOLERANCE: 0.25,
+    MEDIA_A_PROJECTOR_CAP: 17500,
+    MAIN_ROOM_TARGET: 10000,
+    LABOR: {
+      PROG_RATE: 150, TRIM_RATE: 125, ROUGH_RATE: 95, PROG_A_FACTOR: 0.7,
+      PREWIRE_HRS_PER_RUN: 0.5,
+      PROG_TABLE: {
+        entry: { base: 8,  z: 1.0, t: 0.75, l: 0.15, k: 0.5,  c: 0.25, r: 4 },
+        mid:   { base: 24, z: 1.5, t: 1.0,  l: 0.20, k: 0.75, c: 0.35, r: 6 },
+        stark: { base: 40, z: 2.0, t: 1.5,  l: 0.25, k: 1.0,  c: 0.5,  r: 8 }
+      },
+      STARK_PROG_FLOOR: 100,
+      JOSH_PROG_BASE: 4, JOSH_PROG_PER_MICRO: 0.5,
+      C4_PROG_BASE: 12,
+      RA3_PROG_BASE: 4,
+      SHADE_PROG_PER_WINDOW: 0.25
+    },
+    SHADE_WINDOWS: { primary: 4, bath: 1, great: 4, kitchen: 2, dining: 3, office: 2, gym: 2, bonus: 2, game: 2, media: 2, outdoor: 0, other: 2, bedroom: 2 },
+    VOICE_DEFAULT_ROOMS: { base: 2, perSqft: 2000, min: 3, max: 6 },
+    RANGE: { LOW_FACTOR: 0.95, HIGH_FACTOR: 1.05 },
+    LIGHTING: {
+      SELECT_ABOVE_SQFT: 3000,
+      SELECT_MAX_SQFT: 5000,
+      SELECT_MAX_DEVICES: 95,
+      CASETA_MAX_DEVICES: 74,
+      RF_SQFT_PER_NODE: 2500,
+      RA3_DEVICES_PER_PROCESSOR: 95,
+      RA3_NODES_PER_PROCESSOR: 5,
+      RA3_MAX_DEVICES: 190,
+    },
+  };
+  const ROOM_DEFS = {
+    great:   { label: 'Great Room',        tv: true,  music: true },
+    kitchen: { label: 'Kitchen',           tv: false, music: true },
+    dining:  { label: 'Dining',            tv: false, music: true },
+    office:  { label: 'Office',            tv: true,  music: true },
+    gym:     { label: 'Gym',               tv: true,  music: true },
+    bonus:   { label: 'Bonus Room',        tv: true,  music: true },
+    game:    { label: 'Game Room',         tv: true,  music: false },
+    media:   { label: 'Media/Theater Room',tv: false, music: false },
+    outdoor: { label: 'Outdoor',           tv: false, music: true }
+  };
+  const TV_ROOM_ORDER = ['great', 'office', 'gym', 'bonus', 'game'];
+  const SYSTEMS = ['lighting', 'shades', 'audio', 'tv', 'surround', 'voice'];
+  const SURROUND_ROOMS = { great: 1, bonus: 1, game: 1 };
+  const MUSIC_ORDER = ['kitchen', 'dining', 'outdoor'];
+  const r2 = (x) => Math.round(x * 100) / 100;
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const deepMerge = (a, b) => {
+    const out = Object.assign({}, a);
+    Object.keys(b || {}).forEach((k) => {
+      out[k] = (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) ? deepMerge(a[k] || {}, b[k]) : b[k];
     });
-  } catch (err) {
-    // Even if Kit fails, continue with the redirect
-    console.error('Kit submission error:', err);
+    return out;
+  };
+  function defaultInputs() {
+    return {
+      sqft: 3500,
+      bedrooms: 3,
+      rooms: ['great', 'kitchen', 'dining', 'office'],
+      others: [],
+      mainRoom: 'great',
+      priority: null,
+      roomOverrides: {},
+      opts: {
+        tvBedrooms: false,
+        retrofit: false,
+        appleTv: false,
+        control4: false,
+        sonosSub: true,
+        lightingSwitches: null,
+        tvSizeMain: null,
+        mediaChoice: 'A',
+        mediaProjector: null,
+        mediaAReceiver: 'YA-RX-V6A',
+        mediaMusic: false,
+        mediaBAudio: 'soundbar',
+        mediaBPrewired: false,
+        mediaBCabinet: 'salamander',
+        mediaBProjector: 'Aetherion Max',
+        joshRemote: 'auto',
+        joshPlan: 'Y',
+        discountPct: null
+      }
+    };
   }
-
-  if (qualified) {
-    // Pre-fill Calendly with name + email so the booking form is one field shorter
-    const calendlyURL = CALENDLY_URL +
-      '?name=' + encodeURIComponent(firstName) +
-      '&email=' + encodeURIComponent(email) +
-      '&utm_source=qualifier';
-    window.location.href = calendlyURL;
-  } else {
-    // Pass name + email through so the quote form on /not-a-fit is pre-filled
-    window.location.href = NOT_A_FIT_URL +
-      '?name=' + encodeURIComponent(firstName) +
-      '&email=' + encodeURIComponent(email) +
-      '&budget=' + encodeURIComponent(budgetLabel);
+  function normalizeInputs(inp) {
+    const d = defaultInputs();
+    const o = deepMerge(d, inp || {});
+    o.rooms = Array.from(new Set((inp && inp.rooms) ? inp.rooms : d.rooms)).filter((r) => ROOM_DEFS[r]);
+    o.others = ((inp && inp.others) || []).map((s) => String(s).trim()).filter(Boolean).slice(0, 8);
+    o.sqft = clamp(Math.round(Number(o.sqft) || 3500), 400, 20000);
+    o.bedrooms = clamp(Math.round(Number(o.bedrooms) || 1), 1, 12);
+    const ro = {};
+    const srcRo = (inp && inp.roomOverrides && typeof inp.roomOverrides === 'object') ? inp.roomOverrides : {};
+    Object.keys(srcRo).forEach((k) => {
+      const v = srcRo[k]; if (!v || typeof v !== 'object') return;
+      const c = {}; SYSTEMS.forEach((sy) => { if (typeof v[sy] === 'boolean') c[sy] = v[sy]; });
+      if (Object.keys(c).length) ro[k] = c;
+    });
+    o.roomOverrides = ro;
+    return o;
   }
+  function listPrice(item, cfg) {
+    cfg = cfg || CONFIG;
+    const p = item.listPolicy || { type: 'msrp' };
+    const cost = item.cost, msrp = item.msrp;
+    let list, flag = null;
+    switch (p.type) {
+      case 'msrp':
+        if (msrp) list = msrp; else { list = cost / cfg.LIST_FALLBACK_DIV; flag = 'LIST_ASSUMED'; }
+        break;
+      case 'msrp_cap': {
+        const mult = typeof p.capMult === 'string' ? cfg[p.capMult] : p.capMult;
+        if (msrp) { const cap = cost * mult; if (msrp > cap) { list = cap; flag = 'LIST_CAPPED'; } else list = msrp; }
+        else { list = cost / cfg.LIST_FALLBACK_DIV; flag = 'LIST_ASSUMED'; }
+        break;
+      }
+      case 'fixed': list = p.list; break;
+      case 'cost_div': list = cost / p.div; flag = 'LIST_ASSUMED'; break;
+      case 'cost_div_tv':
+        if (msrp) list = msrp; else { list = cost / cfg.TV_LIST_FROM_COST; flag = 'LIST_ASSUMED'; }
+        break;
+      case 'awol_promo': {
+        const pr = (item.promos || []).filter(Boolean);
+        if (pr.length) list = Math.max.apply(null, pr); else list = msrp || cost / cfg.LIST_FALLBACK_DIV;
+        break;
+      }
+      default: list = msrp || cost / cfg.LIST_FALLBACK_DIV;
+    }
+    if (item.map && list < item.map) list = item.map;
+    return { list: r2(list), flag: flag };
+  }
+  function buildProject(inputsRaw, path, catalog, cfgOverride) {
+    const cfg = cfgOverride ? deepMerge(CONFIG, cfgOverride) : CONFIG;
+    const cat = catalog.items || catalog;
+    const inp = normalizeInputs(inputsRaw);
+    const o = inp.opts;
+    const stdRef = Object.keys(inp.roomOverrides || {}).length ? buildProject(Object.assign({}, inp, { roomOverrides: {} }), path, catalog, cfgOverride) : null;
+    path = path === 'josh' ? 'josh' : 'alexa';
+    const discPct = clamp(o.discountPct == null ? cfg.DISCOUNT_PCT : Number(o.discountPct), 0, cfg.DISCOUNT_MAX);
+    const hasMedia = inp.rooms.indexOf('media') >= 0;
+    const tier = (inp.sqft < 2500 || inp.priority === 'budget') && inp.priority !== 'sound' ? 'entry' : 'core';
+    let mainRoom = null;
+    const selectedTv = TV_ROOM_ORDER.filter((r) => inp.rooms.indexOf(r) >= 0);
+    if (!hasMedia) {
+      mainRoom = (inp.mainRoom && selectedTv.indexOf(inp.mainRoom) >= 0) ? inp.mainRoom : (selectedTv[0] || 'great');
+    }
+    const roomSet = inp.rooms.slice();
+    if (mainRoom && roomSet.indexOf(mainRoom) < 0) roomSet.push(mainRoom);
+    const zones = [];
+    zones.push({ id: 'primary', label: 'Primary Bedroom + Bath', kind: 'primary' });
+    TV_ROOM_ORDER.forEach((id) => {
+      if (roomSet.indexOf(id) >= 0) zones.push({ id: id, label: ROOM_DEFS[id].label, kind: id === mainRoom ? 'main' : 'tv' });
+    });
+    MUSIC_ORDER.forEach((id) => { if (roomSet.indexOf(id) >= 0) zones.push({ id: id, label: ROOM_DEFS[id].label, kind: id === 'outdoor' ? 'outdoor' : 'music' }); });
+    inp.others.forEach((lbl, i) => zones.push({ id: 'other' + i, label: lbl, kind: 'other' }));
+    for (let i = 2; i <= inp.bedrooms; i++) zones.push({ id: 'bed' + i, label: 'Bedroom ' + i, kind: 'bedroom' });
+    const tvKinds = { primary: 1, main: 1, tv: 1 };
+    const OVR = inp.roomOverrides || {};
+    const ovr = (k, sy) => (OVR[k] && typeof OVR[k][sy] === 'boolean') ? OVR[k][sy] : null;
+    const lightKeys = ['primary', 'bath'];
+    for (let i = 2; i <= inp.bedrooms; i++) lightKeys.push('bed' + i);
+    inp.rooms.forEach((r) => lightKeys.push(r));
+    inp.others.forEach((_, i) => lightKeys.push('other' + i));
+    const planKeys = ['primary', 'bath'];
+    Object.keys(ROOM_DEFS).forEach((id) => { if (zones.some((z) => z.id === id) || (id === 'media' && hasMedia)) planKeys.push(id); });
+    inp.others.forEach((_, i) => planKeys.push('other' + i));
+    for (let i = 2; i <= inp.bedrooms; i++) planKeys.push('bed' + i);
+    const zoneOf = {}; zones.forEach((z) => { zoneOf[z.id] = z; });
+    const plan = {};
+    planKeys.forEach((key) => {
+      const z = zoneOf[key];
+      let kind = key === 'bath' ? 'bath' : key === 'media' ? 'media' : (z ? z.kind : 'music');
+      const label = key === 'primary' ? 'Primary Bedroom' : key === 'bath' ? 'Primary Bath' : key === 'media' ? 'Media/Theater Room' : z.label;
+      const wkey = key === 'primary' || key === 'bath' || ROOM_DEFS[key] ? key : (kind === 'bedroom' ? 'bedroom' : 'other');
+      const windows = cfg.SHADE_WINDOWS[wkey] || 0;
+      const A = { lighting: lightKeys.indexOf(key) >= 0, shades: windows > 0, audio: false, tv: false, surround: false, voice: false };
+      const D = { lighting: true, shades: false, audio: false, tv: false, surround: false, voice: false };
+      if (kind === 'primary') { A.audio = A.tv = A.surround = true; D.audio = D.tv = D.surround = true; }
+      else if (kind === 'bath') { A.audio = true; D.audio = true; }
+      else if (kind === 'main') { A.tv = A.surround = true; D.tv = D.surround = true; A.audio = D.audio = !o.retrofit; }
+      else if (kind === 'tv') { A.tv = A.audio = true; D.tv = D.audio = true; A.surround = !!SURROUND_ROOMS[key]; }
+      else if (kind === 'bedroom') { A.audio = A.tv = true; D.audio = true; D.tv = !!o.tvBedrooms; }
+      else if (kind === 'outdoor') { A.audio = true; D.audio = true; }
+      else if (kind === 'music' || kind === 'other') { A.audio = A.tv = true; D.audio = true; }
+      plan[key] = { key: key, label: label, kind: kind, windows: windows, avail: A, def: D, on: {}, dis: {} };
+    });
+    {
+      const V = cfg.VOICE_DEFAULT_ROOMS;
+      const nVoice = clamp(V.base + Math.ceil(Math.max(0, inp.sqft - V.perSqft) / V.perSqft), V.min, V.max);
+      const rank = ['primary', mainRoom, 'great', 'kitchen', 'office', 'dining', 'gym', 'bonus', 'game'].concat(inp.others.map((_, i) => 'other' + i), planKeys.filter((k) => /^bed\d+$/.test(k)), ['outdoor']);
+      let n = 0, seen = {};
+      rank.forEach((k) => {
+        if (!k || seen[k] || !plan[k]) return; seen[k] = 1;
+        const P = plan[k]; P.avail.voice = P.kind !== 'bath' && P.kind !== 'media' && (P.avail.audio || P.avail.surround);
+        if (path === 'josh' && P.avail.voice && (P.def.audio || (P.def.surround && P.def.tv)) && n < nVoice) { P.def.voice = true; n++; }
+      });
+      planKeys.forEach((k) => { const P = plan[k]; if (!seen[k]) P.avail.voice = P.kind !== 'bath' && P.kind !== 'media' && (P.avail.audio || P.avail.surround); });
+      plan.__voiceBase = { nVoice: nVoice, defCount: n };
+    }
+    planKeys.forEach((key) => {
+      const P = plan[key];
+      SYSTEMS.forEach((sy) => { const v = ovr(key, sy); P.on[sy] = !!P.avail[sy] && (v == null ? !!P.def[sy] : v); });
+      if (!P.on.tv) P.on.surround = false;
+      if (!(P.on.audio || P.on.surround)) P.on.voice = false;
+      if (P.avail.surround && !P.on.tv) P.dis.surround = 'Needs a TV';
+      if (P.avail.voice && !(P.on.audio || P.on.surround)) P.dis.voice = 'Needs speakers';
+      P.custom = SYSTEMS.some((sy) => P.avail[sy] && ovr(key, sy) != null && ovr(key, sy) !== !!P.def[sy]);
+    });
+    const voiceBase = plan.__voiceBase; delete plan.__voiceBase;
+    const planArr = planKeys.map((k) => plan[k]);
+    const PB = plan.bath.on;
+    const zoneAudio = (z) => {
+      const P = plan[z.id] ? plan[z.id].on : { audio: true };
+      if (z.kind === 'primary') return P.audio || PB.audio;
+      if (z.kind === 'main' && o.retrofit) return P.surround;
+      return P.audio;
+    };
+    const zoneAudioDef = (z) => {
+      const D = plan[z.id] ? plan[z.id].def : { audio: true };
+      if (z.kind === 'primary') return D.audio || plan.bath.def.audio;
+      if (z.kind === 'main' && o.retrofit) return D.surround;
+      return D.audio;
+    };
+    const matrixZones = zones.filter((z) => !tvKinds[z.kind] && zoneAudio(z));
+    const countsAsMusic = (z) => ROOM_DEFS[z.id] ? ROOM_DEFS[z.id].music !== false : true;
+    const audioRooms = zones.filter((z) => countsAsMusic(z) && zoneAudio(z)).length;
+    const defAudioRooms = zones.filter((z) => countsAsMusic(z) && zoneAudioDef(z)).length;
+    const defMatrixZones = zones.filter((z) => !tvKinds[z.kind] && zoneAudioDef(z)).length;
+    const useMatrix = defAudioRooms >= cfg.MATRIX_ZONE_THRESHOLD && defMatrixZones >= 4;
+    const raw = [];
+    function add(key, qty, group, room, note, opt) {
+      if (!qty || qty <= 0) return null;
+      const it = cat[key];
+      if (!it) throw new Error('catalog missing: ' + key);
+      const lp = listPrice(it, cfg);
+      const flags = [];
+      if (it.placeholder) flags.push('PLACEHOLDER');
+      if (lp.flag) flags.push(lp.flag);
+      (it.flagsExtra || []).forEach((f) => flags.push(f));
+      if (opt && opt.flags) opt.flags.forEach((f) => flags.push(f));
+      const ln = {
+        key: key, sku: it.sku, name: (opt && opt.name) || it.name, qty: qty, cost: it.cost != null ? it.cost : r2(lp.list * it.fr), list: lp.list,
+        discountable: !discountExcluded(it, key, cfg), flags: flags, group: group, rooms: room ? [room] : [],
+        note: note || '', labor: it.labor || { trim: 0, rough: 0 }, brand: it.brand, cat: it.cat, placeholderCost: it.placeholder
+      };
+      raw.push(ln);
+      return ln;
+    }
+    const rooms = [];
+    const facts = { tvs: 0, speakers: 0, dataRuns: 0, micros: 0, zonesPriced: 0, mediaRoom: false, joshDevices: 0 };
+    const spkSizeFor = (kind, id) => {
+      if (tier === 'entry') return 6;
+      if (inp.priority === 'sound' && (kind === 'main' || id === 'great' || id === 'kitchen' || kind === 'tv')) return 8;
+      if (kind === 'main' || kind === 'tv' || id === 'great' || id === 'bonus' || id === 'game' || id === 'gym' || kind === 'outdoor') return 8;
+      return 6;
+    };
+    function addSpeakers(count, kind, id, group, room, label) {
+      const size = spkSizeFor(kind, id);
+      const key = tier === 'entry' ? 'SP-6' : (size === 8 ? 'PG-8' : 'PG-6');
+      add(key, count, group, room, label || '');
+      facts.speakers += count;
+      if (!o.retrofit) add(size === 8 && tier !== 'entry' ? 'RC-879' : 'RC-6', count, group, room, 'Pre-construction ring');
+      return key;
+    }
+    const tvPick = (size, premium) => {
+      const m = {
+        43: 'K43XR30M2', 50: 'K50S30', 55: premium ? 'K55XR30M2' : 'K55XR30M2',
+        65: premium ? 'K65XR50' : 'K65XR30M2', 75: premium ? 'K75XR50' : 'K75XR30M2',
+        85: 'K85XR50', 98: 'K98XR50', 100: 'K100XR30M2'
+      };
+      return m[size];
+    };
+    const mountFor = (size) => (size >= 75 ? 'CHF-XTM1U' : size >= 55 ? 'CHF-LTM1U' : 'SAN-VMPL50A-B1');
+    function addTV(size, premium, group, room, label) {
+      const k = tvPick(size, premium);
+      add(k, 1, group, room, label || (size + '" TV'));
+      add(mountFor(size), 1, group, room, 'TV mount');
+      facts.tvs += 1; facts.dataRuns += 1;
+      return k;
+    }
+    const sqft = inp.sqft;
+    let mainTvSize = o.tvSizeMain || (inp.priority === 'picture' ? 98 : 85);
+    const tvSizes = {};
+    zones.forEach((z) => {
+      const room = z.label;
+      const P = plan[z.id].on;
+      const rm = { id: z.id, label: z.label, kind: z.kind, audio: true, tv: null, notes: [] };
+      if (z.kind === 'primary') {
+        const sz = 65;
+        if (P.tv) { addTV(sz, true, 'Primary Suite', room, 'Primary bedroom TV ' + sz + '"'); rm.tv = sz; tvSizes.primary = sz; }
+        if (P.surround) {
+          add('SONOS-ARC-2-BL', 1, 'Primary Suite', room, 'Soundbar');
+          add('SONOS-ARC-2-WM', 1, 'Primary Suite', room, 'Soundbar mount');
+          add('B6-4K2-2', 1, 'Primary Suite', room, 'TV to soundbar HDMI eARC');
+        }
+        const spk = (P.audio ? 2 : 0) + (PB.audio ? 2 : 0);
+        if (spk > 0) {
+          add('Sonos-Amp', 1, 'Primary Suite', room, 'Zone amp for ceiling speakers (bedroom + bath)');
+          add('SAN-WSSCAM1-B2', 1, 'Primary Suite', room, 'Amp mount');
+          addSpeakers(spk, 'primary', z.id, 'Primary Suite', room, spk === 4 ? '2 bedroom + 2 bath ceiling speakers on one zone' : (P.audio ? '2 bedroom ceiling speakers' : '2 bath ceiling speakers'));
+          if (P.tv && !P.surround && P.audio) add('B6-4K2-1', 1, 'Primary Suite', room, 'TV eARC to amp');
+        }
+        rm.notes.push('TV + Sonos soundbar + 2 ceiling speakers; bath shares the zone');
+        if (P.tv || P.surround || spk > 0) facts.zonesPriced += 1;
+      } else if (z.kind === 'main') {
+        if (P.tv) { addTV(mainTvSize, true, 'Main Viewing Room', room, 'Large TV ' + mainTvSize + '"'); tvSizes[z.id] = mainTvSize; }
+        if (P.surround) {
+          add('SONOS-ARC-2-BL', 1, 'Main Viewing Room', room, 'Soundbar');
+          add('SONOS-ARC-2-WM', 1, 'Main Viewing Room', room, 'Soundbar mount');
+          add('B6-4K2-2', 1, 'Main Viewing Room', room, 'TV to soundbar HDMI eARC');
+        }
+        if (o.retrofit) {
+          if (P.surround) add('SONOS-ERA-100-BL', 2, 'Main Viewing Room', room, 'Wireless surrounds (retrofit)');
+          rm.notes.push('Retrofit: wireless surrounds instead of ceiling speakers');
+        } else if (P.audio) {
+          add('Sonos-Amp', 1, 'Main Viewing Room', room, 'Surround / zone amp');
+          add('SAN-WSSCAM1-B2', 1, 'Main Viewing Room', room, 'Amp mount');
+          addSpeakers(2, 'main', z.id, 'Main Viewing Room', room, 'In-ceiling surround speakers');
+          if (P.tv && !P.surround) add('B6-4K2-1', 1, 'Main Viewing Room', room, 'TV eARC to amp');
+        }
+        if (P.surround && o.sonosSub) add('SONOS-SUB-M-BL', 1, 'Main Viewing Room', room, 'Wireless subwoofer');
+        rm.tv = P.tv ? mainTvSize : null; rm.notes.push('Main viewing room: Sonos Arc + large TV');
+        if (P.tv || P.surround || P.audio) facts.zonesPriced += 1;
+      } else if (z.kind === 'tv') {
+        const sz = z.id === 'office' ? 55 : z.id === 'great' ? 85 : 65;
+        if (P.tv) { addTV(sz, z.id === 'great', 'TV Rooms', room, room + ' TV ' + sz + '"'); rm.tv = sz; tvSizes[z.id] = sz; }
+        if (P.audio) {
+          if (P.tv) {
+            add('SM-RBX-14-WH', 1, 'TV Rooms', room, 'Recessed box behind TV for Sonos Amp (TV audio to ceiling speakers)');
+            if (!o.retrofit) add('SM-RBX-14-BKT', 1, 'TV Rooms', room, 'Pre-construction bracket');
+            add('Sonos-Amp', 1, 'TV Rooms', room, 'TV-audio zone amp (in recessed box)');
+            if (!P.surround) add('B6-4K2-1', 1, 'TV Rooms', room, 'TV eARC to amp');
+          } else {
+            add('Sonos-Amp', 1, 'Whole-Home Audio', room, 'Zone amp'); add('SAN-WSSCAM1-B2', 1, 'Whole-Home Audio', room, 'Amp mount');
+          }
+          addSpeakers(2, 'tv', z.id, P.tv ? 'TV Rooms' : 'Whole-Home Audio', room, 'Ceiling speakers (TV audio + music)');
+        }
+        if (P.surround) {
+          add('SONOS-ARC-2-BL', 1, 'TV Rooms', room, 'Soundbar');
+          add('SONOS-ARC-2-WM', 1, 'TV Rooms', room, 'Soundbar mount');
+          add('B6-4K2-2', 1, 'TV Rooms', room, 'TV to soundbar HDMI eARC');
+          add('SONOS-SUB-M-BL', 1, 'TV Rooms', room, 'Wireless subwoofer');
+        }
+        rm.notes.push('TV audio piped to ceiling speakers via Sonos Amp in a recessed box');
+        if (P.tv || P.audio || P.surround) facts.zonesPriced += 1;
+      } else if (z.kind === 'outdoor') {
+        if (P.audio) {
+          if (useMatrix) {   } else add('Sonos-Amp', 1, 'Whole-Home Audio', room, 'Zone amp');
+          add('OP6-BK', sqft > 5000 ? 4 : 2, 'Whole-Home Audio', room, 'Outdoor speakers'); facts.speakers += (sqft > 5000 ? 4 : 2);
+          facts.zonesPriced += 1;
+        }
+      } else {
+        if (P.audio) {
+          if (!useMatrix) { add('Sonos-Amp', 1, 'Whole-Home Audio', room, 'Zone amp'); add('SAN-WSSCAM1-B2', 1, 'Whole-Home Audio', room, 'Amp mount'); }
+          addSpeakers(2, z.kind, z.id, 'Whole-Home Audio', room, 'Ceiling speakers');
+        }
+        if (P.tv) {
+          if (z.kind === 'bedroom') { const sz = 50; addTV(sz, false, 'TV Rooms', room, 'Bedroom TV 50"'); rm.tv = sz; tvSizes[z.id] = sz; }
+          else { const sz = z.id === 'kitchen' ? 43 : 50; addTV(sz, false, 'TV Rooms', room, room + ' TV ' + sz + '"'); rm.tv = sz; tvSizes[z.id] = sz; }
+        }
+        if (P.audio || P.tv) facts.zonesPriced += 1;
+      }
+      rooms.push(rm);
+    });
+    let callUs = false;
+    if (useMatrix) {
+      callUs = true;
+      const nz = matrixZones.length;
+      add('AC-MAX-24', 1, 'Whole-Home Audio', 'Equipment rack', 'Audio matrix (line-level)', { flags: ['CALL_US'] });
+      add('TS-PAMP8-125-V2', Math.ceil(nz / 8), 'Whole-Home Audio', 'Equipment rack', 'Multi-zone power amplifier(s)', { flags: ['CALL_US'] });
+      add('Sonos-Port', clamp(Math.ceil(nz / 4), 2, 6), 'Whole-Home Audio', 'Equipment rack', 'Music sources into the matrix', { flags: ['CALL_US'] });
+      add('B6-XLR-3FM-2FT', nz * 2, 'Whole-Home Audio', 'Equipment rack', 'Line-level patch cables (matrix to amps)');
+      add('SR-CS-RACK-21U', 1, 'Whole-Home Audio', 'Equipment rack', 'Equipment rack');
+      add('SR-SHELF-FIXED-2U', Math.ceil(clamp(Math.ceil(nz / 4), 2, 6) / 2), 'Whole-Home Audio', 'Equipment rack', 'Rack shelves for Sonos Ports');
+      add('WB-700CH-IPV-12', 1, 'Whole-Home Audio', 'Equipment rack', 'Rack power / remote reboot');
+      facts.dataRuns += 2;
+    }
+    const area = clamp(sqft * 0.07, 200, 450);
+    const roomW = Math.sqrt(area / 1.4), roomL = area / roomW;
+    let mediaInfo = null;
+    function mediaAlines(projKey, recvKey) {
+      const g = 'Media Room', room = 'Media Room';
+      const wantDiag = roomW * 7.57;
+      const sizes = [92, 100, 106, 110, 120];
+      const size = sizes.reduce((b, s) => (Math.abs(s - wantDiag) < Math.abs(b - wantDiag) ? s : b), 100);
+      const scr = { 92: 'DF-SL-92-UAW', 100: 'DF-SL-100-UAW', 106: 'DF-SL-106-UAW', 110: 'DF-TB-110-UAW', 120: 'PH-DF120-AT' }[size];
+      add(projKey, 1, g, room, 'Projector');
+      add('SM-PROJ-XL-BLK', 1, g, room, 'Projector mount');
+      add('B6A-4K2-10', 1, g, room, 'Long-run active HDMI (auto)');
+      add(scr, 1, g, room, 'Fixed acoustically-transparent screen ' + size + '"');
+      add(recvKey, 1, g, room, 'AV receiver');
+      add('SR-SHELF-FIXED-4U', 1, g, room, 'Rack shelf for receiver (no rack ears)');
+      add('GHT-66P', 3, g, room, 'Left / center / right behind screen');
+      add('GHT-SUR-P', 2, g, room, 'Surround speakers');
+      add('DFS-10BK', 1, g, room, 'Subwoofer');
+      add('PH-SUBCABLE', 1, g, room, 'Subwoofer cable');
+      if (!o.retrofit) { add('RW-G66', 3, g, room, 'Pre-construction rings'); add('RW-GSUR', 2, g, room, 'Pre-construction rings'); }
+      add('WB-150-IPW-1B-2', 1, g, room, 'Remote power reboot (OvrC)');
+      add('B6-4K2-2', 2, g, room, 'Source HDMI');
+      facts.speakers += 5; facts.dataRuns += 2;
+      const pr = cat[projKey];
+      const wm = { VPLXW5000ES: [1.38, 2.21], VPLXW5100ES: [1.38, 2.21], V11HA47020MB: [1.35, 2.84] }[projKey];
+      const screenW = size * 0.8716 / 12;
+      const info = { type: 'A', screenSize: size, projector: projKey, projectorName: pr.name, receiver: recvKey, hasReceiver: true };
+      if (wm) {
+        info.throwMinFt = r2(wm[0] * screenW); info.throwMaxFt = r2(wm[1] * screenW);
+        info.roomLenFt = r2(roomL);
+        info.throwOk = info.throwMinFt <= roomL - 1;
+      }
+      return info;
+    }
+    function mediaBlines() {
+      const g = 'Media Room', room = 'Media Room';
+      const big = roomW >= 14.5;
+      const projKey = o.mediaBProjector === 'Aetherion Pro' ? 'Aetherion Pro' : 'Aetherion Max';
+      add(projKey, 1, g, room, 'Ultra-short-throw laser projector');
+      add(big ? 'ALR-F230C Pro' : 'ALR-F220C Pro', 1, g, room, 'Rise screen ' + (big ? 130 : 120) + '" ambient-light-rejecting');
+      if (o.mediaBCabinet === 'awol') add(big ? 'AS-S130' : 'AS-S120', 1, g, room, 'Cabinet / station');
+      else add('PH-SALAMANDER', 1, g, room, 'Salamander cabinet');
+      add('WB-150-IPW-1B-2', 1, g, room, 'Remote power reboot (OvrC)');
+      add('B6-4K2-2', 1, g, room, 'Source HDMI');
+      facts.dataRuns += 2;
+      let audio = o.mediaBAudio;
+      const notes = [];
+      if (audio === 'ghost' && !o.mediaBPrewired) { audio = 'soundbar'; notes.push('Ghost + Yamaha needs wiring in place; using Sonos soundbar'); }
+      if (audio === 'soundbar') {
+        add('SONOS-ARC-2-BL', 1, g, room, 'Soundbar'); add('SONOS-SUB-M-BL', 1, g, room, 'Wireless subwoofer');
+        add('SONOS-ERA-100-BL', 2, g, room, 'Wireless surrounds');
+      } else if (audio === 'amp') {
+        add('Sonos-Amp', 1, g, room, 'Amp'); add('SAN-WSSCAM1-B2', 1, g, room, 'Amp mount');
+        addSpeakers(2, 'tv', 'media', g, room, 'In-ceiling speakers');
+        add('SONOS-SUB-M-BL', 1, g, room, 'Wireless subwoofer');
+      } else if (audio === 'ghost') {
+        add('YA-RX-V6A', 1, g, room, 'AV receiver'); add('SR-SHELF-FIXED-4U', 1, g, room, 'Rack shelf');
+        add('GHT-66P', 3, g, room, 'Left / center / right'); add('GHT-SUR-P', 2, g, room, 'Surround speakers');
+        add('DFS-10BK', 1, g, room, 'Subwoofer'); add('PH-SUBCABLE', 1, g, room, 'Subwoofer cable');
+        if (!o.retrofit) { add('RW-G66', 3, g, room, 'Rings'); add('RW-GSUR', 2, g, room, 'Rings'); }
+        facts.speakers += 5;
+      } else if (audio === 'thunder') {
+        add('TB-412', 1, g, room, 'AWOL ThunderBeat 4.1.2 sound system');
+      }
+      return { type: 'B', screenSize: big ? 130 : 120, projector: projKey, audio: audio, notes: notes, cabinet: o.mediaBCabinet, roomLenFt: r2(roomL), hasReceiver: audio === 'ghost' };
+    }
+    if (hasMedia) {
+      facts.mediaRoom = true;
+      const startLen = raw.length;
+      if (o.mediaChoice === 'B') {
+        mediaInfo = mediaBlines();
+      } else {
+        const cands = o.mediaProjector ? [o.mediaProjector] : ['VPLXW5000ES', 'VPLXW5100ES', 'V11HA47020MB'];
+        const recv = o.mediaAReceiver || 'YA-RX-V6A';
+        let best = null;
+        cands.forEach((pk) => {
+          const save = raw.length; const sFacts = JSON.stringify(facts);
+          const info = mediaAlines(pk, recv);
+          const sub = raw.slice(save);
+          const list = sub.reduce((s, l) => s + l.list * l.qty, 0);
+          const margin = sub.reduce((s, l) => s + (l.list - l.cost) * l.qty, 0);
+          raw.length = save; Object.assign(facts, JSON.parse(sFacts));
+          const fits = list <= cfg.MEDIA_A_PROJECTOR_CAP;
+          const score = o.mediaProjector ? 1 : (fits ? 1e6 + margin : -list);
+          if (!best || score > best.score) best = { pk: pk, score: score, info: info };
+        });
+        mediaInfo = mediaAlines(best.pk, recv);
+        mediaInfo.autoPicked = !o.mediaProjector;
+      }
+      const mlines = raw.slice(startLen);
+      mediaInfo.packageList = r2(mlines.reduce((s, l) => s + l.list * l.qty, 0));
+      mediaInfo.packageCost = r2(mlines.reduce((s, l) => s + l.cost * l.qty, 0));
+      mediaInfo.offTarget = Math.abs(mediaInfo.packageList - cfg.MEDIA_TARGET) / cfg.MEDIA_TARGET > cfg.MEDIA_TOLERANCE;
+      mediaInfo.musicOption = mediaInfo.hasReceiver;
+      mediaInfo.musicAdded = false;
+      if (o.mediaMusic && mediaInfo.hasReceiver) {
+        add('Sonos-Port', 1, 'Media Room', 'Media Room', 'Sonos Port feeding the receiver as an input');
+        add('PH-SUBCABLE', 1, 'Media Room', 'Media Room', 'RCA cable, Port to receiver', { name: 'RCA cable' });
+        facts.dataRuns += 1; mediaInfo.musicAdded = true;
+      }
+      rooms.push({ id: 'media', label: 'Media/Theater Room', kind: 'media', audio: false, tv: null, notes: ['Projector theater (' + (o.mediaChoice === 'B' ? 'AWOL UST' : 'new-build') + ')'] });
+    }
+    if (mediaInfo) facts.dataRuns += 0;
+    const wireReels = Math.ceil((facts.speakers * 50) / 500);
+    add('NST-162-500-WH', wireReels, 'Cabling', 'Whole house', 'Speaker wire (' + facts.speakers + ' speakers x ~50 ft)');
+    if (o.appleTv) {
+      add('PH-APPLETV', facts.tvs + (hasMedia ? 1 : 0), 'TV Rooms', 'Each TV', 'One source per TV');
+    }
+    const lightingRoomsAuto = inp.bedrooms + inp.rooms.length + inp.others.length + 1;
+    const lightingOff = planArr.filter((P) => P.avail.lighting && !P.on.lighting).length;
+    let lightingRooms, lightingMinApplied = false;
+    if (o.lightingSwitches != null) lightingRooms = clamp(Math.round(o.lightingSwitches), 1, 120);
+    else if (lightingOff > 0) lightingRooms = Math.max(0, lightKeys.length - lightingOff);
+    else if (lightingRoomsAuto < 3) { lightingRooms = cfg.LIGHTING_MIN_DIMMERS; lightingMinApplied = true; }
+    else lightingRooms = lightingRoomsAuto;
+    const shadeRooms = planArr.filter((P) => P.on.shades);
+    const shadeWindows = shadeRooms.reduce((a, P) => a + P.windows, 0);
+    const switches = lightingRooms;
+    const LT = cfg.LIGHTING;
+    const kitsN = Math.round(switches * cfg.LIGHTING_KIT_SHARE), dimmersN = switches - kitsN;
+    const lightDevs = switches + kitsN + shadeWindows;
+    const tierFor = (sf, devs) => (sf <= LT.SELECT_ABOVE_SQFT ? 'caseta' : (sf <= LT.SELECT_MAX_SQFT && devs <= LT.SELECT_MAX_DEVICES ? 'select' : 'ra3'));
+    const lightTier = stdRef ? stdRef.meta.lighting.system : tierFor(sqft, lightDevs);
+    const rfNodes = Math.max(1, Math.ceil(sqft / LT.RF_SQFT_PER_NODE));
+    const lightingFlags = [];
+    let ra3Processors = 0;
+    if (lightTier === 'caseta') {
+      add('LUT-PD-6WCL-WH', dimmersN, 'Lighting Control', 'Whole house', 'Smart dimmers');
+      add('LUT-P-PKG1W-WH', kitsN, 'Lighting Control', 'Whole house', 'Dimmer + Pico kits for 3-way / multi-location');
+      add('LUT-L-BDGPRO2-WH', (switches > 0 || shadeWindows > 0) ? Math.max(1, Math.ceil(switches / 75)) : 0, 'Lighting Control', 'Whole house', 'Smart Bridge PRO (required for Josh; works with Alexa)');
+      add('LUT-PD-REP-WH', Math.floor(switches / 15), 'Lighting Control', 'Whole house', 'Wireless repeaters');
+      if (lightDevs > LT.CASETA_MAX_DEVICES) lightingFlags.push('LIGHTING_LIMIT: ' + lightDevs + ' Caseta devices (dimmers + Picos + shades) exceed the 74 a Caseta system supports (75 incl. the hub); move to Lutron Select / RadioRA 3 on the call');
+    } else {
+      const hasLoads = switches > 0 || shadeWindows > 0;
+      add('RRD-PRO', switches, 'Lighting Control', 'Whole house', 'Smart dimmers');
+      add('PJ2-WALL-WH-L01', kitsN, 'Lighting Control', 'Whole house', 'Pico remotes for 3-way / multi-location');
+      if (lightTier === 'select') {
+        add('RR-SEL-REP2', hasLoads ? 1 : 0, 'Lighting Control', 'Whole house', 'Lutron Select main repeater (app-programmed; Josh connects to it directly)');
+        add('L-REPPRO', hasLoads ? Math.min(4, rfNodes - 1) : 0, 'Lighting Control', 'Whole house', 'Wireless repeaters (one per 2,500 sf)');
+        lightingFlags.push('LIGHTING_SYSTEM: Lutron Select (home ' + sqft + ' sf > ' + LT.SELECT_ABOVE_SQFT + ' sf; Select covers up to ' + LT.SELECT_MAX_SQFT + ' sf / ' + LT.SELECT_MAX_DEVICES + ' devices). Dealer-installed, client-programmable in the Lutron app. Lutron MAP applies to line items only; the package discount covers these lines (v18)');
+      } else {
+        ra3Processors = hasLoads ? Math.max(1, Math.ceil(lightDevs / LT.RA3_DEVICES_PER_PROCESSOR), Math.ceil(rfNodes / LT.RA3_NODES_PER_PROCESSOR)) : 0;
+        add('RR-PROC3-KIT1', ra3Processors, 'Lighting Control', 'Whole house', 'RadioRA 3 processor (programmed in Lutron Designer by a qualified installer)');
+        add('L-REPPRO', hasLoads ? Math.max(0, rfNodes - ra3Processors) : 0, 'Lighting Control', 'Whole house', 'Wireless repeaters (one per 2,500 sf)');
+        const why = sqft > LT.SELECT_MAX_SQFT ? 'home ' + sqft + ' sf > ' + LT.SELECT_MAX_SQFT + ' sf Select coverage' : 'standard setup needs more than ' + LT.SELECT_MAX_DEVICES + ' Select devices';
+        lightingFlags.push('LIGHTING_SYSTEM: Lutron RadioRA 3 (' + why + '). More dealer dependence: Lutron Designer programming by a Lutron-qualified installer; ' + ra3Processors + ' processor(s). RA3 processor list is LIST-ASSUMED');
+        if (lightDevs > LT.RA3_MAX_DEVICES) lightingFlags.push('CALL_US: ' + lightDevs + ' lighting devices exceed RadioRA 3 (' + LT.RA3_MAX_DEVICES + ' Type A devices per system): HomeWorks QSX');
+      }
+      if (lightTier === 'select' && lightDevs > LT.SELECT_MAX_DEVICES) lightingFlags.push('CALL_US: exceeds Select limits: ' + lightDevs + ' devices (dimmers + Picos + shades) > ' + LT.SELECT_MAX_DEVICES + '. Tier stays Select (set from the standard setup); move to RadioRA 3 on the call');
+      if (shadeWindows > 0) lightingFlags.push('SHADES_TIER: with Lutron Select / RadioRA 3 shades are Sivoia QS Wireless or Triathlon (Serena is Caseta-only); the $850/window PLACEHOLDER is probably light');
+      if (path === 'josh') lightingFlags.push('JOSH_LUTRON: Josh connects to the ' + (lightTier === 'select' ? 'Select main repeater' : 'RadioRA 3 processor') + ' directly (enable Telnet / integration in the Lutron app, press the button on the device); no Smart Bridge PRO needed');
+    }
+    shadeRooms.forEach((P) => add('PH-SHADE', P.windows, 'Shades', P.label, 'Motorized shades (estimate)'));
+    if (path !== 'josh') planArr.filter((P) => P.on.voice).forEach((P) => add('PH-ECHODOT', 1, 'Voice Control', P.label, 'Alexa voice speaker'));
+    const aps = Math.max(1, Math.ceil(sqft / 1500));
+    const outdoorAp = roomSet.indexOf('outdoor') >= 0 ? 1 : 0;
+    const microsPlanned = 0;
+    let micros = 0;
+    if (path === 'josh') {
+      const voiceOn = planArr.filter((P) => P.on.voice).length;
+      micros = Math.max(0, voiceBase.nVoice - voiceBase.defCount + voiceOn);
+    }
+    const ports = aps + outdoorAp + facts.tvs + (hasMedia ? 2 : 0) + (path === 'josh' ? 1 + micros : 0) + 2;
+    const sw = ports <= 8 ? 'S8-POE' : ports <= 16 ? 'S16-POE' : ports <= 24 ? 'S24-POE' : 'S48-APOE';
+    add('ROUTE10', 1, 'Network', 'Rack / closet', 'Router');
+    add(sw, 1, 'Network', 'Rack / closet', 'PoE switch');
+    add('AP6', aps, 'Network', 'Whole house', 'Wi-Fi access points (~1 per 1,500 sf)');
+    add('AP6-PRO-OUTDOOR', outdoorAp, 'Network', 'Outdoor', 'Outdoor Wi-Fi');
+    const dataRuns = aps + outdoorAp + facts.tvs + (hasMedia ? 2 : 0) + 2 + (path === 'josh' ? micros : 0);
+    add('0E-CAT6RGN', Math.max(1, Math.ceil(dataRuns * 90 / 1000)), 'Network', 'Whole house', 'Cat6 cable');
+    let joshInfo = null;
+    if (path === 'josh') {
+      const lightDevices = switches + Math.round(switches * cfg.LIGHTING_KIT_SHARE);
+      const devices = facts.zonesPriced + facts.tvs + (hasMedia ? 3 : 0) + lightDevices + 6;
+      const core = devices > cfg.JOSH_ONE_MAX_DEVICES || useMatrix || sqft > cfg.JOSH_CORE_SQFT;
+      const proc = core ? 'J-CR-BLK-100' : 'J-ON-100';
+      add(proc, 1, 'Josh.ai Control', 'Equipment closet', core ? 'Josh Core (device count / whole-home scale)' : 'Josh One (up to ~80 devices)');
+      if (core && useMatrix) add('J-ACC-MNT-CR-S', 1, 'Josh.ai Control', 'Equipment rack', 'Rack mount');
+      add((core ? 'J-SFT-CR1:' : 'J-SFT-ON1:') + (o.joshPlan === '5Y' ? '5Y' : 'Y'), 1, 'Josh.ai Control', 'Software', o.joshPlan === '5Y' ? 'Software plan, 5 years' : 'Software plan, year 1 (renews yearly)');
+      add('J-WHT-100', micros, 'Josh.ai Control', 'Key rooms', 'Room voice endpoints');
+      facts.micros = micros;
+      const rem = o.joshRemote === 'auto' ? (hasMedia ? 'edge' : 'none') : o.joshRemote;
+      if (rem === 'edge') add('J-EDG-1', 1, 'Josh.ai Control', hasMedia ? 'Media Room' : 'Main room', 'Remote');
+      if (rem === 'ava') add('AVA-RM-RX2-US-AL', 1, 'Josh.ai Control', hasMedia ? 'Media Room' : 'Main room', 'Cinema remote');
+      joshInfo = { devices: devices, processor: core ? 'Core' : 'One', micros: micros, remote: rem };
+    }
+    if (o.control4) {
+      add('C4-CORE-LITE-RSK', 1, 'Control4', 'Equipment closet', 'Control4 hub + remote', { flags: ['C4_PLACEHOLDER_SCOPE'] });
+      add('PH-C4-LIC', 1, 'Control4', 'Equipment closet', 'Licensing / drivers / setup (placeholder)');
+    }
+    const starkSize = sqft > cfg.STARK_SQFT;
+    let allowanceInfo = null;
+    if (starkSize) {
+      const total = sqft * cfg.STARK_ALLOWANCE_PER_SF, sh = cfg.STARK_ALLOWANCE_SHARES, un = cfg.STARK_ALLOWANCE_UNIT;
+      const ref = stdRef ? stdRef.meta : { lightingRooms: lightingRooms, tvs: facts.tvs, audioRooms: audioRooms };
+      const dLight = lightingRooms - ref.lightingRooms, dTv = facts.tvs - ref.tvs, dAud = audioRooms - ref.audioRooms;
+      const parts = [
+        ['Lighting scope allowance', 'Premium lighting control beyond one dimmer per room (halls, baths, exterior)', Math.max(0, total * sh.lighting + dLight * un.lighting), 'lighting'],
+        ['Audio / video scope allowance', 'Distribution, premium displays and audio beyond the priced rooms', Math.max(0, total * sh.av + dTv * un.tv + dAud * un.audio), 'av'],
+        ['Infrastructure allowance', 'Network, security, gate, rack and power for a home this size', total * sh.fixed, 'fixed']
+      ];
+      allowanceInfo = { standardList: r2(total), delta: { lightingRooms: dLight, tvs: dTv, audioRooms: dAud }, parts: {} };
+      let acc = 0;
+      parts.forEach((pt, i) => {
+        const list = i === parts.length - 1 && !stdRef ? r2(total - acc) : r2(pt[2]);
+        acc += list;
+        allowanceInfo.parts[pt[3]] = list;
+        if (list <= 0) return;
+        const ln = add('PH-STARK-ALLOW', 1, 'Custom Design Allowance', 'Whole house', pt[1], { flags: ['ALLOWANCE'], name: pt[0] });
+        ln.list = list;
+        ln.cost = r2(list * cfg.STARK_ALLOWANCE_COST_RATIO);
+        ln.discountable = false;
+      });
+    }
+    const merged = [];
+    const idx = {};
+    raw.forEach((l) => {
+      const k = l.group + '|' + l.key + '|' + (l.note || '') ;
+      if (idx[k] != null) {
+        const m = merged[idx[k]]; m.qty += l.qty; l.rooms.forEach((r) => { if (m.rooms.indexOf(r) < 0) m.rooms.push(r); });
+      } else { idx[k] = merged.length; merged.push(Object.assign({}, l)); }
+    });
+    let listAll = 0, listDisc = 0, costAll = 0, placeholderCost = 0, placeholderList = 0;
+    merged.forEach((l) => {
+      l.listExt = r2(l.list * l.qty); l.costExt = r2(l.cost * l.qty);
+      listAll += l.listExt; costAll += l.costExt; if (l.discountable) listDisc += l.listExt;
+    });
+    const floor = cfg.MARGIN_FLOOR == null ? 0 : cfg.MARGIN_FLOOR;
+    const floorMax = listDisc > 0 ? Math.max(0, Math.floor(((listAll - costAll / (1 - floor)) / listDisc) * 1e6) / 1e4) : 0;
+    const discCap = discPct;
+    const discApplied = Math.min(discCap, floorMax);
+    const discLimited = discApplied < discCap - 1e-9;
+    const discMult = discApplied / 100;
+    const marginAt = (pct) => { const net = listAll - listDisc * pct / 100; return net > 0 ? (net - costAll) / net : 0; };
+    const extraPct = cfg.EXTRA_CALL_DISCOUNT || 5;
+    const extra = { pct: extraPct, dollars: r2(listDisc * extraPct / 100), marginAfter: marginAt(discApplied + extraPct), fits: marginAt(discApplied + extraPct) >= floor - 1e-9 };
+    listAll = 0; listDisc = 0; costAll = 0;
+    merged.forEach((l) => {
+      l.netUnit = r2(l.list * (l.discountable ? 1 - discMult : 1));
+      l.netExt = r2(l.netUnit * l.qty);
+      l.marginPct = l.netExt > 0 ? (l.netExt - l.costExt) / l.netExt : 0;
+      if (l.marginPct < cfg.MARGIN_TARGET && l.flags.indexOf('ALLOWANCE') < 0) l.flags.push('LOW_MARGIN');
+      if (!l.discountable) l.flags.push('NO_DISCOUNT');
+      listAll += l.listExt; costAll += l.costExt; if (l.discountable) listDisc += l.listExt;
+      if (l.placeholderCost) { placeholderCost += l.costExt; placeholderList += l.listExt; }
+    });
+    const savings = r2(listDisc * discMult);
+    const packageNet = r2(listAll - savings);
+    const marginDollar = r2(packageNet - costAll);
+    const L = cfg.LABOR;
+    let trimH = 0, roughH = 0;
+    merged.forEach((l) => { trimH += l.qty * (l.labor.trim || 0); roughH += l.qty * (l.labor.rough || 0); });
+    roughH += L.PREWIRE_HRS_PER_RUN * facts.dataRuns;
+    const installA = Math.round(trimH * L.TRIM_RATE);
+    const installB = Math.round(trimH * L.TRIM_RATE + roughH * L.ROUGH_RATE);
+    const T0 = listAll;
+    const rowE = L.PROG_TABLE.entry, rowM = L.PROG_TABLE.mid, rowS = L.PROG_TABLE.stark;
+    const lerpRow = (a, b, t) => { const out = {}; Object.keys(a).forEach((k) => { out[k] = a[k] + (b[k] - a[k]) * t; }); return out; };
+    let row;
+    if (T0 < 40000) row = rowE; else if (T0 < 60000) row = lerpRow(rowE, rowM, (T0 - 40000) / 20000);
+    else if (T0 < 100000) row = rowM; else if (T0 < 200000) row = lerpRow(rowM, rowS, (T0 - 100000) / 100000); else row = rowS;
+    const zonesCount = facts.zonesPriced + (hasMedia ? 1 : 0);
+    const keypads = Math.round(switches * cfg.LIGHTING_KIT_SHARE);
+    const racks = (useMatrix || sqft > 5000) ? 1 : 0;
+    let progH = row.base + row.z * zonesCount + row.t * (facts.tvs + (hasMedia ? 1 : 0)) + row.l * switches + row.k * keypads + row.r * racks;
+    if (path === 'josh') progH += L.JOSH_PROG_BASE + L.JOSH_PROG_PER_MICRO * micros;
+    if (o.control4) progH += L.C4_PROG_BASE;
+    if (lightTier === 'ra3' && switches > 0) progH += L.RA3_PROG_BASE || 0;
+    progH += (L.SHADE_PROG_PER_WINDOW || 0) * shadeWindows;
+    if (T0 >= 200000 || starkSize) progH = Math.max(progH, L.STARK_PROG_FLOOR);
+    progH = Math.round(progH * 2) / 2;
+    const progB = Math.round(progH * L.PROG_RATE);
+    const progA = Math.round(progH * L.PROG_RATE * L.PROG_A_FACTOR);
+    const labor = {
+      trimHours: r2(trimH), roughHours: r2(roughH), installA: installA, installB: installB,
+      progHours: progH, progA: progA, progB: progB,
+      totalA: installA + progA, totalB: installB + progB,
+      unconfirmed: true
+    };
+    const projectMid = listAll + (labor.totalA + labor.totalB) / 2;
+    let band;
+    if (starkSize || projectMid >= cfg.STARK_TOTAL || projectMid >= cfg.BAND_STARK) band = 'stark';
+    else if (projectMid >= cfg.BAND_MID) band = 'mid';
+    else band = 'entry';
+    const lowRaw = (packageNet + labor.totalA) * cfg.RANGE.LOW_FACTOR;
+    const highRaw = (listAll + labor.totalB) * cfg.RANGE.HIGH_FACTOR;
+    if (stdRef) band = stdRef.band;
+    const estimate = packageNet + (labor.totalA + labor.totalB) / 2;
+    const range = band === 'stark' ? makeStarkRange(estimate, cfg.STARK_RANGE) : makeRange(lowRaw, highRaw, band, projectMid);
+    const headlines = [], headlineKeys = [];
+    const hl = (key, text) => { headlineKeys.push(key); headlines.push(text); };
+    if (audioRooms > 0) hl('music', 'Whole Home Music in ' + audioRooms + ' Room' + (audioRooms === 1 ? '' : 's'));
+    const mainOn = (!hasMedia && plan[mainRoom]) ? plan[mainRoom].on : null;
+    if (hasMedia) hl('viewing', 'Media Room with Projector and Surround');
+    else if (mainOn && mainOn.tv && mainOn.surround) hl('viewing', ROOM_DEFS[mainRoom].label + ' with ' + mainTvSize + '" TV and Surround');
+    else if (mainOn && mainOn.tv) hl('viewing', ROOM_DEFS[mainRoom].label + ' with ' + mainTvSize + '" TV');
+    else if (mainOn && mainOn.surround) hl('viewing', ROOM_DEFS[mainRoom].label + ' with Surround');
+    if (lightingRooms > 0) hl('lighting', 'Lighting Control for ' + lightingRooms + ' Room' + (lightingRooms === 1 ? '' : 's'));
+    if (shadeRooms.length) hl('shades', 'Motorized Shades in ' + shadeRooms.length + ' Room' + (shadeRooms.length === 1 ? '' : 's'));
+    if (merged.some((l) => /security|camera|alarm/i.test(l.group || ''))) hl('security', 'Security');
+    hl('network', 'WiFi & Network');
+    const otherTvs = Math.max(0, facts.tvs - ((!hasMedia && mainOn && mainOn.tv) ? 1 : 0));
+    if (otherTvs > 0) hl('tvs', otherTvs + ' Additional TV' + (otherTvs === 1 ? '' : 's'));
+    hl('control', 'Alexa or Josh.ai Control');
+    const flags = lightingFlags.slice();
+    if (allowanceInfo) {
+      const alTotal = (allowanceInfo.parts.lighting || 0) + (allowanceInfo.parts.av || 0) + (allowanceInfo.parts.fixed || 0);
+      flags.push('STARK_ALLOWANCE: $' + Math.round(alTotal) + ' (' + Math.round(alTotal / listAll * 100) + '% of equipment list) is a PLACEHOLDER allowance ($' + cfg.STARK_ALLOWANCE_PER_SF + '/sf at the standard setup), split lighting $' + Math.round(allowanceInfo.parts.lighting || 0) + ' / audio-video $' + Math.round(allowanceInfo.parts.av || 0) + ' / infrastructure $' + Math.round(allowanceInfo.parts.fixed || 0) + '; lighting and audio-video parts move with room toggles ($' + cfg.STARK_ALLOWANCE_UNIT.lighting + ' per lighting room, $' + cfg.STARK_ALLOWANCE_UNIT.tv + ' per TV, $' + cfg.STARK_ALLOWANCE_UNIT.audio + ' per audio room)');
+    }
+    if (!useMatrix && audioRooms >= cfg.MATRIX_ZONE_THRESHOLD && planArr.some((P) => P.custom)) flags.push('REVIEW_ON_CALL: ' + audioRooms + ' audio rooms >= ' + cfg.MATRIX_ZONE_THRESHOLD + ' but the project stays Sonos-tier (tier is set from the screen-1 room list, ' + defAudioRooms + ' rooms by default); review matrix chassis on the call');
+    if (callUs) flags.push('CALL_US: ' + audioRooms + ' audio rooms >= ' + cfg.MATRIX_ZONE_THRESHOLD + ' (matrix + amps tier)');
+    if (mediaInfo && mediaInfo.offTarget) flags.push('MEDIA_OFF_TARGET: media package list $' + Math.round(mediaInfo.packageList) + ' vs target $' + cfg.MEDIA_TARGET);
+    if (mediaInfo && mediaInfo.throwOk === false) flags.push('THROW: projector min throw ' + mediaInfo.throwMinFt + ' ft > room length ' + mediaInfo.roomLenFt + ' ft (assumed room size)');
+    const mainList = merged.filter((l) => l.group === 'Main Viewing Room').reduce((s, l) => s + l.listExt, 0);
+    if (!hasMedia && mainList > cfg.MAIN_ROOM_TARGET) flags.push('MAIN_ROOM_OVER_TARGET: $' + Math.round(mainList) + ' > $' + cfg.MAIN_ROOM_TARGET);
+    if (o.control4 && path === 'josh') flags.push('C4_JOSH: Josh with Control4 is voice-only (after 04/21/2026)');
+    if (path === 'alexa' && callUs) flags.push('NO_CONTROL_FOR_MATRIX: Alexa-only path has no control for matrix zones');
+    if (placeholderCost > 0) flags.push('PLACEHOLDER_COST: $' + Math.round(placeholderCost) + ' of cost is placeholder (' + Math.round(placeholderCost / costAll * 100) + '%)');
+    const mg = marginDollar / packageNet;
+    if (mg < cfg.MARGIN_TARGET) flags.push('MARGIN_LOW: overall margin ' + (mg * 100).toFixed(1) + '% < ' + cfg.MARGIN_TARGET * 100 + '%');
+    const groups = [];
+    const gIdx = {};
+    merged.forEach((l) => {
+      if (gIdx[l.group] == null) { gIdx[l.group] = groups.length; groups.push({ group: l.group, list: 0, net: 0, cost: 0 }); }
+      const g = groups[gIdx[l.group]]; g.list += l.listExt; g.net += l.netExt; g.cost += l.costExt;
+    });
+    groups.forEach((g) => { g.list = r2(g.list); g.net = r2(g.net); g.cost = r2(g.cost); });
+    const roomPlan = planArr.map((P) => {
+      const parts = [];
+      if (P.kind === 'media') parts.push('projector theater with surround');
+      if (P.on.tv) parts.push((tvSizes[P.key] ? tvSizes[P.key] + '" ' : '') + 'TV');
+      if (P.on.surround) parts.push('soundbar surround');
+      if (P.on.audio) parts.push(P.kind === 'outdoor' ? 'outdoor speakers' : P.kind === 'bath' ? '2 ceiling speakers' : '2 ceiling speakers');
+      if (P.on.lighting) parts.push('lighting');
+      if (P.on.shades) parts.push(P.windows + ' shade' + (P.windows === 1 ? '' : 's'));
+      if (P.on.voice) parts.push('voice');
+      return { key: P.key, label: P.label, kind: P.kind, windows: P.windows, avail: P.avail, def: P.def, on: P.on, dis: P.dis, custom: !!P.custom,
+               summary: parts.length ? parts.join(', ') : 'Nothing selected' };
+    });
+    const changes = [];
+    planArr.forEach((P) => SYSTEMS.forEach((sy) => { if (P.avail[sy] && ovr(P.key, sy) != null && ovr(P.key, sy) !== !!P.def[sy]) changes.push(P.key + ':' + (ovr(P.key, sy) ? '+' : '-') + sy); }));
+    return {
+      inputs: inp, path: path, band: band, tier: tier, callUs: callUs, useMatrix: useMatrix,
+      rooms: rooms, roomPlan: roomPlan, lines: merged, groups: groups,
+      totals: {
+        packagePrice: r2(listAll), directBuySavings: savings, discountPct: discApplied, discountCap: discCap, discountLimited: discLimited, discountFloorMax: floorMax, marginFloor: floor, extraCall: extra, yourPrice: packageNet,
+        cost: r2(costAll), marginDollar: marginDollar, marginPct: packageNet ? marginDollar / packageNet : 0,
+        placeholderCost: r2(placeholderCost), placeholderShare: costAll ? placeholderCost / costAll : 0,
+        basis: 'equipment-only (labor and programming excluded)',
+        discountableList: r2(listDisc), projectMid: Math.round(projectMid), estimate: Math.round(estimate)
+      },
+      separate: {
+        equipment: { list: r2(listAll), net: packageNet, cost: r2(costAll), marginDollar: marginDollar, marginPct: packageNet ? marginDollar / packageNet : 0 },
+        installation: { low: installA, high: installB },
+        programming: { low: progA, high: progB, hours: progH },
+        laborMarginIncluded: false
+      },
+      labor: labor, range: range, headlines: headlines, headlineKeys: headlineKeys, flags: flags,
+      meta: { lighting: { system: lightTier, devices: lightDevs, nodes: rfNodes, processors: ra3Processors, selectMaxDevices: LT.SELECT_MAX_DEVICES }, allowance: allowanceInfo, standardBand: stdRef ? stdRef.band : band, audioRoomsDefault: defAudioRooms, echoDots: path !== 'josh' ? planArr.filter((P) => P.on.voice).length : 0, customizedRooms: roomPlan.filter((r) => r.custom).length, overrideChanges: changes, shadeWindows: shadeWindows, shadeRooms: shadeRooms.length, fineTuneRooms: roomPlan.length,
+              lightingRooms: lightingRooms, lightingRoomsAuto: lightingRoomsAuto, lightingMinApplied: lightingMinApplied, mainRoom: mainRoom, mainTvSize: mainTvSize, hasMedia: hasMedia, mediaInfo: mediaInfo, switches: switches, aps: aps,
+              audioRooms: audioRooms, tvs: facts.tvs, speakers: facts.speakers, josh: joshInfo, mediaRoomSizeAssumed: { sf: Math.round(area), w: r2(roomW), l: r2(roomL) } }
+    };
+  }
+  function makeRange(lowRaw, highRaw, band, mid) {
+    let low, high;
+    if (band === 'stark') {
+      const step = 50000;
+      low = Math.floor(mid * 0.9 / step) * step; high = Math.ceil(mid * 1.1 / step) * step;
+      if (high - low < step) high = low + step;
+    } else {
+      const step = band === 'mid' ? 5000 : (lowRaw < 25000 ? 500 : 1000);
+      low = Math.floor(lowRaw / step) * step; high = Math.ceil(highRaw / step) * step;
+    }
+    return { low: low, high: high };
+  }
+  function makeStarkRange(est, rc) {
+    const step = est < rc.SWITCH_AT ? rc.STEP_SMALL : rc.STEP_LARGE;
+    let low = Math.round(est * (1 - rc.WIDTH) / step) * step, high = Math.round(est * (1 + rc.WIDTH) / step) * step;
+    if (low > est) low -= step;
+    if (high < est) high += step;
+    if (high - low < 2 * step) { low = Math.floor(est / step) * step - (high - low < step ? step : 0); high = Math.max(high, low + 2 * step); }
+    return { low: Math.max(0, low), high: high };
+  }
+  function formatRange(rg) {
+    const f = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    if (rg.high >= 200000) return '$' + Math.round(rg.low / 1000) + '-' + Math.round(rg.high / 1000) + 'k';
+    return f(rg.low) + ' - ' + f(rg.high);
+  }
+  return { CONFIG: CONFIG, ROOM_DEFS: ROOM_DEFS, TV_ROOM_ORDER: TV_ROOM_ORDER, defaultInputs: defaultInputs, normalizeInputs: normalizeInputs,
+           listPrice: listPrice, buildProject: buildProject, formatRange: formatRange, SYSTEMS: SYSTEMS };
 });
-</script>
 
+</script>
 <script>
-// Universal nav — mobile hamburger toggle
-(function() {
-  var toggle = document.getElementById('nav-toggle');
-  var menu   = document.getElementById('nav-menu');
-  if (!toggle || !menu) return;
-  function closeMenu() { menu.classList.remove('open'); toggle.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
-  function openMenu()  { menu.classList.add('open'); toggle.classList.add('open'); toggle.setAttribute('aria-expanded', 'true'); }
-  toggle.addEventListener('click', function() { menu.classList.contains('open') ? closeMenu() : openMenu(); });
-  menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
-})();
-</script>
 
+(function () {
+  'use strict';
+  const LEAD_WEBHOOK_URL = '';
+  const CALL_BOOKING_URL = 'https://calendly.com/smartdesigns/quick-call-project-review';
+  const AB_LARGE_CTA = 'call_primary';
+  const TEST_SKIP_CALENDLY = false;
+  const BOOKED_ADVANCE_MS = 1400;
+  const BRAND = 'YourTech';
+  const TYM = 'TYM';
+  const LS_LEAD = 'yourtech_lead', LS_LEADS = 'yourtech_leads', LS_STATE = 'yourtech_state';
+  const E = window.YTEngine;
+  const CATALOG = JSON.parse(document.getElementById('yt-catalog').textContent);
+  const params = new URLSearchParams(location.search);
+  const MATT = false;
+  const abLarge = () => { const o = params.get('cta'); return (o === 'email_primary' || o === 'call_primary') ? o : (AB_LARGE_CTA === 'email_primary' ? 'email_primary' : 'call_primary'); };
+  const $app = document.getElementById('app');
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+  const sgn = (n) => (n >= 0 ? '+' : '\u2212') + money(Math.abs(n));
+  const ROOM_EMOJI = { great: '🛋️', kitchen: '🍳', dining: '🍽️', office: '💼', gym: '🏋️', bonus: '🎉', game: '🎮', media: '🎬', outdoor: '🌿' };
+  const ROOM_ORDER = ['great', 'kitchen', 'dining', 'office', 'gym', 'bonus', 'game', 'media', 'outdoor'];
+  const PRIORITIES = [['sound', '🎧', 'Sound quality'], ['picture', '📺', 'Picture'], ['simple', '🎛️', 'Simple control'], ['budget', '💵', 'Keep it affordable']];
+  const state = {
+    step: 1,
+    path: null,
+    s3more: false,
+    inputs: E.defaultInputs(),
+    lead: null,
+    thanks: false,
+    showOther: false,
+    ft: { open: null, reviewed: [] },
+    booked: false
+  };
+  try { const l = JSON.parse(localStorage.getItem(LS_LEAD) || 'null'); if (l) state.lead = l; } catch (e) {}
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_STATE) || 'null');
+    if (s && s.inputs) { state.inputs = E.normalizeInputs(s.inputs); }
+    if (s && s.ft && Array.isArray(s.ft.reviewed)) state.ft.reviewed = s.ft.reviewed.filter((x) => typeof x === 'string').slice(0, 60);
+  } catch (e) {}
+  const save = () => { try { localStorage.setItem(LS_STATE, JSON.stringify({ inputs: state.inputs, ft: { reviewed: state.ft.reviewed } })); } catch (e) {} };
+  const calc = (path, optsPatch, inPatch) => {
+    const inp = Object.assign({}, state.inputs, inPatch || {});
+    inp.opts = Object.assign({}, state.inputs.opts, optsPatch || {});
+    return E.buildProject(inp, path || effPath(), CATALOG);
+  };
+  const starkPath = () => (E.buildProject(state.inputs, 'alexa', CATALOG).band === 'stark' ? (state.starkPick === 'alexa' ? 'alexa' : 'josh') : null);
+  const autoPath = () => {
+    const std = E.buildProject(Object.assign({}, state.inputs, { roomOverrides: {}, opts: E.defaultInputs().opts }), 'alexa', CATALOG);
+    return std.totals.estimate > E.CONFIG.JOSH_DEFAULT_ABOVE ? 'josh' : 'alexa';
+  };
+  const effPath = () => starkPath() || state.path || autoPath();
+  function hero(step, title, sub) {
+    const dots = [1, 2, 3, 4].map((i) => '<i class="' + (i <= step ? 'on' : '') + '"></i>').join('');
+    return '<div class="hero"><div class="brand" id="logo"><span class="mark">⚡</span>' + BRAND + '<small>by ' + TYM + '</small></div>' +
+      '<h1>' + title + '</h1><p>' + sub + '</p><div class="steps">' + dots + '</div></div>';
+  }
+  function mattBadge() { return ''; }
+  function mattMargin() {}
+  const pctTxt = (x) => (Math.abs(x - Math.round(x)) < 0.05 ? String(Math.round(x)) : x.toFixed(1));
+  function bindLogo() {}
+  function go(step) {
+    state.step = step; window.scrollTo(0, 0);
+    if (step === 1) mountS1(); else if (step === 2) mountS2(); else if (step === 'finetune') mountFT(); else mountS3();
+  }
+  function mountS1() {
+    const inp = state.inputs;
+    $app.innerHTML = hero(1, 'Price your smart home in 10 seconds', 'A few quick taps and you will see a real price range for music, TV, lighting and Wi-Fi.') +
+      '<div class="sheet fade">' +
+      '<div class="card"><h2>About how big is your home?</h2><p class="hint">Approximate is perfect.</p>' +
+      '<div class="big-val" id="sqftVal"></div><input type="range" id="sqft" min="800" max="10000" step="100">' +
+      '<div class="ticks"><span>800</span><span>3,500</span><span>6,500</span><span>10,000+</span></div></div>' +
+      '<div class="card"><h2>How many bedrooms?</h2><p class="hint">Include the primary bedroom. We assume the primary bath too.</p>' +
+      '<div class="stepper"><button id="bedMinus" aria-label="fewer">\u2212</button><div class="n" id="bedVal"></div><button id="bedPlus" aria-label="more">+</button></div></div>' +
+      '<div class="card"><h2>Choose the rooms in your home</h2><p class="hint">Tap the rooms you have. Common rooms are pre-selected.</p>' +
+      '<div class="chips" id="roomChips"></div>' +
+      '<div class="other-row hidden" id="otherRow"><input type="text" id="otherInput" maxlength="28" placeholder="e.g. Wine room, Guest suite"><button class="btn sm" id="otherAdd">Add</button></div></div>' +
+      '<div class="card hidden" id="mainCard"></div>' +
+      '<div class="card"><h2>One more, totally optional</h2><p class="hint">What matters most to you?</p><div class="chips" id="prioChips"></div></div>' +
+      '</div>' +
+      '<div class="cta-bar"><div class="in"><button class="btn" id="go">See my estimate</button></div></div>' + mattBadge();
+    const sq = $('#sqft');
+    sq.value = inp.sqft;
+    const upSq = () => { inp.sqft = parseInt(sq.value, 10); $('#sqftVal').innerHTML = inp.sqft.toLocaleString('en-US') + ' <small>sq ft</small>' + (inp.sqft >= 10000 ? ' <small>or more</small>' : ''); save(); };
+    sq.addEventListener('input', upSq); upSq();
+    const upBeds = () => { $('#bedVal').textContent = inp.bedrooms; save(); };
+    $('#bedMinus').onclick = () => { inp.bedrooms = Math.max(1, inp.bedrooms - 1); upBeds(); };
+    $('#bedPlus').onclick = () => { inp.bedrooms = Math.min(12, inp.bedrooms + 1); upBeds(); };
+    upBeds();
+    renderRoomChips(); renderMainQ(); renderPrio();
+    $('#otherAdd').onclick = addOther;
+    $('#otherInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addOther(); });
+    $('#go').onclick = () => { state.inputs.opts.lightingSwitches = null; save(); go(2); };
+    bindLogo();
+  }
+  function addOther() {
+    const v = $('#otherInput').value.trim();
+    if (!v) return;
+    if (state.inputs.others.length < 8) state.inputs.others.push(v);
+    $('#otherInput').value = ''; save(); renderRoomChips();
+  }
+  function renderRoomChips() {
+    const inp = state.inputs;
+    let h = ROOM_ORDER.map((id) => '<div class="chip ' + (inp.rooms.indexOf(id) >= 0 ? 'on' : '') + '" data-room="' + id + '"><span class="e">' + ROOM_EMOJI[id] + '</span>' + esc(E.ROOM_DEFS[id].label) + '</div>').join('');
+    h += inp.others.map((o, i) => '<div class="chip on" data-other="' + i + '"><span class="e">🏠</span>' + esc(o) + '<span class="x">\u00d7</span></div>').join('');
+    h += '<div class="chip add" id="addOtherChip"><span class="e">\uff0b</span>Add other</div>';
+    $('#roomChips').innerHTML = h;
+    $('#otherRow').classList.toggle('hidden', !state.showOther);
+    $$('#roomChips [data-room]').forEach((c) => c.onclick = () => {
+      const id = c.dataset.room, i = inp.rooms.indexOf(id);
+      if (i >= 0) inp.rooms.splice(i, 1); else inp.rooms.push(id);
+      save(); renderRoomChips(); renderMainQ();
+    });
+    $$('#roomChips [data-other]').forEach((c) => c.onclick = () => { inp.others.splice(parseInt(c.dataset.other, 10), 1); save(); renderRoomChips(); });
+    $('#addOtherChip').onclick = () => { state.showOther = !state.showOther; $('#otherRow').classList.toggle('hidden', !state.showOther); if (state.showOther) $('#otherInput').focus(); };
+  }
+  function renderMainQ() {
+    const inp = state.inputs, card = $('#mainCard');
+    if (inp.rooms.indexOf('media') >= 0) { card.classList.add('hidden'); return; }
+    const tvRooms = E.TV_ROOM_ORDER.filter((r) => inp.rooms.indexOf(r) >= 0);
+    const opts = tvRooms.length ? tvRooms : ['great'];
+    if (opts.indexOf(inp.mainRoom) < 0) inp.mainRoom = opts[0];
+    card.classList.remove('hidden');
+    card.innerHTML = '<h2>Which room is your main viewing room?</h2><p class="hint">Where you watch movies and big games.</p><div class="chips">' +
+      opts.map((r) => '<div class="chip ' + (inp.mainRoom === r ? 'on' : '') + '" data-main="' + r + '"><span class="e">' + ROOM_EMOJI[r] + '</span>' + esc(E.ROOM_DEFS[r].label) + '</div>').join('') + '</div>';
+    $$('#mainCard [data-main]').forEach((c) => c.onclick = () => { inp.mainRoom = c.dataset.main; save(); renderMainQ(); });
+  }
+  function renderPrio() {
+    const inp = state.inputs;
+    $('#prioChips').innerHTML = PRIORITIES.map((p) => '<div class="chip ' + (inp.priority === p[0] ? 'on' : '') + '" data-p="' + p[0] + '"><span class="e">' + p[1] + '</span>' + p[2] + '</div>').join('');
+    $$('#prioChips [data-p]').forEach((c) => c.onclick = () => { inp.priority = inp.priority === c.dataset.p ? null : c.dataset.p; save(); renderPrio(); });
+  }
+  function mountS2() {
+    const res = calc(starkPath() || 'alexa');
+    const band = res.band;
+    const rangeTxt = E.formatRange(res.range);
+    const bulletIcons = { music: '🎵', viewing: '🎬', lighting: '💡', shades: '🪟', security: '🔒', network: '📶', tvs: '📺', control: '🎙️' };
+    const bullets = res.headlines.map((t, i) => '<li><span class="ic">' + (bulletIcons[res.headlineKeys[i]] || '✔️') + '</span><span>' + esc(t) + '</span></li>').join('');
+    const custom = band !== 'entry';
+    let top = '<div class="range-card"><div class="lbl">Estimated project investment</div><div class="rng">' + esc(rangeTxt) + '</div>' +
+      '<div class="sub">' + (band === 'stark' ? 'Equipment, design, installation and programming' : 'Equipment + typical installation & setup') + '</div></div>';
+    let body = '<div class="card"><h2>What this covers</h2><p class="hint">Based on your answers.</p><ul class="bullets">' + bullets + '</ul></div>';
+    let cta = '', gate = '';
+    const callBtn = '<a class="btn green js-call" id="callBtn" style="display:block;text-align:center;text-decoration:none" href="' + esc(CALL_BOOKING_URL) + '" target="_blank" rel="noopener">Book a free 15-minute call</a>';
+    const chatCard = (quiet) => '<div class="callout" id="chatCard"><h2>Let\'s Chat</h2><p>Your tech for a home this size is a little more custom. Book a free 15 minute call, we can tighten the design, answer your questions and give you a specific price.</p>' + callBtn +
+      (quiet ? '<div class="quiet-wrap"><button type="button" class="quiet" id="showGate">No thanks, I just want the full breakdown</button></div>' : '') + '</div>';
+    if (custom) {
+      if (abLarge() === 'email_primary') { gate = gateHTML(band); cta = chatCard(false); }
+      else cta = chatCard(true);
+    } else gate = gateHTML(band);
+    $app.innerHTML = hero(2, 'Your estimate', 'Instant range for the whole project.') + '<div class="sheet fade">' + top + body +
+      (res.callUs && band === 'entry' ? '<div class="notice">Heads up: at this size we design a more advanced whole-home audio system. It is priced in, and we will confirm details on a call.</div>' : '') +
+      (abLarge() === 'email_primary' && custom ? gate + cta : cta + gate) +
+      '<p class="disc">This is an estimate only, based on the answers you gave, and is not a quote. Your final proposal comes after a call with a TYM designer. Prices exclude tax, shipping, electrical work, seating and finishes.</p>' +
+      '<button class="linkbtn" id="edit">\u2190 Edit my answers</button>' +
+      '</div>' + mattBadge();
+    $('#edit').onclick = () => go(1);
+    bindLogo();
+    const sk = $('#skipGate'); if (sk) sk.onclick = () => proceedAfterLead();
+    bindGate(res);
+    bindCall(res, 'screen2');
+    const sg = $('#showGate');
+    if (sg) sg.onclick = () => {
+      sg.parentNode.remove();
+      $('#chatCard').insertAdjacentHTML('afterend', gateHTML(band));
+      bindGate(res);
+      const ln = $('#lname'); if (ln) ln.focus();
+    };
+    bindMatt(res);
+  }
+  function gateHTML(band) {
+    const l = state.lead || {};
+    let tag, title, btn, sub;
+    btn = 'Get Instant Access to Full Breakdown & Quote';
+    tag = 'Save up to ' + E.CONFIG.DISCOUNT_PCT + '% direct';
+    title = 'Unlock your full breakdown + save when you buy direct from TYM';
+    sub = band === 'stark' ? 'Unlocks instantly. We will also reach out to schedule your free 15-minute call. No spam, ever.' : 'Unlocks instantly on screen. No spam, ever.';
+    return '<div class="card gate" id="gate">' + (tag ? '<span class="tag">' + tag + '</span>' : '') + '<h2>' + title + '</h2>' +
+      '<div class="field"><input type="text" id="lname" placeholder="First name" autocomplete="given-name" value="' + esc(l.name || '') + '"></div>' +
+      '<div class="field"><input type="email" id="lemail" placeholder="Email address" autocomplete="email" value="' + esc(l.email || '') + '"></div>' +
+      '<button class="btn" id="lsend">' + btn + '</button><div class="fine" id="lerr">' + sub + '</div></div>';
+  }
+  function bindGate(res) {
+    const b = $('#lsend'); if (!b) return;
+    b.onclick = () => {
+      const name = $('#lname').value.trim(), email = $('#lemail').value.trim();
+      if (!name) { $('#lerr').textContent = 'Please add your first name.'; $('#lname').focus(); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('#lerr').textContent = 'Please enter a valid email address.'; $('#lemail').focus(); return; }
+      submitLead(name, email, res, res.band === 'entry' ? 'email_gate_sub50k' : 'breakdown_only');
+      proceedAfterLead();
+    };
+  }
+  function leadPayload(route, res, extra) {
+    const path = effPath();
+    const lead = Object.assign({
+      event: route === 'call_cta_clicked' ? 'call_click' : (route === 'call_booked' ? 'call_booked' : (route === 'finetune_done' ? 'finetune_done' : 'lead_submit')),
+      route: route, band: res.band, path: path, sqft: state.inputs.sqft,
+      projectRange: E.formatRange(res.range), range: res.range, rangeText: E.formatRange(res.range),
+      tags: ['band:' + res.band, 'path:' + path, 'route:' + route],
+      abLargeCta: abLarge(),
+      ts: new Date().toISOString(),
+      inputs: { sqft: state.inputs.sqft, bedrooms: state.inputs.bedrooms, rooms: state.inputs.rooms, others: state.inputs.others, mainRoom: state.inputs.mainRoom, priority: state.inputs.priority, roomOverrides: state.inputs.roomOverrides },
+      roomsCustomized: res.meta.customizedRooms,
+      roomsReviewed: reviewedCount(res),
+      source: 'yourtech-v1'
+    }, extra || {});
+    if (route === 'finetune_done') {
+      const stdRes = calc(null, null, { roomOverrides: {} });
+      lead.estimate = res.totals.estimate;
+      lead.finetune = { standardRange: E.formatRange(stdRes.range), standardEstimate: stdRes.totals.estimate, estimateDelta: res.totals.estimate - stdRes.totals.estimate, roomsCustomized: res.meta.customizedRooms, roomsReviewed: lead.roomsReviewed, totalRooms: res.meta.fineTuneRooms, changes: res.meta.overrideChanges.slice(0, 40), shadeRooms: res.meta.shadeRooms };
+      lead.tags.push((lead.roomsCustomized > 0 || lead.roomsReviewed > 0) ? 'finetune:engaged' : 'finetune:defaults');
+      if (lead.roomsCustomized > 0) lead.tags.push('finetune:customized');
+    }
+    return lead;
+  }
+  function storeAndPost(lead, setCurrent) {
+    try {
+      if (setCurrent) localStorage.setItem(LS_LEAD, JSON.stringify(lead));
+      const all = JSON.parse(localStorage.getItem(LS_LEADS) || '[]'); all.push(lead); localStorage.setItem(LS_LEADS, JSON.stringify(all));
+    } catch (e) {}
+    if (LEAD_WEBHOOK_URL) {
+      try { fetch(LEAD_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(lead) }).catch(() => {}); } catch (e) {}
+    }
+  }
+  function submitLead(name, email, res, route) {
+    const lead = leadPayload(route, res, { name: name, email: email });
+    state.lead = lead;
+    storeAndPost(lead, true);
+  }
+  function bindCall(res, where) {
+    $$('.js-call').forEach((a) => a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const sk = null;
+      if (sk === '1' || (sk !== '0' && TEST_SKIP_CALENDLY)) {
+        storeAndPost(leadPayload('call_cta_clicked', res, { where: where, testSkip: true }), false);
+        state.testSkipped = true;
+        if (!state.lead) state.lead = { name: '', email: '' };
+        if (res.band === 'stark') state.thanks = true;
+        if (where === 'screen2') go('finetune'); else if (where === 'finetune') showToast('Test mode', 'Call booking skipped.'); else go(3);
+        return;
+      }
+      const known = state.lead && state.lead.email ? { name: state.lead.name, email: state.lead.email } : (state.callContact || {});
+      if (known.email) {
+        storeAndPost(leadPayload('call_cta_clicked', res, Object.assign({ where: where }, known)), false);
+        openScheduler(res, where, known);
+      } else openCallStep(res, where);
+    }));
+  }
+  function openCallStep(res, where) {
+    let ov = document.getElementById('schedOverlay'); if (ov) ov.remove();
+    ov = document.createElement('div'); ov.id = 'schedOverlay'; ov.className = 'sched-ov';
+    ov.innerHTML = '<div class="sched-box"><div class="sched-top"><b>Book your free 15-minute call</b><button type="button" class="sched-x" id="schedClose" aria-label="Close">\u2715</button></div>' +
+      '<div class="callstep"><p class="fine" style="margin:4px 0 10px">Where should we send the call details?</p>' +
+      '<div class="field"><input type="text" id="cname" placeholder="First name" autocomplete="given-name"></div>' +
+      '<div class="field"><input type="email" id="cemail" placeholder="Email address" autocomplete="email"></div>' +
+      '<button class="btn green" id="cgo">Pick a time</button><div class="fine" id="cerr" style="text-align:center;margin-top:8px">No spam, ever.</div></div></div>';
+    document.body.appendChild(ov); document.body.style.overflow = 'hidden';
+    const close = () => { ov.remove(); document.body.style.overflow = ''; };
+    $('#schedClose').onclick = close;
+    ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+    $('#cgo').onclick = () => {
+      const name = $('#cname').value.trim(), email = $('#cemail').value.trim();
+      if (!name) { $('#cerr').textContent = 'Please add your first name.'; $('#cname').focus(); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('#cerr').textContent = 'Please enter a valid email address.'; $('#cemail').focus(); return; }
+      state.callContact = { name: name, email: email };
+      storeAndPost(leadPayload('call_cta_clicked', res, { where: where, name: name, email: email }), false);
+      openScheduler(res, where, state.callContact);
+    };
+    setTimeout(() => { const n = $('#cname'); if (n) n.focus(); }, 50);
+  }
+  let calendlyLoaded = false, schedCtx = null;
+  function openScheduler(res, where, known) {
+    schedCtx = { res: res, where: where, known: known };
+    let ov = document.getElementById('schedOverlay');
+    if (ov) ov.remove();
+    ov = document.createElement('div'); ov.id = 'schedOverlay'; ov.className = 'sched-ov';
+    const q = [];
+    if (known.name) q.push('name=' + encodeURIComponent(known.name));
+    if (known.email) q.push('email=' + encodeURIComponent(known.email));
+    q.push('hide_gdpr_banner=1');
+    const url = CALL_BOOKING_URL + (CALL_BOOKING_URL.indexOf('?') > -1 ? '&' : '?') + q.join('&');
+    ov.innerHTML = '<div class="sched-box"><div class="sched-top"><b>Book your free 15-minute call</b><button type="button" class="sched-x" id="schedClose" aria-label="Close">\u2715</button></div>' +
+      '<div class="calendly-inline-widget" data-url="' + esc(url) + '" style="min-width:320px;height:700px;"></div>' +
+      '<div class="fine sched-fallback">Scheduler not loading? <a href="' + esc(CALL_BOOKING_URL) + '" target="_blank" rel="noopener">Open it in a new tab</a></div></div>';
+    document.body.appendChild(ov);
+    document.body.style.overflow = 'hidden';
+    const close = () => { ov.remove(); document.body.style.overflow = ''; };
+    $('#schedClose').onclick = close;
+    ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+    if (!calendlyLoaded) {
+      calendlyLoaded = true;
+      const sc = document.createElement('script'); sc.src = 'https://assets.calendly.com/assets/external/widget.js'; sc.async = true;
+      document.head.appendChild(sc);
+    } else if (window.Calendly && window.Calendly.initInlineWidgets) { window.Calendly.initInlineWidgets(); }
+  }
+  window.addEventListener('message', (e) => {
+    if (!e.data || e.data.event !== 'calendly.event_scheduled' || !schedCtx) return;
+    if (e.origin.indexOf('calendly.com') === -1) return;
+    storeAndPost(leadPayload('call_booked', schedCtx.res, Object.assign({ where: schedCtx.where }, schedCtx.known)), false);
+    onBooked(schedCtx);
+  });
+  function onBooked(ctx) {
+    state.booked = true;
+    const ov = document.getElementById('schedOverlay'); if (ov) ov.remove();
+    document.body.style.overflow = '';
+    showToast("You're booked \u2713", 'A calendar invite is on its way to your email.');
+    if (!state.lead && ctx.known && ctx.known.email) state.lead = { name: ctx.known.name, email: ctx.known.email };
+    if (ctx.where === 'screen2') {
+      if (calc('alexa').band === 'stark') state.thanks = true;
+      setTimeout(() => { if (state.step === 2) go('finetune'); }, BOOKED_ADVANCE_MS);
+    } else if (state.step === 3) setTimeout(() => { if (state.step === 3) renderS3(); }, 50);
+    else if (state.step === 'finetune') renderFT();
+  }
+  function showToast(title, sub) {
+    const old = document.getElementById('ytToast'); if (old) old.remove();
+    const t = document.createElement('div'); t.id = 'ytToast'; t.className = 'toast'; t.setAttribute('role', 'status');
+    t.innerHTML = '<b>' + esc(title) + '</b>' + (sub ? '<span>' + esc(sub) + '</span>' : '');
+    document.body.appendChild(t);
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 3600);
+  }
+  function proceedAfterLead() {
+    const res = calc('alexa');
+    if (res.band === 'stark') state.thanks = true;
+    go('finetune');
+  }
+  const SYS_META = {
+    lighting: ['\u{1F4A1}', 'Lighting'], shades: ['\u{1FA9F}', 'Shades'], audio: ['\u{1F50A}', 'Speakers'],
+    tv: ['\u{1F4FA}', 'TV'], surround: ['\u{1F3AC}', 'Surround'], voice: ['\u{1F399}\uFE0F', 'Voice']
+  };
+  const KIND_EMOJI = { primary: '\u{1F6CF}\uFE0F', bath: '\u{1F6C1}', bedroom: '\u{1F6CF}\uFE0F', other: '\u{1F3E0}' };
+  const roomEmoji = (P) => ROOM_EMOJI[P.key] || KIND_EMOJI[P.kind] || (P.key.indexOf('other') === 0 ? '\u{1F3E0}' : '\u{1F6CF}\uFE0F');
+  const reviewedCount = (res) => { const keys = res.roomPlan.map((r) => r.key); return keys.filter((k) => state.ft.reviewed.indexOf(k) >= 0 || res.roomPlan.some((r) => r.key === k && r.custom)).length; };
+  const capFirst = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  function mountFT() {
+    $app.innerHTML = hero(3, 'Make it yours', 'Totally optional. Tap a room to fine-tune it, or just continue.') +
+      '<div class="sheet fade"><div id="ft"></div></div>' +
+      '<div class="cta-bar"><div class="in"><button class="btn" id="ftGo">' + (starkPath() ? 'Looks good, continue' : 'Looks good, show my full breakdown') + '</button></div></div>' + mattBadge();
+    bindLogo();
+    $('#ftGo').onclick = finishFT;
+    renderFT();
+  }
+  const roundTo = (n, step) => Math.round(n / step) * step;
+  function ftDelta(res, roomKey, sy, path) {
+    const ro = JSON.parse(JSON.stringify(state.inputs.roomOverrides || {}));
+    const P = res.roomPlan.find((r) => r.key === roomKey);
+    ro[roomKey] = Object.assign({}, ro[roomKey]);
+    const nv = !P.on[sy];
+    if (nv === !!P.def[sy]) delete ro[roomKey][sy]; else ro[roomKey][sy] = nv;
+    const r2 = calc(path, sy === 'lighting' ? { lightingSwitches: null } : null, { roomOverrides: ro });
+    return res.band === 'stark' ? roundTo(r2.totals.estimate - res.totals.estimate, 100) : r2.totals.yourPrice - res.totals.yourPrice;
+  }
+  function renderFT() {
+    const root = $('#ft');
+    const res = calc(), base = calc(null, null, { roomOverrides: {} });
+    const T = res.totals, L = res.labor;
+    const plan = res.roomPlan;
+    const touched = reviewedCount(res), total = plan.length;
+    const pct = state.booked ? 100 : Math.min(90, 40 + Math.round(50 * touched / Math.max(1, total)));
+    const stark = res.band === 'stark';
+    const diff = stark ? roundTo(T.estimate - base.totals.estimate, 100) : T.yourPrice - base.totals.yourPrice;
+    let h = '<div class="ft-bar" id="ftBar"><div class="ft-tot"><span class="l">' + (stark ? 'Your estimate <i>all-in</i>' : 'Your package <i>equipment</i>') + '</span>' +
+      '<b id="ftTotal">' + esc(stark ? E.formatRange(res.range) : money(T.yourPrice)) + '</b>' +
+      '<em class="ft-delta ' + (Math.abs(diff) < 1 ? '' : diff > 0 ? 'up' : 'dn') + '" id="ftDelta">' + (Math.abs(diff) < 1 ? 'Standard setup' : sgn(diff) + ' from your changes') + '</em></div>' +
+      '<div class="ft-meter" id="ftMeter" title="Estimate precision"><span class="l">Precision</span><div class="bar"><i style="width:' + pct + '%"></i></div><span class="p" id="ftPct">' + pct + '%</span></div></div>';
+    h += stark
+      ? '<p class="ft-labor">Includes equipment, installation &amp; programming. The range tightens as we finalize your design.</p>'
+      : '<p class="ft-labor">+ installation &amp; setup (est.) <b>' + money(L.installA + L.progA) + ' \u2013 ' + money(L.installB + L.progB) + '</b>, shown separately</p>';
+    const nudge = state.booked
+      ? 'Your call is booked. We will tighten the details together, so nothing here is final.'
+      : touched === 0
+        ? 'Everything below is pre-set to our standard setup for your rooms, so you can skip this page. Tap a room to add or remove lighting, shades, speakers, TV, surround or voice control.' + (stark ? ' The estimate updates as you tap, and your choices go straight to your designer for the call.' : '')
+        : 'You have looked at ' + touched + ' of ' + total + ' rooms. A free 15-minute call can take this to 100%.';
+    h += '<div class="card ft-intro"><p>' + esc(nudge) + '</p>' + (state.booked ? '' : '<a class="quietlink js-call" href="' + esc(CALL_BOOKING_URL) + '" target="_blank" rel="noopener">Book a free 15-minute call</a>') + '</div>';
+    plan.forEach((P) => {
+      const open = state.ft.open === P.key;
+      h += '<div class="rc ' + (open ? 'open ' : '') + (P.custom ? 'custom' : '') + '" data-card="' + esc(P.key) + '"><button type="button" class="rc-h" data-open="' + esc(P.key) + '" aria-expanded="' + open + '">' +
+        '<span class="e">' + roomEmoji(P) + '</span><span class="t"><b>' + esc(P.label) + (P.custom ? ' <span class="pill o">edited</span>' : '') + '</b><small>' + esc(capFirst(P.summary)) + '</small></span><span class="ch">\u25BE</span></button>';
+      if (open) {
+        h += '<div class="rc-b">';
+        if (P.kind === 'media') h += '<p class="hint" style="margin:0 0 8px">Projector, screen and surround sound are included. Pick projector and sound options on your full breakdown.</p>';
+        h += '<div class="sys">';
+        E.SYSTEMS.forEach((sy) => {
+          if (!P.avail[sy]) return;
+          const on = P.on[sy], dis = P.dis[sy];
+          let sub;
+          if (dis) sub = dis;
+          else {
+            const d = ftDelta(res, P.key, sy, res.path);
+            if (on) sub = P.def[sy] ? 'Included' : 'Added';
+            else sub = Math.abs(d) < 1 ? 'No charge' : sgn(d) + (sy === 'shades' ? ' est.' : '');
+          }
+          h += '<button type="button" class="sy ' + (on ? 'on ' : '') + (dis ? 'dis' : '') + '" data-room="' + esc(P.key) + '" data-sys="' + sy + '" aria-pressed="' + on + '"' + (dis ? ' disabled' : '') + '>' +
+            '<span class="e">' + SYS_META[sy][0] + '</span><span class="n">' + SYS_META[sy][1] + '</span><span class="d">' + esc(sub) + '</span>' +
+            '</button>';
+        });
+        h += '</div>';
+        if (P.on.shades) h += '<p class="hint ft-shade" style="margin:8px 0 0">Shade price is a ballpark until we have your window and door sizes and fabric choices.</p>';
+        if (P.custom) h += '<button type="button" class="linkbtn" data-reset="' + esc(P.key) + '">Reset this room</button>';
+        h += '</div>';
+      }
+      h += '</div>';
+    });
+    h += '<p class="disc" style="margin-top:12px">' + (stark
+      ? 'Estimates change as you tap. ' + SHADE_NOTE + ' Projects at this scale are priced as a fixed proposal after your design call, so this range tightens then; the range includes installation and programming.'
+      : 'Prices here are estimates and change as you tap. ' + SHADE_NOTE + ' Installation and setup are shown separately and are not part of the package price.') + '</p>';
+    mattMargin(res);
+    const sy = window.scrollY;
+    root.innerHTML = h;
+    window.scrollTo(0, sy);
+    $$('[data-open]', root).forEach((b) => b.onclick = () => {
+      const k = b.dataset.open; state.ft.open = state.ft.open === k ? null : k;
+      if (state.ft.open && state.ft.reviewed.indexOf(k) < 0) state.ft.reviewed.push(k);
+      save(); renderFT();
+    });
+    $$('[data-sys]', root).forEach((b) => b.onclick = () => toggleSys(b.dataset.room, b.dataset.sys));
+    $$('[data-reset]', root).forEach((b) => b.onclick = () => { delete state.inputs.roomOverrides[b.dataset.reset]; save(); renderFT(); });
+    bindCall(res, 'finetune');
+  }
+  function toggleSys(roomKey, sy) {
+    const res = calc();
+    const P = res.roomPlan.find((r) => r.key === roomKey);
+    if (!P || !P.avail[sy] || P.dis[sy]) return;
+    const nv = !P.on[sy];
+    const ro = state.inputs.roomOverrides = state.inputs.roomOverrides || {};
+    ro[roomKey] = ro[roomKey] || {};
+    if (nv === !!P.def[sy]) delete ro[roomKey][sy]; else ro[roomKey][sy] = nv;
+    if (!Object.keys(ro[roomKey]).length) delete ro[roomKey];
+    if (sy === 'lighting') state.inputs.opts.lightingSwitches = null;
+    if (state.ft.reviewed.indexOf(roomKey) < 0) state.ft.reviewed.push(roomKey);
+    save(); renderFT();
+  }
+  function finishFT() {
+    const res = calc();
+    const known = state.lead && state.lead.email ? { name: state.lead.name, email: state.lead.email } : (state.callContact || {});
+    storeAndPost(leadPayload('finetune_done', res, Object.assign({ where: 'finetune' }, known)), false);
+    go(3);
+  }
+  function mountS3() {
+    const lead = state.lead || { name: '' };
+    const bnd = calc('alexa').band;
+    const word = bnd === 'mid' ? 'precise estimate' : bnd === 'stark' ? 'next step' : 'breakdown';
+    const hello = lead.name ? esc(lead.name) + ', here is your ' + word : 'Your ' + word;
+    $app.innerHTML = hero(4, hello, bnd === 'stark' ? 'Your all-in range. Next step: a free design call.' : 'Here is your estimate. Next step: a free design call.') +
+      '<div class="sheet fade"><div id="s3"></div></div>' + mattBadge();
+    bindLogo();
+    renderS3();
+  }
+  function renderS3() {
+    const root = $('#s3');
+    const res = calc(effPath());
+    const alexa = res.path === 'alexa' ? res : calc('alexa'), josh = res.path === 'josh' ? res : calc('josh');
+    const band = res.band;
+    const T = res.totals;
+    let h = '';
+    const stark = band === 'stark', P = res.path;
+    const nm = lead();
+    if (state.booked) h += '<div class="confirm" id="s3confirm"><b>You\'re set' + (nm ? ', ' + esc(nm) : '') + '!</b> Your call is booked, and we\'ll send a confirmation email shortly.</div>';
+    else if (state.lead && state.lead.email) h += '<div class="confirm" id="s3confirm"><b>Congrats' + (nm ? ', ' + esc(nm) : '') + '!</b> We\'ll email you this estimate shortly.</div>';
+    h += '<div class="tabs"><button data-path="alexa" class="' + (P === 'alexa' ? 'on' : '') + '">Alexa-only<small>' + (stark ? esc(E.formatRange(alexa.range)) : money(alexa.totals.yourPrice)) + '</small></button>' +
+      '<button data-path="josh" class="' + (P === 'josh' ? 'on' : '') + '">Josh.ai<small>' + (stark ? esc(E.formatRange(josh.range)) : money(josh.totals.yourPrice)) + '</small></button></div>';
+    h += '<p class="hint path-desc" style="margin:-4px 4px 12px;color:var(--ink2);font-size:13.5px">Your Custom Design includes Sonos, Lutron, Sony TVs, and ' + (P === 'josh' ? 'Josh.ai' : 'Alexa') + ' for Control</p>';
+    if (stark) h += '<div class="range-card price-card stark"><div class="lbl">Estimated Package <i>all-in</i></div><div class="rng">' + esc(E.formatRange(res.range)) + '</div>' +
+      '<div class="sub">Equipment, installation &amp; programming' + (res.meta.customizedRooms ? ', with your room choices' : '') + '. Estimates only; priced as a fixed proposal after your design call.</div></div>';
+    else {
+      h += '<div class="card price-card"><h2>Estimated Package</h2><p class="hint">Equipment only. Installation is shown separately below.</p>' +
+      '<div class="row"><span>Standard Price</span><b>' + money(T.packagePrice) + '</b></div>' +
+      (T.directBuySavings < 1 ? '' : T.discountLimited
+        ? '<div class="row save"><span>Your Savings</span><b>\u2212' + money(T.directBuySavings) + '</b></div>'
+        : '<div class="row save"><span>When you buy from ' + TYM + ' <span class="pill g">save ' + pctTxt(T.discountPct) + '%</span></span><b>\u2212' + money(T.directBuySavings) + '</b></div>') +
+      '<div class="total"><span>Your Price</span><b>' + money(T.yourPrice) + '</b></div>' +
+      '<div class="labor"><div><span>Installation (est.)</span><b>' + money(res.labor.installA) + ' \u2013 ' + money(res.labor.installB) + '</b></div>' +
+      '<div><span>Setup &amp; programming (est.)</span><b>' + money(res.labor.progA) + ' \u2013 ' + money(res.labor.progB) + '</b></div></div>' +
+      '<p class="fine">Labor and programming are separate from equipment. These are estimates only; labor varies by market.</p></div>';
+    }
+    if (!state.booked) h += '<div class="callout"><h2>Book a free design call</h2><p>See where you can save additional cost on your free 15-minute design call.' +
+      (stark ? ' Homes this size are then designed room by room and priced as a fixed proposal.' : '') + '</p>' +
+      '<a class="btn green js-call" style="display:block;text-align:center;text-decoration:none" href="' + esc(CALL_BOOKING_URL) + '" target="_blank" rel="noopener">Book a free 15-minute call</a></div>';
+    h += '<div class="card more"><h2>Want to fine-tune your design?</h2><p class="hint">Take a few minutes and have some fun. Swap and upgrade options update your price right away.</p>' +
+      '<button type="button" class="btn alt sm" id="s3More" aria-expanded="' + !!state.s3more + '">' + (state.s3more ? 'Hide options \u25B4' : 'Show my options \u25BE') + '</button>' +
+      (state.s3more ? '<div style="margin-top:6px"><button class="linkbtn" id="ftBack">\u2190 Fine-tune my rooms</button></div>' : '') + '</div>';
+    if (state.s3more) h += swapSection(res);
+    if (stark || (band === 'mid' && MIDMODE() === 'summary')) {
+      h += '<div class="card"><h2>Systems in your package</h2><p class="hint">Full line-by-line detail comes with your design call.</p><ul class="items">' +
+        res.groups.map((g) => '<li><span class="q">\u2022</span><span><b>' + esc(clientGroup(g.group)) + '</b></span></li>').join('') + '</ul>' + (res.meta.shadeWindows ? '<p class="fine">' + SHADE_NOTE + '</p>' : '') + '</div>';
+    } else {
+      h += '<div class="card"><h2>What is included</h2><p class="hint">' + (P === 'josh' ? 'Josh.ai pieces are highlighted.' : 'Line items are shown without individual prices.') + '</p>';
+      res.groups.forEach((g) => {
+        const lines = res.lines.filter((l) => l.group === g.group);
+        h += '<div class="group"><h3>' + esc(g.group) + (g.group === 'Josh.ai Control' ? '<span class="pill o">Josh adds</span>' : '') + '</h3><ul class="items">' +
+          lines.map((l) => '<li><span class="q">' + l.qty + '\u00d7</span><span>' + esc(l.name) + (l.note ? '<span class="note">' + esc(roomNote(l)) + '</span>' : '') + '</span></li>').join('') + '</ul></div>';
+      });
+      h += (res.meta.shadeWindows ? '<p class="fine">' + SHADE_NOTE + '</p>' : '') + '</div>';
+    }
+    h += disclaimer() + '<button class="linkbtn" id="edit">\u2190 Edit my answers</button>';
+    const sy = window.scrollY;
+    root.innerHTML = h;
+    window.scrollTo(0, sy);
+    bindS3(res);
+    bindCall(res, 'screen3');
+    mattMargin(res);
+  }
+  const lead = () => (state.lead && state.lead.name) || '';
+  const MIDMODE = () => E.CONFIG.MID_BREAKDOWN;
+  const clientGroup = (g) => (g === 'Custom Design Allowance' ? 'Custom design allowance (lighting, AV, infrastructure)' : g);
+  const SHADE_NOTE = 'Shade prices are a ballpark. A real shade quote needs a full list of windows and doors with sizes and fabric selections.';
+  const roomNote = (l) => (l.rooms.length && l.rooms[0] && l.rooms.length <= 3 ? l.rooms.join(', ') + ': ' : '') + l.note;
+  const disclaimer = () => '<p class="disc">Estimate only, not a quote. Final proposal after your call with a TYM designer. Equipment prices are pre-tax and exclude shipping, electrical work, seating, acoustic treatment and wall finishes. Installation and programming shown as typical ranges. Individual items are listed at their standard (MSRP / MAP) price; package savings apply to equipment, not to labor.</p>';
+  function delta(patch, path) {
+    const base = calc(effPath()).totals.yourPrice;
+    return calc(path || effPath(), patch).totals.yourPrice - base;
+  }
+  function dtxt(d) { return Math.abs(d) < 1 ? 'Same price' : sgn(d); }
+  const PROJ_SHORT = { VPLXW5000ES: 'Sony 4K laser', VPLXW5100ES: 'Sony premium 4K laser', V11HA47020MB: 'Epson 4K laser' };
+  function optCard(on, title, desc, d, dataAttr, rec) {
+    return '<div class="opt ' + (on ? 'on' : '') + '" ' + dataAttr + '>' + (rec ? '<span class="rec">' + rec + '</span>' : '') + '<h3>' + title + '</h3><p>' + desc + '</p><span class="d ' + (d > 1 ? 'up' : d < -1 ? 'dn' : '') + '">' + (on ? 'Selected' : dtxt(d)) + '</span></div>';
+  }
+  function chipOpt(on, label, d, attr) {
+    return '<div class="chip sm ' + (on ? 'on' : '') + '" ' + attr + '>' + label + ' <span class="dd">' + (on ? 'Included' : dtxt(d)) + '</span></div>';
+  }
+  function toggleRow(id, title, sub, on, d) {
+    return '<div class="toggle"><div class="tx"><b>' + title + '</b><span>' + sub + (on ? '' : (d ? ' \u00b7 ' + sgn(d) : '')) + '</span></div><button class="sw ' + (on ? 'on' : '') + '" data-tg="' + id + '" aria-label="' + esc(title) + '"></button></div>';
+  }
+  function swapSection(res) {
+    const o = state.inputs.opts, inp = state.inputs;
+    const hasMedia = res.meta.hasMedia;
+    let h = '<div class="card"><h2>Swap &amp; upgrade options</h2><p class="hint">Tap a card to swap. Your total updates right away.</p>';
+    if (hasMedia) {
+      const aRes = calc(effPath(), { mediaChoice: 'A' }), bRes = calc(effPath(), { mediaChoice: 'B' });
+      const cur = res.totals.yourPrice;
+      const aPkg = aRes.meta.mediaInfo.packageList, bPkg = bRes.meta.mediaInfo.packageList;
+      h += '<div class="swap two">' +
+        optCard(o.mediaChoice === 'A', 'New-build theater', esc(PROJ_SHORT[(o.mediaChoice === 'A' ? res : aRes).meta.mediaInfo.projector] || '4K laser projector') + ', fixed acoustically-transparent screen, Yamaha receiver, in-wall surround and subwoofer.', aRes.totals.yourPrice - cur, 'data-media="A"', 'POPULAR') +
+        optCard(o.mediaChoice === 'B', 'AWOL laser + rise screen', 'Ultra-short-throw laser projector on a cabinet with a rise-up ambient-light-rejecting screen. Great in bright rooms.', bRes.totals.yourPrice - cur, 'data-media="B"') + '</div>';
+      if (o.mediaChoice === 'A') {
+        h += '<div class="sub-opts"><div class="lbl">Projector</div><div class="chips">' +
+          (() => { const cur = res.meta.mediaInfo.projector, rec = calc(effPath(), { mediaProjector: null }).meta.mediaInfo.projector;
+            return ['VPLXW5000ES', 'VPLXW5100ES', 'V11HA47020MB'].map((k) => chipOpt(cur === k, esc(PROJ_SHORT[k]) + (k === rec ? ' <span class="pill g">Recommended</span>' : ''), delta({ mediaProjector: k }), 'data-proj="' + k + '"')).join(''); })() + '</div><div class="lbl" style="margin-top:10px">Receiver</div><div class="chips">' +
+          [['YA-RX-V6A', 'Yamaha RX-V6A'], ['YA-RX-A4A', 'Yamaha AVENTAGE RX-A4A']].map((p) => chipOpt((o.mediaAReceiver || 'YA-RX-V6A') === p[0], p[1], delta({ mediaAReceiver: p[0] }), 'data-recv="' + p[0] + '"')).join('') + '</div></div>';
+      } else {
+        h += '<div class="sub-opts"><div class="lbl">Sound</div><div class="chips">' +
+          [['soundbar', 'Sonos soundbar'], ['amp', 'Sonos Amp + 2 ceiling speakers'], ['ghost', 'Ghost + Yamaha'], ['thunder', 'AWOL ThunderBeat']].map((p) =>
+            chipOpt(o.mediaBAudio === p[0], p[1], delta({ mediaBAudio: p[0], mediaBPrewired: p[0] === 'ghost' ? true : o.mediaBPrewired }), 'data-baudio="' + p[0] + '"')).join('') + '</div>' +
+          toggleRow('mediaBPrewired', 'Prewired for sound?', 'Needed for in-wall speakers + receiver', !!o.mediaBPrewired, 0) +
+          '<div class="lbl" style="margin-top:6px">Projector &amp; cabinet</div><div class="chips">' +
+          [['Aetherion Max', 'Brighter (Aetherion Max)'], ['Aetherion Pro', 'Aetherion Pro']].map((p) => chipOpt(o.mediaBProjector === p[0], p[1], delta({ mediaBProjector: p[0] }), 'data-bproj="' + p[0] + '"')).join('') +
+          [['salamander', 'Salamander cabinet'], ['awol', 'AWOL station']].map((p) => chipOpt(o.mediaBCabinet === p[0], p[1], delta({ mediaBCabinet: p[0] }), 'data-bcab="' + p[0] + '"')).join('') + '</div></div>';
+      }
+    } else {
+      const mt = res.meta.mainTvSize;
+      h += '<div class="lbl" style="font-size:12px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Main viewing room TV</div><div class="swap" style="grid-template-columns:repeat(4,1fr)">' +
+        [65, 75, 85, 98].map((s) => optCard(mt === s, s + '"', { 65: 'Great all-rounder', 75: 'Bigger picture', 85: 'Big-screen feel', 98: 'Home-cinema scale' }[s], delta({ tvSizeMain: s }), 'data-tvsize="' + s + '"')).join('') + '</div>';
+      h += toggleRow('sonosSub', 'Add a Sonos Sub Mini', 'Deeper bass for movies', !!o.sonosSub, delta({ sonosSub: !o.sonosSub }));
+    }
+    h += '<div style="margin-top:8px">';
+    if (inp.bedrooms > 1) h += toggleRow('tvBedrooms', 'TVs in the other bedrooms', 'Sony 50" with mount in each', !!o.tvBedrooms, delta({ tvBedrooms: true }));
+    if (hasMedia && res.meta.mediaInfo && res.meta.mediaInfo.musicOption) h += toggleRow('mediaMusic', 'Add music to the Media Room', 'Sonos Port feeding your receiver as an input', !!o.mediaMusic, delta({ mediaMusic: !o.mediaMusic }));
+    h += toggleRow('appleTv', 'Apple TV for every TV', 'Each TV gets its own source', !!o.appleTv, delta({ appleTv: true }));
+    h += toggleRow('retrofit', 'Walls are already closed (retrofit)', 'Skips pre-wire hardware, uses wireless surrounds', !!o.retrofit, delta({ retrofit: true }));
+    h += toggleRow('control4', 'I want Control4', effPath() === 'josh' ? 'Heads up: Josh works voice-only alongside Control4' : 'Adds a Control4 hub (pricing confirmed on call)', !!o.control4, delta({ control4: true }));
+    const sw = res.meta.lightingRooms;
+    h += '<div class="toggle"><div class="tx"><b>Lighting rooms</b><span>One Lutron ' + ({ caseta: 'Caseta', select: 'Select', ra3: 'RadioRA 3' }[res.meta.lighting.system] || 'Caseta') + ' dimmer per room (auto: ' + res.meta.lightingRoomsAuto + ')</span></div><div class="mini-step"><button data-sw="-1">\u2212</button><b>' + sw + '</b><button data-sw="1">+</button></div></div>';
+    h += '</div>';
+    if (effPath() === 'josh') {
+      const jr = res.meta.josh ? res.meta.josh.remote : 'none';
+      h += '<div class="sub-opts"><div class="lbl">Josh remote (optional)</div><div class="chips">' +
+        [['none', 'No remote'], ['edge', 'Josh Edge'], ['ava', 'AVA Cinema']].map((p) => chipOpt(jr === p[0], p[1], delta({ joshRemote: p[0] }), 'data-jremote="' + p[0] + '"')).join('') +
+        '</div><div class="lbl" style="margin-top:10px">Josh software plan</div><div class="chips">' +
+        [['Y', 'Year 1 (renews yearly)'], ['5Y', '5 years prepaid']].map((p) => chipOpt(o.joshPlan === p[0], p[1], delta({ joshPlan: p[0] }), 'data-jplan="' + p[0] + '"')).join('') + '</div></div>';
+    }
+    h += '</div>';
+    return h;
+  }
+  function setOpt(patch) { Object.assign(state.inputs.opts, patch); save(); renderS3(); }
+  function bindS3(res) {
+    const o = state.inputs.opts;
+    $$('.tabs [data-path]').forEach((b) => b.onclick = () => { if (starkPath()) state.starkPick = b.dataset.path; else state.path = b.dataset.path; save(); renderS3(); });
+    $$('[data-media]').forEach((b) => b.onclick = () => setOpt({ mediaChoice: b.dataset.media }));
+    $$('[data-proj]').forEach((b) => b.onclick = () => setOpt({ mediaProjector: b.dataset.proj || null }));
+    $$('[data-recv]').forEach((b) => b.onclick = () => setOpt({ mediaAReceiver: b.dataset.recv }));
+    $$('[data-baudio]').forEach((b) => b.onclick = () => setOpt({ mediaBAudio: b.dataset.baudio, mediaBPrewired: b.dataset.baudio === 'ghost' ? true : o.mediaBPrewired }));
+    $$('[data-bproj]').forEach((b) => b.onclick = () => setOpt({ mediaBProjector: b.dataset.bproj }));
+    $$('[data-bcab]').forEach((b) => b.onclick = () => setOpt({ mediaBCabinet: b.dataset.bcab }));
+    $$('[data-tvsize]').forEach((b) => b.onclick = () => setOpt({ tvSizeMain: parseInt(b.dataset.tvsize, 10) }));
+    $$('[data-jremote]').forEach((b) => b.onclick = () => setOpt({ joshRemote: b.dataset.jremote }));
+    $$('[data-jplan]').forEach((b) => b.onclick = () => setOpt({ joshPlan: b.dataset.jplan }));
+    $$('[data-tg]').forEach((b) => b.onclick = () => { const k = b.dataset.tg; setOpt({ [k]: !o[k] }); });
+    $$('[data-sw]').forEach((b) => b.onclick = () => { const cur = res.meta.lightingRooms; setOpt({ lightingSwitches: Math.max(1, cur + parseInt(b.dataset.sw, 10)) }); });
+    const ed = $('#edit'); if (ed) ed.onclick = () => go(1);
+    const fb = $('#ftBack'); if (fb) fb.onclick = () => go('finetune');
+    const mo = $('#s3More'); if (mo) mo.onclick = () => { state.s3more = !state.s3more; renderS3(); };
+  }
+  function mattSummaryBlock() { return ''; }
+  function mattFull() { return ''; }
+  function bindMatt() {}
+  window.YT_APP = { state: state, go: go, calc: calc };
+  go(state.step || 1);
+})();
+
+</script>
 </body>
 </html>
