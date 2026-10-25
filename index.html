@@ -692,6 +692,13 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   gtag('config', 'G-C44FWQVXVS');
 </script>
 <!-- End Google tag -->
+<style>
+  /* Instant-quote CTA: long label on desktop, short on phones */
+  nav .cta-short { display: none; }
+  @media (max-width: 480px) { nav .cta-long { display: none; } nav .cta-short { display: inline; } }
+  nav ul.nav-menu li.nav-mobile-cta { display: none; }
+  @media (max-width: 900px) { nav ul.nav-menu li.nav-mobile-cta { display: block; } nav ul.nav-menu li.nav-mobile-cta a { color: var(--accent, #2563EB); font-weight: 700; } }
+</style>
 </head>
 <body>
 
@@ -701,6 +708,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
 
     <ul class="nav-menu" id="nav-menu">
+      <li class="nav-mobile-cta"><a href="/qualify/">Get My Instant Quote</a></li>
       <li><a href="/packages/aetherion-max/">Packages</a></li>
       <li><a href="/qualify/">Custom Design</a></li>
       <li><a href="/learn/">Blog</a></li>
@@ -709,7 +717,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     </ul>
 
     <div class="nav-right">
-      <a href="/qualify/" class="btn">Design My Theater</a>
+      <a href="/qualify/" class="btn"><span class="cta-long">Get My Instant Quote</span><span class="cta-short">Instant Quote</span></a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span>
         <span></span>
@@ -727,7 +735,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     <p class="hero-sub">Turnkey packages from $9,997. Custom designs from $25k. Drop-shipped to your door — nationwide.</p>
     <div class="hero-cta">
       <a href="#packages" class="btn btn-lg">Browse Packages</a>
-      <a href="/qualify/" class="btn-outline on-hero btn-lg">Design Custom</a>
+      <a href="/qualify/" class="btn-outline on-hero btn-lg">Get My Instant Quote</a>
     </div>
   </div>
 </section>
@@ -802,7 +810,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
     <p class="section-sub">Turnkey packages ship in 7–10 days. Custom designs take about 6 weeks. Either way, we'll get you to movie night.</p>
     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
       <a href="#packages" class="btn btn-lg">Browse Packages</a>
-      <a href="/qualify/" class="btn-outline btn-lg">Design Custom</a>
+      <a href="/qualify/" class="btn-outline btn-lg">Get My Instant Quote</a>
     </div>
   </div>
 </section>

@@ -399,6 +399,13 @@ body:has(.cta-bar) footer.site-footer{padding-bottom:110px}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C44FWQVXVS"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C44FWQVXVS');</script>
+<style>
+  /* Instant-quote CTA: long label on desktop, short on phones */
+  nav .cta-short { display: none; }
+  @media (max-width: 480px) { nav .cta-long { display: none; } nav .cta-short { display: inline; } }
+  nav ul.nav-menu li.nav-mobile-cta { display: none; }
+  @media (max-width: 900px) { nav ul.nav-menu li.nav-mobile-cta { display: block; } nav ul.nav-menu li.nav-mobile-cta a { color: var(--accent, #2563EB); font-weight: 700; } }
+</style>
 </head>
 <body>
 <nav class="site-nav">
@@ -406,6 +413,7 @@ body:has(.cta-bar) footer.site-footer{padding-bottom:110px}
     <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
 
     <ul class="nav-menu" id="nav-menu">
+      <li class="nav-mobile-cta"><a href="/qualify/">Get My Instant Quote</a></li>
       <li><a href="/packages/aetherion-max/">Packages</a></li>
       <li><a href="/qualify/">Custom Design</a></li>
       <li><a href="/learn/">Blog</a></li>
@@ -414,7 +422,7 @@ body:has(.cta-bar) footer.site-footer{padding-bottom:110px}
     </ul>
 
     <div class="nav-right">
-      <a href="/qualify/" class="btn">Design My Theater</a>
+      <a href="/qualify/" class="btn"><span class="cta-long">Get My Instant Quote</span><span class="cta-short">Instant Quote</span></a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span>
         <span></span>

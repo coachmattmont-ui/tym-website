@@ -301,6 +301,13 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
 
   footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 13px; background: var(--bg-elev); }
 </style>
+<style>
+  /* Instant-quote CTA: long label on desktop, short on phones */
+  nav .cta-short { display: none; }
+  @media (max-width: 480px) { nav .cta-long { display: none; } nav .cta-short { display: inline; } }
+  nav ul.nav-menu li.nav-mobile-cta { display: none; }
+  @media (max-width: 900px) { nav ul.nav-menu li.nav-mobile-cta { display: block; } nav ul.nav-menu li.nav-mobile-cta a { color: var(--accent, #2563EB); font-weight: 700; } }
+</style>
 </head>
 <body>
 
@@ -309,6 +316,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   <div class="wrap">
     <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
     <ul class="nav-menu" id="nav-menu">
+      <li class="nav-mobile-cta"><a href="/qualify/">Get My Instant Quote</a></li>
       <li><a href="/packages/aetherion-max/">Packages</a></li>
       <li><a href="/qualify/">Custom Design</a></li>
       <li><a href="/learn/">Blog</a></li>
@@ -316,7 +324,7 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
       <li><a href="/about/">About</a></li>
     </ul>
     <div class="nav-right">
-      <a href="/qualify/" class="btn">Design My Theater</a>
+      <a href="/qualify/" class="btn"><span class="cta-long">Get My Instant Quote</span><span class="cta-short">Instant Quote</span></a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span>
         <span></span>
@@ -409,8 +417,8 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   <section class="final-cta">
     <div class="wrap">
       <h2>Planning a theater or media room <span class="accent">for real?</span></h2>
-      <p>The guides are a great start — but if you're actually building, we'll design it to your room and drop-ship every component to your door.</p>
-      <a href="/qualify/" class="cta-btn">Design My Theater →</a>
+      <p>The guides are a great start — but if you're actually building, we'll design it to your room and drop-ship every component to your door. Zero wait. Get your quote now.</p>
+      <a href="/qualify/" class="cta-btn">Get My Instant Quote →</a>
     </div>
   </section>
 </main>
