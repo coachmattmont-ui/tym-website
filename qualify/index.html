@@ -1251,12 +1251,53 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
     if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('__') === 0 || !res) return;
     try { const q = supabaseRequest(leadRow(lead, res)); fetch(q.url, q.init).catch(() => {}); } catch (e) {}
   }
+  const KIT_FORM_ID = '10094626';
+  const LIGHTING_NAME = { caseta: 'Lutron Caseta', select: 'Lutron Select', ra3: 'Lutron RA3' };
+  function kitPackage(res) {
+    const M = res.meta || {}, L = M.lighting || {};
+    const p = ['Sonos', LIGHTING_NAME[L.system] || 'Lutron'];
+    if (M.shadeRooms > 0) p.push('Lutron shades');
+    if (M.tvs > 0 || M.mainTvSize) p.push('Sony TVs');
+    if (M.hasMedia) p.push('Sony projector theater');
+    p.push(res.path === 'josh' ? 'Josh.ai' : 'Alexa');
+    return p.join(', ');
+  }
+  function kitDetails(res) {
+    const I = state.inputs || {}, M = res.meta || {}, mi = M.mediaInfo;
+    const rooms = (res.rooms || []).map((r) => r.label + (r.tv ? ' (' + r.tv + '" TV)' : '')).join(', ');
+    const bits = [(I.sqft || '').toLocaleString('en-US') + ' sf, ' + (I.bedrooms || '?') + ' bed', 'Rooms: ' + rooms];
+    if (M.audioRooms) bits.push(M.audioRooms + ' music zones');
+    if (mi && M.hasMedia) bits.push('Theater: ' + (mi.screenSize ? mi.screenSize + '" screen, ' : '') + (mi.projectorName || '').replace(/\s*\(.*\)$/, ''));
+    if (M.shadeRooms) bits.push('Shades: ' + M.shadeRooms + ' rooms');
+    if (M.customizedRooms) bits.push(M.customizedRooms + ' rooms fine-tuned');
+    bits.push('Range ' + E.formatRange(res.range));
+    const t = bits.join(' | ');
+    return t.length > 500 ? t.slice(0, 497) + '...' : t;
+  }
+  function kitRequest(lead, res) {
+    const T = res.totals || {};
+    const f = { email_address: lead.email,
+      'fields[first_name]': lead.name || '',
+      'fields[estimate]': res.band === 'stark' ? E.formatRange(res.range) : '$' + Math.round(T.yourPrice || 0).toLocaleString('en-US'),
+      'fields[sqft]': String(lead.sqft || ''), 'fields[control_path]': lead.path || '', 'fields[band]': lead.band || '',
+      'fields[lead_step]': lead.route || '', 'fields[source]': 'yourtech', 'fields[package]': kitPackage(res), 'fields[quote_details]': kitDetails(res) };
+    return { url: 'https://app.kit.com/forms/' + KIT_FORM_ID + '/subscriptions',
+      init: { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(f).toString() } };
+  }
+  function postKit(lead, res) {
+    const who = (lead && lead.email) ? lead : (state.callContact && state.callContact.email ? state.callContact : (state.lead && state.lead.email ? state.lead : null));
+    if (!KIT_FORM_ID || !who || !res) return;
+    lead = Object.assign({}, lead, { email: who.email, name: lead.name || who.name });
+    try { const q = kitRequest(lead, res); fetch(q.url, q.init).catch(() => {}); } catch (e) {}
+  }
   function storeAndPost(lead, setCurrent, res) {
     try {
       if (setCurrent) localStorage.setItem(LS_LEAD, JSON.stringify(lead));
       const all = JSON.parse(localStorage.getItem(LS_LEADS) || '[]'); all.push(lead); localStorage.setItem(LS_LEADS, JSON.stringify(all));
     } catch (e) {}
-    postSupabase(lead, res || calc());
+    const r0 = res || calc();
+    postSupabase(lead, r0);
+    postKit(lead, r0);
     if (LEAD_WEBHOOK_URL) {
       try { fetch(LEAD_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(lead) }).catch(() => {}); } catch (e) {}
     }
@@ -1631,7 +1672,7 @@ input[type=text]:focus,input[type=email]:focus{border-color:var(--brand);box-sha
   function mattSummaryBlock() { return ''; }
   function mattFull() { return ''; }
   function bindMatt() {}
-  window.YT_APP = { state: state, go: go, calc: calc, leadRow: leadRow, supabaseRequest: supabaseRequest };
+  window.YT_APP = { state: state, go: go, calc: calc, leadRow: leadRow, supabaseRequest: supabaseRequest, kitRequest: kitRequest };
   go(state.step || 1);
 })();
 
