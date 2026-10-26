@@ -297,25 +297,26 @@ fbq('init','522485526738484');fbq('track','PageView');
   nav ul.nav-menu li.nav-mobile-cta { display: none; }
   @media (max-width: 900px) { nav ul.nav-menu li.nav-mobile-cta { display: block; } nav ul.nav-menu li.nav-mobile-cta a { color: var(--accent, #2563EB); font-weight: 700; } }
 </style>
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 <div class="progress" id="progress"></div>
 
 <!-- NAV (universal, sticky, hamburger on mobile) -->
-<nav>
+<nav class="tym-nav" aria-label="Main">
   <div class="wrap">
     <a href="/" class="logo">Tym <span>·</span> SmartHome Brothers</a>
     <ul class="nav-menu" id="nav-menu">
       <li class="nav-mobile-cta"><a href="/qualify/">Get My Instant Quote</a></li>
-      <li><a href="/packages/aetherion-max/">Packages</a></li>
-      <li><a href="/qualify/">Custom Design</a></li>
-      <li><a href="/learn/">Blog</a></li>
-      <li><a href="/guides/">Guides</a></li>
+      <li><a href="/packages/aetherion-max/">Theater Package</a></li>
+      <li><a href="/design-service/">Custom Design</a></li>
+      <li><a href="/learn/" aria-current="page">Learn</a></li>
+      <li><a href="/club/">Club</a></li>
       <li><a href="/about/">About</a></li>
     </ul>
     <div class="nav-right">
       <a href="/qualify/" class="btn"><span class="cta-long">Get My Instant Quote</span><span class="cta-short">Instant Quote</span></a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
         <span></span>
         <span></span>
         <span></span>
