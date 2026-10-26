@@ -71,3 +71,26 @@ nav.tym-nav.tym-nav--tool{position:relative !important;background:rgba(11,13,16,
   nav.tym-nav.tym-nav--tool .nav-toggle{width:38px;height:38px}
   nav.tym-nav.tym-nav--tool .nav-right a.btn{display:none !important}
 }
+
+/* ---- Canonical footer ---- */
+footer.tym-footer{background:var(--tym-bg);color:var(--tym-text-muted);border-top:1px solid var(--tym-border);font-family:var(--tym-font);
+  font-size:14px;line-height:1.55;padding:56px 0 28px;margin:0;text-align:left;-webkit-font-smoothing:antialiased}
+footer.tym-footer *{box-sizing:border-box;margin:0;padding:0}
+footer.tym-footer .tym-footer-wrap{max-width:var(--tym-max);margin:0 auto;padding:0 clamp(18px,5vw,24px)}
+footer.tym-footer .tym-footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+footer.tym-footer .tym-footer-brand{font-weight:800;font-size:20px;letter-spacing:.04em;color:var(--tym-text);margin-bottom:10px}
+footer.tym-footer .tym-footer-tagline{color:var(--tym-text-soft);margin-bottom:14px;max-width:320px}
+footer.tym-footer .tym-footer-contact{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+footer.tym-footer .tym-footer-contact a{color:var(--tym-text-soft);text-decoration:none}
+footer.tym-footer .tym-footer-ctas{display:flex;flex-wrap:wrap;gap:10px}
+footer.tym-footer .tym-footer-ctas .tym-btn{font-size:14px;padding:11px 18px}
+footer.tym-footer .tym-footer-heading{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tym-text);margin-bottom:14px}
+footer.tym-footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+footer.tym-footer ul a{color:var(--tym-text-muted);text-decoration:none}
+footer.tym-footer a:not(.tym-btn):hover{color:var(--tym-accent-strong)}
+footer.tym-footer a.tym-btn{color:#fff}
+footer.tym-footer a.tym-btn-ghost{color:var(--tym-text)}
+footer.tym-footer .tym-footer-bottom{margin-top:44px;padding-top:22px;border-top:1px solid var(--tym-border);font-size:13px;color:var(--tym-text-muted)}
+@media (max-width:800px){footer.tym-footer .tym-footer-grid{grid-template-columns:1fr 1fr;gap:32px}footer.tym-footer .tym-footer-col1{grid-column:1/-1}}
+@media (max-width:480px){footer.tym-footer{padding:44px 0 24px}footer.tym-footer .tym-footer-grid{grid-template-columns:1fr 1fr;gap:28px 20px}
+  footer.tym-footer .tym-footer-ctas .tym-btn{flex:1 1 100%;text-align:center}}
