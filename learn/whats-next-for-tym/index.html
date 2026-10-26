@@ -13,9 +13,6 @@
 <meta property="og:image" content="https://tymhomes.com/images/learn/smarthome-brothers-back.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <!-- Meta Pixel -->
 <script>
@@ -53,23 +50,23 @@ fbq('init','522485526738484');fbq('track','PageView');
   
 
   :root{
-    --bg:#100f0e;--surface:#191816;--text:#f3efe8;--body:rgba(243,239,232,.82);--sec:rgba(243,239,232,.6);--ter:rgba(243,239,232,.4);--faint:rgba(243,239,232,.32);
-    --line:rgba(243,239,232,.09);--line2:rgba(243,239,232,.14);
-    --accent:#e2a45c;--accent-tint:rgba(226,164,92,.07);--accent-bd:rgba(226,164,92,.22);
+    --bg:var(--tym-bg);--surface:var(--tym-bg-card);--text:var(--tym-text);--body:var(--tym-text-soft);--sec:var(--tym-text-muted);--ter:rgba(154,164,178,.8);--faint:rgba(154,164,178,.65);
+    --line:var(--tym-border);--line2:var(--tym-border-strong);
+    --accent:var(--tym-accent-strong);--accent-tint:rgba(37,99,235,.08);--accent-bd:rgba(59,122,255,.28);
     --gut:clamp(20px,5vw,40px);
-    --sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    --serif:"Instrument Serif",Georgia,serif;
+    --sans:var(--tym-font);
+    --serif:var(--tym-font);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:var(--accent);text-decoration:none;transition:color .18s ease,opacity .18s ease}
   a:hover{color:var(--text)}
-  .serif-i{font-family:var(--serif);font-style:italic;font-weight:400}
+  .serif-i{font-family:inherit;font-style:normal;font-weight:inherit;color:var(--tym-accent-strong)}
 
   .progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:90}
 
-  header{position:sticky;top:0;z-index:80;height:60px;display:flex;align-items:center;background:rgba(16,15,14,.72);backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:80;height:60px;display:flex;align-items:center;background:rgba(11,13,16,.72);backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);border-bottom:1px solid var(--line)}
   header .hwrap{max-width:1320px;margin:0 auto;padding:0 var(--gut);width:100%;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:baseline;gap:8px;color:var(--text)}
   .brand b{font-size:15px;font-weight:600;letter-spacing:-0.01em}
@@ -77,7 +74,7 @@ fbq('init','522485526738484');fbq('track','PageView');
   
   
   
-  .pill-cta{height:32px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;background:var(--text);color:#100f0e !important;font-size:13.5px;font-weight:600;white-space:nowrap}
+  .pill-cta{height:32px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;background:var(--text);color:#0b0d10 !important;font-size:13.5px;font-weight:600;white-space:nowrap}
   .pill-cta:hover{background:var(--accent)}
   
 
@@ -99,14 +96,14 @@ fbq('init','522485526738484');fbq('track','PageView');
   .body{max-width:680px;margin:0 auto;padding:clamp(48px,7vw,78px) var(--gut) 0}
   .body p{font-size:18.5px;line-height:1.68;color:var(--body);margin-bottom:26px}
   .body p.first{font-size:20px;line-height:1.6}
-  .body p.first::first-letter{font-family:var(--serif);font-style:italic;font-size:62px;line-height:.8;color:var(--accent);float:left;margin:8px 12px 0 0}
-  .pullquote{margin:44px 0;border-left:2px solid var(--accent);padding-left:26px;font-family:var(--serif);font-style:italic;font-size:30px;line-height:1.28;letter-spacing:-0.015em;color:var(--text)}
+  .body p.first::first-letter{font-family:var(--tym-font);font-style:normal;font-weight:700;font-size:58px;line-height:.8;color:var(--accent);float:left;margin:8px 12px 0 0}
+  .pullquote{margin:44px 0;border-left:2px solid var(--accent);padding-left:26px;font-family:var(--tym-font);font-style:normal;font-weight:500;font-size:26px;line-height:1.28;letter-spacing:-0.015em;color:var(--text)}
 
   .cta{max-width:1000px;margin:clamp(56px,8vw,96px) auto 0;padding:0 var(--gut)}
   .cta .inner{border-top:1px solid var(--line);padding-top:56px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
   .cta h2{font-size:clamp(28px,4vw,40px);line-height:1.05;letter-spacing:-0.03em;font-weight:500;max-width:26ch}
   .cta .cdek{font-size:16.5px;color:var(--sec);margin-top:12px;max-width:42ch}
-  .cta-pill{display:inline-flex;align-items:center;height:52px;padding:0 28px;border-radius:999px;background:var(--accent);color:#100f0e !important;font-weight:600;font-size:16px;white-space:nowrap}
+  .cta-pill{display:inline-flex;align-items:center;height:52px;padding:0 28px;border-radius:999px;background:var(--accent);color:#fff !important;font-weight:600;font-size:16px;white-space:nowrap}
   .cta-pill:hover{background:var(--text)}
 
   
@@ -183,13 +180,15 @@ fbq('init','522485526738484');fbq('track','PageView');
   <p>Looking forward to seeing you here.</p>
 </article>
 
-<section class="cta">
-  <div class="inner">
-    <div>
-      <h2>Thinking about a theater or <span class="serif-i">media room</span>?</h2>
-      <p class="cdek">Book a quick 15-minute call and let's talk through your space — no pressure, just a straight conversation.</p>
+<section class="tym-post-cta" aria-label="Get a quote">
+  <div class="tym-post-cta-box">
+    <p class="tym-post-cta-eyebrow">YourTech by TYM</p>
+    <h2>See what your setup would cost.</h2>
+    <p>Answer a few quick taps and get an instant price range for your theater, music, TV, lighting and Wi‑Fi. Zero wait.</p>
+    <div class="tym-post-cta-actions">
+      <a class="tym-btn tym-btn-lg" href="/qualify/">Get My Instant Quote</a>
+      <a class="tym-post-cta-link" href="/packages/aetherion-max/">Or see the $15k Theater Package →</a>
     </div>
-    <a class="cta-pill" href="https://calendly.com/smartdesigns/quick-call-project-review" target="_blank" rel="noopener">Book a 15-Minute Call →</a>
   </div>
 </section>
 

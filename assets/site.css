@@ -94,3 +94,16 @@ footer.tym-footer .tym-footer-bottom{margin-top:44px;padding-top:22px;border-top
 @media (max-width:800px){footer.tym-footer .tym-footer-grid{grid-template-columns:1fr 1fr;gap:32px}footer.tym-footer .tym-footer-col1{grid-column:1/-1}}
 @media (max-width:480px){footer.tym-footer{padding:44px 0 24px}footer.tym-footer .tym-footer-grid{grid-template-columns:1fr 1fr;gap:28px 20px}
   footer.tym-footer .tym-footer-ctas .tym-btn{flex:1 1 100%;text-align:center}}
+
+/* ---- Post-end CTA box (/learn posts) ---- */
+.tym-post-cta{padding:clamp(40px,6vw,64px) clamp(18px,5vw,24px) clamp(56px,8vw,88px)}
+.tym-post-cta-box{max-width:680px;margin:0 auto;background:linear-gradient(180deg,#14181d,#181d24);border:1px solid var(--tym-border-strong);
+  border-radius:16px;padding:clamp(24px,5vw,40px);font-family:var(--tym-font);box-shadow:0 0 0 1px rgba(37,99,235,.08),0 24px 60px rgba(0,0,0,.35)}
+.tym-post-cta-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tym-accent-strong);margin:0 0 10px}
+.tym-post-cta-box h2{font-family:var(--tym-font);font-size:clamp(24px,4vw,30px);line-height:1.15;letter-spacing:-.02em;font-weight:700;color:var(--tym-text);margin:0 0 12px}
+.tym-post-cta-box p{font-size:16px;line-height:1.6;color:var(--tym-text-soft);margin:0 0 22px}
+.tym-post-cta-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.tym-post-cta-actions .tym-btn{color:#fff}
+.tym-post-cta-link{color:var(--tym-accent-strong);font-weight:600;font-size:15px;text-decoration:none}
+.tym-post-cta-link:hover{color:#fff;text-decoration:underline}
+@media (max-width:480px){.tym-post-cta-actions .tym-btn{width:100%;text-align:center}}
