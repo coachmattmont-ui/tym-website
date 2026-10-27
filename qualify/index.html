@@ -1387,7 +1387,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   }
   const KIT_FORM_ID = '10094626';
   const LIGHTING_NAME = { caseta: 'Lutron Caseta', select: 'Lutron Select', ra3: 'Lutron RA3' };
-  const LIGHTING_SHORT = { caseta: 'Caseta', select: 'Select', ra3: 'RA3' };
+  const LIGHTING_SHORT = { caseta: 'Lutron Caseta', select: 'Lutron Select', ra3: 'Lutron RA3' };
   function kitPackage(res) {
     const M = res.meta || {}, L = M.lighting || {};
     const p = ['Sonos', LIGHTING_NAME[L.system] || 'Lutron'];
