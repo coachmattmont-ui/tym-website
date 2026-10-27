@@ -1374,7 +1374,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     const est = res.band === 'stark' && R.low != null ? Math.round((R.low + R.high) / 2) : Math.round(T.yourPrice || 0);
     const num = (x) => { const n = parseInt(x, 10); return isNaN(n) ? null : n; };
     return { email: lead.email || null, name: lead.name || null, route: lead.route || null, band: lead.band || null, path: lead.path || null,
-      sqft: num(lead.sqft), estimate: est, payload: lead };
+      sqft: num(lead.sqft), estimate: est, payload: Object.assign({}, lead, kitLead(lead) ? { kit: kitFields(kitLead(lead), res) } : {}) };
   }
   function supabaseRequest(row) {
     return { url: SUPABASE_URL + '/rest/v1/leads', init: { method: 'POST', keepalive: true,
@@ -1409,30 +1409,38 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     const t = bits.join(' | ');
     return t.length > 500 ? t.slice(0, 497) + '...' : t;
   }
-  function kitRequest(lead, res) {
+  function kitLead(lead) {   // same contact resolution for the browser Kit post and the Supabase row's payload.kit
+    const who = (lead && lead.email) ? lead : (state.callContact && state.callContact.email ? state.callContact : (state.lead && state.lead.email ? state.lead : null));
+    return who ? Object.assign({}, lead, { email: who.email, name: (lead && lead.name) || who.name }) : null;
+  }
+  function kitFields(lead, res) {
     const T = res.totals || {}, M = res.meta || {}, L = M.lighting || {}, mi = M.mediaInfo, I = state.inputs || {};
     const estText = res.band === 'stark' ? E.formatRange(res.range) : '$' + Math.round(T.yourPrice || 0).toLocaleString('en-US');
     const theater = (M.hasMedia && mi)
       ? ((mi.screenSize ? mi.screenSize + '" screen, ' : '') + (mi.projectorName || '').replace(/\s*\(.*\)$/, '')).replace(/,\s*$/, '')
       : '';   // '' when no theater so Kit Liquid `!= blank` hides it
-    const f = { email_address: lead.email,
-      'fields[first_name]': String(lead.name || '').trim().split(/\s+/)[0] || '',
-      'fields[estimate]': estText,
-      'fields[estimate_text]': estText,
-      'fields[range_text]': E.formatRange(res.range),
-      'fields[bedrooms]': String(I.bedrooms || ''),
-      'fields[control_system]': res.path === 'josh' ? 'Josh.ai' : 'Alexa',
-      'fields[theater]': theater,
-      'fields[lighting]': LIGHTING_SHORT[L.system] || '',
-      'fields[sqft]': String(lead.sqft || ''), 'fields[control_path]': lead.path || '', 'fields[band]': lead.band || '',
-      'fields[lead_step]': lead.route || '', 'fields[source]': 'yourtech', 'fields[package]': kitPackage(res), 'fields[quote_details]': kitDetails(res) };
+    return {
+      first_name: String(lead.name || '').trim().split(/\s+/)[0] || '',
+      estimate: estText,
+      estimate_text: estText,
+      range_text: E.formatRange(res.range),
+      bedrooms: String(I.bedrooms || ''),
+      control_system: res.path === 'josh' ? 'Josh.ai' : 'Alexa',
+      theater: theater,
+      lighting: LIGHTING_SHORT[L.system] || '',
+      sqft: String(lead.sqft || ''), control_path: lead.path || '', band: lead.band || '',
+      lead_step: lead.route || '', source: 'yourtech', package: kitPackage(res), quote_details: kitDetails(res) };
+  }
+  function kitRequest(lead, res) {
+    const k = kitFields(lead, res);
+    const f = { email_address: lead.email };
+    Object.keys(k).forEach((n) => { f['fields[' + n + ']'] = k[n]; });
     return { url: 'https://app.kit.com/forms/' + KIT_FORM_ID + '/subscriptions',
       init: { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(f).toString() } };
   }
   function postKit(lead, res) {
-    const who = (lead && lead.email) ? lead : (state.callContact && state.callContact.email ? state.callContact : (state.lead && state.lead.email ? state.lead : null));
-    if (!KIT_FORM_ID || !who || !res) return;
-    lead = Object.assign({}, lead, { email: who.email, name: lead.name || who.name });
+    lead = kitLead(lead);
+    if (!KIT_FORM_ID || !lead || !res) return;
     try { const q = kitRequest(lead, res); fetch(q.url, q.init).catch(() => {}); } catch (e) {}
   }
   function storeAndPost(lead, setCurrent, res) {
