@@ -1381,6 +1381,7 @@ footer.tym-footer .tym-footer-ctas a[href="/qualify/"]{display:none}
   }
   const KIT_FORM_ID = '10094626';
   const LIGHTING_NAME = { caseta: 'Lutron Caseta', select: 'Lutron Select', ra3: 'Lutron RA3' };
+  const LIGHTING_SHORT = { caseta: 'Caseta', select: 'Select', ra3: 'RA3' };
   function kitPackage(res) {
     const M = res.meta || {}, L = M.lighting || {};
     const p = ['Sonos', LIGHTING_NAME[L.system] || 'Lutron'];
@@ -1403,10 +1404,20 @@ footer.tym-footer .tym-footer-ctas a[href="/qualify/"]{display:none}
     return t.length > 500 ? t.slice(0, 497) + '...' : t;
   }
   function kitRequest(lead, res) {
-    const T = res.totals || {};
+    const T = res.totals || {}, M = res.meta || {}, L = M.lighting || {}, mi = M.mediaInfo, I = state.inputs || {};
+    const estText = res.band === 'stark' ? E.formatRange(res.range) : '$' + Math.round(T.yourPrice || 0).toLocaleString('en-US');
+    const theater = (M.hasMedia && mi)
+      ? ((mi.screenSize ? mi.screenSize + '" screen, ' : '') + (mi.projectorName || '').replace(/\s*\(.*\)$/, '')).replace(/,\s*$/, '')
+      : '';   // '' when no theater so Kit Liquid `!= blank` hides it
     const f = { email_address: lead.email,
-      'fields[first_name]': lead.name || '',
-      'fields[estimate]': res.band === 'stark' ? E.formatRange(res.range) : '$' + Math.round(T.yourPrice || 0).toLocaleString('en-US'),
+      'fields[first_name]': String(lead.name || '').trim().split(/\s+/)[0] || '',
+      'fields[estimate]': estText,
+      'fields[estimate_text]': estText,
+      'fields[range_text]': E.formatRange(res.range),
+      'fields[bedrooms]': String(I.bedrooms || ''),
+      'fields[control_system]': res.path === 'josh' ? 'Josh.ai' : 'Alexa',
+      'fields[theater]': theater,
+      'fields[lighting]': LIGHTING_SHORT[L.system] || '',
       'fields[sqft]': String(lead.sqft || ''), 'fields[control_path]': lead.path || '', 'fields[band]': lead.band || '',
       'fields[lead_step]': lead.route || '', 'fields[source]': 'yourtech', 'fields[package]': kitPackage(res), 'fields[quote_details]': kitDetails(res) };
     return { url: 'https://app.kit.com/forms/' + KIT_FORM_ID + '/subscriptions',
