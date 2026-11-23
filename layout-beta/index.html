@@ -1,0 +1,1150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>YourTech Layout Tool — Beta</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root{
+  --ink:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.08); --bg:#e8e8ed; --panel:rgba(255,255,255,.78);
+  --blue:#0071e3; --tym:#00acec; --fill:#f5f5f7; --shadow:0 8px 28px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.04);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;color:var(--ink);
+  font:13px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;
+  background:var(--bg); -webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+/* Visible scrollbars (macOS otherwise hides them) */
+*{scrollbar-width:thin;scrollbar-color:#b0b0b5 #ececf0}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-track{background:#ececf0;border-radius:6px}
+*::-webkit-scrollbar-thumb{background:#b0b0b5;border-radius:6px;border:2px solid #ececf0}
+*::-webkit-scrollbar-thumb:hover{background:#8e8e93}
+
+/* Beta shell: banner, password gate, feedback */
+.beta-banner{flex-shrink:0;background:#111318;color:#f2f4f7;font-size:12px;line-height:1.35;letter-spacing:.01em;text-align:center;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.08);z-index:9}
+#btnFeedback{font-weight:600}
+#gate{position:fixed;inset:0;z-index:20000;background:#0b0d10;color:#f2f4f7;display:flex;align-items:center;justify-content:center;padding:24px}
+#gate.ok{display:none}
+.gate-card{width:min(400px,100%);background:#14161b;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 26px 24px;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.gate-card h1{font-size:22px;letter-spacing:-.03em;margin:0 0 8px;font-weight:700}
+.gate-card p{margin:0 0 16px;color:#b6bcc6;font-size:14px;line-height:1.45}
+.gate-card input[type=password]{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7;margin-bottom:12px}
+.gate-card input:focus{outline:2px solid #3B7AFF;outline-offset:1px}
+.gate-card button[type=submit]{width:100%;padding:11px 14px;border-radius:10px;border:0;background:#2563EB;color:#fff;font-weight:650;cursor:pointer}
+.gate-card button[type=submit]:hover{background:#3B7AFF}
+#gateErr{color:#ff8a8a;font-size:13px;margin:12px 0 0}
+#fbModal{position:fixed;inset:0;z-index:15000;background:rgba(15,16,20,.45);display:none;align-items:center;justify-content:center;padding:24px}
+#fbModal.on{display:flex}
+#fbModal .fb-card{width:min(440px,100%);background:#fff;border-radius:16px;padding:22px 22px 18px;box-shadow:0 20px 50px rgba(0,0,0,.22);color:#1d1d1f}
+#fbModal h2{margin:0 0 14px;font-size:18px;letter-spacing:-.02em}
+#fbModal label{display:block;font-size:12px;font-weight:600;margin:10px 0 5px}
+#fbModal label span{font-weight:500;color:#6e6e73}
+#fbModal textarea,#fbModal input[type=email]{width:100%;padding:9px 10px;border-radius:10px;border:1px solid rgba(0,0,0,.12);background:#f5f5f7;font:inherit}
+#fbModal textarea{min-height:72px;resize:vertical}
+#fbModal .fb-row{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+#fbThanks{color:#22863a;font-size:13px;margin:10px 0 0}
+
+
+.hdr{min-height:54px;height:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:6px 14px;
+  background:rgba(255,255,255,.84);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(255,255,255,.8), 0 8px 24px rgba(0,0,0,.04);
+  position:relative;z-index:8;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px;min-width:auto;flex-shrink:0;text-decoration:none;color:var(--ink)}
+.tym-logo-svg{height:28px;width:auto;display:block}
+.brand small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tools{flex:1 1 640px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px}
+.tools .sep{width:1px;height:20px;background:var(--line);margin:0 6px}
+.tools button,.file-btn,aside button,dialog button,#ctx button{
+  appearance:none;border:0;background:var(--fill);padding:6px 11px;border-radius:9px;cursor:pointer;
+  color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.tools button:hover,aside button:hover,.file-btn:hover{background:#ececf0}
+.tools button:disabled{opacity:.4;cursor:default}
+.zl{display:inline-block;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
+.search{width:150px;border:0;background:var(--fill);border-radius:9px;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.total{min-width:140px;text-align:right;margin-left:auto;flex-shrink:0}
+.total b{font-size:16px;font-weight:600;letter-spacing:-.02em}
+.total span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+.app{display:flex;height:calc(100% - 54px);min-height:0}
+aside{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
+  background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px);
+  border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
+.aside-scroll{flex:1;min-height:0;overflow:auto;padding:16px 14px 8px}
+.file-btn{display:block;text-align:center;padding:8px 10px;margin-bottom:6px}
+#pdf{display:none}
+#pg{font-size:11px;color:var(--muted);margin:0 0 14px;min-height:1em}
+.sec{margin-bottom:16px}
+.sec-h{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin:0 0 8px}
+.sec-h button{margin-left:auto;letter-spacing:0;text-transform:none;font-size:12px;padding:4px 8px}
+#hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+#lastAdded{margin-top:8px;padding:8px 10px;background:#fff;border-radius:10px;box-shadow:var(--shadow);font-size:12px}
+#lastAdded b{font-weight:600}
+#selBox{padding:10px;background:#fff;border-radius:12px;box-shadow:var(--shadow);font-size:12px;color:var(--muted)}
+#selBox b{color:var(--ink);font-weight:600}
+#selBox .rowbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+.pal{display:flex;align-items:center;gap:8px;padding:6px 8px;margin:0 0 4px;background:#fff;border-radius:10px;
+  box-shadow:inset 0 0 0 1px var(--line);cursor:grab;font-size:12px}
+.pal:active{cursor:grabbing}
+.pal:hover{box-shadow:inset 0 0 0 1px rgba(0,113,227,.35)}
+.g{margin-bottom:6px}
+.gh{display:flex;align-items:center;gap:6px;padding:6px 4px;cursor:pointer;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);font-weight:600;user-select:none;border-radius:8px}
+.gh:hover{color:var(--ink)}
+.gh .ch{display:inline-block;width:10px;transition:transform .15s}
+.g:not(.open) .ch{transform:rotate(-90deg)}
+.g:not(.open) .gb{display:none}
+
+.room{padding:8px 8px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:13px}
+.room:hover{background:rgba(0,0,0,.04)}
+.room.act{background:rgba(0,113,227,.1)}
+.room .nm{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.room .tot{color:var(--muted);font-variant-numeric:tabular-nums}
+.room .x{opacity:.4;font-size:12px;padding:0 3px}
+.room .x:hover{opacity:1}
+.item{padding:5px 6px 5px 22px;font-size:12px;color:#3a3a3c;cursor:pointer;display:flex;align-items:center;gap:6px}
+.item.sel{color:var(--blue);font-weight:560}
+.item .ip{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted)}
+.item select{font-size:11px;border:0;background:var(--fill);border-radius:6px;padding:2px 4px;max-width:110px;box-shadow:inset 0 0 0 1px var(--line)}
+.un .room{color:#b15c00}
+
+#sideTotal{flex-shrink:0;margin:0;padding:12px 16px 16px;background:rgba(255,255,255,.92);
+  border-top:1px solid var(--line);font-size:13px;text-align:right}
+#sideTotal b{font-size:18px;letter-spacing:-.02em}
+
+main{flex:1;overflow:auto;position:relative;background:
+  radial-gradient(1200px 600px at 70% 0%, #f3f3f7, var(--bg));}
+#empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;pointer-events:none}
+#stage{position:relative;display:inline-block;margin:28px;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
+#stage canvas{display:block;background:#fff;border-radius:8px}
+
+.devwrap{position:absolute;left:0;top:0}
+.devsvg{position:absolute;overflow:visible}
+.devsvg .body{cursor:move}
+.devsvg .end{cursor:grab}
+.devsvg .rot{cursor:grab}
+.devsvg .sz{cursor:nwse-resize}
+.tag{position:absolute;transform:translateX(-50%);font-size:10px;background:rgba(29,29,31,.86);color:#fff;
+  padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none;letter-spacing:.02em}
+.devwrap:hover .tag,.devwrap.sel .tag{display:block}
+.guide{position:absolute;pointer-events:none;z-index:3}
+
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;align-items:center;justify-content:center;z-index:20}
+#modal .card{background:#fff;padding:22px;border-radius:16px;width:380px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+#modal .card b{font-size:15px}
+#modal select,#modal input{width:100%;margin:6px 0;padding:8px 10px;border:0;background:var(--fill);border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
+
+#ctx{position:fixed;z-index:30;min-width:200px;background:#fff;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.18),0 0 0 1px var(--line);
+  padding:6px;display:none}
+#ctx .ct{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 10px}
+#ctx button{display:block;width:100%;text-align:left;background:transparent;box-shadow:none;border-radius:8px;padding:7px 10px}
+#ctx button:hover{background:var(--fill)}
+#ctx button.on{color:var(--blue);font-weight:600}
+
+.tools button.on, #btnHifi.on{background:#0071e3;color:#fff;box-shadow:none}
+#projName{width:118px;border:0;background:var(--fill);border-radius:9px;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--line);font-size:12px}
+#pageLbl{min-width:72px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
+.ph{display:inline-block;margin-left:4px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#9a6700;background:#fff4d6;border-radius:4px;padding:0 4px;vertical-align:middle}
+.tbd{color:#9a6700}
+#tierPop{position:fixed;z-index:25;min-width:220px;background:#fff;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.18),0 0 0 1px var(--line);padding:8px;display:none}
+#tierPop .tp-h{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:4px 8px 6px}
+#tierPop button{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:transparent;box-shadow:none;border-radius:8px;padding:8px 10px}
+#tierPop button:hover{background:var(--fill)}
+#tierPop button.on{background:rgba(0,113,227,.1);color:var(--blue)}
+#tierPop button span{color:var(--muted);font-size:11px;flex:1}
+#tierPop button em{font-style:normal;font-variant-numeric:tabular-nums}
+#tierPop .tp-n{font-size:11px;color:var(--muted);padding:6px 8px 4px}
+#bundles{display:flex;flex-direction:column;gap:4px}
+#bundles button{width:100%;text-align:left}
+#bundles .tbd-note{font-size:11px;color:var(--muted);margin:4px 0 0}
+
+</style>
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+</script>
+</head>
+<body>
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <form class="gate-card" id="gateForm" autocomplete="off">
+    <h1 id="gateTitle">Layout Tool beta</h1>
+    <p>This page is a private preview. Enter the access password to continue.</p>
+    <input type="password" id="gatePw" name="password" placeholder="Password" required autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="gateErr" hidden>That password doesn’t match.</p>
+  </form>
+</div>
+<div id="fbModal" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+  <form class="fb-card" id="fbForm">
+    <h2 id="fbTitle">Send feedback</h2>
+    <label for="fbDoing">What were you doing?</label>
+    <textarea id="fbDoing" required></textarea>
+    <label for="fbHappened">What happened?</label>
+    <textarea id="fbHappened" required></textarea>
+    <label for="fbEmail">Email <span>(optional)</span></label>
+    <input type="email" id="fbEmail" autocomplete="email">
+    <div class="fb-row">
+      <button type="button" id="fbCancel">Cancel</button>
+      <button type="submit" id="fbSend">Send</button>
+    </div>
+    <p id="fbThanks" hidden>Thanks — we got it.</p>
+  </form>
+</div>
+
+<div class="beta-banner">Beta: prices are estimates; saves stay in this browser.</div>
+<header class="hdr">
+  <div class="brand"><svg class="tym-logo-svg" role="img" aria-label="SmartHome Brothers by TYM" viewBox="0 0 212.7 59.89" xmlns="http://www.w3.org/2000/svg"><defs><style>.tym-none{fill:none;}.tym-fill{fill:#00acec;}.tym-clip{clip-path:url(#tym-logo-clip);}</style><clipPath id="tym-logo-clip"><rect height="59.89" width="212.7" x="0" class="tym-none"></rect></clipPath></defs><g class="tym-clip"><path d="M192.51,59.89c1.46,0,2.8-.22,4.04-.67,1.24-.45,2.3-1.08,3.19-1.9.89-.82,1.59-1.81,2.1-2.97.51-1.16.76-2.45.76-3.88,0-2.2-.6-4.09-1.81-5.67-1.21-1.58-2.91-2.86-5.11-3.84l-1.7-.76c-1.46-.65-2.54-1.25-3.24-1.78-.7-.53-1.05-1.22-1.05-2.05,0-.71.26-1.26.78-1.63.52-.37,1.08-.56,1.67-.56.74,0,1.41.15,1.99.45.58.3,1.27.94,2.07,1.92l4.82-5.09c-1.34-1.55-2.71-2.6-4.13-3.15-1.41-.55-3-.83-4.75-.83-1.25,0-2.45.22-3.61.65-1.16.43-2.19,1.05-3.08,1.85-.89.8-1.61,1.77-2.14,2.9-.54,1.13-.8,2.38-.8,3.75,0,2.14.63,4.07,1.9,5.78,1.26,1.71,3.1,3.1,5.51,4.17l1.79.8c1.34.6,2.29,1.15,2.86,1.67.57.52.85,1.14.85,1.85,0,1.52-1.01,2.28-3.04,2.28-1.1,0-2.18-.38-3.24-1.14-1.06-.76-1.93-1.69-2.61-2.79l-5.4,4.42c1.1,2.05,2.63,3.6,4.6,4.64,1.96,1.04,4.22,1.56,6.78,1.56M168.86,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M164.93,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.32-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM135.53,27.85v31.68h19.63v-7.05h-12.49v-5.35h9.82v-6.87h-9.82v-5.35h12.49v-7.05h-19.63ZM104.82,27.85v31.68h7.14v-12.41h12.67v12.41h7.14v-31.68h-7.14v12.41h-12.67v-12.41h-7.14ZM88.45,34.9v24.63h7.14v-24.63h7.63v-7.05h-22.36v7.05h7.59ZM65.51,59.89c2.23,0,4.33-.42,6.29-1.27,1.96-.85,3.68-2.01,5.15-3.48,1.47-1.47,2.63-3.19,3.48-5.15.85-1.96,1.27-4.06,1.27-6.29s-.42-4.33-1.27-6.29c-.85-1.96-2.01-3.68-3.48-5.15-1.47-1.47-3.19-2.63-5.15-3.48-1.96-.85-4.06-1.27-6.29-1.27s-4.33.42-6.29,1.27c-1.96.85-3.68,2.01-5.15,3.48-1.47,1.47-2.63,3.19-3.48,5.15-.85,1.96-1.27,4.06-1.27,6.29s.42,4.33,1.27,6.29c.85,1.96,2.01,3.68,3.48,5.15,1.47,1.47,3.19,2.63,5.15,3.48,1.96.85,4.06,1.27,6.29,1.27M65.51,53.01c-1.28,0-2.47-.24-3.57-.74-1.1-.49-2.05-1.16-2.86-2.01-.8-.85-1.44-1.84-1.9-2.97-.46-1.13-.69-2.33-.69-3.61s.23-2.48.69-3.61c.46-1.13,1.09-2.12,1.9-2.97.8-.85,1.76-1.52,2.86-2.01,1.1-.49,2.29-.74,3.57-.74s2.47.25,3.57.74c1.1.49,2.05,1.16,2.86,2.01s1.44,1.84,1.9,2.97c.46,1.13.69,2.34.69,3.61s-.23,2.48-.69,3.61c-.46,1.13-1.09,2.12-1.9,2.97s-1.76,1.52-2.86,2.01c-1.1.49-2.29.74-3.57.74M38.02,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M34.09,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.33-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM12.5,40.65h-3.97v-6.29h3.97c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M14.68,52.97h-6.16v-6.29h6.16c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.92-2.36.92M1.38,27.85v31.68h13.97c1.34,0,2.59-.25,3.75-.74,1.16-.49,2.18-1.16,3.06-2.01.88-.85,1.56-1.84,2.05-2.99.49-1.14.74-2.37.74-3.68,0-1.7-.41-3.18-1.23-4.44-.82-1.26-1.9-2.25-3.23-2.97.68-.68,1.23-1.48,1.63-2.39.4-.91.6-1.93.6-3.06,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74H1.38Z" class="tym-fill"></path><path d="M185.93.28v24.6h15.25v-5.48h-9.7v-4.16h7.62v-5.34h-7.62v-4.16h9.7V.28h-15.25ZM158.49,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L158.49,0ZM144.14,25.16c1.73,0,3.36-.33,4.89-.99,1.52-.66,2.86-1.56,4-2.7,1.14-1.14,2.04-2.48,2.7-4,.66-1.53.99-3.15.99-4.89s-.33-3.36-.99-4.89c-.66-1.52-1.56-2.86-2.7-4-1.14-1.14-2.48-2.04-4-2.7C147.5.33,145.88,0,144.14,0s-3.36.33-4.88.99c-1.53.66-2.86,1.56-4,2.7-1.14,1.14-2.04,2.48-2.7,4-.66,1.53-.99,3.15-.99,4.89s.33,3.36.99,4.89c.66,1.52,1.56,2.86,2.7,4,1.14,1.14,2.48,2.04,4,2.7,1.52.66,3.15.99,4.88.99M144.14,19.82c-.99,0-1.92-.19-2.77-.57-.85-.38-1.59-.9-2.22-1.56-.62-.66-1.12-1.43-1.47-2.3-.36-.88-.54-1.81-.54-2.81s.18-1.93.54-2.81c.36-.88.85-1.65,1.47-2.3.62-.66,1.36-1.18,2.22-1.56.86-.38,1.78-.57,2.77-.57s1.92.19,2.77.57c.85.38,1.59.9,2.22,1.56.62.66,1.11,1.43,1.47,2.3.36.88.54,1.81.54,2.81s-.18,1.93-.54,2.81c-.36.88-.85,1.65-1.47,2.3-.62.66-1.36,1.18-2.22,1.56-.85.38-1.78.57-2.77.57M108.87.28v24.6h5.54v-9.63h9.84v9.63h5.54V.28h-5.54v9.63h-9.84V.28h-5.54ZM90.26,5.75v19.13h5.54V5.75h5.93V.28h-17.36v5.47h5.89ZM75.95,10.22h-3.12v-4.89h3.12c.74,0,1.35.24,1.84.73s.73,1.06.73,1.73-.24,1.24-.73,1.72c-.49.47-1.1.71-1.84.71M72.9,14.9l7.62,9.98h6.62l-8-10.43c1.43-.55,2.58-1.45,3.45-2.69.87-1.24,1.3-2.63,1.3-4.18,0-.99-.19-1.93-.57-2.82-.38-.89-.91-1.67-1.58-2.34-.67-.67-1.45-1.2-2.34-1.58s-1.83-.57-2.82-.57h-9.29v24.6h5.54v-9.98h.07ZM57.24,16.56h-4.64l2.32-5.13,2.32,5.13ZM54.92,0l-12.13,24.88h5.82l1.77-3.81h9.08l1.77,3.81h5.82L54.92,0ZM18.02,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L18.02,0ZM8.84,25.16c1.13,0,2.18-.17,3.14-.52.96-.35,1.78-.84,2.48-1.47.69-.64,1.24-1.4,1.63-2.31.39-.9.59-1.91.59-3.01,0-1.71-.47-3.18-1.4-4.4-.94-1.22-2.26-2.22-3.97-2.98l-1.32-.59c-1.13-.51-1.97-.97-2.51-1.39-.54-.42-.81-.95-.81-1.59,0-.55.2-.98.61-1.26.4-.29.84-.43,1.3-.43.58,0,1.09.12,1.54.35.45.23.99.73,1.61,1.49l3.74-3.95c-1.04-1.2-2.11-2.02-3.2-2.44C11.15.21,9.92,0,8.56,0,7.59,0,6.65.17,5.75.5c-.9.33-1.7.81-2.39,1.44-.69.62-1.25,1.37-1.66,2.25-.42.88-.62,1.85-.62,2.91,0,1.66.49,3.16,1.47,4.49.98,1.33,2.41,2.41,4.28,3.24l1.39.62c1.04.46,1.78.9,2.22,1.3.44.41.66.88.66,1.44,0,1.18-.78,1.77-2.36,1.77-.86,0-1.69-.29-2.51-.88s-1.5-1.31-2.03-2.17l-4.19,3.43c.86,1.59,2.05,2.79,3.57,3.6,1.53.81,3.28,1.21,5.27,1.21" class="tym-fill"></path><path d="M208.38,54.74v-1.08c0-.3.12-.36.39-.36.24,0,.72.12.72.69,0,.3-.09.51-.33.63-.12.09-.36.12-.51.12h-.27ZM211.02,56.63c-.12-.06-.24-.15-.39-.3-.45-.51-.69-.84-.99-1.41.48-.18.81-.51.81-1.02,0-.87-.78-1.05-1.44-1.05h-2.04v.45c.48.03.54.03.54.57v2.04c0,.54-.06.54-.57.57v.48h2.01v-.48c-.51-.03-.57-.03-.57-.57v-.72h.12c.15,0,.3.03.42.21.12.21.27.6.54.96.36.48.78.63,1.44.63l.12-.36ZM208.8,51.74c1.74,0,3.03,1.41,3.03,3.18s-1.29,3.15-3.03,3.15-3-1.35-3-3.15,1.23-3.18,3-3.18M208.8,51.05c-2.19,0-3.87,1.77-3.87,3.87s1.65,3.87,3.87,3.87,3.9-1.83,3.9-3.87-1.68-3.87-3.9-3.87" class="tym-fill"></path></g></svg><small>Layout</small></div>
+  <div class="tools">
+    <button type="button" id="btnRot" title="Rotate 15° (Shift for 1°)">Rotate</button>
+    <button type="button" id="btnSz" title="Step size 0.75× – 1.5×">Resize</button>
+    <span class="sep"></span>
+    <button type="button" id="btnUndo" title="Undo (⌘Z)">Undo</button>
+    <span class="sep"></span>
+    <input id="projName" placeholder="Project name" title="Project name" value="Untitled project">
+    <button type="button" id="btnNew" title="New project">New</button>
+    <button type="button" id="btnOpen" title="Open a saved project">Open</button>
+    <button type="button" id="btnSave" title="Save project JSON (PDF stays in this browser)">Save</button>
+    <input type="file" id="openProj" accept="application/json,.json" hidden>
+    <span class="sep"></span>
+    <button type="button" id="btnHifi" title="Unlock Audiophile / Hi-Fi (Paradigm CI Elite; Sonance not yet in the catalog)">Hi-Fi</button>
+    <span class="sep"></span>
+    <button type="button" id="btnPrevPage" title="Previous page">‹</button>
+    <span id="pageLbl">—</span>
+    <button type="button" id="btnNextPage" title="Next page">›</button>
+    <span class="sep"></span>
+    <button type="button" id="btnZmOut" title="Zoom out">Zoom −</button>
+    <span class="zl" id="zl">100%</span>
+    <button type="button" id="btnZmIn" title="Zoom in">Zoom +</button>
+    <button type="button" id="btnFit">Fit</button>
+    <button type="button" id="btn100">100%</button>
+    <span class="sep"></span>
+    <input class="search" id="search" placeholder="Search" title="Search arrives in Phase C" readonly>
+    <span class="sep"></span>
+    <button type="button" id="btnFeedback" title="Send feedback">Feedback</button>
+  </div>
+  <div class="total"><span>Package total</span><b id="hdrTotal">$0</b></div>
+</header>
+<div class="app">
+<aside>
+<div class="aside-scroll">
+  <label class="file-btn" for="pdf">Upload floor plan</label>
+  <input type="file" id="pdf" accept="application/pdf">
+  <div id="pg"></div>
+
+  <section class="sec" id="roomsPanel" hidden>
+    <div class="sec-h">Rooms <button type="button" id="addRoom">Add Room</button></div>
+    <div id="hint"></div>
+    <div id="tree"></div>
+    <div id="lastAdded">Last added: —</div>
+  </section>
+
+  <section class="sec" id="bundlePanel" hidden>
+    <div class="sec-h">Bundles</div>
+    <div id="bundles">
+      <button type="button" data-b="5.1">Add 5.1 Surround</button>
+      <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
+      <button type="button" data-b="microled">Add Micro LED Screen</button>
+      <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
+    </div>
+  </section>
+  <section class="sec" id="palette"></section>
+
+  <section class="sec">
+    <div class="sec-h">Selected</div>
+    <div id="selBox">Click a device to edit.</div>
+  </section>
+
+</div>
+  <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Package total</span><br><b id="sideTotalAmt">$0</b></div>
+</aside>
+<main id="main">
+  <div id="empty">Upload a PDF floor plan to begin.</div>
+  <div id="stage"></div>
+</main>
+</div>
+<div id="modal"><div class="card"><div id="mBody"></div><div id="mBtns" style="margin-top:16px;text-align:right"></div></div></div>
+<div id="ctx"></div>
+<div id="tierPop"></div>
+<script>
+/* Client-safe catalog: list prices only. Generated by build_layout_catalog.py. */
+const CATALOG={"meta":{"safe":true,"note":"Client catalog: list prices only. No internal pricing fields."},"items":{"Sonos-Amp":{"key":"Sonos-Amp","sku":"Sonos-Amp","name":"Sonos Amp","brand":"Sonos","cat":"audio","list":799},"Sonos-Port":{"key":"Sonos-Port","sku":"Sonos-Port","name":"Sonos Port","brand":"Sonos","cat":"audio","list":499},"SONOS-ARC-2-BL":{"key":"SONOS-ARC-2-BL","sku":"SONOS-ARC-2-BL","name":"Sonos Arc Ultra soundbar","brand":"Sonos","cat":"audio","list":1099},"SONOS-SUB-M-BL":{"key":"SONOS-SUB-M-BL","sku":"SONOS-SUB-M-WH","name":"Sonos Sub Mini","brand":"Sonos","cat":"audio","list":499},"SONOS-ERA-100-BL":{"key":"SONOS-ERA-100-BL","sku":"SONOS-ERA-100-BL","name":"Sonos Era 100 (wireless surround)","brand":"Sonos","cat":"audio","list":219},"SONOS-ARC-2-WM":{"key":"SONOS-ARC-2-WM","sku":"SONOS-ARC-2-WM","name":"Sonos Arc Ultra wall mount set","brand":"Sonos","cat":"mount","list":79},"SAN-WSSCAM1-B2":{"key":"SAN-WSSCAM1-B2","sku":"SAN-WSSCAM1-B2","name":"Sanus slim wall mount for Sonos Amp","brand":"Sanus","cat":"mount","list":65.99},"SP-6":{"key":"SP-6","sku":"SP-6","name":"TruAudio Shadow 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":93},"PG-6":{"key":"PG-6","sku":"PG-6","name":"TruAudio Phantom 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":374},"PG-8":{"key":"PG-8","sku":"PG-8","name":"TruAudio Phantom 8\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":467},"RC-6":{"key":"RC-6","sku":"RC-6","name":"TruAudio speaker ring (pre-construction bracket) 6.5\"","brand":"TruAudio","cat":"accessory","list":34},"RC-879":{"key":"RC-879","sku":"RC-879","name":"TruAudio speaker ring (pre-construction bracket) 8\"","brand":"TruAudio","cat":"accessory","list":34},"GHT-66P":{"key":"GHT-66P","sku":"GHT-66P","name":"TruAudio Ghost HT in-wall LCR speaker","brand":"TruAudio","cat":"speaker","list":826.5},"GHT-SUR-P":{"key":"GHT-SUR-P","sku":"GHT-SUR-P","name":"TruAudio Ghost HT in-wall surround speaker","brand":"TruAudio","cat":"speaker","list":652.5},"DFS-10BK":{"key":"DFS-10BK","sku":"DFS-10BK","name":"TruAudio 10\" powered down-firing subwoofer","brand":"TruAudio","cat":"speaker","list":1334},"RW-G66":{"key":"RW-G66","sku":"RW-G66","name":"TruAudio rough-in ring for Ghost HT LCR","brand":"TruAudio","cat":"accessory","list":65},"RW-GSUR":{"key":"RW-GSUR","sku":"RW-GSUR","name":"TruAudio rough-in ring for Ghost HT surround","brand":"TruAudio","cat":"accessory","list":63},"OP6-BK":{"key":"OP6-BK","sku":"OP6-BK","name":"TruAudio 6.5\" outdoor speaker (black)","brand":"TruAudio","cat":"speaker","list":580},"SM-RBX-14-WH":{"key":"SM-RBX-14-WH","sku":"SM-RBX-14-WH","name":"Strong VersaBox recessed box (behind TV, houses Sonos Amp)","brand":"Strong","cat":"mount","list":139.98},"SM-RBX-14-BKT":{"key":"SM-RBX-14-BKT","sku":"SM-RBX-14-BKT","name":"VersaBox pre-construction bracket","brand":"Strong","cat":"accessory","list":27.98},"CHF-MTM1U":{"key":"CHF-MTM1U","sku":"CHF-MTM1U","name":"Chief Fusion tilt TV mount 32-65\"","brand":"Chief","cat":"mount","list":279},"CHF-LTM1U":{"key":"CHF-LTM1U","sku":"CHF-LTM1U","name":"Chief Fusion tilt TV mount 42-86\"","brand":"Chief","cat":"mount","list":438},"CHF-XTM1U":{"key":"CHF-XTM1U","sku":"CHF-XTM1U","name":"Chief Fusion tilt TV mount 55-100\"","brand":"Chief","cat":"mount","list":519},"SAN-VMPL50A-B1":{"key":"SAN-VMPL50A-B1","sku":"SAN-VMPL50A-B1","name":"Sanus tilting TV wall mount","brand":"Sanus","cat":"mount","list":189.99},"SM-PROJ-XL-BLK":{"key":"SM-PROJ-XL-BLK","sku":"SM-PROJ-XL-BLK","name":"Strong projector ceiling mount","brand":"Strong","cat":"mount","list":399.99},"B6-4K2-1":{"key":"B6-4K2-1","sku":"B6-4K2-1","name":"Binary 4K HDMI cable 1 m","brand":"Binary","cat":"cable","list":19.99},"B6-4K2-2":{"key":"B6-4K2-2","sku":"B6-4K2-2","name":"Binary 4K HDMI cable 2 m","brand":"Binary","cat":"cable","list":31.99},"B6A-4K2-10":{"key":"B6A-4K2-10","sku":"B6A-4K2-10","name":"Binary active 4K HDMI cable 10 m (projector run)","brand":"Binary","cat":"cable","list":145.99},"B6-XLR-3FM-2FT":{"key":"B6-XLR-3FM-2FT","sku":"B6-XLR-3FM-2FT","name":"Binary XLR patch cable","brand":"Binary","cat":"cable","list":17.99},"SR-SHELF-FIXED-4U":{"key":"SR-SHELF-FIXED-4U","sku":"SR-SHELF-FIXED-4U","name":"Strong rack shelf 4U","brand":"Strong","cat":"rack","list":149.98},"SR-SHELF-FIXED-2U":{"key":"SR-SHELF-FIXED-2U","sku":"SR-SHELF-FIXED-2U","name":"Strong rack shelf 2U","brand":"Strong","cat":"rack","list":109.98},"SR-CS-RACK-21U":{"key":"SR-CS-RACK-21U","sku":"SR-CS-RACK-21U","name":"Strong 21U equipment rack","brand":"Strong","cat":"rack","list":599.98},"WB-150-IPW-1B-2":{"key":"WB-150-IPW-1B-2","sku":"WB-150-IPW-1B-2","name":"WattBox IP power outlet (OvrC)","brand":"WattBox","cat":"power","list":268.79},"WB-700CH-IPV-12":{"key":"WB-700CH-IPV-12","sku":"WB-700CH-IPV-12","name":"WattBox IP power conditioner, 12 outlets (OvrC)","brand":"WattBox","cat":"power","list":1241.99},"NST-162-500-WH":{"key":"NST-162-500-WH","sku":"NST-162-500-WH","name":"Wirepath 16/2 speaker wire, 500 ft","brand":"Wirepath","cat":"cable","list":147.95},"YA-RX-V6A":{"key":"YA-RX-V6A","sku":"YA-RX-V6A","name":"Yamaha 7.2-ch AV receiver (RX-V6A)","brand":"Yamaha","cat":"av","list":849.95},"YA-RX-A4A":{"key":"YA-RX-A4A","sku":"YA-RX-A4A","name":"Yamaha AVENTAGE 7.2-ch AV receiver (RX-A4A)","brand":"Yamaha","cat":"av","list":1599.95},"VPLXW5000ES":{"key":"VPLXW5000ES","sku":"VPLXW5000ES","name":"Sony VPL-XW5000ES 4K laser projector (2,000 lm)","brand":"Sony","cat":"projector","list":5999.99},"VPLXW5100ES":{"key":"VPLXW5100ES","sku":"VPLXW5100ES","name":"Sony VPL-XW5100ES 4K laser projector (2,200 lm)","brand":"Sony","cat":"projector","list":9999.99},"V11HA47020MB":{"key":"V11HA47020MB","sku":"V11HA47020MB","name":"Epson Pro Cinema LS12000 4K laser projector (2,700 lm)","brand":"Epson","cat":"projector","list":4999},"DF-SL-92-UAW":{"key":"DF-SL-92-UAW","sku":"DF-SL-92-UAW","name":"Dragonfly 92\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":3168.99},"DF-SL-100-UAW":{"key":"DF-SL-100-UAW","sku":"DF-SL-100-UAW","name":"Dragonfly 100\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1816.29},"DF-SL-106-UAW":{"key":"DF-SL-106-UAW","sku":"DF-SL-106-UAW","name":"Dragonfly 106\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1925.91},"DF-TB-110-UAW":{"key":"DF-TB-110-UAW","sku":"DF-TB-110-UAW","name":"Dragonfly 110\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4308.99},"Aetherion Max":{"key":"Aetherion Max","sku":"Aetherion Max","name":"AWOL Vision Aetherion Max 4K triple-laser UST projector (3,300 lm)","brand":"AWOL Vision","cat":"projector","list":3999},"Aetherion Pro":{"key":"Aetherion Pro","sku":"Aetherion Pro","name":"AWOL Vision Aetherion Pro 4K triple-laser UST projector (2,600 lm)","brand":"AWOL Vision","cat":"projector","list":2999},"ALR-F220C Pro":{"key":"ALR-F220C Pro","sku":"ALR-F220C Pro","name":"AWOL Vision 120\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":2999},"ALR-F230C Pro":{"key":"ALR-F230C Pro","sku":"ALR-F230C Pro","name":"AWOL Vision 130\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":3799},"AS-S120":{"key":"AS-S120","sku":"AS-S120","name":"AWOL Smart Station cabinet 120\"","brand":"AWOL Vision","cat":"cabinet","list":749},"AS-S130":{"key":"AS-S130","sku":"AS-S130","name":"AWOL Smart Station cabinet 130\"","brand":"AWOL Vision","cat":"cabinet","list":849},"TB-412":{"key":"TB-412","sku":"TB-412","name":"AWOL ThunderBeat 4.1.2 surround system","brand":"AWOL Vision","cat":"audio","list":1199},"LUT-PD-6WCL-WH":{"key":"LUT-PD-6WCL-WH","sku":"LUT-PD-6WCL-WH","name":"Lutron Caseta smart dimmer","brand":"Lutron","cat":"lighting","list":79.3},"LUT-P-PKG1W-WH":{"key":"LUT-P-PKG1W-WH","sku":"LUT-P-PKG1W-WH","name":"Lutron Caseta dimmer + Pico 3-way kit","brand":"Lutron","cat":"lighting","list":96.3},"LUT-L-BDGPRO2-WH":{"key":"LUT-L-BDGPRO2-WH","sku":"LUT-L-BDGPRO2-WH","name":"Lutron Caseta Smart Bridge PRO","brand":"Lutron","cat":"lighting","list":180},"LUT-PD-REP-WH":{"key":"LUT-PD-REP-WH","sku":"LUT-PD-REP-WH","name":"Lutron Caseta wireless repeater","brand":"Lutron","cat":"lighting","list":110},"RRD-PRO":{"key":"RRD-PRO","sku":"RRD-PRO","name":"Lutron Select smart dimmer (Maestro PRO LED+, neutral optional)","brand":"Lutron","cat":"lighting","list":219.5},"PJ2-WALL-WH-L01":{"key":"PJ2-WALL-WH-L01","sku":"PJ2-WALL-WH-L01","name":"Lutron Pico remote + wall-mount kit (3-way / multi-location)","brand":"Lutron","cat":"lighting","list":39.95},"RR-SEL-REP2":{"key":"RR-SEL-REP2","sku":"RR-SEL-REP2","name":"Lutron Select main repeater","brand":"Lutron","cat":"lighting","list":384},"L-REPPRO":{"key":"L-REPPRO","sku":"L-REPPRO","name":"Lutron wireless repeater (Select / RA3)","brand":"Lutron","cat":"lighting","list":252},"RR-PROC3-KIT1":{"key":"RR-PROC3-KIT1","sku":"RR-PROC3-KIT1","name":"Lutron RadioRA 3 processor kit (with PoE injector)","brand":"Lutron","cat":"lighting","list":548.64},"ROUTE10":{"key":"ROUTE10","sku":"ROUTE10","name":"Alta Labs Route10 router","brand":"Alta Labs","cat":"network","list":318.99},"AP6":{"key":"AP6","sku":"AP6","name":"Alta Labs AP6 Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":120.25},"AP6-PRO-OUTDOOR":{"key":"AP6-PRO-OUTDOOR","sku":"AP6-PRO-OUTDOOR","name":"Alta Labs outdoor Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":284.81},"S8-POE":{"key":"S8-POE","sku":"S8-POE","name":"Alta Labs 8-port PoE switch","brand":"Alta Labs","cat":"network","list":164.56},"S16-POE":{"key":"S16-POE","sku":"S16-POE","name":"Alta Labs 16-port PoE switch","brand":"Alta Labs","cat":"network","list":436.71},"S24-POE":{"key":"S24-POE","sku":"S24-POE","name":"Alta Labs 24-port PoE switch","brand":"Alta Labs","cat":"network","list":588.61},"S48-APOE":{"key":"S48-APOE","sku":"S48-APOE","name":"Alta Labs 48-port PoE+ switch","brand":"Alta Labs","cat":"network","list":1125.32},"0E-CAT6RGN":{"key":"0E-CAT6RGN","sku":"0E-CAT6RGN","name":"Cat6 network cable (1,000 ft reel)","brand":"ADI PRO","cat":"cable","list":359.98},"K43XR30M2":{"key":"K43XR30M2","sku":"K43XR30M2","name":"Sony BRAVIA 43\" 4K TV (K43XR30M2)","brand":"Sony","cat":"tv","list":638.27},"K50S30":{"key":"K50S30","sku":"K50S30","name":"Sony BRAVIA 50\" 4K TV (K50S30)","brand":"Sony","cat":"tv","list":698.04},"K55XR30M2":{"key":"K55XR30M2","sku":"K55XR30M2","name":"Sony BRAVIA 55\" 4K TV (K55XR30M2)","brand":"Sony","cat":"tv","list":851.02},"K65XR30M2":{"key":"K65XR30M2","sku":"K65XR30M2","name":"Sony BRAVIA 65\" 4K TV (K65XR30M2)","brand":"Sony","cat":"tv","list":899.99},"K65XR50":{"key":"K65XR50","sku":"K65XR50","name":"Sony BRAVIA 65\" 4K TV (K65XR50)","brand":"Sony","cat":"tv","list":1499.99},"K75XR30M2":{"key":"K75XR30M2","sku":"K75XR30M2","name":"Sony BRAVIA 75\" 4K TV (K75XR30M2)","brand":"Sony","cat":"tv","list":1246.53},"K75XR50":{"key":"K75XR50","sku":"K75XR50","name":"Sony BRAVIA 75\" 4K TV (K75XR50)","brand":"Sony","cat":"tv","list":2040.82},"K85XR50":{"key":"K85XR50","sku":"K85XR50","name":"Sony BRAVIA 85\" 4K TV (K85XR50)","brand":"Sony","cat":"tv","list":2485.88},"K98XR50":{"key":"K98XR50","sku":"K98XR50","name":"Sony BRAVIA 98\" 4K TV (K98XR50)","brand":"Sony","cat":"tv","list":4744.19},"K100XR30M2":{"key":"K100XR30M2","sku":"K100XR30M2","name":"Sony BRAVIA 100\" 4K TV (K100XR30M2)","brand":"Sony","cat":"tv","list":2685.05},"J-ON-100":{"key":"J-ON-100","sku":"J-ON-100","name":"Josh One processor","brand":"Josh.ai","cat":"control","list":1000},"J-CR-BLK-100":{"key":"J-CR-BLK-100","sku":"J-CR-BLK-100","name":"Josh Core processor","brand":"Josh.ai","cat":"control","list":3500},"J-WHT-100":{"key":"J-WHT-100","sku":"J-WHT-100","name":"Josh Micro (room voice endpoint)","brand":"Josh.ai","cat":"control","list":899},"J-EDG-1":{"key":"J-EDG-1","sku":"J-EDG-1","name":"Josh Edge remote","brand":"Josh.ai","cat":"control","list":599},"AVA-RM-RX2-US-AL":{"key":"AVA-RM-RX2-US-AL","sku":"AVA-RM-RX2-US-AL","name":"Josh AVA Cinema remote","brand":"Josh.ai","cat":"control","list":1299},"J-ACC-MNT-CR-S":{"key":"J-ACC-MNT-CR-S","sku":"J-ACC-MNT-CR-S","name":"Josh Core 1U rack mount","brand":"Josh.ai","cat":"control","list":248},"J-SFT-ON1:Y":{"key":"J-SFT-ON1:Y","sku":"J-SFT-ON1","name":"Josh One software plan, year 1","brand":"Josh.ai","cat":"control","list":220},"J-SFT-ON1:5Y":{"key":"J-SFT-ON1:5Y","sku":"J-SFT-ON1","name":"Josh One software plan, 5 years","brand":"Josh.ai","cat":"control","list":1100},"J-SFT-CR1:Y":{"key":"J-SFT-CR1:Y","sku":"J-SFT-CR1","name":"Josh Core software plan, year 1","brand":"Josh.ai","cat":"control","list":720},"J-SFT-CR1:5Y":{"key":"J-SFT-CR1:5Y","sku":"J-SFT-CR1","name":"Josh Core software plan, 5 years","brand":"Josh.ai","cat":"control","list":3600},"AC-MAX-24":{"key":"AC-MAX-24","sku":"AC-MAX-24","name":"AVPro 24x24 audio matrix","brand":"AVPro Edge","cat":"audio","list":3017},"TS-PAMP8-125-V2":{"key":"TS-PAMP8-125-V2","sku":"TS-PAMP8-125-V2","name":"Triad 8-zone power amplifier (16 ch x 125 W)","brand":"Triad","cat":"audio","list":2498.99},"C4-CORE-LITE-RSK":{"key":"C4-CORE-LITE-RSK","sku":"C4-CORE-LITE-RSK","name":"Control4 CORE lite + SR260 remote bundle","brand":"Control4","cat":"control","list":936.35},"PH-APPLETV":{"key":"PH-APPLETV","sku":"PH-APPLETV","name":"Apple TV 4K","brand":"Apple","cat":"source","list":149},"PH-SUBCABLE":{"key":"PH-SUBCABLE","sku":"PH-SUBCABLE","name":"Subwoofer cable (RCA)","brand":"","cat":"cable","list":35.71},"PH-SALAMANDER":{"key":"PH-SALAMANDER","sku":"PH-SALAMANDER","name":"Salamander cabinet for AWOL UST (C2/AWOL/245CH/BK)","brand":"Salamander","cat":"cabinet","list":3799},"PH-DF120-AT":{"key":"PH-DF120-AT","sku":"PH-DF120-AT","name":"Dragonfly 120\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4181.82},"PH-C4-LIC":{"key":"PH-C4-LIC","sku":"PH-C4-LIC","name":"Control4 licenses / drivers","brand":"","cat":"control","list":571.43},"PH-STARK-ALLOW":{"key":"PH-STARK-ALLOW","sku":"PH-STARK-ALLOW","name":"Custom-design scope allowance (premium lighting, shades, security, premium AV)","brand":"","cat":"allowance","list":0},"PH-SHADE":{"key":"PH-SHADE","sku":"PH-SHADE","name":"Motorized window shade (estimate)","brand":"Lutron","cat":"shades","list":850},"PH-ECHODOT":{"key":"PH-ECHODOT","sku":"PH-ECHODOT","name":"Alexa smart speaker (Echo Dot)","brand":"Amazon","cat":"voice","list":50},"PDP-6":{"key":"PDP-6","sku":"PDP-6","name":"TruAudio Phantom 6.5\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":371.0,"added":"soundvision_msrp"},"PDP-8":{"key":"PDP-8","sku":"PDP-8","name":"TruAudio Phantom 8\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":362.5,"added":"soundvision_msrp"},"CI-PRO-P3-LCR":{"key":"CI-PRO-P3-LCR","sku":"330-10006813","name":"Paradigm CI Pro P3-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":1749.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-IW":{"key":"CI-PRO-P65-IW","sku":"340-10006822","name":"Paradigm CI Pro P65-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":449.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-R":{"key":"CI-PRO-P65-R","sku":"336-10006818","name":"Paradigm CI Pro P65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":349.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E5-LCR":{"key":"CI-ELITE-E5-LCR","sku":"342-10006824","name":"Paradigm CI Elite E5-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":3249.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E80-IW":{"key":"CI-ELITE-E80-IW","sku":"347-10006829","name":"Paradigm CI Elite E80-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":799.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E65-R":{"key":"CI-ELITE-E65-R","sku":"346-10006828","name":"Paradigm CI Elite E65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":549.99,"added":"paradigm_anthem_msrp"},"DEF-S12":{"key":"DEF-S12","sku":"1375-10006863","name":"Paradigm Defiance S12 subwoofer","brand":"Paradigm","cat":"speaker","list":1599.99,"added":"paradigm_anthem_msrp"},"DCS-208IW3":{"key":"DCS-208IW3","sku":"312-10006793","name":"Paradigm DCS-208IW3 in-wall subwoofer","brand":"Paradigm","cat":"speaker","list":679.99,"added":"paradigm_anthem_msrp"},"AVM-70-8K":{"key":"AVM-70-8K","sku":"318-10006799","name":"Anthem AVM 70 8K AV processor (pre-pro)","brand":"Anthem","cat":"av","list":3999.99,"added":"paradigm_anthem_msrp"},"MCA-525":{"key":"MCA-525","sku":"295-10006351","name":"Anthem MCA 525 Gen 2 5-channel amplifier","brand":"Anthem","cat":"av","list":3799.99,"added":"paradigm_anthem_msrp"}}};
+
+
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PRICES={stereo:{label:'Stereo pair (in-ceiling)',qty:2,unit:350},single:{label:'Single in-ceiling speaker',qty:1,unit:450}};
+const ROOMS=['Great Room','Kitchen','Primary Bedroom','Primary Bath','Office','Dining','Patio','Laundry','Powder Bath','Shower'];
+const SMALL=['shower','laundry','powder','closet','pantry','half bath'];
+const WALL=new Set(['lcr','surwall','subwall','tv','doorbell','touch','shades','keypad','camera']);
+const C={blue:'#1e88e5',bk:'#0d47a1',grn:'#7ed321',gk:'#2e6b0a',org:'#f5a623',ok:'#8a5200',yel:'#f8e71c',teal:'#3fb6b0',lb:'#7fc8f8',pur:'#7b3fa0',pink:'#e94ca8',red:'#e02020',rk:'#7a0000'};
+const sw='stroke-width="1.5"';
+const SHAPES={
+ outdoor:`<rect x="-10" y="-10" width="20" height="20" rx="2" fill="${C.blue}" stroke="${C.bk}" ${sw}/><path d="M-5 -2q2.5 -3 5 0t5 0M-5 3q2.5 -3 5 0t5 0" stroke="#fff" fill="none" stroke-width="1.3"/>`,
+ lcr:`<rect x="-16" y="-3.5" width="32" height="7" fill="${C.grn}" stroke="${C.gk}" ${sw}/>`,
+ surwall:`<rect x="-9" y="-4.5" width="18" height="9" fill="${C.grn}" stroke="${C.gk}" ${sw}/>`,
+ surceil:`<circle r="9" fill="#fff" stroke="${C.grn}" stroke-width="3"/>`,
+ subwall:`<rect x="-12" y="-6" width="24" height="12" fill="${C.grn}" stroke="${C.gk}" stroke-width="2.5"/>`,
+ subfloor:`<circle r="9" fill="${C.grn}" stroke="${C.gk}" ${sw}/>`,
+ tv:`<rect x="-14" y="-3.5" width="28" height="7" fill="${C.org}" stroke="${C.ok}" ${sw}/>`,
+ tvport:`<circle r="8" fill="${C.org}" stroke="${C.ok}" ${sw}/><text y="2.5" font-size="7" text-anchor="middle" fill="#000" font-family="Helvetica" font-weight="bold">TV</text>`,
+ doorbell:`<path d="M0 -10L10 -2L6 9H-6L-10 -2Z" fill="${C.org}" stroke="${C.ok}" ${sw}/>`,
+ rack:`<rect x="-10" y="-10" width="20" height="20" fill="${C.org}" stroke="${C.ok}" ${sw}/><rect x="-6" y="-6" width="12" height="12" fill="${C.yel}"/>`,
+ touch:`<rect x="-9" y="-5" width="18" height="10" rx="1.5" fill="${C.teal}" stroke="#14605c" ${sw}/>`,
+ garage:`<path d="M-9 0L-4.5 -8H4.5L9 0L4.5 8H-4.5Z" fill="${C.lb}" stroke="#2a6f9e" ${sw}/>`,
+ shades:`<path d="M0 -10L10 0L0 10L-10 0Z" fill="${C.teal}" stroke="#14605c" ${sw}/>`,
+ lvcan:`<rect x="-12" y="-6" width="24" height="12" rx="4" fill="${C.pur}" stroke="#3d1a55" ${sw}/>`,
+ wap:`<circle r="9" fill="#fff" stroke="${C.pink}" stroke-width="2" stroke-dasharray="1.5 2"/><circle r="3" fill="${C.pink}"/>`,
+ data:`<path d="M-8 -6H8L0 8Z" fill="${C.pur}" stroke="#3d1a55" ${sw}/>`,
+ phone:`<path d="M-8 -6H8L0 8Z" fill="${C.pink}" stroke="#8a1f5c" ${sw}/>`,
+ keypad:`<rect x="-10" y="-3" width="20" height="6" fill="${C.red}" stroke="${C.rk}" ${sw}/>`,
+ motion:`<circle r="7" fill="${C.red}" stroke="${C.rk}" ${sw}/><path d="M-10 -6l-2 -2M10 -6l2 -2M-10 6l-2 2M10 6l2 2" stroke="${C.red}" stroke-width="1.5"/>`,
+ camera:`<rect x="-10" y="-6" width="15" height="12" rx="2" fill="${C.red}" stroke="${C.rk}" ${sw}/><path d="M5 -3L11 -6V6L5 3Z" fill="${C.red}" stroke="${C.rk}" ${sw}/>`,
+ contact:`<rect x="-8" y="-5" width="7" height="10" fill="${C.red}" stroke="${C.rk}" ${sw}/><rect x="1" y="-5" width="7" height="10" fill="${C.red}" stroke="${C.rk}" ${sw}/>`,
+ prepro:`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#333" stroke="#111" ${sw}/><text y="3" font-size="6" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">PRE-PRO</text>`,
+ microled:`<rect x="-18" y="-6" width="36" height="12" rx="1" fill="#111" stroke="#f5a623" ${sw}/><text y="2.5" font-size="5" text-anchor="middle" fill="#f5a623" font-family="Helvetica" font-weight="bold">MICRO LED</text>`
+};
+const ADD={outdoor:['Outdoor speaker','Audio',400],lcr:['LCR soundbar','Audio',900],surwall:['In-wall surround','Audio',300],surceil:['In-ceiling surround','Audio',300],subwall:['In-wall subwoofer','Audio',800],subfloor:['Floor subwoofer','Audio',900],
+ tv:['Wall-mount TV','Video / Control',250],tvport:['In-ceiling TV port','Video / Control',150],doorbell:['Video doorbell','Video / Control',300],rack:['Media rack','Video / Control',1500],touch:['Touch / iPad wall mount','Video / Control',200],garage:['Garage door opener','Video / Control',150],shades:['Shades (wired)','Video / Control',100],
+ lvcan:['Low voltage can','Network',75],wap:['Hot spot / WAP','Network',250],data:['Data drop','Network',100],phone:['Phone','Network',75],
+ keypad:['Security keypad','Security',200],motion:['Motion sensor','Security',75],camera:['Camera','Security',350],contact:['Door/window sensor','Security',50]};
+for(const k in ADD) PRICES[k]={label:ADD[k][0],qty:1,unit:ADD[k][2],group:ADD[k][1]};
+PRICES.stereo.group=PRICES.single.group='Audio';
+PRICES.stereo.label='Stereo pair (in-ceiling)';
+PRICES.single.label='Single in-ceiling speaker';
+
+const GROUPS=['Audio','Video / Control','Network','Security'];
+const openGroups=new Set(['Audio']);
+const mini=t=>SHAPES[t]
+  ? `<svg width="34" height="24" viewBox="-17 -12 34 24">${SHAPES[t]}</svg>`
+  : `<svg width="34" height="24" viewBox="-17 -12 34 24">${t==='stereo'
+    ? `<line x1="-10" x2="10" stroke="${C.blue}" stroke-dasharray="2 2"/><circle cx="-10" r="6" fill="${C.blue}" stroke="${C.bk}"/><circle cx="10" r="6" fill="${C.blue}" stroke="${C.bk}"/>`
+    : `<circle r="8" fill="${C.blue}" stroke="${C.bk}" stroke-width="1.5" stroke-dasharray="2.5 1.5"/>`}</svg>`;
+
+function renderPalette(){
+  palette.innerHTML=GROUPS.map(g=>{
+    const open=openGroups.has(g)?' open':'';
+    const items=Object.keys(PRICES).filter(k=>PRICES[k].group===g).map(k=>
+      `<div class="pal" draggable="true" data-t="${k}" title="${PRICES[k].label}">${mini(k)}<span>${PRICES[k].label}</span></div>`
+    ).join('');
+    return `<div class="g${open}" data-g="${g}"><div class="gh"><span class="ch">▾</span> ${g}</div><div class="gb">${items}</div></div>`;
+  }).join('');
+  palette.querySelectorAll('.gh').forEach(h=>h.onclick=()=>{
+    const g=h.parentElement.dataset.g;
+    if(openGroups.has(g)) openGroups.delete(g); else openGroups.add(g);
+    renderPalette();
+  });
+  palette.querySelectorAll('.pal').forEach(p=>p.ondragstart=e=>e.dataTransfer.setData('text',p.dataset.t));
+}
+renderPalette();
+
+const CAT=CATALOG.items;
+const catalogList=k=> (CAT[k]&&CAT[k].list)||0;
+const catalogName=k=> (CAT[k]&&CAT[k].name)||k;
+
+/* Icon → catalog keys by tier. Home audio: Shadow / Phantom / Ghost. Surround: Ghost / Paradigm / Paradigm + separates. */
+const LADDERS={
+  stereo:  {kind:'home', qty:2, good:'SP-6', better:'PG-6', best:'GHT-66P'},
+  single:  {kind:'home', qty:1, good:'SP-6', better:'PDP-6', best:'PDP-8'},
+  outdoor: {kind:'home', qty:1, good:'OP6-BK', better:'OP6-BK', best:'OP6-BK'},
+  lcr:     {kind:'surround', qty:1, good:'GHT-66P', better:'CI-PRO-P3-LCR', best:'CI-PRO-P3-LCR', hifi:'CI-ELITE-E5-LCR'},
+  surwall: {kind:'surround', qty:1, good:'GHT-SUR-P', better:'CI-PRO-P65-IW', best:'CI-PRO-P65-IW', hifi:'CI-ELITE-E80-IW'},
+  surceil: {kind:'surround', qty:1, good:'GHT-SUR-P', better:'CI-PRO-P65-R', best:'CI-PRO-P65-R', hifi:'CI-ELITE-E65-R'},
+  subfloor:{kind:'surround', qty:1, good:'DFS-10BK', better:'DEF-S12', best:'DEF-S12', hifi:'DEF-S12'},
+  subwall: {kind:'surround', qty:1, good:'DFS-10BK', better:'DCS-208IW3', best:'DCS-208IW3'},
+  tv:      {kind:'tv', qty:1, good:'K55XR30M2', better:'K65XR50', best:'K75XR50'},
+  rack:    {kind:'one', qty:1, good:'SR-CS-RACK-21U', better:'SR-CS-RACK-21U', best:'SR-CS-RACK-21U'},
+  touch:   {kind:'one', qty:1, good:'J-WHT-100', better:'J-WHT-100', best:'J-WHT-100'},
+  shades:  {kind:'one', qty:1, good:'PH-SHADE', better:'PH-SHADE', best:'PH-SHADE'},
+  wap:     {kind:'one', qty:1, good:'AP6', better:'AP6', best:'AP6'}
+};
+const PLACEHOLDERS={
+  tvport:{label:'In-ceiling TV port',unit:150}, doorbell:{label:'Video doorbell',unit:300},
+  garage:{label:'Garage door opener',unit:150}, lvcan:{label:'Low voltage can',unit:75},
+  data:{label:'Data drop',unit:100}, phone:{label:'Phone',unit:75},
+  keypad:{label:'Security keypad',unit:200}, motion:{label:'Motion sensor',unit:75},
+  camera:{label:'Camera',unit:350}, contact:{label:'Door/window sensor',unit:50},
+  microled:{label:'Micro LED screen',unit:0,tbd:true}
+};
+const PREPRO_KEYS=['AVM-70-8K','MCA-525']; // TBD pack: Anthem pre-pro + 5-ch amp
+const SURROUND_TYPES=new Set(['lcr','surwall','surceil','subfloor','subwall','prepro']);
+
+/* Bundles — default guesses, marked TBD for Matt to train. */
+const BUNDLES={
+  '5.1':{label:'Add 5.1 Surround', tbd:true, items:[
+    {type:'lcr',role:'LCR-left',dx:-40,dy:0},{type:'lcr',role:'LCR-center',dx:0,dy:0},{type:'lcr',role:'LCR-right',dx:40,dy:0},
+    {type:'surwall',role:'surround-L',dx:-50,dy:50},{type:'surwall',role:'surround-R',dx:50,dy:50},
+    {type:'subfloor',role:'sub',dx:0,dy:70}
+  ]},
+  '7.1.2':{label:'Add 7.1.2 Surround', tbd:true, items:[
+    {type:'lcr',role:'LCR-left',dx:-40,dy:0},{type:'lcr',role:'LCR-center',dx:0,dy:0},{type:'lcr',role:'LCR-right',dx:40,dy:0},
+    {type:'surwall',role:'surround-L',dx:-50,dy:50},{type:'surwall',role:'surround-R',dx:50,dy:50},
+    {type:'surwall',role:'rear-L',dx:-40,dy:80},{type:'surwall',role:'rear-R',dx:40,dy:80},
+    {type:'surceil',role:'atmos-L',dx:-30,dy:30},{type:'surceil',role:'atmos-R',dx:30,dy:30},
+    {type:'subfloor',role:'sub',dx:0,dy:90}
+  ]},
+  'microled':{label:'Add Micro LED Screen', tbd:true, items:[
+    {type:'microled',role:'screen',dx:0,dy:0}
+  ]}
+};
+
+function keyFor(d){
+  const L=LADDERS[d.type]; if(!L) return d.catalogKey||null;
+  const t=d.tier||'better';
+  if(t==='hifi' && L.hifi) return L.hifi;
+  return L[t]||L.better||L.good;
+}
+function isPlaceholder(d){ return !LADDERS[d.type] || d.type==='microled'; }
+function linePrice(d){
+  if(d.type==='prepro') return PREPRO_KEYS.reduce((a,k)=>a+catalogList(k),0);
+  if(isPlaceholder(d)){ const p=PLACEHOLDERS[d.type]||PRICES[d.type]; return p?(p.qty||1)*(p.unit||0):0; }
+  const L=LADDERS[d.type], key=keyFor(d);
+  return catalogList(key)*(L.qty||1);
+}
+function lineLabel(d){
+  if(d.type==='prepro') return 'Pre-pro + separates (TBD)';
+  if(d.type==='microled') return 'Micro LED screen (TBD)';
+  const p=PRICES[d.type];
+  return (p&&p.label)||d.type;
+}
+function applyTier(d,tier){
+  d.tier=tier;
+  const L=LADDERS[d.type];
+  d.catalogKey=L?keyFor(d):null;
+}
+
+function tierOptions(d){
+  if(d.type==='prepro'||d.type==='microled'||isPlaceholder(d)) return null;
+  const L=LADDERS[d.type]; if(!L) return null;
+  const out=['good','better','best'];
+  if(hifi && L.hifi) out.push('hifi');
+  return out;
+}
+function tierPrice(type,tier){
+  if(type==='prepro') return PREPRO_KEYS.reduce((a,k)=>a+catalogList(k),0);
+  const L=LADDERS[type]; if(!L) return null;
+  const key=(tier==='hifi'&&L.hifi)?L.hifi:(L[tier]||L.better);
+  return catalogList(key)*(L.qty||1);
+}
+const TIER_NAME={good:'Good',better:'Better',best:'Best',hifi:'Hi-Fi'};
+const TIER_SUB={
+  home:{good:'Shadow',better:'Phantom',best:'Ghost',hifi:'Hi-Fi'},
+  surround:{good:'Ghost',better:'Paradigm',best:'Paradigm + separates',hifi:'CI Elite'},
+  tv:{good:'Good',better:'Better',best:'Best',hifi:'Hi-Fi'},
+  one:{good:'Standard',better:'Standard',best:'Standard',hifi:'Standard'}
+};
+
+function syncSeparates(){
+  const roomsNeed=new Set();
+  devs.forEach(d=>{
+    if(SURROUND_TYPES.has(d.type) && d.type!=='prepro' && (d.tier==='best'||d.tier==='hifi')) roomsNeed.add(d.room||'');
+  });
+  // remove stale prepro
+  devs=devs.filter(d=>{
+    if(d.type!=='prepro') return true;
+    return roomsNeed.has(d.room||'');
+  });
+  roomsNeed.forEach(roomName=>{
+    if(!devs.some(d=>d.type==='prepro' && (d.room||'')===roomName)){
+      const host=devs.find(d=>SURROUND_TYPES.has(d.type)&&d.type!=='prepro'&&(d.room||'')===roomName);
+      const d={id:nid++,type:'prepro',page:host?host.page:pageNum,x:(host?host.x:200)+20,y:(host?host.y:200)+40,
+        room:roomName,rot:0,scale:1,tier:'best',catalogKey:'AVM-70-8K',role:'prepro',tbd:true};
+      devs.push(d);
+    }
+  });
+}
+
+/* ---- pages ---- */
+function updatePageLbl(){
+  const on=numPages>1 && pdfDoc;
+  btnPrevPage.disabled=!on||pageNum<=1;
+  btnNextPage.disabled=!on||pageNum>=numPages;
+  pageLbl.textContent=pdfDoc?(on?`Page ${pageNum} / ${numPages}`:`Page 1`):'—';
+}
+async function showPage(n, keepZoom){
+  if(!pdfDoc) return;
+  n=Math.min(numPages, Math.max(1, n|0));
+  pageNum=n;
+  const p=await pdfDoc.getPage(n), vp=p.getViewport({scale:1.5});
+  const c=document.createElement('canvas'); c.width=vp.width; c.height=vp.height;
+  await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+  baseW=vp.width; baseH=vp.height;
+  stage.querySelectorAll('canvas').forEach(x=>x.remove());
+  stage.prepend(c);
+  empty.style.display='none';
+  pg.textContent=`${pdfName||'Floor plan'} — page ${pageNum} of ${numPages}`;
+  updatePageLbl();
+  if(!keepZoom) fitZoom(); else { setZoom(zoom); }
+  draw();
+}
+
+/* ---- save / open / new (project JSON + PDF in IndexedDB) ---- */
+const PROJ_VER=2, LS_CUR='yt-layout-current', IDB_NAME='yt-layout', IDB_STORE='pdfs';
+
+function openIdb(){
+  return new Promise((res,rej)=>{
+    const q=indexedDB.open(IDB_NAME,1);
+    q.onupgradeneeded=()=>{ if(!q.result.objectStoreNames.contains(IDB_STORE)) q.result.createObjectStore(IDB_STORE); };
+    q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error);
+  });
+}
+async function idbPut(id, rec){
+  const db=await openIdb();
+  return new Promise((res,rej)=>{ const t=db.transaction(IDB_STORE,'readwrite'); t.objectStore(IDB_STORE).put(rec,id); t.oncomplete=()=>res(); t.onerror=()=>rej(t.error); });
+}
+async function idbGet(id){
+  const db=await openIdb();
+  return new Promise((res,rej)=>{ const t=db.transaction(IDB_STORE,'readonly'); const r=t.objectStore(IDB_STORE).get(id); r.onsuccess=()=>res(r.result||null); r.onerror=()=>rej(r.error); });
+}
+function serializeProject(){
+  return {
+    version:PROJ_VER, id:projectId, name:projectName, updated:new Date().toISOString(),
+    pdf: pdfName?{id:projectId, name:pdfName, numPages}:null,
+    page:pageNum, zoom, hifi, nid,
+    rooms, activeRoomId:active&&active.id, lastAddedId:lastAdded&&lastAdded.id,
+    devices:devs
+  };
+}
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{ try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){} }, 400);
+}
+async function persistPdf(){ if(pdfBuf&&projectId) await idbPut(projectId, {name:pdfName, buf:pdfBuf}); }
+function applyProject(st){
+  projectId=st.id||crypto.randomUUID();
+  projectName=st.name||'Untitled project';
+  pageNum=st.page||1; zoom=st.zoom||1; hifi=!!st.hifi; nid=st.nid||1;
+  rooms=st.rooms||[]; devs=st.devices||[];
+  active=rooms.find(r=>r.id===st.activeRoomId)||null;
+  lastAdded=devs.find(d=>d.id===st.lastAddedId)||null;
+  sel=null;
+  if(projName) projName.value=projectName;
+  btnHifi.classList.toggle('on', hifi);
+}
+async function restoreLast(){
+  let st; try{ st=JSON.parse(localStorage.getItem(LS_CUR)||'null'); }catch(e){ st=null; }
+  if(!st||st.version!==PROJ_VER) return;
+  applyProject(st);
+  if(st.pdf&&st.pdf.id){
+    const rec=await idbGet(st.pdf.id);
+    if(rec&&rec.buf){ await loadPdfBuffer(rec.buf, rec.name||st.pdf.name, {keepPage:st.page, keepZoom:st.zoom, skipNewId:true}); return; }
+    pdfName=st.pdf.name||''; numPages=st.pdf.numPages||1;
+    empty.style.display=''; empty.textContent='Re-upload the PDF to continue “'+projectName+'”.';
+    updatePageLbl(); draw();
+  } else { draw(); }
+}
+async function saveProjectFile(){
+  const name= (projName&&projName.value.trim()) || projectName || 'Untitled project';
+  projectName=name;
+  await persistPdf();
+  scheduleSave();
+  ph('layout_save',{name:projectName});
+  const blob=new Blob([JSON.stringify(serializeProject(),null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=(name.replace(/[^\w\-]+/g,'_')||'layout')+'.ytlayout.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+}
+async function openProjectFile(file){
+  const st=JSON.parse(await file.text());
+  if(!st||!st.version) throw new Error('Not a Layout Tool project');
+  applyProject(st);
+  hist=[]; hidx=-1; snapshot();
+  if(st.pdf&&st.pdf.id){
+    const rec=await idbGet(st.pdf.id);
+    if(rec&&rec.buf){ await loadPdfBuffer(rec.buf, rec.name||st.pdf.name, {keepPage:st.page, keepZoom:st.zoom, skipNewId:true}); }
+    else { pdfDoc=null; pdfBuf=null; empty.style.display=''; empty.textContent='Re-upload the PDF to continue “'+projectName+'”.'; updatePageLbl(); draw(); }
+  } else { draw(); }
+  scheduleSave();
+}
+function newProject(){
+  if((devs.length||rooms.length||pdfDoc) && !confirm('Start a new project? The current layout will be cleared from the editor (the last autosave stays in this browser until you overwrite it).')) return;
+  projectId=crypto.randomUUID(); projectName='Untitled project';
+  devs=[]; rooms=[]; active=null; sel=null; lastAdded=null; nid=1; hifi=false;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  stage.querySelectorAll('canvas').forEach(x=>x.remove());
+  empty.style.display=''; empty.textContent='Upload a PDF floor plan to begin.';
+  pg.textContent=''; if(projName) projName.value=projectName;
+  btnHifi.classList.remove('on'); hist=[]; hidx=-1; snapshot();
+  updatePageLbl(); draw(); scheduleSave();
+}
+
+/* ---- tier popup ---- */
+function hideTierPop(){ tierPop.style.display='none'; }
+function showTierPop(d, cx, cy){
+  const opts=tierOptions(d);
+  if(!opts){ hideTierPop(); return; }
+  const L=LADDERS[d.type], names=TIER_SUB[L.kind]||TIER_NAME;
+  tierPop.innerHTML='<div class="tp-h">Choose a tier</div>'+opts.map(t=>{
+    const pr=tierPrice(d.type,t), on=(d.tier||'better')===t;
+    return `<button data-t="${t}" class="${on?'on':''}"><b>${TIER_NAME[t]}</b> <span>${names[t]||''}</span><em>${money(pr)}</em></button>`;
+  }).join('');
+  if(L.kind==='surround') tierPop.innerHTML+='<div class="tp-n">Best adds a pre-pro + separates pack to this room (TBD kit).</div>';
+  if(L.kind==='home'&&d.type==='stereo') tierPop.innerHTML+='<div class="tp-n">Best uses Ghost HT (in-wall) as the closest catalog match for a ceiling pair.</div>';
+  tierPop.style.display='block';
+  const x=Math.min(cx, innerWidth-260), y=Math.min(cy, innerHeight-20-tierPop.offsetHeight);
+  tierPop.style.left=x+'px'; tierPop.style.top=y+'px';
+  tierPop.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    snapshot(); applyTier(d,b.dataset.t); ph('layout_tier_switch',{type:d.type,tier:d.tier}); syncSeparates(); hideTierPop(); draw(); scheduleSave();
+  });
+}
+
+/* ---- bundles ---- */
+function dropBundle(id){
+  if(!stage.querySelector('canvas')) return;
+  if(!active){ showModal('<b>Select a room first.</b><br><br>Bundles drop into the active room so you can position the icons on the plan.', [['OK']]); return; }
+  const b=BUNDLES[id]; if(!b) return;
+  const cx=(baseW||800)/2, cy=(baseH||600)/2;
+  snapshot();
+  const created=[];
+  b.items.forEach(it=>{
+    const d=makeDevice(it.type, cx+it.dx, cy+it.dy);
+    d.room=active.name; d.role=it.role; d.bundle=id; if(b.tbd) d.tbd=true;
+    devs.push(d); created.push(d); lastAdded=d;
+  });
+  syncSeparates();
+  select(created[0]||null);
+  ph('layout_bundle',{bundle:id,label:b.label});
+  if(b.tbd) showModal(`<b>${b.label}</b><br><br>Items and quantities are a default guess, marked TBD, for Matt to train later. Position the icons on the plan.`, [['OK']]);
+}
+
+function makeDevice(type,cx,cy){
+  const d=type==='stereo'
+    ? {id:nid++,type:'stereo',x:cx-GAP/2,y:cy,x2:cx+GAP/2,y2:cy,room:'',rot:0,scale:1}
+    : {id:nid++,type,x:cx,y:cy,room:'',rot:0,scale:1};
+  d.page=pageNum; d.tier='better'; applyTier(d,'better');
+  return d;
+}
+
+
+const GAP=60,R=13,SC_MIN=0.75,SC_MAX=1.5,SC_STEPS=[0.75,1,1.25,1.5];
+let devs=[],sel=null,nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
+let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
+let projectId=crypto.randomUUID(), projectName='Untitled project', hifi=false, saveTimer=null;
+let hist=[],hidx=-1;
+const stage=document.getElementById('stage');
+const modalEl=document.getElementById('modal');
+const ctxEl=document.getElementById('ctx');
+
+const money=n=>'$'+Math.round(n).toLocaleString();
+const pkgTotal=()=>devs.reduce((a,d)=>a+linePrice(d),0);
+const canXF=d=>d && WALL.has(d.type);
+const rotOf=d=>d.rot||0;
+const scOf=d=>d.scale||1;
+
+function snapshot(){
+  hist=hist.slice(0,hidx+1);
+  hist.push(JSON.stringify({devs,rooms,active:active&&active.id,sel:sel&&sel.id,last:lastAdded&&lastAdded.id,nid}));
+  if(hist.length>80) hist.shift();
+  hidx=hist.length-1;
+  updateTools();
+}
+function restore(s){
+  const st=JSON.parse(s);
+  devs=st.devs; rooms=st.rooms; nid=st.nid;
+  active=rooms.find(r=>r.id===st.active)||null;
+  sel=devs.find(d=>d.id===st.sel)||null;
+  lastAdded=devs.find(d=>d.id===st.last)||null;
+  draw();
+}
+function undo(){ if(hidx<=0) return; hidx--; restore(hist[hidx]); }
+function redo(){ if(hidx>=hist.length-1) return; hidx++; restore(hist[hidx]); }
+
+async function loadPdfBuffer(buf,name,opts={}){
+  const src=buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  // pdf.js detaches its input buffer — keep an independent copy for IndexedDB.
+  const kept=src.slice();
+  pdfBuf=kept.buffer.slice(kept.byteOffset, kept.byteOffset+kept.byteLength);
+  pdfDoc=await pdfjsLib.getDocument({data:src.slice()}).promise;
+  numPages=pdfDoc.numPages; pdfName=name||pdfName||'Floor plan';
+  empty.style.display='none';
+  await persistPdf();
+  await showPage(opts.keepPage||1, !!opts.keepZoom);
+  if(opts.keepZoom && opts.keepZoom!==true) setZoom(opts.keepZoom);
+  scheduleSave();
+}
+pdf.onchange=async e=>{const f=e.target.files[0]; if(!f) return; await loadPdfBuffer(await f.arrayBuffer(), f.name);};
+
+function placeAt(type,cx,cy,opts={}){
+  const d=makeDevice(type,cx,cy);
+  if(!opts.silent) snapshot();
+  devs.push(d);
+  lastAdded=d;
+  if(active) assign(d,active.name,true);
+  else { select(d); if(!opts.skipRoom) askRoom(d,true); }
+  if(!opts.silent){ showTierPop(d, opts.cx||0, opts.cy||0); ph('layout_drop',{type:d.type}); }
+  scheduleSave();
+  return d;
+}
+stage.ondragover=e=>e.preventDefault();
+stage.ondrop=e=>{
+  e.preventDefault();
+  const t=e.dataTransfer.getData('text')||'stereo';
+  if(!stage.querySelector('canvas')) return;
+  const r=stage.getBoundingClientRect();
+  placeAt(t,(e.clientX-r.left)/zoom,(e.clientY-r.top)/zoom,{cx:e.clientX,cy:e.clientY});
+};
+
+function assign(d,name,fromSnap){
+  if(!fromSnap) snapshot();
+  if(!name){ d.room=''; select(d); return; }
+  let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase());
+  if(!rm){ rm={id:nid++,name}; rooms.push(rm); }
+  d.room=rm.name;
+  select(d);
+  const n=rm.name.toLowerCase();
+  scheduleSave();
+  if(d.type==='stereo' && SMALL.some(s=>n.includes(s))){
+    setTimeout(()=>showModal(
+      '<b>This looks like a small room.</b><br><br>Use a single speaker instead of a stereo pair?',
+      [['Keep stereo pair'],['Use single speaker',()=>{snapshot(); setType(d,'single')}]]
+    ),0);
+  }
+}
+
+function setZoom(z){
+  zoom=Math.min(4,Math.max(.2,z));
+  const c=stage.querySelector('canvas');
+  if(c){ c.style.width=baseW*zoom+'px'; c.style.height=baseH*zoom+'px'; }
+  zl.textContent=Math.round(zoom*100)+'%';
+  draw();
+}
+function fitZoom(){ if(!baseW) return; setZoom(Math.min((main.clientWidth-40)/baseW,(main.clientHeight-40)/baseH)); }
+
+function showModal(html,btns){
+  mBody.innerHTML=html; mBtns.innerHTML='';
+  btns.forEach(([t,f])=>{
+    const b=document.createElement('button'); b.textContent=t; b.style.marginLeft='6px';
+    b.onclick=()=>{ modalEl.style.display='none'; f&&f(); };
+    mBtns.appendChild(b);
+  });
+  modalEl.style.display='flex';
+  const inp=modalEl.querySelector('input,select'); if(inp) setTimeout(()=>inp.focus(),0);
+}
+modalEl.addEventListener('click',e=>{ if(e.target===modalEl) modalEl.style.display='none'; });
+
+function roomPrompt(title,cb,val=''){
+  showModal(
+    `<b>${title}</b><br><br><select id="rs"><option value="">Pick a room…</option>${ROOMS.map(r=>`<option>${r}</option>`).join('')}</select><br>or custom:<input id="rc" value="${val}" placeholder="e.g. Wine Room">`,
+    [['Cancel'],['OK',()=>{ const v=(document.getElementById('rc').value.trim()||document.getElementById('rs').value); if(v) cb(v); }]]
+  );
+}
+addRoom.onclick=()=>roomPrompt('Add Room',v=>{
+  snapshot();
+  let rm=rooms.find(r=>r.name.toLowerCase()===v.toLowerCase());
+  if(!rm){ rm={id:nid++,name:v}; rooms.push(rm); }
+  active=rm; draw();
+});
+function renameRoom(rm){
+  roomPrompt('Rename room',v=>{
+    snapshot();
+    devs.forEach(d=>{ if(d.room===rm.name) d.room=v; });
+    rm.name=v; draw();
+  }, rm.name);
+}
+function delRoom(rm){
+  snapshot();
+  devs.forEach(d=>{ if(d.room===rm.name) d.room=''; });
+  rooms=rooms.filter(r=>r!==rm);
+  if(active===rm) active=null;
+  draw();
+}
+function askRoom(d,isNew){
+  roomPrompt(isNew?'No room selected — which room is this in?':'Move to room',v=>{
+    if(isNew){
+      let rm=rooms.find(r=>r.name.toLowerCase()===v.toLowerCase());
+      if(!rm){ rm={id:nid++,name:v}; rooms.push(rm); }
+      active=rm;
+      assign(d,rm.name,true); // placeAt already snapped
+    } else {
+      assign(d,v,false);
+    }
+  });
+};
+
+function roomOptions(selected){
+  const names=rooms.map(r=>r.name);
+  return `<option value="">Unassigned</option>`+names.map(n=>`<option ${n===selected?'selected':''}>${n}</option>`).join('')+`<option value="__new__">New room…</option>`;
+}
+
+function hideCtx(){ ctxEl.style.display='none'; }
+function showCtx(ev,d){
+  ev.preventDefault(); ev.stopPropagation();
+  select(d);
+  const items=['<div class="ct">Move to room</div>'];
+  items.push(`<button data-n="" class="${!d.room?'on':''}">Unassigned</button>`);
+  rooms.forEach(r=>items.push(`<button data-n="${r.name}" class="${d.room===r.name?'on':''}">${r.name}</button>`));
+  items.push('<button data-n="__new__">New room…</button>');
+  ctxEl.innerHTML=items.join('');
+  ctxEl.style.display='block';
+  const x=Math.min(ev.clientX, innerWidth-220), y=Math.min(ev.clientY, innerHeight-16-ctxEl.offsetHeight);
+  ctxEl.style.left=x+'px'; ctxEl.style.top=y+'px';
+  ctxEl.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    hideCtx();
+    if(b.dataset.n==='__new__') askRoom(d,false);
+    else assign(d,b.dataset.n,false);
+  });
+}
+addEventListener('click',hideCtx);
+addEventListener('contextmenu',e=>{ if(!e.target.closest('#stage, #tree, #ctx')) hideCtx(); });
+
+function updateTools(){
+  const ok=canXF(sel);
+  btnRot.disabled=!ok; btnSz.disabled=!ok;
+  btnUndo.disabled=hidx<=0;
+}
+function updateTotals(){
+  const tot=pkgTotal();
+  const sp=devs.filter(d=>d.type==='stereo'||d.type==='single').reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
+  const n=devs.length;
+  hdrTotal.textContent=money(tot);
+  sideTotalAmt.textContent=money(tot);
+  sideTotalAmt.parentElement.querySelector('span').textContent=`${n} device${n===1?'':'s'} · ${sp} speaker${sp===1?'':'s'}`;
+}
+
+function draw(){
+  stage.querySelectorAll('.dev,.devwrap,.guide').forEach(x=>x.remove());
+  devs.filter(d=>(d.page||1)===pageNum).forEach(d=>{
+    const el=document.createElement('div');
+    el.className='devwrap'+(sel===d?' sel':'');
+    stage.appendChild(el);
+    renderDev(d,el);
+    el.oncontextmenu=ev=>showCtx(ev,d);
+  });
+
+  const showRooms=rooms.length||devs.length;
+  roomsPanel.hidden=!showRooms; bundlePanel.hidden=!showRooms;
+  const groups=rooms.map(r=>({r,ds:devs.filter(d=>d.room===r.name)}));
+  const un=devs.filter(d=>!d.room);
+  const item=d=>{
+    const ph=isPlaceholder(d), tbd=d.tbd||d.type==='microled'||d.type==='prepro';
+    const opts=tierOptions(d);
+    const tierSel=opts?`<select class="tier" data-d="${d.id}" onclick="event.stopPropagation()">${opts.map(t=>`<option value="${t}" ${(d.tier||'better')===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select>`:'';
+    const pgHint=numPages>1?` <small style="color:var(--muted)">p.${d.page||1}</small>`:'';
+    return `<div class="item${sel===d?' sel':''}" data-d="${d.id}">
+      <span>${lineLabel(d)}${ph||tbd?'<span class="ph">'+(tbd?'TBD':'Placeholder')+'</span>':''}${pgHint}</span>
+      ${tierSel}
+      <select data-d="${d.id}" onclick="event.stopPropagation()">${roomOptions(d.room)}</select>
+      <span class="ip">${money(linePrice(d))}</span>
+    </div>`;
+  };
+  const roomRow=(r,ds,open)=>{
+    const $ = ds.reduce((a,d)=>a+linePrice(d),0);
+    const q=ds.reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
+    return `<div class="room${open?' act':''}" data-r="${r.id}"><span>${open?'▾':'▸'}</span><span class="nm">${r.name}</span><span class="tot">${q} · ${money($)}</span><span class="x" data-ren="${r.id}">✎</span><span class="x" data-del="${r.id}">✕</span></div>`
+      +(open?ds.map(item).join(''):'');
+  };
+  hint.innerHTML=active?`New devices go to <b>${active.name}</b>`:'Select or add a room, then drag devices onto the plan.';
+  tree.innerHTML=groups.map(({r,ds})=>roomRow(r,ds,active===r)).join('')
+    +(un.length?`<div class="un">${roomRow({id:'un',name:'Unassigned'},un,true).replace('data-r="un"','data-un="1"').replace(/<span class="x"[^>]*>[^<]*<\/span>/g,'')}</div>`:'');
+  tree.querySelectorAll('[data-r]').forEach(el=>el.onclick=e=>{
+    const rm=rooms.find(r=>r.id==el.dataset.r);
+    if(!rm) return;
+    if(e.target.dataset.ren) return renameRoom(rm);
+    if(e.target.dataset.del) return delRoom(rm);
+    active=active===rm?null:rm;
+    draw();
+  });
+  tree.querySelectorAll('.item').forEach(el=>el.onclick=()=>select(devs.find(d=>d.id==el.dataset.d)));
+  tree.querySelectorAll('.item select:not(.tier)').forEach(s=>s.onchange=()=>{
+    const d=devs.find(x=>x.id==s.dataset.d);
+    if(s.value==='__new__'){ s.value=d.room||''; askRoom(d,false); }
+    else assign(d,s.value,false);
+  });
+  tree.querySelectorAll('select.tier').forEach(s=>s.onchange=()=>{
+    const d=devs.find(x=>x.id==s.dataset.d);
+    snapshot(); applyTier(d,s.value); ph('layout_tier_switch',{type:d.type,tier:d.tier}); syncSeparates(); draw(); scheduleSave();
+  });
+  tree.querySelectorAll('.item').forEach(el=>el.oncontextmenu=ev=>{
+    const d=devs.find(x=>x.id==el.dataset.d); if(d) showCtx(ev,d);
+  });
+
+  if(lastAdded){
+    document.getElementById('lastAdded').innerHTML=`Last added: <b>${lastAdded.room||'Unassigned'}</b> · ${lineLabel(lastAdded)} · ${money(linePrice(lastAdded))}`;
+  } else {
+    document.getElementById('lastAdded').textContent='Last added: —';
+  }
+
+  updateTotals();
+
+  if(!sel) selBox.innerHTML='Click a device to edit.';
+  else {
+    const topts=tierOptions(sel);
+    const tsel=topts?`<div style="margin-top:6px">Tier: <select id="selTier">${topts.map(t=>`<option value="${t}" ${(sel.tier||'better')===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select></div>`:'';
+    selBox.innerHTML=`<b>${lineLabel(sel)}</b>${sel.catalogKey?`<div style="margin-top:4px;color:var(--muted)">${catalogName(sel.catalogKey)}</div>`:''}<div style="margin-top:6px">Room:
+      <select id="selRoom">${roomOptions(sel.room)}</select></div>
+      ${tsel}
+      <div class="rowbtns">
+        ${sel.type==='single'?'<button type="button" id="btnMakePair">Make stereo pair</button>':''}
+        ${canXF(sel)?`<button type="button" id="btnRot15">Rotate 15°</button><button type="button" id="btnSzStep">Resize</button>`:''}
+        <button type="button" id="btnDel">Delete</button>
+      </div>`;
+    selRoom.onchange=()=>{ if(selRoom.value==='__new__'){ selRoom.value=sel.room||''; askRoom(sel,false);} else assign(sel,selRoom.value,false); };
+    const st=document.getElementById('selTier'); if(st) st.onchange=()=>{ snapshot(); applyTier(sel,st.value); ph('layout_tier_switch',{type:sel.type,tier:sel.tier}); syncSeparates(); draw(); scheduleSave(); };
+    const bp=document.getElementById('btnMakePair'); if(bp) bp.onclick=()=>{ snapshot(); setType(sel,'stereo'); };
+    const br=document.getElementById('btnRot15'); if(br) br.onclick=()=>rotateSel(15);
+    const bs=document.getElementById('btnSzStep'); if(bs) bs.onclick=()=>resizeSel();
+    btnDel.onclick=()=>{ snapshot(); devs=devs.filter(x=>x!==sel); if(lastAdded===sel) lastAdded=null; sel=null; draw(); };
+  }
+  updateTools();
+}
+
+function setType(d,t){
+  if(t==='single'){ d.x=(d.x+d.x2)/2; d.y=(d.y+d.y2)/2; }
+  else { d.x2=d.x+GAP/2; d.x-=GAP/2; d.y2=d.y; }
+  d.type=t; applyTier(d,d.tier||'better'); draw(); scheduleSave();
+}
+function pts(d){ return d.type==='stereo'?[[d.x,d.y],[d.x2,d.y2]]:[[d.x,d.y]]; }
+
+function renderDev(d,el){
+  const z=zoom, P=pts(d), on=sel===d, sc=scOf(d), rot=rotOf(d), xf=canXF(d);
+  const base=(SHAPES[d.type]?19:R)*sc;
+  const pad=on&&xf?36:10;
+  const reach=base*1.5+pad;
+  const minx=Math.min(...P.map(p=>p[0]))*z-reach*z, miny=Math.min(...P.map(p=>p[1]))*z-reach*z;
+  const maxx=Math.max(...P.map(p=>p[0]))*z+reach*z, maxy=Math.max(...P.map(p=>p[1]))*z+reach*z;
+  let h=`<svg class="devsvg" style="left:${minx}px;top:${miny}px" width="${maxx-minx}" height="${maxy-miny}" viewBox="${minx} ${miny} ${maxx-minx} ${maxy-miny}">`;
+  if(P.length>1){
+    const[a,b]=P;
+    h+=`<line x1="${a[0]*z}" y1="${a[1]*z}" x2="${b[0]*z}" y2="${b[1]*z}" stroke="#1e88e5" stroke-width="${Math.max(1.5,2*z)}" stroke-dasharray="${5*z} ${4*z}"/>`;
+    h+=`<line class="body" x1="${a[0]*z}" y1="${a[1]*z}" x2="${b[0]*z}" y2="${b[1]*z}" stroke="transparent" stroke-width="${12*z}"/>`;
+  }
+  const fs=4.6*z, lbl=d.type==='stereo'?['STEREO','AUDIO']:['SINGLE','AUDIO'];
+  const selCol='#0071e3';
+  P.forEach(([x,y],i)=>{
+    if(SHAPES[d.type]){
+      h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
+      if(on) h+=`<rect x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
+      h+=`<rect x="-17" y="-12" width="34" height="24" fill="transparent"/>${SHAPES[d.type]}</g>`;
+      if(on&&xf){
+        const rad=(rot-90)*Math.PI/180, hr=(base+14)*z;
+        const hx=x*z+Math.cos(rad)*hr, hy=y*z+Math.sin(rad)*hr;
+        h+=`<line x1="${x*z}" y1="${y*z}" x2="${hx}" y2="${hy}" stroke="${selCol}" stroke-width="1.25"/>`;
+        h+=`<circle class="rot" cx="${hx}" cy="${hy}" r="6" fill="#fff" stroke="${selCol}" stroke-width="2"/>`;
+        const br=(rot-45)*Math.PI/180, brl=base*z*0.85;
+        const sx=x*z+Math.cos(br)*brl, sy=y*z+Math.sin(br)*brl;
+        h+=`<rect class="sz" x="${sx-5}" y="${sy-5}" width="10" height="10" fill="#fff" stroke="${selCol}" stroke-width="2" transform="rotate(${rot} ${sx} ${sy})"/>`;
+      }
+      return;
+    }
+    if(d.type!=='stereo' && d.type!=='single'){
+      const title=(lineLabel(d)||d.type).split(' ').slice(0,2);
+      h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
+      if(on) h+=`<rect x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
+      h+=`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#555" stroke="#222" stroke-width="1.5"/><text y="2.5" font-size="5" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">${title[0]||''}</text></g>`;
+      return;
+    }
+    const rr=R*z;
+    h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
+      `<text x="${x*z}" y="${y*z-fs*.2}" font-size="${fs}" fill="#fff" text-anchor="middle" font-family="Helvetica" font-weight="bold">${lbl[0]}</text>`+
+      `<text x="${x*z}" y="${y*z+fs}" font-size="${fs}" fill="#fff" text-anchor="middle" font-family="Helvetica" font-weight="bold">${lbl[1]}</text></g>`;
+  });
+  h+='</svg>';
+  const mid=P.reduce((a,p)=>[a[0]+p[0]/P.length,a[1]+p[1]/P.length],[0,0]);
+  const tagY=mid[1]*z + base*z + 6;
+  h+=`<span class="tag" style="left:${mid[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
+  el.innerHTML=h;
+  el.querySelectorAll('.body').forEach(b=>b.onpointerdown=ev=>drag(ev,d,'body'));
+  el.querySelectorAll('.end').forEach(b=>b.onpointerdown=ev=>drag(ev,d,+b.dataset.i));
+  el.querySelectorAll('.rot').forEach(b=>b.onpointerdown=ev=>dragRot(ev,d));
+  el.querySelectorAll('.sz').forEach(b=>b.onpointerdown=ev=>dragScale(ev,d));
+}
+
+function drag(ev,d,mode){
+  ev.preventDefault(); ev.stopPropagation();
+  if(sel!==d) select(d);
+  snapshot();
+  const start=[ev.clientX/zoom, ev.clientY/zoom], o={x:d.x,y:d.y,x2:d.x2,y2:d.y2};
+  const others=devs.filter(x=>x!==d).flatMap(pts), T=6/zoom;
+  const mv=m=>{
+    let dx=m.clientX/zoom-start[0], dy=m.clientY/zoom-start[1], gx=null, gy=null;
+    if(mode==='body'){
+      const P0=pts(Object.assign({},d,o)); let best=[T,T];
+      P0.forEach(([px,py])=>others.forEach(([qx,qy])=>{
+        const ex=qx-(px+dx), ey=qy-(py+dy);
+        if(Math.abs(ex)<best[0]){ best[0]=Math.abs(ex); gx=qx; dx+=ex; }
+        if(Math.abs(ey)<best[1]){ best[1]=Math.abs(ey); gy=qy; dy+=ey; }
+      }));
+      d.x=o.x+dx; d.y=o.y+dy;
+      if(d.type==='stereo'){ d.x2=o.x2+dx; d.y2=o.y2+dy; }
+    } else {
+      const k=mode?['x2','y2']:['x','y'], f=mode?['x','y']:['x2','y2'];
+      let nx=o[k[0]]+dx, ny=o[k[1]]+dy;
+      if(Math.abs(ny-o[f[1]])<T*2){ ny=o[f[1]]; gy=ny; }
+      else if(Math.abs(nx-o[f[0]])<T*2){ nx=o[f[0]]; gx=nx; }
+      const L=Math.hypot(nx-o[f[0]], ny-o[f[1]]);
+      if(L<2*R+4){ const s=(2*R+4)/(L||1); nx=o[f[0]]+(nx-o[f[0]])*s; ny=o[f[1]]+(ny-o[f[1]])*s; }
+      d[k[0]]=nx; d[k[1]]=ny;
+    }
+    draw();
+    if(gx!==null) guide(gx,true);
+    if(gy!==null) guide(gy,false);
+  };
+  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
+  addEventListener('pointermove',mv); addEventListener('pointerup',up);
+}
+function dragRot(ev,d){
+  ev.preventDefault(); ev.stopPropagation();
+  if(sel!==d) select(d);
+  snapshot();
+  const rect=stage.getBoundingClientRect();
+  const cx=rect.left+d.x*zoom, cy=rect.top+d.y*zoom;
+  const mv=m=>{
+    let a=Math.atan2(m.clientY-cy, m.clientX-cx)*180/Math.PI+90;
+    if(!m.shiftKey) a=Math.round(a/15)*15;
+    d.rot=((a%360)+360)%360;
+    draw();
+  };
+  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); };
+  addEventListener('pointermove',mv); addEventListener('pointerup',up);
+}
+function dragScale(ev,d){
+  ev.preventDefault(); ev.stopPropagation();
+  if(sel!==d) select(d);
+  snapshot();
+  const rect=stage.getBoundingClientRect();
+  const cx=rect.left+d.x*zoom, cy=rect.top+d.y*zoom;
+  const d0=Math.hypot(ev.clientX-cx, ev.clientY-cy)||1;
+  const s0=scOf(d);
+  const mv=m=>{
+    d.scale=Math.min(SC_MAX, Math.max(SC_MIN, s0*Math.hypot(m.clientX-cx,m.clientY-cy)/d0));
+    draw();
+  };
+  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); };
+  addEventListener('pointermove',mv); addEventListener('pointerup',up);
+}
+function guide(v,vert){
+  const g=document.createElement('div'); g.className='guide';
+  g.style.cssText=vert?`left:${v*zoom}px;top:0;width:0;height:100%;border-left:1px dashed #af52de`
+    :`top:${v*zoom}px;left:0;height:0;width:100%;border-top:1px dashed #af52de`;
+  stage.appendChild(g);
+}
+function select(d){ sel=d; draw(); }
+
+function rotateSel(deg){
+  if(!canXF(sel)) return;
+  snapshot();
+  sel.rot=(((rotOf(sel)+deg)%360)+360)%360;
+  draw();
+}
+function resizeSel(){
+  if(!canXF(sel)) return;
+  snapshot();
+  const cur=scOf(sel);
+  const i=SC_STEPS.findIndex(v=>Math.abs(v-cur)<0.01);
+  sel.scale=SC_STEPS[(i>=0?i+1:0)%SC_STEPS.length];
+  draw();
+}
+
+btnRot.onclick=e=>rotateSel(e.shiftKey?1:15);
+btnSz.onclick=()=>resizeSel();
+btnUndo.onclick=()=>undo();
+btnZmOut.onclick=()=>setZoom(zoom/1.25);
+btnZmIn.onclick=()=>setZoom(zoom*1.25);
+btnFit.onclick=()=>fitZoom();
+btn100.onclick=()=>setZoom(1);
+search.addEventListener('mousedown',e=>{
+  e.preventDefault();
+  showModal('<b>Search arrives in Phase C.</b><br><br>It will look up things like “Micro LED” or “Theater” and hand off to a bundle or Auto Designer.', [['OK']]);
+});
+
+stage.addEventListener('pointerdown',e=>{ if(e.target===stage || e.target.tagName==='CANVAS'){ sel=null; draw(); }});
+
+addEventListener('keydown',e=>{
+  const meta=e.metaKey||e.ctrlKey;
+  if(meta && (e.key==='z'||e.key==='Z')){
+    e.preventDefault();
+    if(e.shiftKey) redo(); else undo();
+    return;
+  }
+  if(meta && (e.key==='='||e.key==='+')){ e.preventDefault(); setZoom(zoom*1.25); }
+  if(meta && e.key==='-'){ e.preventDefault(); setZoom(zoom/1.25); }
+  if(meta && e.key==='0'){ e.preventDefault(); setZoom(1); }
+});
+main.addEventListener('wheel',e=>{ if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }},{passive:false});
+
+btnPrevPage.onclick=()=>showPage(pageNum-1,true);
+btnNextPage.onclick=()=>showPage(pageNum+1,true);
+btnNew.onclick=()=>newProject();
+btnOpen.onclick=()=>openProj.click();
+btnSave.onclick=()=>saveProjectFile();
+openProj.onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(f) try{ await openProjectFile(f);}catch(err){ showModal('<b>Could not open project.</b><br><br>'+err.message, [['OK']]); } };
+if(projName){ projName.onchange=projName.onblur=()=>{ projectName=projName.value.trim()||'Untitled project'; scheduleSave(); }; }
+btnHifi.onclick=()=>{ hifi=!hifi; btnHifi.classList.toggle('on',hifi); if(!hifi) devs.forEach(d=>{ if(d.tier==='hifi') applyTier(d,'best'); }); draw(); scheduleSave(); };
+document.getElementById('bundles').querySelectorAll('button[data-b]').forEach(b=>b.onclick=()=>dropBundle(b.dataset.b));
+addEventListener('click',e=>{ if(!e.target.closest('#tierPop')) hideTierPop(); });
+
+snapshot();
+draw();
+updatePageLbl();
+restoreLast().catch(()=>{});
+
+window.__LT={
+  loadPdfFromUrl: async url=>{ const r=await fetch(url); if(!r.ok) throw new Error('pdf '+r.status); await loadPdfBuffer(await r.arrayBuffer(), url.split('/').pop()); },
+  placeAt, assign, select, setZoom, fitZoom, rotateSel, resizeSel, undo, redo, setType, canXF, WALL,
+  showPage, dropBundle, applyTier, linePrice, keyFor, isPlaceholder, catalogList, syncSeparates,
+  state:()=>({devs,rooms,active:active&&active.name,sel:sel&&{id:sel.id,type:sel.type,rot:sel.rot,scale:sel.scale,x:sel.x,y:sel.y,room:sel.room,tier:sel.tier,catalogKey:sel.catalogKey,page:sel.page},zoom,total:pkgTotal(),nid,openGroups:[...openGroups],page:pageNum,numPages,hifi,projectId,projectName}),
+  setActive: name=>{ active=rooms.find(r=>r.name===name)||null; draw(); },
+  addRoomNamed: name=>{ let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase()); if(!rm){ snapshot(); rm={id:nid++,name}; rooms.push(rm);} active=rm; draw(); return rm; },
+  setHifi: on=>{ hifi=!!on; btnHifi.classList.toggle('on',hifi); draw(); },
+  serializeProject, newProject
+};
+
+
+/* ---- beta: gate, feedback, PostHog ---- */
+const GATE_HASH='2f0bba544eb3a0ee5645bc9fa75b00ba8991d995260638d857e253244fec2509';
+const GATE_LS='tym-layout-beta-unlock';
+function ph(ev,props){ try{ if(window.posthog&&typeof posthog.capture==='function') posthog.capture(ev,props||{}); }catch(e){} }
+async function sha256hex(s){
+  const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+(function initGate(){
+  const g=document.getElementById('gate');
+  const form=document.getElementById('gateForm');
+  const err=document.getElementById('gateErr');
+  const pw=document.getElementById('gatePw');
+  const unlock=()=>{ g.classList.add('ok'); g.setAttribute('aria-hidden','true'); };
+  try{ if(localStorage.getItem(GATE_LS)===GATE_HASH) unlock(); }catch(e){}
+  form.addEventListener('submit', async ev=>{
+    ev.preventDefault();
+    err.hidden=true;
+    const val=pw.value;
+    pw.value='';
+    const h=await sha256hex(val);
+    if(h===GATE_HASH){ try{ localStorage.setItem(GATE_LS,h); }catch(e){} unlock(); }
+    else { err.hidden=false; pw.focus(); }
+  });
+})();
+(function initFeedback(){
+  const modal=document.getElementById('fbModal');
+  const form=document.getElementById('fbForm');
+  const thanks=document.getElementById('fbThanks');
+  const open=()=>{ thanks.hidden=true; modal.classList.add('on'); document.getElementById('fbDoing').focus(); };
+  const close=()=>{ modal.classList.remove('on'); form.reset(); thanks.hidden=true; };
+  const btn=document.getElementById('btnFeedback');
+  if(btn) btn.onclick=open;
+  document.getElementById('fbCancel').onclick=close;
+  modal.addEventListener('click', ev=>{ if(ev.target===modal) close(); });
+  form.addEventListener('submit', ev=>{
+    ev.preventDefault();
+    const doing=document.getElementById('fbDoing').value.trim();
+    const happened=document.getElementById('fbHappened').value.trim();
+    const email=document.getElementById('fbEmail').value.trim();
+    if(!doing||!happened) return;
+    const props={doing,happened};
+    if(email) props.email=email;
+    ph('layout_feedback', props);
+    thanks.hidden=false;
+    setTimeout(close, 900);
+  });
+})();
+
+</script>
+</body>
+</html>
