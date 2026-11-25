@@ -998,7 +998,7 @@ let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
 let pageNames={}, controlPlatform='', audioSystem='amps', matrixDismissed=false, controlPrompted=false;
 let projectId=crypto.randomUUID(), projectName='Untitled project', hifi=false, saveTimer=null;
 let cloudState=null, cloudTimer=null, guardNoteAt=0, checkoutBusy=false, sb=null, defaultTier='';
-let testMode=false, testEditUntil=null;
+let testMode=false, testEditUntil=null, testSource='';
 let payConfig={authConfigured:false,paymentsConfigured:false,priceCents:2900,editDays:30};
 let hist=[],hidx=-1;
 const stage=document.getElementById('stage');
@@ -2185,7 +2185,7 @@ function applyAccessMode(){
   const buy=document.getElementById('buyScreen');
   if(buy) buy.hidden=linked || testing;
   const beta=document.querySelector('.beta-banner');
-  if(beta) beta.textContent=testing?'Test mode. List prices can change. This copy stays in this browser.':'List prices can change. This project is saved to your account.';
+  if(beta) beta.textContent=testing?(testSource==='preview_unlock'?'Test mode. Preview. List prices can change. This copy stays in this browser.':'Test mode. List prices can change. This copy stays in this browser.'):'List prices can change. This project is saved to your account.';
   const banner=document.getElementById('accessBanner');
   const stamp=(testing?'test':view?'view':linked?'open':'local')+'|'+(testEditUntil||'')+'|'+(cloudState&&cloudState.editUntil||'');
   if(banner && stamp!==accessStamp){
@@ -2193,9 +2193,10 @@ function applyAccessMode(){
     if(testing){
       banner.hidden=false;
       const until=fmtDate(testEditUntil);
+      const label=testSource==='preview_unlock'?'Test mode. Preview.':'Test mode.';
       banner.textContent=open
-        ? ('Test mode. This copy stays in this browser.'+(until?' Editing is open until '+until+'.':''))
-        : 'Test mode. Editing has ended. This copy stays in this browser.';
+        ? (label+' This copy stays in this browser.'+(until?' Editing is open until '+until+'.':''))
+        : (label+' Editing has ended. This copy stays in this browser.');
     } else if(view){
       banner.hidden=false;
       banner.innerHTML='This project is view only. It stays saved in your account. <button type="button" id="btnUnlock">Unlock editing</button>';
@@ -2597,19 +2598,26 @@ async function enterAccountProjects(preferId){
   }
   await openCloudProject(row.id);
 }
-function restoreLocalTest(){
+async function restoreLocalTest(){
   try{
     const raw=JSON.parse(localStorage.getItem('yt-layout-test')||'null');
-    if(!raw || !raw.editUntil || raw.source!=='test_code') return false;
+    if(!raw || !raw.editUntil) return false;
+    if(raw.source!=='test_code' && raw.source!=='preview_unlock') return false;
+    if(raw.source==='preview_unlock'){
+      const allowed=await confirmPreviewServer();
+      if(!allowed){ try{ localStorage.removeItem('yt-layout-test'); }catch(e){} return false; }
+    }
     testMode=true;
     testEditUntil=raw.editUntil;
+    testSource=raw.source;
     return true;
   }catch(e){ return false; }
 }
-function beginLocalTest(editUntil){
+function beginLocalTest(editUntil, source){
   testMode=true;
   testEditUntil=editUntil;
-  try{ localStorage.setItem('yt-layout-test', JSON.stringify({editUntil, source:'test_code'})); }catch(e){}
+  testSource=source==='preview_unlock'?'preview_unlock':'test_code';
+  try{ localStorage.setItem('yt-layout-test', JSON.stringify({editUntil, source:testSource})); }catch(e){}
   const seed=readBuySeed();
   projectId=crypto.randomUUID();
   projectName='Test project';
@@ -2662,7 +2670,22 @@ async function submitAccessCode(){
     await openCloudProject(body.projectId);
     return;
   }
-  beginLocalTest(body.editUntil);
+  beginLocalTest(body.editUntil, 'test_code');
+}
+async function confirmPreviewServer(){
+  try{
+    const res=await fetch('/api/preview-unlock', {method:'POST', headers:{'content-type':'application/json'}, body:'{}'});
+    if(!res.ok) return null;
+    const body=await res.json();
+    if(!body || body.testMode!==true || body.source!=='preview_unlock' || !body.editUntil) return null;
+    return body;
+  }catch(e){ return null; }
+}
+async function requestPreviewUnlock(){
+  const body=await confirmPreviewServer();
+  if(!body) return false;
+  beginLocalTest(body.editUntil, 'preview_unlock');
+  return true;
 }
 async function bootAccount(){
   try{
@@ -2687,13 +2710,15 @@ async function bootAccount(){
   await renderAccountBtn();
   await paintBuyAccount();
   const params=new URLSearchParams(location.search);
-  if(params.get('checkout')==='success'){
+  if(params.get('preview_unlock')==='1' && await requestPreviewUnlock()){
+    /* server allowed this preview host */
+  } else if(params.get('checkout')==='success'){
     await finishCheckoutReturn(params.get('session_id')||'', params.get('project_id')||'');
   } else if(params.get('checkout')==='cancel'){
     history.replaceState({}, '', location.pathname);
     showBuyLanding();
     showModal('<b>Payment canceled</b><br><br>Nothing was charged.', [['OK']]);
-  } else if(!payConfig.paymentsConfigured && restoreLocalTest()){
+  } else if(!payConfig.paymentsConfigured && await restoreLocalTest()){
     accessStamp='';
     await restoreLast().catch(()=>{});
     applyAccessMode();

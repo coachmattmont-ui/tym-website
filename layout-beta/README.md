@@ -86,6 +86,7 @@ node --test functions/_lib/billing.test.mjs
 
 - With no purchase, the page is a purchase screen: one project, every floor, 30 days of editing, kept to view, pay again to edit, and the price from `YT_SINGLE_USE_PRICE_CENTS`.
 - **Have an access code?** checks `YT_TEST_ACCESS_CODE` on the server. A match opens a new 30-day project the same way a payment does, with entitlement `source` `test_code`. Tries are limited. If Supabase is not configured, the same code opens **Test mode** in this browser instead (localStorage and IndexedDB), still for 30 days. The code is not stored in the browser.
+- On a Cloudflare Pages preview only, `/layout-beta/?preview_unlock=1` asks the server to open that same Test mode. The server allows it only when `CF_PAGES` is set, `CF_PAGES_BRANCH` is not `main`, and the host is a `*.tym-website.pages.dev` preview. Production hosts ignore it and keep the purchase screen.
 - Sign in emails a link. No password. After the link, Checkout starts when they came from `/layout/buy` or `?buy=1`.
 - An open edit window goes straight into the tool. An expired project opens view only, with **Unlock editing**.
 - The priced quote download is available during the open window.
