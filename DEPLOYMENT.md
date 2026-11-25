@@ -130,6 +130,21 @@ Highest-priority images to get real:
 - Don't enable Cloudflare's "Auto Minify" for HTML — it can break the inline CSS. Disable it under Speed → Optimization.
 - Don't connect a Cloudflare Worker unless you need server-side logic — the site is fully static.
 
+## Layout Tool account save and payments
+
+Cloud save, reopen, and the priced quote for `/layout-beta/` use Cloudflare Pages Functions in `/functions` plus Supabase and Stripe test mode. Instant Quote stays free. Full steps, the SQL migration, and every variable are in `layout-beta/README.md`.
+
+Set these on the Pages project for Production and Preview. Encrypt the service role key, the Stripe secret, and the webhook secret.
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `YT_SINGLE_USE_PRICE_CENTS` (optional, default `2900`)
+
+Until those are set, the Layout Tool still runs in the browser and cloud actions say payments are not configured.
+
 ## Support
 
 If you get stuck on any step, come back here and I'll walk through it. The Cloudflare Pages docs are also genuinely good: https://developers.cloudflare.com/pages/

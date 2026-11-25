@@ -15,6 +15,7 @@
 # Environment
 .env
 .env.local
+.dev.vars
 
 # Dependencies (none yet, but future-proofing)
 node_modules/
