@@ -98,3 +98,32 @@ export async function applyCheckoutSession(session, db, nowMs = Date.now()) {
   if (typeof db.completeCheckout === 'function') await db.completeCheckout(session.id);
   return { ok: true, projectId, editUntil, kind: 'single_use' };
 }
+
+export async function grantTestProject(db, { userId, name, seed, nowMs = Date.now() }) {
+  const projectId = crypto.randomUUID();
+  const editUntil = nextEditUntil(nowMs);
+  const cleanName = cleanProjectName(name);
+  const inserted = await db.insertProject({
+    id: projectId,
+    owner: userId,
+    name: cleanName,
+    layout: seedLayout(seed, cleanName),
+    edit_until: editUntil
+  });
+  if (inserted && inserted.error) return { ok: false, reason: 'project_create', status: 500 };
+  const project = await db.getProject(projectId);
+  if (!project || project.owner !== userId) return { ok: false, reason: 'missing_project', status: 500 };
+  await db.insertEntitlement({
+    project_id: projectId,
+    owner: userId,
+    kind: 'single_use',
+    status: 'active',
+    source: 'test_code',
+    stripe_session_id: null,
+    stripe_payment_intent: null,
+    amount_cents: null,
+    currency: 'usd',
+    edit_until: editUntil
+  });
+  return { ok: true, projectId, editUntil, source: 'test_code' };
+}

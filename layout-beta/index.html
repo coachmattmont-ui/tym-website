@@ -255,6 +255,8 @@ body.locked #buyScreen[hidden]{display:none !important}
 .buy-card input{width:100%;margin:8px 0 12px;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7}
 .buy-card button{width:100%;padding:12px 14px;border:0;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;cursor:pointer}
 .buy-card button:disabled{opacity:.45;cursor:default}
+.buy-card button.buy-link{width:auto;display:inline;background:transparent;color:#9ec1ff;font-weight:600;font-size:13px;padding:0}
+.buy-code{margin:16px 0 0;text-align:center}
 #buyConfigNote{color:#ffd7a8}
 #acctModal{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:24px}
 #acctModal.on{display:flex}
@@ -323,6 +325,12 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <button type="button" id="buyGo">Continue to payment</button>
     </div>
     <p id="buyConfigNote" hidden>Payments not configured. The Layout Tool stays locked until payments are connected.</p>
+    <p class="buy-code"><button type="button" class="buy-link" id="buyCodeLink">Have an access code?</button></p>
+    <div id="buyCodeBox" hidden>
+      <input id="buyCode" type="password" autocomplete="off" placeholder="Access code" aria-label="Access code">
+      <button type="button" id="buyCodeGo">Continue</button>
+      <p id="buyCodeMsg"></p>
+    </div>
   </div>
 </div>
 <div id="accessBanner" hidden></div>
@@ -990,6 +998,7 @@ let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
 let pageNames={}, controlPlatform='', audioSystem='amps', matrixDismissed=false, controlPrompted=false;
 let projectId=crypto.randomUUID(), projectName='Untitled project', hifi=false, saveTimer=null;
 let cloudState=null, cloudTimer=null, guardNoteAt=0, checkoutBusy=false, sb=null, defaultTier='';
+let testMode=false, testEditUntil=null;
 let payConfig={authConfigured:false,paymentsConfigured:false,priceCents:2900,editDays:30};
 let hist=[],hidx=-1;
 const stage=document.getElementById('stage');
@@ -2113,10 +2122,16 @@ function editWindowOpen(iso, now){
   return Number.isFinite(t) && t>(now||Date.now());
 }
 function editOpen(){
+  if(testMode) return editWindowOpen(testEditUntil);
   if(!cloudState || !cloudState.editUntil) return false;
   return editWindowOpen(cloudState.editUntil);
 }
 function guardEdit(){
+  if(testMode){
+    if(editOpen()) return true;
+    showModal('<b>Test mode</b><br><br>This test session has ended. The copy in this browser stays here to view.', [['OK']]);
+    return false;
+  }
   if(!cloudState) return false;
   if(editOpen()) return true;
   const now=Date.now();
@@ -2162,17 +2177,26 @@ function detachCloud(){
 let accessStamp='';
 function applyAccessMode(){
   const linked=!!cloudState;
+  const testing=!!testMode && !linked;
   const open=editOpen();
-  const view=linked && !open;
-  document.body.classList.toggle('locked', !linked);
+  const view=(linked || testing) && !open;
+  document.body.classList.toggle('locked', !linked && !testing);
   document.body.classList.toggle('viewonly', view);
   const buy=document.getElementById('buyScreen');
-  if(buy) buy.hidden=linked;
+  if(buy) buy.hidden=linked || testing;
+  const beta=document.querySelector('.beta-banner');
+  if(beta) beta.textContent=testing?'Test mode. List prices can change. This copy stays in this browser.':'List prices can change. This project is saved to your account.';
   const banner=document.getElementById('accessBanner');
-  const stamp=(view?'view':linked?'open':'local')+'|'+(cloudState&&cloudState.editUntil||'');
+  const stamp=(testing?'test':view?'view':linked?'open':'local')+'|'+(testEditUntil||'')+'|'+(cloudState&&cloudState.editUntil||'');
   if(banner && stamp!==accessStamp){
     accessStamp=stamp;
-    if(view){
+    if(testing){
+      banner.hidden=false;
+      const until=fmtDate(testEditUntil);
+      banner.textContent=open
+        ? ('Test mode. This copy stays in this browser.'+(until?' Editing is open until '+until+'.':''))
+        : 'Test mode. Editing has ended. This copy stays in this browser.';
+    } else if(view){
       banner.hidden=false;
       banner.innerHTML='This project is view only. It stays saved in your account. <button type="button" id="btnUnlock">Unlock editing</button>';
       const unlock=document.getElementById('btnUnlock');
@@ -2573,6 +2597,73 @@ async function enterAccountProjects(preferId){
   }
   await openCloudProject(row.id);
 }
+function restoreLocalTest(){
+  try{
+    const raw=JSON.parse(localStorage.getItem('yt-layout-test')||'null');
+    if(!raw || !raw.editUntil || raw.source!=='test_code') return false;
+    testMode=true;
+    testEditUntil=raw.editUntil;
+    return true;
+  }catch(e){ return false; }
+}
+function beginLocalTest(editUntil){
+  testMode=true;
+  testEditUntil=editUntil;
+  try{ localStorage.setItem('yt-layout-test', JSON.stringify({editUntil, source:'test_code'})); }catch(e){}
+  const seed=readBuySeed();
+  projectId=crypto.randomUUID();
+  projectName='Test project';
+  if(projName) projName.value=projectName;
+  devs=[]; rooms=seed.rooms.map((name,i)=>({id:i+1, name}));
+  active=null; sel=null; multi=[]; lastAdded=null;
+  defaultTier=seed.tier||'';
+  nid=rooms.length+1;
+  pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false; hifi=false;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  stage.querySelectorAll('canvas').forEach(x=>x.remove());
+  empty.style.display='';
+  empty.textContent='Upload a PDF floor plan to begin.';
+  if(btnHifi) btnHifi.classList.remove('on');
+  accessStamp='';
+  hist=[]; hidx=-1; snapshot();
+  updatePageLbl(); draw();
+  try{ localStorage.setItem('yt-layout-current', JSON.stringify(serializeProject())); }catch(e){}
+  scheduleSave();
+  applyAccessMode();
+}
+async function submitAccessCode(){
+  const input=document.getElementById('buyCode');
+  const msg=document.getElementById('buyCodeMsg');
+  const code=(input&&input.value||'').trim();
+  if(!code){ if(msg) msg.textContent='Enter the access code.'; return; }
+  if(msg) msg.textContent='Checking the code.';
+  let res, body;
+  const headers={'content-type':'application/json'};
+  if(sb){
+    try{ const {data}=await sb.auth.getSession(); if(data.session) headers.authorization='Bearer '+data.session.access_token; }catch(e){}
+  }
+  try{
+    res=await fetch('/api/test-access', {
+      method:'POST',
+      headers,
+      body:JSON.stringify({code, name:projectName||'Test project', seed:readBuySeed()})
+    });
+    body=await res.json();
+  }catch(e){
+    if(msg) msg.textContent='The code could not be checked. Try again.';
+    return;
+  }
+  if(input) input.value='';
+  if(!res.ok){
+    if(msg) msg.textContent=body&&body.message?body.message:'That code does not match.';
+    return;
+  }
+  if(body.mode==='account' && body.projectId){
+    await openCloudProject(body.projectId);
+    return;
+  }
+  beginLocalTest(body.editUntil);
+}
 async function bootAccount(){
   try{
     const res=await fetch('/api/config');
@@ -2602,6 +2693,10 @@ async function bootAccount(){
     history.replaceState({}, '', location.pathname);
     showBuyLanding();
     showModal('<b>Payment canceled</b><br><br>Nothing was charged.', [['OK']]);
+  } else if(!payConfig.paymentsConfigured && restoreLocalTest()){
+    accessStamp='';
+    await restoreLast().catch(()=>{});
+    applyAccessMode();
   } else if(payConfig.paymentsConfigured){
     await enterAccountProjects();
   } else {
@@ -2650,6 +2745,11 @@ async function bootAccount(){
   };
   const buyGo=document.getElementById('buyGo');
   if(buyGo) buyGo.onclick=()=>{ try{ sessionStorage.removeItem('yt-buy-started'); }catch(e){} sendCheckout(); };
+  const buyCodeLink=document.getElementById('buyCodeLink');
+  const buyCodeBox=document.getElementById('buyCodeBox');
+  if(buyCodeLink && buyCodeBox) buyCodeLink.onclick=()=>{ buyCodeBox.hidden=!buyCodeBox.hidden; if(!buyCodeBox.hidden){ const el=document.getElementById('buyCode'); if(el) el.focus(); } };
+  const buyCodeGo=document.getElementById('buyCodeGo');
+  if(buyCodeGo) buyCodeGo.onclick=()=>submitAccessCode();
   if(cloudState && editOpen()) scheduleCloudPush();
   applyAccessMode();
 }

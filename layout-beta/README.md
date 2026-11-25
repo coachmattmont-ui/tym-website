@@ -28,6 +28,7 @@ Set these on the Cloudflare Pages project (Production and Preview). Mark the thr
 | `STRIPE_SECRET_KEY` | Checkout and payment confirm | Test mode: `sk_test_...` |
 | `STRIPE_WEBHOOK_SECRET` | `POST /api/stripe-webhook` | Signing secret, `whsec_...` |
 | `YT_SINGLE_USE_PRICE_CENTS` | Checkout amount | Optional. Whole cents. Default **2900** ($29.00). Use `1500` for $15 or `5000` for $50. No code change. |
+| `YT_TEST_ACCESS_CODE` | `POST /api/test-access` only | Optional encrypted secret. If unset, access codes are disabled. Never put this value in the page, a commit, or a pull request. |
 
 `/api/config` is public. It returns the Supabase URL, the anon key, whether payments are configured, the price in cents, and `editDays` (30). It does not return the service role key, the Stripe secret, or the webhook secret.
 
@@ -84,6 +85,7 @@ node --test functions/_lib/billing.test.mjs
 ## What the client sees
 
 - With no purchase, the page is a purchase screen: one project, every floor, 30 days of editing, kept to view, pay again to edit, and the price from `YT_SINGLE_USE_PRICE_CENTS`.
+- **Have an access code?** checks `YT_TEST_ACCESS_CODE` on the server. A match opens a new 30-day project the same way a payment does, with entitlement `source` `test_code`. Tries are limited. If Supabase is not configured, the same code opens **Test mode** in this browser instead (localStorage and IndexedDB), still for 30 days. The code is not stored in the browser.
 - Sign in emails a link. No password. After the link, Checkout starts when they came from `/layout/buy` or `?buy=1`.
 - An open edit window goes straight into the tool. An expired project opens view only, with **Unlock editing**.
 - The priced quote download is available during the open window.

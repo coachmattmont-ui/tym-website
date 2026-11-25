@@ -1,3 +1,4 @@
+import { testCodeConfigured } from '../_lib/access-code.js';
 import { json } from '../_lib/http.js';
 import { EDIT_DAYS, authConfigured, paymentsConfigured, resolvePriceCents } from '../_lib/billing.js';
 
@@ -9,7 +10,8 @@ export function publicConfig(env) {
     authConfigured: authConfigured(env),
     paymentsConfigured: paymentsConfigured(env) && !price.error,
     priceCents: price.cents || 2900,
-    editDays: EDIT_DAYS
+    editDays: EDIT_DAYS,
+    testCodesEnabled: testCodeConfigured(env)
   };
   if (price.error) body.priceError = price.error;
   return body;

@@ -46,7 +46,7 @@ create table if not exists public.entitlements (
   owner uuid not null references auth.users (id) on delete cascade,
   kind text not null,
   status text not null default 'active',
-  source text not null default 'stripe_checkout',
+  source text not null default 'stripe_checkout', -- stripe_checkout or test_code
   stripe_session_id text,
   stripe_payment_intent text,
   amount_cents integer,
