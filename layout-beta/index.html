@@ -71,11 +71,29 @@ button,input,select{font:inherit;color:inherit}
 .total b{font-size:16px;font-weight:600;letter-spacing:-.02em}
 .total span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
-.app{display:flex;height:calc(100% - 54px);min-height:0}
-aside{width:348px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
-  background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px);
-  border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
-.aside-scroll{flex:1;min-height:0;overflow:auto;padding:16px 14px 8px}
+.app{display:flex;height:calc(100% - 54px);min-height:0;position:relative}
+#colLeft,#colRight{flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
+  background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px)}
+#colLeft{width:312px;border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
+#colRight{width:252px;border-left:1px solid var(--line);box-shadow:-8px 0 28px rgba(0,0,0,.05);z-index:5}
+#colRight.collapsed{width:40px}
+#colRight.collapsed .right-body{display:none}
+#btnRail{display:none;flex:1;border:0;background:transparent;cursor:pointer;writing-mode:vertical-rl;transform:rotate(180deg);
+  letter-spacing:.08em;text-transform:uppercase;font-size:11px;font-weight:650;color:var(--muted);padding:12px 0}
+#colRight.collapsed #btnRail{display:block}
+.right-head{display:flex;gap:6px;align-items:center;padding:12px 12px 0}
+.right-head .search{flex:1;width:auto;min-width:0}
+.right-body{display:flex;flex-direction:column;min-height:0;flex:1}
+.right-selected{padding:8px 12px 0;max-height:46%;overflow:auto;flex-shrink:0}
+.aside-scroll{flex:1;min-height:0;overflow:auto;padding:12px 14px 8px}
+@media (max-width:1180px){
+  #colRight{position:absolute;top:0;right:0;bottom:0;width:min(280px,88vw);box-shadow:-12px 0 30px rgba(0,0,0,.16)}
+  #colRight.collapsed{width:40px;box-shadow:none}
+  #colLeft{width:280px}
+}
+@media (max-width:780px){
+  #colLeft{width:220px}
+}
 .file-btn{display:block;text-align:center;padding:8px 10px;margin-bottom:6px}
 #pdf{display:none}
 #pg{font-size:11px;color:var(--muted);margin:0 0 14px;min-height:1em}
@@ -116,13 +134,18 @@ aside{width:348px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-hei
 .item .ip{margin-left:auto;flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--muted)}
 .item select{font-size:11px;border:0;background:var(--fill);border-radius:6px;padding:2px 4px;max-width:118px;flex:0 0 auto;box-shadow:inset 0 0 0 1px var(--line)}
 .item select.tier{max-width:78px}
-#tree{max-height:min(200px,28vh);overflow:auto}
+#tree{overflow:visible}
+.item.auto{cursor:default;color:var(--muted)}
+#layoutTools{margin:0 0 12px}
+#catFilters{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 8px}
+#catFilters button,#btnSortCost{font-size:11px;padding:4px 7px}
+#catFilters button.on,#btnSortCost.on{background:#0071e3;color:#fff;box-shadow:none}
+#wholeHome{margin:8px 0 4px}
+#filterNote{font-size:11px;color:var(--muted);margin-top:4px}
 .un .room{color:#b15c00}
 
-#editorStack{position:sticky;top:0;z-index:4;margin:0 -14px 12px;padding:8px 14px 6px;
-  background:#f4f4f6;border-bottom:1px solid var(--line)}
-#sideTotal{flex-shrink:0;margin:0 0 8px;padding:2px 0 4px;background:transparent;
-  border-top:0;font-size:13px;text-align:right}
+#sideTotal{flex-shrink:0;margin:0;padding:10px 14px 14px;background:rgba(255,255,255,.94);
+  border-top:1px solid var(--line);font-size:13px;text-align:right}
 #sideTotal b{font-size:18px;letter-spacing:-.02em}
 #selSec{margin-bottom:2px}
 #selBox .sel-row{margin-top:6px}
@@ -274,14 +297,12 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <button type="button" id="btnFit">Fit</button>
     <button type="button" id="btn100">100%</button>
     <span class="sep"></span>
-    <input class="search" id="search" placeholder="Search" title="Search arrives in Phase C" readonly>
-    <span class="sep"></span>
     <button type="button" id="btnFeedback" title="Send feedback">Feedback</button>
   </div>
   <div class="total"><span>Package total</span><b id="hdrTotal">$0</b></div>
 </header>
 <div class="app">
-<aside>
+<aside id="colLeft">
 <div class="aside-scroll">
   <label class="file-btn" for="pdf">Upload floor plan</label>
   <input type="file" id="pdf" accept="application/pdf">
@@ -297,56 +318,81 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <option value="Basement"></option>
   </datalist>
 
+  <div class="sec" id="ctlRow">
+    <div class="sec-h">Control</div>
+    <select id="ctlPlat" title="Control platform">
+      <option value="josh">Josh.ai</option>
+      <option value="control4">Control4</option>
+      <option value="alexa">Alexa</option>
+    </select>
+  </div>
+  <div id="matrixPrompt" hidden>
+    <p>You can save money with a whole-home audio system: a matrix switch and multi-zone amp with Sonos Port, run by Josh.ai or Control4.</p>
+    <div class="rowbtns">
+      <button type="button" id="matrixYes">Use whole-home audio</button>
+      <button type="button" id="matrixNo">Keep room amps</button>
+    </div>
+  </div>
+  <div id="layoutTools">
+    <div id="audMode">
+      <button type="button" data-aud="amps">Room amps</button>
+      <button type="button" data-aud="matrix">Whole-home</button>
+    </div>
+    <div id="catFilters">
+      <button type="button" data-cat="all" class="on">All</button>
+      <button type="button" data-cat="Audio">Audio</button>
+      <button type="button" data-cat="Video">Video</button>
+      <button type="button" data-cat="Network">Network</button>
+      <button type="button" data-cat="Control">Control</button>
+      <button type="button" data-cat="Security">Security</button>
+    </div>
+    <button type="button" id="btnSortCost">Sort by cost</button>
+  </div>
+
   <section class="sec" id="roomsPanel" hidden>
     <div class="sec-h">Rooms <button type="button" id="addRoom">Add Room</button></div>
     <div id="hint"></div>
     <div id="tree"></div>
     <div id="lastAdded">Last added: —</div>
   </section>
-
-  <div id="editorStack">
-    <div class="sec" id="ctlRow">
-      <div class="sec-h">Control</div>
-      <select id="ctlPlat" title="Control platform">
-        <option value="josh">Josh.ai</option>
-        <option value="control4">Control4</option>
-        <option value="alexa">Alexa</option>
-      </select>
-    </div>
-    <div id="matrixPrompt" hidden>
-      <p>You can save money with a whole-home audio system: a matrix switch and multi-zone amp with Sonos Port, run by Josh.ai or Control4.</p>
-      <div class="rowbtns">
-        <button type="button" id="matrixYes">Use whole-home audio</button>
-        <button type="button" id="matrixNo">Keep room amps</button>
-      </div>
-    </div>
-    <div id="included" hidden></div>
-    <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Package total</span><br><b id="sideTotalAmt">$0</b></div>
-    <section class="sec" id="selSec">
-      <div class="sec-h">Selected</div>
-      <div id="selBox">Click a device to edit.</div>
-    </section>
-  </div>
-
-  <section class="sec" id="bundlePanel" hidden>
-    <div class="g" id="bundleGroup">
-      <div class="gh" id="bundleToggle" role="button" tabindex="0" aria-expanded="false"><span class="ch">▾</span> Bundles</div>
-      <div class="gb" id="bundles">
-        <button type="button" data-b="5.1">Add 5.1 Surround</button>
-        <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
-        <button type="button" data-b="microled">Add Micro LED Screen</button>
-        <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
-      </div>
-    </div>
-  </section>
-  <section class="sec" id="palette"></section>
+  <div id="wholeHome" hidden></div>
 
 </div>
+  <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Project total</span><br><b id="sideTotalAmt">$0</b><div id="filterNote" hidden></div></div>
 </aside>
 <main id="main">
   <div id="empty">Upload a PDF floor plan to begin.</div>
   <div id="stage"></div>
 </main>
+<aside id="colRight">
+  <button type="button" id="btnRail" aria-expanded="true">Devices</button>
+  <div class="right-body">
+    <div class="right-head">
+      <input class="search" id="search" placeholder="Search" title="Search arrives in Phase C" readonly>
+      <button type="button" id="btnHideRight" title="Hide device list">Hide</button>
+    </div>
+    <div class="right-selected">
+      <section class="sec" id="selSec">
+        <div class="sec-h">Selected</div>
+        <div id="selBox">Click a device to edit.</div>
+      </section>
+    </div>
+    <div class="aside-scroll">
+      <section class="sec" id="bundlePanel" hidden>
+        <div class="g" id="bundleGroup">
+          <div class="gh" id="bundleToggle" role="button" tabindex="0" aria-expanded="false"><span class="ch">▾</span> Bundles</div>
+          <div class="gb" id="bundles">
+            <button type="button" data-b="5.1">Add 5.1 Surround</button>
+            <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
+            <button type="button" data-b="microled">Add Micro LED Screen</button>
+            <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
+          </div>
+        </div>
+      </section>
+      <section class="sec" id="palette"></section>
+    </div>
+  </div>
+</aside>
 </div>
 <div id="modal"><div class="card"><div id="mBody"></div><div id="mBtns" style="margin-top:16px;text-align:right"></div></div></div>
 <div id="planPick" role="dialog" aria-modal="true" aria-labelledby="planPickTitle">
@@ -1080,7 +1126,7 @@ function controlLines(){
     const core=joshCore();
     return [
       {key:core?'J-CR-BLK-100':'J-ON-100', qty:1, room:'Whole home', label:core?'Josh Core processor':'Josh One processor'},
-      {key:core?'J-SFT-CR1:Y':'J-SFT-ON1:Y', qty:1, room:'Software', label:'Software plan, year 1'}
+      {key:core?'J-SFT-CR1:Y':'J-SFT-ON1:Y', qty:1, room:'Whole home', label:'Software plan, year 1'}
     ];
   }
   if(plat==='control4'){
@@ -1286,6 +1332,37 @@ function updateTools(){
   btnRot.disabled=!ok; btnSz.disabled=!ok;
   btnUndo.disabled=hidx<=0;
 }
+const TYPE_CAT={
+  stereo:'Audio', single:'Audio', outdoor:'Audio', lcr:'Audio', surwall:'Audio', surceil:'Audio', subwall:'Audio', subfloor:'Audio', prepro:'Audio',
+  tv:'Video', tvport:'Video', doorbell:'Video', microled:'Video', rack:'Video', shades:'Video', garage:'Video',
+  lvcan:'Network', wap:'Network', data:'Network', phone:'Network',
+  touch:'Control', voice:'Control', ipad:'Control',
+  keypad:'Security', motion:'Security', camera:'Security', contact:'Security'
+};
+let costFilter='all', roomSort='name', rightOpen=innerWidth>=1180;
+function costCat(d){ return TYPE_CAT[d.type]||'Video'; }
+function lineCat(l){
+  const k=l.key||'';
+  if(k.startsWith('J-')||k.startsWith('C4-')||k==='PH-C4-LIC') return 'Control';
+  return 'Audio';
+}
+function lineMoney(l){ return catalogList(l.key)*(l.qty||1); }
+function roomNames(){
+  const names=new Set(rooms.map(r=>r.name));
+  names.add('Unassigned');
+  return names;
+}
+function linesFor(name){
+  return packageLines().filter(l=>l.room===name && (costFilter==='all'||lineCat(l)===costFilter));
+}
+function wholeLines(){
+  const names=roomNames();
+  return packageLines().filter(l=>!names.has(l.room||'') && (costFilter==='all'||lineCat(l)===costFilter));
+}
+function autoHtml(l){
+  return `<div class="item auto"><span class="lb">${l.qty>1?l.qty+' × ':''}${l.label}</span><span class="ip">${money(lineMoney(l))}</span></div>`;
+}
+
 function updateTotals(){
   const tot=pkgTotal();
   const sp=devs.filter(d=>d.type==='stereo'||d.type==='single').reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
@@ -1293,26 +1370,32 @@ function updateTotals(){
   hdrTotal.textContent=money(tot);
   sideTotalAmt.textContent=money(tot);
   sideTotalAmt.parentElement.querySelector('span').textContent=`${n} device${n===1?'':'s'} · ${sp} speaker${sp===1?'':'s'}`;
+  const note=document.getElementById('filterNote');
+  if(note){
+    if(costFilter==='all') note.hidden=true;
+    else {
+      const shown=devs.filter(d=>costCat(d)===costFilter).reduce((a,d)=>a+linePrice(d),0)
+        + packageLines().filter(l=>lineCat(l)===costFilter).reduce((a,l)=>a+lineMoney(l),0);
+      note.hidden=false;
+      note.textContent=costFilter+' shown · '+money(shown);
+    }
+  }
 }
 
 function renderPackageExtras(){
-  const lines=packageLines();
-  const box=document.getElementById('included');
   const prompt=document.getElementById('matrixPrompt');
   if(prompt) prompt.hidden=!(musicRoomCount()>=RULES.MATRIX_ZONE_THRESHOLD && audioSystem!=='matrix' && !matrixDismissed);
   const ctl=document.getElementById('ctlPlat');
   if(ctl && document.activeElement!==ctl) ctl.value=controlPlatform||'josh';
-  if(!box) return;
-  if(!lines.length){ box.hidden=true; box.innerHTML=''; return; }
-  box.hidden=false;
-  const mode=audioSystem==='matrix'?'matrix':'amps';
-  box.innerHTML='<div class="sec-h">Included</div><div id="audMode"><button type="button" data-aud="amps" class="'+(mode==='amps'?'on':'')+'">Room amps</button><button type="button" data-aud="matrix" class="'+(mode==='matrix'?'on':'')+'">Whole-home</button></div>'+
-    lines.map(l=>`<div class="inc"><b>${l.qty>1?l.qty+' × ':''}${l.label}</b><small style="color:var(--muted)">${l.room||''}</small><span>${money(catalogList(l.key)*(l.qty||1))}</span></div>`).join('');
-  box.querySelectorAll('#audMode button').forEach(b=>b.onclick=()=>{
-    audioSystem=b.dataset.aud==='matrix'?'matrix':'amps';
-    if(audioSystem==='matrix') matrixDismissed=true;
-    draw(); scheduleSave();
+  document.querySelectorAll('#audMode button').forEach(b=>{
+    b.classList.toggle('on', (b.dataset.aud==='matrix')===(audioSystem==='matrix'));
   });
+  document.querySelectorAll('#catFilters button').forEach(b=>b.classList.toggle('on', b.dataset.cat===costFilter));
+  const sortBtn=document.getElementById('btnSortCost');
+  if(sortBtn){
+    sortBtn.classList.toggle('on', roomSort==='cost');
+    sortBtn.textContent=roomSort==='cost'?'Sorted by cost':'Sort by cost';
+  }
 }
 
 function draw(){
@@ -1327,7 +1410,7 @@ function draw(){
     el.oncontextmenu=ev=>showCtx(ev,d);
   });
 
-  const showRooms=rooms.length||devs.length;
+  const showRooms=rooms.length||devs.length||packageLines().length;
   roomsPanel.hidden=!showRooms; bundlePanel.hidden=!showRooms;
   const groups=rooms.map(r=>({r,ds:devs.filter(d=>d.room===r.name)}));
   const un=devs.filter(d=>!d.room);
@@ -1344,15 +1427,35 @@ function draw(){
       <span class="ip">${money(linePrice(d))}</span>
     </div>`;
   };
-  const roomRow=(r,ds,open)=>{
-    const $ = ds.reduce((a,d)=>a+linePrice(d),0);
-    const q=ds.reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
-    return `<div class="room${open?' act':''}" data-r="${r.id}"><span>${open?'▾':'▸'}</span><span class="nm">${r.name}</span><span class="tot">${q} · ${money($)}</span><span class="x" data-ren="${r.id}">✎</span><span class="x" data-del="${r.id}">✕</span></div>`
-      +(open?ds.map(item).join(''):'');
+  const roomMoney=(name,ds)=>{
+    const devsSum=ds.filter(d=>costFilter==='all'||costCat(d)===costFilter).reduce((a,d)=>a+linePrice(d),0);
+    const extra=linesFor(name).reduce((a,l)=>a+lineMoney(l),0);
+    return devsSum+extra;
   };
+  const roomRow=(r,ds,open)=>{
+    const shownDevs=ds.filter(d=>costFilter==='all'||costCat(d)===costFilter);
+    const autos=linesFor(r.name);
+    if(costFilter!=='all' && !shownDevs.length && !autos.length) return '';
+    const $ = roomMoney(r.name, ds);
+    const q=ds.reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
+    return `<div class="room${open?' act':''}" data-r="${r.id}"><span>${open?'▾':'▸'}</span><span class="nm">${r.name}</span><span class="tot">${q?q+' · ':''}${money($)}</span><span class="x" data-ren="${r.id}">✎</span><span class="x" data-del="${r.id}">✕</span></div>`
+      +(open?shownDevs.map(item).join('')+autos.map(autoHtml).join(''):'');
+  };
+  let ordered=groups.slice();
+  if(roomSort==='cost') ordered.sort((a,b)=>roomMoney(b.r.name,b.ds)-roomMoney(a.r.name,a.ds));
   hint.innerHTML=active?`New devices go to <b>${active.name}</b>`:'Select or add a room, then drag devices onto the plan.';
-  tree.innerHTML=groups.map(({r,ds})=>roomRow(r,ds,active===r)).join('')
+  tree.innerHTML=ordered.map(({r,ds})=>roomRow(r,ds,active===r)).join('')
     +(un.length?`<div class="un">${roomRow({id:'un',name:'Unassigned'},un,true).replace('data-r="un"','data-un="1"').replace(/<span class="x"[^>]*>[^<]*<\/span>/g,'')}</div>`:'');
+  const home=wholeLines();
+  const homeEl=document.getElementById('wholeHome');
+  if(homeEl){
+    if(!home.length){ homeEl.hidden=true; homeEl.innerHTML=''; }
+    else {
+      const sum=home.reduce((a,l)=>a+lineMoney(l),0);
+      homeEl.hidden=false;
+      homeEl.innerHTML=`<div class="room"><span>▾</span><span class="nm">Whole home</span><span class="tot">${money(sum)}</span></div>`+home.map(autoHtml).join('');
+    }
+  }
   tree.querySelectorAll('[data-r]').forEach(el=>el.onclick=e=>{
     const rm=rooms.find(r=>r.id==el.dataset.r);
     if(!rm) return;
@@ -1361,7 +1464,7 @@ function draw(){
     active=active===rm?null:rm;
     draw();
   });
-  tree.querySelectorAll('.item').forEach(el=>el.onclick=()=>select(devs.find(d=>d.id==el.dataset.d)));
+  tree.querySelectorAll('.item[data-d]').forEach(el=>el.onclick=()=>select(devs.find(d=>d.id==el.dataset.d)));
   tree.querySelectorAll('.item select:not(.tier)').forEach(s=>s.onchange=()=>{
     const d=devs.find(x=>x.id==s.dataset.d);
     if(s.value==='__new__'){ s.value=d.room||''; askRoom(d,false); }
@@ -1371,7 +1474,7 @@ function draw(){
     const d=devs.find(x=>x.id==s.dataset.d);
     snapshot(); applyTier(d,s.value); ph('layout_tier_switch',{type:d.type,tier:d.tier}); syncSeparates(); draw(); scheduleSave();
   });
-  tree.querySelectorAll('.item').forEach(el=>el.oncontextmenu=ev=>{
+  tree.querySelectorAll('.item[data-d]').forEach(el=>el.oncontextmenu=ev=>{
     const d=devs.find(x=>x.id==el.dataset.d); if(d) showCtx(ev,d);
   });
 
@@ -1730,6 +1833,24 @@ if(bundleToggle){
   });
 }
 addEventListener('click',e=>{ if(!e.target.closest('#tierPop')) hideTierPop(); });
+
+function setRight(open){
+  rightOpen=!!open;
+  const col=document.getElementById('colRight');
+  if(col) col.classList.toggle('collapsed', !rightOpen);
+  const rail=document.getElementById('btnRail');
+  if(rail) rail.setAttribute('aria-expanded', rightOpen?'true':'false');
+}
+document.querySelectorAll('#audMode button').forEach(b=>b.onclick=()=>{
+  audioSystem=b.dataset.aud==='matrix'?'matrix':'amps';
+  if(audioSystem==='matrix') matrixDismissed=true;
+  draw(); scheduleSave();
+});
+document.querySelectorAll('#catFilters button').forEach(b=>b.onclick=()=>{ costFilter=b.dataset.cat; draw(); });
+btnSortCost.onclick=()=>{ roomSort=roomSort==='cost'?'name':'cost'; draw(); };
+btnHideRight.onclick=()=>setRight(false);
+btnRail.onclick=()=>setRight(true);
+setRight(rightOpen);
 
 snapshot();
 draw();
