@@ -1724,13 +1724,47 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       });
       h += (res.meta.shadeWindows ? '<p class="fine">' + SHADE_NOTE + '</p>' : '') + '</div>';
     }
-    h += disclaimer() + '<button class="linkbtn" id="edit">\u2190 Edit my answers</button>';
+    h += layoutOfferCard() + disclaimer() + '<button class="linkbtn" id="edit">\u2190 Edit my answers</button>';
     const sy = window.scrollY;
     root.innerHTML = h;
     window.scrollTo(0, sy);
     bindS3(res);
     bindCall(res, 'screen3');
     mattMargin(res);
+    fillLayoutOffer();
+  }
+  function layoutBuyHref() {
+    const rooms = [];
+    (state.inputs.rooms || []).forEach((id) => {
+      const def = E.ROOM_DEFS[id];
+      if (def && def.label) rooms.push(def.label);
+    });
+    (state.inputs.others || []).forEach((name) => {
+      const clean = String(name || '').replace(/[|\r\n]+/g, ' ').trim().slice(0, 40);
+      if (clean) rooms.push(clean);
+    });
+    const beds = Math.max(1, Math.min(12, Math.round(Number(state.inputs.bedrooms) || 1)));
+    for (let i = 1; i <= beds; i++) rooms.push(i === 1 ? 'Primary bedroom' : ('Bedroom ' + i));
+    const tier = state.inputs.priority === 'budget' ? 'good' : 'better';
+    const q = new URLSearchParams();
+    if (rooms.length) q.set('rooms', rooms.join('|'));
+    q.set('tier', tier);
+    return '/layout/buy?' + q.toString();
+  }
+  function layoutOfferCard() {
+    return '<div class="card" id="layoutOffer"><h2>Put this on your floor plan</h2><p class="hint" id="layoutOfferCopy">The Layout Tool covers one project, every floor, and 30 days of editing. The project stays saved so you can view it later. Pay again when you want another 30 days of editing.</p><a class="btn" id="layoutOfferGo" style="display:block;text-align:center;text-decoration:none" href="' + esc(layoutBuyHref()) + '">Get the Layout Tool</a></div>';
+  }
+  function fillLayoutOffer() {
+    const el = document.getElementById('layoutOfferCopy');
+    const btn = document.getElementById('layoutOfferGo');
+    if (!el) return;
+    fetch('/api/config').then((r) => r.ok ? r.json() : null).then((cfg) => {
+      const cents = cfg && cfg.priceCents ? cfg.priceCents : 2900;
+      const price = '$' + (Number(cents) / 100).toFixed(2);
+      const days = cfg && cfg.editDays ? cfg.editDays : 30;
+      el.textContent = 'The Layout Tool is ' + price + ' for one project. You get every floor, ' + days + ' days to edit, and the project stays saved so you can view it after that. Pay again when you want another ' + days + ' days of editing.';
+      if (btn) btn.textContent = 'Get the Layout Tool for ' + price;
+    }).catch(() => {});
   }
   const lead = () => (state.lead && state.lead.name) || '';
   const MIDMODE = () => E.CONFIG.MID_BREAKDOWN;

@@ -177,6 +177,35 @@ create policy plan_pdfs_insert_editable
     )
   );
 
+-- A checkout is not a project. The row is created only after Stripe reports
+-- the payment, in the same step as the entitlement. One open checkout per
+-- user and purpose (a new project, or a re-unlock of one existing project)
+-- so a double click cannot start two payments.
+create table if not exists public.pending_checkouts (
+  id uuid primary key default gen_random_uuid(),
+  owner uuid not null references auth.users (id) on delete cascade,
+  project_id uuid references public.projects (id) on delete cascade,
+  reserved_project_id uuid not null,
+  stripe_session_id text unique,
+  checkout_url text,
+  status text not null default 'open',
+  seed jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  constraint pending_checkouts_status check (status in ('open', 'complete', 'expired')),
+  constraint pending_checkouts_seed check (jsonb_typeof(seed) = 'object')
+);
+
+comment on table public.pending_checkouts is
+  'In-flight Stripe Checkout only. Not a saved project. seed may hold room names and good or better. No prices and no customer contact.';
+
+create unique index if not exists pending_checkouts_one_open
+  on public.pending_checkouts (owner, coalesce(project_id, '00000000-0000-0000-0000-000000000000'::uuid))
+  where status = 'open';
+
+alter table public.pending_checkouts enable row level security;
+revoke all on public.pending_checkouts from anon, authenticated;
+grant all on public.pending_checkouts to service_role;
+
 drop policy if exists plan_pdfs_update_editable on storage.objects;
 create policy plan_pdfs_update_editable
   on storage.objects

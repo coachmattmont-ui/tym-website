@@ -7,7 +7,7 @@ import { publicConfig } from '../api/config.js';
 import { handleCheckout } from '../api/checkout.js';
 import { handleConfirm } from '../api/checkout/confirm.js';
 import { handleWebhook } from '../api/stripe-webhook.js';
-import { applyCheckoutSession, stripStoredPrices } from './grant.js';
+import { applyCheckoutSession, cleanSeed, stripStoredPrices } from './grant.js';
 
 const ENV = {
   SUPABASE_URL: 'https://example.supabase.co',
@@ -40,7 +40,12 @@ function fakeDb(seed = {}) {
     async setEditUntil(id, editUntil) {
       state.edits.push(editUntil);
       if (state.project) state.project.edit_until = editUntil;
-    }
+    },
+    async insertProject(row) {
+      state.project = { ...row };
+      return { row: state.project };
+    },
+    async completeCheckout() {}
   };
 }
 
@@ -145,29 +150,63 @@ test('reopening keeps the later edit window and strips stored prices', () => {
   assert.deepEqual(Object.keys(stripped.devices[0]).sort(), ['catalogKey', 'type']);
 });
 
+test('a paid session creates the project and keeps only room names', async () => {
+  const db = fakeDb();
+  const session = paidSession({
+    metadata: {
+      project_id: PROJECT,
+      user_id: USER,
+      project_name: 'Kitchen',
+      seed_rooms: 'Great Room|Kitchen|dealer cost',
+      seed_tier: 'better'
+    }
+  });
+  const result = await applyCheckoutSession(session, db, Date.parse('2026-11-25T12:00:00Z'));
+  assert.equal(result.ok, true);
+  assert.equal(db.state.project.owner, USER);
+  assert.equal(db.state.project.edit_until, result.editUntil);
+  assert.deepEqual(db.state.project.layout.rooms.map(room => room.name), ['Great Room', 'Kitchen']);
+  assert.equal(db.state.project.layout.defaultTier, 'better');
+  assert.equal(JSON.stringify(db.state.project).includes('person@example.com'), false);
+  assert.equal(JSON.stringify(db.state.project).includes('dealer'), false);
+  assert.deepEqual(cleanSeed({ rooms: ['Office', 'Office'], tier: 'core', fr: 0.6 }), { rooms: ['Office'], tier: '' });
+});
+
 test('checkout uses the env price, refuses a locked-out config, and will not double charge an open project', async () => {
-  const calls = [];
+  let stripeCreates = 0;
   const fetchImpl = async (url, options = {}) => {
-    calls.push({ url, options });
-    if (String(url).endsWith('/auth/v1/user')) {
+    const path = String(url);
+    if (path.endsWith('/auth/v1/user')) {
       return new Response(JSON.stringify({ id: USER, email: 'person@example.com' }), { status: 200 });
     }
-    if (String(url).includes('/rest/v1/projects?id=eq.')) {
+    if (path.includes('/rest/v1/projects?id=eq.') && (!options.method || options.method === 'GET')) {
       return new Response(JSON.stringify([]), { status: 200 });
     }
-    if (String(url).endsWith('/rest/v1/projects') && options.method === 'POST') {
-      const row = JSON.parse(options.body);
-      assert.deepEqual(row.layout, { version: 2 });
-      assert.equal(row.edit_until, null);
-      assert.equal(row.owner, USER);
-      return new Response(JSON.stringify([row]), { status: 201 });
+    if (path.includes('/rest/v1/projects') && options.method === 'POST') {
+      throw new Error('project row must wait for payment');
     }
-    if (String(url).includes('api.stripe.com')) {
+    if (path.includes('/rest/v1/pending_checkouts?') && (!options.method || options.method === 'GET')) {
+      return new Response('[]', { status: 200 });
+    }
+    if (path.endsWith('/rest/v1/pending_checkouts') && options.method === 'POST') {
+      const row = JSON.parse(options.body);
+      assert.equal(row.owner, USER);
+      assert.equal(row.status, 'open');
+      assert.equal(row.project_id, null);
+      assert.equal(JSON.stringify(row.seed).includes('dealer'), false);
+      return new Response(JSON.stringify([{ ...row, id: '33333333-3333-4333-8333-333333333333' }]), { status: 201 });
+    }
+    if (path.includes('/rest/v1/pending_checkouts?id=eq.') && options.method === 'PATCH') {
+      return new Response(null, { status: 204 });
+    }
+    if (path.includes('api.stripe.com')) {
+      stripeCreates += 1;
       const body = String(options.body);
       assert.match(body, /unit_amount%5D=1500/);
       assert.match(body, /session_id=\{CHECKOUT_SESSION_ID\}/);
-      assert.equal(body.includes('person%40example.com') || body.includes('person@example.com'), true);
+      assert.match(body, /seed_rooms%5D=Great%20Room%7CKitchen/);
       assert.equal(body.includes('dealer'), false);
+      assert.equal(options.headers['Idempotency-Key'], 'yt_33333333-3333-4333-8333-333333333333');
       return new Response(JSON.stringify({ id: 'cs_test_new', url: 'https://checkout.stripe.com/c/pay/cs_test_new' }), { status: 200 });
     }
     return new Response('{}', { status: 500 });
@@ -179,13 +218,32 @@ test('checkout uses the env price, refuses a locked-out config, and will not dou
   const ok = await handleCheckout(new Request('https://tymhomes.com/api/checkout', {
     method: 'POST',
     headers: { authorization: 'Bearer token' },
-    body: JSON.stringify({ projectId: PROJECT, name: 'Kitchen\nplan', priceCents: 100 })
+    body: JSON.stringify({ name: 'Kitchen\nplan', priceCents: 100, seed: { rooms: ['Great Room', 'Kitchen', 'dealer cost'], tier: 'better', fr: 0.5 } })
   }), { ...ENV, YT_SINGLE_USE_PRICE_CENTS: '1500' }, fetchImpl);
   assert.equal(ok.status, 200);
   const payload = await ok.json();
   assert.equal(payload.priceCents, 1500);
-  assert.equal(payload.projectId, PROJECT);
+  assert.equal(stripeCreates, 1);
   assert.match(payload.url, /^https:\/\/checkout\.stripe\.com\//);
+  const again = await handleCheckout(new Request('https://tymhomes.com/api/checkout', {
+    method: 'POST',
+    headers: { authorization: 'Bearer token' },
+    body: JSON.stringify({ name: 'Kitchen plan' })
+  }), { ...ENV, YT_SINGLE_USE_PRICE_CENTS: '1500' }, async (url, options = {}) => {
+    const path = String(url);
+    if (path.endsWith('/auth/v1/user')) return new Response(JSON.stringify({ id: USER, email: 'person@example.com' }), { status: 200 });
+    if (path.includes('pending_checkouts?') && (!options.method || options.method === 'GET')) {
+      return new Response(JSON.stringify([{ id: '33333333-3333-4333-8333-333333333333', reserved_project_id: PROJECT, stripe_session_id: 'cs_test_new', checkout_url: 'https://checkout.stripe.com/c/pay/cs_test_new' }]), { status: 200 });
+    }
+    if (path.includes('/v1/checkout/sessions/cs_test_new')) {
+      return new Response(JSON.stringify({ id: 'cs_test_new', status: 'open', url: 'https://checkout.stripe.com/c/pay/cs_test_new' }), { status: 200 });
+    }
+    if (path.includes('api.stripe.com') && options.method === 'POST') throw new Error('second checkout');
+    return new Response('[]', { status: 200 });
+  });
+  const reused = await again.json();
+  assert.equal(reused.reused, true);
+  assert.equal(reused.url, 'https://checkout.stripe.com/c/pay/cs_test_new');
 
   const openFetch = async (url) => {
     if (String(url).endsWith('/auth/v1/user')) return new Response(JSON.stringify({ id: USER, email: 'person@example.com' }), { status: 200 });
@@ -270,10 +328,15 @@ test('project names are labels, not multi-line notes', () => {
 test('layout page does not import the qualify engine and reprices from the current key', () => {
   const html = fs.readFileSync(new URL('../../layout-beta/index.html', import.meta.url), 'utf8');
   assert.equal(/<script[^>]+src=[^>]*YTEngine/i.test(html), false);
-  assert.match(html, /Save to account/);
+  assert.match(html, /id="buyScreen"/);
   assert.match(html, /Payments not configured/);
   assert.match(html, /Unlock editing/);
   assert.match(html, /function repriceLoadedDevices/);
+  assert.equal(html.includes('You can still design here'), false);
+  assert.match(html, /class="locked"/);
+  const quote = fs.readFileSync(new URL('../../qualify/index.html', import.meta.url), 'utf8');
+  assert.match(quote, /Get the Layout Tool/);
+  assert.match(quote, /\/layout\/buy/);
   assert.equal(html.includes('qualify/'), false);
   assert.equal(html.includes('"dealer"'), false);
   assert.equal(html.includes('costRatio'), false);

@@ -80,6 +80,48 @@ export function dbFromEnv(env, fetchImpl = fetch) {
         body: JSON.stringify({ edit_until: editUntil })
       });
       if (!res.ok) throw new Error('edit window update failed');
+    },
+    async findOpenCheckout(owner, projectId) {
+      const purpose = projectId ? 'project_id=eq.' + encodeURIComponent(projectId) : 'project_id=is.null';
+      const q = 'pending_checkouts?owner=eq.' + encodeURIComponent(owner) + '&status=eq.open&' + purpose + '&select=id,reserved_project_id,stripe_session_id,checkout_url&limit=1';
+      const res = await rest(env, fetchImpl, q, { headers: serviceHeaders(env) });
+      if (!res.ok || !Array.isArray(res.data) || !res.data.length) return null;
+      return res.data[0];
+    },
+    async insertPending(row) {
+      const res = await rest(env, fetchImpl, 'pending_checkouts', {
+        method: 'POST',
+        headers: serviceHeaders(env, 'return=representation'),
+        body: JSON.stringify(row)
+      });
+      if (res.status === 409) return { conflict: true };
+      if (!res.ok) return { error: 'Could not start checkout.' };
+      return { row: Array.isArray(res.data) ? res.data[0] : res.data };
+    },
+    async attachSession(id, stripeSessionId, checkoutUrl) {
+      const q = 'pending_checkouts?id=eq.' + encodeURIComponent(id);
+      const res = await rest(env, fetchImpl, q, {
+        method: 'PATCH',
+        headers: serviceHeaders(env, 'return=minimal'),
+        body: JSON.stringify({ stripe_session_id: stripeSessionId, checkout_url: checkoutUrl })
+      });
+      if (!res.ok) throw new Error('checkout session save failed');
+    },
+    async markCheckout(id, status) {
+      const q = 'pending_checkouts?id=eq.' + encodeURIComponent(id);
+      await rest(env, fetchImpl, q, {
+        method: 'PATCH',
+        headers: serviceHeaders(env, 'return=minimal'),
+        body: JSON.stringify({ status })
+      });
+    },
+    async completeCheckout(sessionId) {
+      const q = 'pending_checkouts?stripe_session_id=eq.' + encodeURIComponent(sessionId);
+      await rest(env, fetchImpl, q, {
+        method: 'PATCH',
+        headers: serviceHeaders(env, 'return=minimal'),
+        body: JSON.stringify({ status: 'complete' })
+      });
     }
   };
 }

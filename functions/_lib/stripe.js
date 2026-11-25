@@ -1,4 +1,4 @@
-export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents, projectId, userId, email, origin }) {
+export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents, projectId, userId, email, origin, name, seed, idempotencyKey }) {
   const success = origin + '/layout-beta/?checkout=success&project_id=' + encodeURIComponent(projectId) + '&session_id={CHECKOUT_SESSION_ID}';
   const cancel = origin + '/layout-beta/?checkout=cancel&project_id=' + encodeURIComponent(projectId);
   const pairs = [
@@ -8,6 +8,9 @@ export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents
     ['client_reference_id', projectId],
     ['metadata[project_id]', projectId],
     ['metadata[user_id]', userId],
+    ['metadata[project_name]', name || 'Untitled project'],
+    ['metadata[seed_rooms]', ((seed && seed.rooms) || []).join('|').slice(0, 450)],
+    ['metadata[seed_tier]', (seed && seed.tier) || ''],
     ['line_items[0][quantity]', '1'],
     ['line_items[0][price_data][currency]', 'usd'],
     ['line_items[0][price_data][unit_amount]', String(priceCents)],
@@ -21,7 +24,8 @@ export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents
     method: 'POST',
     headers: {
       authorization: 'Bearer ' + env.STRIPE_SECRET_KEY,
-      'content-type': 'application/x-www-form-urlencoded'
+      'content-type': 'application/x-www-form-urlencoded',
+      ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {})
     },
     body
   });

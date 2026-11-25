@@ -1,6 +1,8 @@
 # Layout Tool: account save and single-use editing
 
-The Layout Tool at `/layout-beta/` still works in the browser with no account. Save downloads a project file, and the last layout stays in this browser (localStorage and IndexedDB). Instant Quote (`/qualify/`) is unchanged and stays free.
+The Layout Tool at `/layout-beta/` does not open until a project is purchased. There is no free design mode. Instant Quote (`/qualify/`) stays free. At the end of that quote, a card links to the Layout Tool with the room names and a good or better starting point. It does not send prices or dealer cost.
+
+The shareable buy URL is `/layout/buy`. It lands on `/layout-beta/?buy=1` and keeps any `rooms` and `tier` query. Promo pages can use either URL.
 
 One payment unlocks **one project**, including every floor and page in it:
 
@@ -12,7 +14,7 @@ After 30 days the project stays in the account and can be viewed, but edits are 
 
 A later dealer subscription can grant access by inserting `entitlements.kind = 'subscription'` and setting `projects.edit_until`. That billing is not built here.
 
-If the environment variables below are missing, the page stays usable and cloud actions say **Payments not configured**.
+If the environment variables below are missing, the page shows the purchase screen and **Payments not configured**. The plan stays locked.
 
 ## Environment variables
 
@@ -36,6 +38,8 @@ Set these on the Cloudflare Pages project (Production and Preview). Mark the thr
 3. Open the SQL editor and run `supabase/migrations/20261125120000_layout_projects.sql`.
 4. Copy the project URL, anon key, and service role key into the Pages variables above.
 
+The migration also creates `pending_checkouts` for an in-flight Stripe session. That is not a project. A second click while one is open returns the same Checkout URL. The project row is inserted only when the payment is paid, together with the entitlement.
+
 The migration creates:
 
 - `projects`: owner, name, layout JSON (schema v2), `edit_until`, plan PDF path, timestamps. No phone, address, or customer name column. The only account identity is the Supabase email.
@@ -58,10 +62,10 @@ Checkout uses `price_data`, so you do not create a Price in the Dashboard. Chang
 
 Flow:
 
-1. The signed-in client calls `POST /api/checkout` with the project id and project name. The function creates the project row if needed (empty layout, `edit_until` null) and opens Stripe Checkout.
-2. `checkout.session.completed` with `payment_status = paid` sets `edit_until` to now + 30 days and writes one `single_use` entitlement.
+1. Sign in with an email link, then `POST /api/checkout`. No project row is written yet. If this user already has an open Checkout for the same purpose, that URL is returned instead of a second charge.
+2. `checkout.session.completed` with `payment_status = paid` creates the project (room names and good or better only, when the quote sent them) and one `single_use` entitlement, with `edit_until` set to now + 30 days.
 3. The return URL calls `POST /api/checkout/confirm`, which reads the Checkout Session from Stripe and applies the same grant if the webhook has not landed yet. A second call with the same session does not extend the window again.
-4. The browser then uploads the layout and the floor-plan PDF. That update is allowed only while `edit_until` is still ahead.
+4. The browser opens that project. Uploads are allowed only while `edit_until` is still ahead.
 
 While a window is already open, Checkout is not started again. Paying after it expires sets a new `edit_until` of now + 30 days (the later of the old timestamp and the new one, so a replay cannot shorten it).
 
@@ -79,8 +83,8 @@ node --test functions/_lib/billing.test.mjs
 
 ## What the client sees
 
-- **Save** downloads a project file. It stays free.
-- **Save to account**, **Projects**, and **Quote** need a paid, open edit window.
-- **Sign in** emails a link. No password.
-- A locked project shows **Unlock editing** and ignores edits. Pan, zoom, and page changes still work.
-- The quote is an HTML file of current list prices. It is an estimate, not an invoice.
+- With no purchase, the page is a purchase screen: one project, every floor, 30 days of editing, kept to view, pay again to edit, and the price from `YT_SINGLE_USE_PRICE_CENTS`.
+- Sign in emails a link. No password. After the link, Checkout starts when they came from `/layout/buy` or `?buy=1`.
+- An open edit window goes straight into the tool. An expired project opens view only, with **Unlock editing**.
+- The priced quote download is available during the open window.
+- The old preview password no longer blocks the page. Payment is the gate.

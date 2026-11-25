@@ -143,7 +143,7 @@ Set these on the Pages project for Production and Preview. Encrypt the service r
 - `STRIPE_WEBHOOK_SECRET`
 - `YT_SINGLE_USE_PRICE_CENTS` (optional, default `2900`)
 
-Until those are set, the Layout Tool still runs in the browser and cloud actions say payments are not configured.
+Until those are set, `/layout/buy` shows the purchase screen and says payments are not configured. The Layout Tool does not open for free.
 
 ## Support
 
