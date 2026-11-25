@@ -1,4 +1,5 @@
 import { testCodeConfigured } from '../_lib/access-code.js';
+import { leadDestinations } from '../_lib/lead.js';
 import { json } from '../_lib/http.js';
 import { EDIT_DAYS, authConfigured, paymentsConfigured, resolvePriceCents } from '../_lib/billing.js';
 
@@ -11,7 +12,9 @@ export function publicConfig(env) {
     paymentsConfigured: paymentsConfigured(env) && !price.error,
     priceCents: price.cents || 2900,
     editDays: EDIT_DAYS,
-    testCodesEnabled: testCodeConfigured(env)
+    testCodesEnabled: testCodeConfigured(env),
+    leadsConfigured: !!leadDestinations(env).webhook,
+    schedulingConfigured: !!leadDestinations(env).scheduling
   };
   if (price.error) body.priceError = price.error;
   return body;

@@ -29,6 +29,8 @@ Set these on the Cloudflare Pages project (Production and Preview). Mark the thr
 | `STRIPE_WEBHOOK_SECRET` | `POST /api/stripe-webhook` | Signing secret, `whsec_...` |
 | `YT_SINGLE_USE_PRICE_CENTS` | Checkout amount | Optional. Whole cents. Default **2900** ($29.00). Use `1500` for $15 or `5000` for $50. No code change. |
 | `YT_TEST_ACCESS_CODE` | `POST /api/test-access` only | Optional encrypted secret. If unset, access codes are disabled. Never put this value in the page, a commit, or a pull request. |
+| `YT_LEAD_WEBHOOK_URL` | `POST /api/lead` | Optional https URL. A quote call request is forwarded here. If unset, the form says scheduling is not connected. |
+| `YT_SCHEDULING_URL` | `POST /api/lead` response | Optional https URL. Overrides the default booking page, `https://calendly.com/smartdesigns/quick-call-project-review`. The page opens in a new tab with the name, email, and a short quote total. |
 
 `/api/config` is public. It returns the Supabase URL, the anon key, whether payments are configured, the price in cents, and `editDays` (30). It does not return the service role key, the Stripe secret, or the webhook secret.
 
