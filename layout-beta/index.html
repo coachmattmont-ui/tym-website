@@ -26,29 +26,8 @@ button,input,select{font:inherit;color:inherit}
 *::-webkit-scrollbar-thumb{background:#b0b0b5;border-radius:6px;border:2px solid #ececf0}
 *::-webkit-scrollbar-thumb:hover{background:#8e8e93}
 
-/* Beta shell: banner, password gate, feedback */
+/* Status line above the tool */
 .beta-banner{flex-shrink:0;background:#111318;color:#f2f4f7;font-size:12px;line-height:1.35;letter-spacing:.01em;text-align:center;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.08);z-index:9}
-#btnFeedback{font-weight:600}
-#gate{position:fixed;inset:0;z-index:20000;background:#0b0d10;color:#f2f4f7;display:flex;align-items:center;justify-content:center;padding:24px}
-#gate.ok{display:none}
-.gate-card{width:min(400px,100%);background:#14161b;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 26px 24px;box-shadow:0 20px 50px rgba(0,0,0,.45)}
-.gate-card h1{font-size:22px;letter-spacing:-.03em;margin:0 0 8px;font-weight:700}
-.gate-card p{margin:0 0 16px;color:#b6bcc6;font-size:14px;line-height:1.45}
-.gate-card input[type=password]{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7;margin-bottom:12px}
-.gate-card input:focus{outline:2px solid #3B7AFF;outline-offset:1px}
-.gate-card button[type=submit]{width:100%;padding:11px 14px;border-radius:10px;border:0;background:#2563EB;color:#fff;font-weight:650;cursor:pointer}
-.gate-card button[type=submit]:hover{background:#3B7AFF}
-#gateErr{color:#ff8a8a;font-size:13px;margin:12px 0 0}
-#fbModal{position:fixed;inset:0;z-index:15000;background:rgba(15,16,20,.45);display:none;align-items:center;justify-content:center;padding:24px}
-#fbModal.on{display:flex}
-#fbModal .fb-card{width:min(440px,100%);background:#fff;border-radius:16px;padding:22px 22px 18px;box-shadow:0 20px 50px rgba(0,0,0,.22);color:#1d1d1f}
-#fbModal h2{margin:0 0 14px;font-size:18px;letter-spacing:-.02em}
-#fbModal label{display:block;font-size:12px;font-weight:600;margin:10px 0 5px}
-#fbModal label span{font-weight:500;color:#6e6e73}
-#fbModal textarea,#fbModal input[type=email]{width:100%;padding:9px 10px;border-radius:10px;border:1px solid rgba(0,0,0,.12);background:#f5f5f7;font:inherit}
-#fbModal textarea{min-height:72px;resize:vertical}
-#fbModal .fb-row{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-#fbThanks{color:#22863a;font-size:13px;margin:10px 0 0}
 
 
 .hdr{min-height:54px;height:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:6px 14px;
@@ -313,32 +292,6 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 </head>
 <body class="locked">
 
-<div id="gate" class="ok" role="dialog" aria-modal="true" aria-labelledby="gateTitle" aria-hidden="true">
-  <form class="gate-card" id="gateForm" autocomplete="off">
-    <h1 id="gateTitle">Layout Tool beta</h1>
-    <p>This page is a private preview. Enter the access password to continue.</p>
-    <input type="password" id="gatePw" name="password" placeholder="Password" required autocomplete="current-password" autofocus>
-    <button type="submit">Enter</button>
-    <p id="gateErr" hidden>That password doesn’t match.</p>
-  </form>
-</div>
-<div id="fbModal" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
-  <form class="fb-card" id="fbForm">
-    <h2 id="fbTitle">Send feedback</h2>
-    <label for="fbDoing">What were you doing?</label>
-    <textarea id="fbDoing" required></textarea>
-    <label for="fbHappened">What happened?</label>
-    <textarea id="fbHappened" required></textarea>
-    <label for="fbEmail">Email <span>(optional)</span></label>
-    <input type="email" id="fbEmail" autocomplete="email">
-    <div class="fb-row">
-      <button type="button" id="fbCancel">Cancel</button>
-      <button type="submit" id="fbSend">Send</button>
-    </div>
-    <p id="fbThanks" hidden>Thanks — we got it.</p>
-  </form>
-</div>
-
 <div class="beta-banner">List prices can change. This project is saved to your account.</div>
 <div id="buyScreen">
   <div class="buy-card">
@@ -434,8 +387,6 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <button type="button" id="btnZmIn" title="Zoom in">Zoom +</button>
     <button type="button" id="btnFit">Fit</button>
     <button type="button" id="btn100">100%</button>
-    <span class="sep"></span>
-    <button type="button" id="btnFeedback" title="Send feedback">Feedback</button>
   </div>
   <div class="total"><span>Package total</span><b id="hdrTotal">$0</b></div>
 </header>
@@ -3086,41 +3037,8 @@ window.__LT={
 };
 
 
-/* ---- beta: gate, feedback, PostHog ---- */
-const GATE_HASH='2f0bba544eb3a0ee5645bc9fa75b00ba8991d995260638d857e253244fec2509';
-const GATE_LS='tym-layout-beta-unlock';
+/* ---- PostHog ---- */
 function ph(ev,props){ try{ if(window.posthog&&typeof posthog.capture==='function') posthog.capture(ev,props||{}); }catch(e){} }
-async function sha256hex(s){
-  const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-(function initGate(){
-  const g=document.getElementById('gate');
-  if(g){ g.classList.add('ok'); g.setAttribute('aria-hidden','true'); }
-})();
-(function initFeedback(){
-  const modal=document.getElementById('fbModal');
-  const form=document.getElementById('fbForm');
-  const thanks=document.getElementById('fbThanks');
-  const open=()=>{ thanks.hidden=true; modal.classList.add('on'); document.getElementById('fbDoing').focus(); };
-  const close=()=>{ modal.classList.remove('on'); form.reset(); thanks.hidden=true; };
-  const btn=document.getElementById('btnFeedback');
-  if(btn) btn.onclick=open;
-  document.getElementById('fbCancel').onclick=close;
-  modal.addEventListener('click', ev=>{ if(ev.target===modal) close(); });
-  form.addEventListener('submit', ev=>{
-    ev.preventDefault();
-    const doing=document.getElementById('fbDoing').value.trim();
-    const happened=document.getElementById('fbHappened').value.trim();
-    const email=document.getElementById('fbEmail').value.trim();
-    if(!doing||!happened) return;
-    const props={doing,happened};
-    if(email) props.email=email;
-    ph('layout_feedback', props);
-    thanks.hidden=false;
-    setTimeout(close, 900);
-  });
-})();
 
 </script>
 </body>
