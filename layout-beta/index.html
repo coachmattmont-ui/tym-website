@@ -71,7 +71,7 @@ button,input,select{font:inherit;color:inherit}
 .total span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
 .app{display:flex;height:calc(100% - 54px);min-height:0}
-aside{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
+aside{width:348px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
   background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px);
   border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
 .aside-scroll{flex:1;min-height:0;overflow:auto;padding:16px 14px 8px}
@@ -90,7 +90,8 @@ aside{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-hei
 #selBox .rowbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 
 .pal{display:flex;align-items:center;gap:8px;padding:6px 8px;margin:0 0 4px;background:#fff;border-radius:10px;
-  box-shadow:inset 0 0 0 1px var(--line);cursor:grab;font-size:12px}
+  box-shadow:inset 0 0 0 1px var(--line);cursor:grab;font-size:12px;min-width:0}
+.pal span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pal:active{cursor:grabbing}
 .pal:hover{box-shadow:inset 0 0 0 1px rgba(0,113,227,.35)}
 .g{margin-bottom:6px}
@@ -108,18 +109,38 @@ aside{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-hei
 .room .tot{color:var(--muted);font-variant-numeric:tabular-nums}
 .room .x{opacity:.4;font-size:12px;padding:0 3px}
 .room .x:hover{opacity:1}
-.item{padding:5px 6px 5px 22px;font-size:12px;color:#3a3a3c;cursor:pointer;display:flex;align-items:center;gap:6px}
+.item{padding:5px 6px 5px 18px;font-size:12px;color:#3a3a3c;cursor:pointer;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0}
 .item.sel{color:var(--blue);font-weight:560}
-.item .ip{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted)}
-.item select{font-size:11px;border:0;background:var(--fill);border-radius:6px;padding:2px 4px;max-width:110px;box-shadow:inset 0 0 0 1px var(--line)}
+.item .lb{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .ip{margin-left:auto;flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--muted)}
+.item select{font-size:11px;border:0;background:var(--fill);border-radius:6px;padding:2px 4px;max-width:118px;flex:0 0 auto;box-shadow:inset 0 0 0 1px var(--line)}
+.item select.tier{max-width:78px}
+#tree{max-height:min(200px,28vh);overflow:auto}
 .un .room{color:#b15c00}
 
-#sideTotal{flex-shrink:0;margin:0;padding:12px 16px 16px;background:rgba(255,255,255,.92);
-  border-top:1px solid var(--line);font-size:13px;text-align:right}
+#editorStack{position:sticky;top:0;z-index:4;margin:0 -14px 12px;padding:8px 14px 6px;
+  background:#f4f4f6;border-bottom:1px solid var(--line)}
+#sideTotal{flex-shrink:0;margin:0 0 8px;padding:2px 0 4px;background:transparent;
+  border-top:0;font-size:13px;text-align:right}
 #sideTotal b{font-size:18px;letter-spacing:-.02em}
+#selSec{margin-bottom:2px}
+#selBox .sel-row{margin-top:6px}
+#selBox .sel-sub{margin-top:4px;color:var(--muted)}
+#selBox .rotlbl{display:inline-flex;align-items:center;gap:4px}
+#selBox .rotlbl input{width:68px;padding:4px 6px;border:0;background:var(--fill);border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
 
 main{flex:1;overflow:auto;position:relative;background:
-  radial-gradient(1200px 600px at 70% 0%, #f3f3f7, var(--bg));}
+  radial-gradient(1200px 600px at 70% 0%, #f3f3f7, var(--bg));
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+main::selection,main *::selection{background:transparent}
+#stage,#stage canvas,.devwrap,.devsvg,.guide,.tag{
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#stage canvas{-webkit-user-drag:none}
+main.can-pan,main.can-pan #stage,main.can-pan #stage canvas{cursor:grab}
+main.space-pan,main.space-pan #stage,main.space-pan #stage canvas,
+main.space-pan .devsvg .body,main.space-pan .devsvg .end,main.space-pan .devsvg .rot{cursor:grab}
+main.panning,main.panning #stage,main.panning #stage canvas,
+main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,main.panning .devsvg .sz{cursor:grabbing}
 #empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;pointer-events:none}
 #stage{position:relative;display:inline-block;margin:28px;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
 #stage canvas{display:block;background:#fff;border-radius:8px}
@@ -130,6 +151,7 @@ main{flex:1;overflow:auto;position:relative;background:
 .devsvg .end{cursor:grab}
 .devsvg .rot{cursor:grab}
 .devsvg .sz{cursor:nwse-resize}
+.devsvg line:not(.body){pointer-events:none}
 .tag{position:absolute;transform:translateX(-50%);font-size:10px;background:rgba(29,29,31,.86);color:#fff;
   padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none;letter-spacing:.02em}
 .devwrap:hover .tag,.devwrap.sel .tag{display:block}
@@ -161,6 +183,7 @@ main{flex:1;overflow:auto;position:relative;background:
 #tierPop button em{font-style:normal;font-variant-numeric:tabular-nums}
 #tierPop .tp-n{font-size:11px;color:var(--muted);padding:6px 8px 4px}
 #bundles{display:flex;flex-direction:column;gap:4px}
+#bundleGroup:not(.open) #bundles{display:none}
 #bundles button{width:100%;text-align:left}
 #bundles .tbd-note{font-size:11px;color:var(--muted);margin:4px 0 0}
 
@@ -245,24 +268,28 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <div id="lastAdded">Last added: —</div>
   </section>
 
+  <div id="editorStack">
+    <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Package total</span><br><b id="sideTotalAmt">$0</b></div>
+    <section class="sec" id="selSec">
+      <div class="sec-h">Selected</div>
+      <div id="selBox">Click a device to edit.</div>
+    </section>
+  </div>
+
   <section class="sec" id="bundlePanel" hidden>
-    <div class="sec-h">Bundles</div>
-    <div id="bundles">
-      <button type="button" data-b="5.1">Add 5.1 Surround</button>
-      <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
-      <button type="button" data-b="microled">Add Micro LED Screen</button>
-      <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
+    <div class="g" id="bundleGroup">
+      <div class="gh" id="bundleToggle" role="button" tabindex="0" aria-expanded="false"><span class="ch">▾</span> Bundles</div>
+      <div class="gb" id="bundles">
+        <button type="button" data-b="5.1">Add 5.1 Surround</button>
+        <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
+        <button type="button" data-b="microled">Add Micro LED Screen</button>
+        <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
+      </div>
     </div>
   </section>
   <section class="sec" id="palette"></section>
 
-  <section class="sec">
-    <div class="sec-h">Selected</div>
-    <div id="selBox">Click a device to edit.</div>
-  </section>
-
 </div>
-  <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Package total</span><br><b id="sideTotalAmt">$0</b></div>
 </aside>
 <main id="main">
   <div id="empty">Upload a PDF floor plan to begin.</div>
@@ -279,7 +306,7 @@ const CATALOG={"meta":{"safe":true,"note":"Client catalog: list prices only. No 
 
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-const PRICES={stereo:{label:'Stereo pair (in-ceiling)',qty:2,unit:350},single:{label:'Single in-ceiling speaker',qty:1,unit:450}};
+const PRICES={stereo:{label:'Speakers',qty:2,unit:350},single:{label:'Speaker',qty:1,unit:450}};
 const ROOMS=['Great Room','Kitchen','Primary Bedroom','Primary Bath','Office','Dining','Patio','Laundry','Powder Bath','Shower'];
 const SMALL=['shower','laundry','powder','closet','pantry','half bath'];
 const WALL=new Set(['lcr','surwall','subwall','tv','doorbell','touch','shades','keypad','camera']);
@@ -293,7 +320,7 @@ const SHAPES={
  subwall:`<rect x="-12" y="-6" width="24" height="12" fill="${C.grn}" stroke="${C.gk}" stroke-width="2.5"/>`,
  subfloor:`<circle r="9" fill="${C.grn}" stroke="${C.gk}" ${sw}/>`,
  tv:`<rect x="-14" y="-3.5" width="28" height="7" fill="${C.org}" stroke="${C.ok}" ${sw}/>`,
- tvport:`<circle r="8" fill="${C.org}" stroke="${C.ok}" ${sw}/><text y="2.5" font-size="7" text-anchor="middle" fill="#000" font-family="Helvetica" font-weight="bold">TV</text>`,
+ tvport:`<circle r="9" fill="#fff" stroke="#5c5346" stroke-width="1.35" stroke-dasharray="2.2 1.5"/><text y="1.7" font-size="5" text-anchor="middle" fill="#5c5346" font-family="Helvetica" font-weight="bold">WIRE</text>`,
  doorbell:`<path d="M0 -10L10 -2L6 9H-6L-10 -2Z" fill="${C.org}" stroke="${C.ok}" ${sw}/>`,
  rack:`<rect x="-10" y="-10" width="20" height="20" fill="${C.org}" stroke="${C.ok}" ${sw}/><rect x="-6" y="-6" width="12" height="12" fill="${C.yel}"/>`,
  touch:`<rect x="-9" y="-5" width="18" height="10" rx="1.5" fill="${C.teal}" stroke="#14605c" ${sw}/>`,
@@ -307,17 +334,17 @@ const SHAPES={
  motion:`<circle r="7" fill="${C.red}" stroke="${C.rk}" ${sw}/><path d="M-10 -6l-2 -2M10 -6l2 -2M-10 6l-2 2M10 6l2 2" stroke="${C.red}" stroke-width="1.5"/>`,
  camera:`<rect x="-10" y="-6" width="15" height="12" rx="2" fill="${C.red}" stroke="${C.rk}" ${sw}/><path d="M5 -3L11 -6V6L5 3Z" fill="${C.red}" stroke="${C.rk}" ${sw}/>`,
  contact:`<rect x="-8" y="-5" width="7" height="10" fill="${C.red}" stroke="${C.rk}" ${sw}/><rect x="1" y="-5" width="7" height="10" fill="${C.red}" stroke="${C.rk}" ${sw}/>`,
- prepro:`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#333" stroke="#111" ${sw}/><text y="3" font-size="6" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">PRE-PRO</text>`,
+ prepro:`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#333" stroke="#111" ${sw}/><text y="2.4" font-size="4.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">THEATER</text>`,
  microled:`<rect x="-18" y="-6" width="36" height="12" rx="1" fill="#111" stroke="#f5a623" ${sw}/><text y="2.5" font-size="5" text-anchor="middle" fill="#f5a623" font-family="Helvetica" font-weight="bold">MICRO LED</text>`
 };
-const ADD={outdoor:['Outdoor speaker','Audio',400],lcr:['LCR soundbar','Audio',900],surwall:['In-wall surround','Audio',300],surceil:['In-ceiling surround','Audio',300],subwall:['In-wall subwoofer','Audio',800],subfloor:['Floor subwoofer','Audio',900],
- tv:['Wall-mount TV','Video / Control',250],tvport:['In-ceiling TV port','Video / Control',150],doorbell:['Video doorbell','Video / Control',300],rack:['Media rack','Video / Control',1500],touch:['Touch / iPad wall mount','Video / Control',200],garage:['Garage door opener','Video / Control',150],shades:['Shades (wired)','Video / Control',100],
- lvcan:['Low voltage can','Network',75],wap:['Hot spot / WAP','Network',250],data:['Data drop','Network',100],phone:['Phone','Network',75],
- keypad:['Security keypad','Security',200],motion:['Motion sensor','Security',75],camera:['Camera','Security',350],contact:['Door/window sensor','Security',50]};
+const ADD={outdoor:['Outdoor speaker','Audio',400],lcr:['Soundbar','Audio',900],surwall:['Surround','Audio',300],surceil:['Ceiling surround','Audio',300],subwall:['Wall sub','Audio',800],subfloor:['Subwoofer','Audio',900],
+ tv:['TV','Video / Control',250],tvport:['Pre-wire only','Video / Control',150],doorbell:['Doorbell','Video / Control',300],rack:['Rack','Video / Control',1500],touch:['Touchscreen','Video / Control',200],garage:['Garage door','Video / Control',150],shades:['Shades','Video / Control',100],
+ lvcan:['Low-voltage box','Network',75],wap:['Wi-Fi','Network',250],data:['Data','Network',100],phone:['Phone','Network',75],
+ keypad:['Keypad','Security',200],motion:['Motion','Security',75],camera:['Camera','Security',350],contact:['Door sensor','Security',50]};
 for(const k in ADD) PRICES[k]={label:ADD[k][0],qty:1,unit:ADD[k][2],group:ADD[k][1]};
 PRICES.stereo.group=PRICES.single.group='Audio';
-PRICES.stereo.label='Stereo pair (in-ceiling)';
-PRICES.single.label='Single in-ceiling speaker';
+PRICES.stereo.label='Speakers';
+PRICES.single.label='Speaker';
 
 const GROUPS=['Audio','Video / Control','Network','Security'];
 const openGroups=new Set(['Audio']);
@@ -367,12 +394,12 @@ const LADDERS={
   wap:     {kind:'one', qty:1, good:'AP6', better:'AP6', best:'AP6'}
 };
 const PLACEHOLDERS={
-  tvport:{label:'In-ceiling TV port',unit:150},
-  garage:{label:'Garage door opener',unit:150}, lvcan:{label:'Low voltage can',unit:75},
-  data:{label:'Data drop',unit:100}, phone:{label:'Phone',unit:75},
-  keypad:{label:'Security keypad',unit:200}, motion:{label:'Motion sensor',unit:75},
-  contact:{label:'Door/window sensor',unit:50},
-  microled:{label:'Micro LED screen',unit:0,tbd:true}
+  tvport:{label:'Pre-wire only',unit:150},
+  garage:{label:'Garage door',unit:150}, lvcan:{label:'Low-voltage box',unit:75},
+  data:{label:'Data',unit:100}, phone:{label:'Phone',unit:75},
+  keypad:{label:'Keypad',unit:200}, motion:{label:'Motion',unit:75},
+  contact:{label:'Door sensor',unit:50},
+  microled:{label:'Micro LED',unit:0,tbd:true}
 };
 const PREPRO_KEYS=['AVM-70-8K','MCA-525']; // TBD pack: Anthem pre-pro + 5-ch amp
 const SURROUND_TYPES=new Set(['lcr','surwall','surceil','subfloor','subwall','prepro']);
@@ -410,8 +437,8 @@ function linePrice(d){
   return catalogList(key)*(L.qty||1);
 }
 function lineLabel(d){
-  if(d.type==='prepro') return 'Pre-pro + separates (TBD)';
-  if(d.type==='microled') return 'Micro LED screen (TBD)';
+  if(d.type==='prepro') return 'Theater electronics (TBD)';
+  if(d.type==='microled') return 'Micro LED (TBD)';
   const p=PRICES[d.type];
   return (p&&p.label)||d.type;
 }
@@ -421,12 +448,45 @@ function applyTier(d,tier){
   d.catalogKey=L?keyFor(d):null;
 }
 
-function tierOptions(d){
-  if(d.type==='prepro'||d.type==='microled'||isPlaceholder(d)) return null;
+function resolvedKey(type, tier){
+  const L=LADDERS[type]; if(!L) return null;
+  if(tier==='hifi' && L.hifi) return L.hifi;
+  return L[tier]||L.better||L.good;
+}
+/* Best/Hi-Fi on surround also adds the theater-electronics pack, so the same speaker can still be a different choice. */
+function tierAddsPack(type, tier){
+  const L=LADDERS[type];
+  return !!(L && L.kind==='surround' && (tier==='best' || tier==='hifi'));
+}
+function tierSignature(type, tier){
+  return resolvedKey(type, tier)+'|'+(tierAddsPack(type, tier)?'pack':'');
+}
+function distinctTiers(d){
+  if(!d || d.type==='prepro' || d.type==='microled' || isPlaceholder(d)) return null;
   const L=LADDERS[d.type]; if(!L) return null;
-  const out=['good','better','best'];
-  if(hifi && L.hifi) out.push('hifi');
+  const order=['good','better','best'];
+  if(hifi && L.hifi) order.push('hifi');
+  const seen=new Set(), out=[];
+  order.forEach(t=>{
+    const sig=tierSignature(d.type, t);
+    if(seen.has(sig)) return;
+    seen.add(sig);
+    out.push(t);
+  });
   return out;
+}
+function tierOptions(d){
+  const out=distinctTiers(d);
+  if(!out || out.length<2) return null;
+  return out;
+}
+function shownTier(d){
+  const cur=d.tier||'better';
+  const opts=tierOptions(d);
+  if(!opts) return cur;
+  if(opts.includes(cur)) return cur;
+  const sig=tierSignature(d.type, cur);
+  return opts.find(t=>tierSignature(d.type, t)===sig)||opts[0];
 }
 function tierPrice(type,tier){
   if(type==='prepro') return PREPRO_KEYS.reduce((a,k)=>a+catalogList(k),0);
@@ -475,6 +535,7 @@ async function showPage(n, keepZoom){
   pageNum=n;
   const p=await pdfDoc.getPage(n), vp=p.getViewport({scale:1.5});
   const c=document.createElement('canvas'); c.width=vp.width; c.height=vp.height;
+  c.draggable=false; c.style.userSelect='none'; c.style.webkitUserSelect='none';
   await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
   baseW=vp.width; baseH=vp.height;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
@@ -582,12 +643,13 @@ function showTierPop(d, cx, cy){
   const opts=tierOptions(d);
   if(!opts){ hideTierPop(); return; }
   const L=LADDERS[d.type], names=TIER_SUB[L.kind]||TIER_NAME;
+  const curT=shownTier(d);
   tierPop.innerHTML='<div class="tp-h">Choose a tier</div>'+opts.map(t=>{
-    const pr=tierPrice(d.type,t), on=(d.tier||'better')===t;
+    const pr=tierPrice(d.type,t), on=curT===t;
     return `<button data-t="${t}" class="${on?'on':''}"><b>${TIER_NAME[t]}</b> <span>${names[t]||''}</span><em>${money(pr)}</em></button>`;
   }).join('');
-  if(L.kind==='surround') tierPop.innerHTML+='<div class="tp-n">Best adds a pre-pro + separates pack to this room (TBD kit).</div>';
-  if(L.kind==='home'&&d.type==='stereo') tierPop.innerHTML+='<div class="tp-n">Best uses Ghost HT (in-wall) as the closest catalog match for a ceiling pair.</div>';
+  if(L.kind==='surround' && opts.some(t=>tierAddsPack(d.type, t))) tierPop.innerHTML+='<div class="tp-n">Best adds theater electronics for this room (TBD kit).</div>';
+  if(L.kind==='home'&&d.type==='stereo'&&opts.includes('best')) tierPop.innerHTML+='<div class="tp-n">Best uses an in-wall speaker, the closest match for a ceiling pair.</div>';
   tierPop.style.display='block';
   const x=Math.min(cx, innerWidth-260), y=Math.min(cy, innerHeight-20-tierPop.offsetHeight);
   tierPop.style.left=x+'px'; tierPop.style.top=y+'px';
@@ -703,8 +765,8 @@ function assign(d,name,fromSnap){
   scheduleSave();
   if(d.type==='stereo' && SMALL.some(s=>n.includes(s))){
     setTimeout(()=>showModal(
-      '<b>This looks like a small room.</b><br><br>Use a single speaker instead of a stereo pair?',
-      [['Keep stereo pair'],['Use single speaker',()=>{snapshot(); setType(d,'single')}]]
+      '<b>This looks like a small room.</b><br><br>Use one speaker instead of a pair?',
+      [['Keep the pair'],['Use one speaker',()=>{snapshot(); setType(d,'single')}]]
     ),0);
   }
 }
@@ -712,9 +774,10 @@ function assign(d,name,fromSnap){
 function setZoom(z){
   zoom=Math.min(4,Math.max(.2,z));
   const c=stage.querySelector('canvas');
-  if(c){ c.style.width=baseW*zoom+'px'; c.style.height=baseH*zoom+'px'; }
+  if(c){ c.style.width=baseW*zoom+'px'; c.style.height=baseH*zoom+'px'; c.draggable=false; }
   zl.textContent=Math.round(zoom*100)+'%';
   draw();
+  updatePanAffordance();
 }
 function fitZoom(){ if(!baseW) return; setZoom(Math.min((main.clientWidth-40)/baseW,(main.clientHeight-40)/baseH)); }
 
@@ -826,10 +889,11 @@ function draw(){
   const item=d=>{
     const ph=isPlaceholder(d), tbd=d.tbd||d.type==='microled'||d.type==='prepro';
     const opts=tierOptions(d);
-    const tierSel=opts?`<select class="tier" data-d="${d.id}" onclick="event.stopPropagation()">${opts.map(t=>`<option value="${t}" ${(d.tier||'better')===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select>`:'';
+    const curT=shownTier(d);
+    const tierSel=opts?`<select class="tier" data-d="${d.id}" onclick="event.stopPropagation()">${opts.map(t=>`<option value="${t}" ${curT===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select>`:'';
     const pgHint=numPages>1?` <small style="color:var(--muted)">p.${d.page||1}</small>`:'';
     return `<div class="item${sel===d?' sel':''}" data-d="${d.id}">
-      <span>${lineLabel(d)}${ph||tbd?'<span class="ph">'+(tbd?'TBD':'Placeholder')+'</span>':''}${pgHint}</span>
+      <span class="lb">${lineLabel(d)}${ph||tbd?'<span class="ph">'+(tbd?'TBD':'Placeholder')+'</span>':''}${pgHint}</span>
       ${tierSel}
       <select data-d="${d.id}" onclick="event.stopPropagation()">${roomOptions(d.room)}</select>
       <span class="ip">${money(linePrice(d))}</span>
@@ -877,13 +941,15 @@ function draw(){
   if(!sel) selBox.innerHTML='Click a device to edit.';
   else {
     const topts=tierOptions(sel);
-    const tsel=topts?`<div style="margin-top:6px">Tier: <select id="selTier">${topts.map(t=>`<option value="${t}" ${(sel.tier||'better')===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select></div>`:'';
-    selBox.innerHTML=`<b>${lineLabel(sel)}</b>${sel.catalogKey?`<div style="margin-top:4px;color:var(--muted)">${catalogName(sel.catalogKey)}</div>`:''}<div style="margin-top:6px">Room:
+    const curT=shownTier(sel);
+    const tsel=topts?`<div class="sel-row">Tier: <select id="selTier">${topts.map(t=>`<option value="${t}" ${curT===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select></div>`:'';
+    const rotCtl=canXF(sel)?`<label class="rotlbl">Angle <input id="selRot" type="number" step="any" inputmode="decimal" value="${formatRot(rotOf(sel))}" aria-label="Angle in degrees" title="Type any angle in degrees">°</label><button type="button" id="btnRot15">Rotate 15°</button><button type="button" id="btnSzStep">Resize</button>`:'';
+    selBox.innerHTML=`<b>${lineLabel(sel)}</b>${sel.catalogKey?`<div class="sel-sub">${catalogName(sel.catalogKey)}</div>`:''}<div class="sel-row">Room:
       <select id="selRoom">${roomOptions(sel.room)}</select></div>
       ${tsel}
       <div class="rowbtns">
-        ${sel.type==='single'?'<button type="button" id="btnMakePair">Make stereo pair</button>':''}
-        ${canXF(sel)?`<button type="button" id="btnRot15">Rotate 15°</button><button type="button" id="btnSzStep">Resize</button>`:''}
+        ${sel.type==='single'?'<button type="button" id="btnMakePair">Make a pair</button>':''}
+        ${rotCtl}
         <button type="button" id="btnDel">Delete</button>
       </div>`;
     selRoom.onchange=()=>{ if(selRoom.value==='__new__'){ selRoom.value=sel.room||''; askRoom(sel,false);} else assign(sel,selRoom.value,false); };
@@ -891,6 +957,11 @@ function draw(){
     const bp=document.getElementById('btnMakePair'); if(bp) bp.onclick=()=>{ snapshot(); setType(sel,'stereo'); };
     const br=document.getElementById('btnRot15'); if(br) br.onclick=()=>rotateSel(15);
     const bs=document.getElementById('btnSzStep'); if(bs) bs.onclick=()=>resizeSel();
+    const ri=document.getElementById('selRot');
+    if(ri){
+      ri.addEventListener('keydown', ev=>{ ev.stopPropagation(); if(ev.key==='Enter'){ ev.preventDefault(); setRot(ri.value); } });
+      ri.onchange=()=>setRot(ri.value);
+    }
     btnDel.onclick=()=>{ snapshot(); devs=devs.filter(x=>x!==sel); if(lastAdded===sel) lastAdded=null; sel=null; draw(); };
   }
   updateTools();
@@ -916,7 +987,8 @@ function renderDev(d,el){
     h+=`<line x1="${a[0]*z}" y1="${a[1]*z}" x2="${b[0]*z}" y2="${b[1]*z}" stroke="#1e88e5" stroke-width="${Math.max(1.5,2*z)}" stroke-dasharray="${5*z} ${4*z}"/>`;
     h+=`<line class="body" x1="${a[0]*z}" y1="${a[1]*z}" x2="${b[0]*z}" y2="${b[1]*z}" stroke="transparent" stroke-width="${12*z}"/>`;
   }
-  const fs=4.6*z, lbl=d.type==='stereo'?['STEREO','AUDIO']:['SINGLE','AUDIO'];
+  const badge=d.type==='stereo'?'SPEAKERS':'SPEAKER';
+  const fs=(badge.length>7?3.15:3.6)*z;
   const selCol='#0071e3';
   P.forEach(([x,y],i)=>{
     if(SHAPES[d.type]){
@@ -943,18 +1015,17 @@ function renderDev(d,el){
     }
     const rr=R*z;
     h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
-      `<text x="${x*z}" y="${y*z-fs*.2}" font-size="${fs}" fill="#fff" text-anchor="middle" font-family="Helvetica" font-weight="bold">${lbl[0]}</text>`+
-      `<text x="${x*z}" y="${y*z+fs}" font-size="${fs}" fill="#fff" text-anchor="middle" font-family="Helvetica" font-weight="bold">${lbl[1]}</text></g>`;
+      `<text x="${x*z}" y="${y*z}" font-size="${fs}" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Helvetica" font-weight="bold">${badge}</text></g>`;
   });
   h+='</svg>';
   const mid=P.reduce((a,p)=>[a[0]+p[0]/P.length,a[1]+p[1]/P.length],[0,0]);
   const tagY=mid[1]*z + base*z + 6;
   h+=`<span class="tag" style="left:${mid[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
   el.innerHTML=h;
-  el.querySelectorAll('.body').forEach(b=>b.onpointerdown=ev=>drag(ev,d,'body'));
-  el.querySelectorAll('.end').forEach(b=>b.onpointerdown=ev=>drag(ev,d,+b.dataset.i));
-  el.querySelectorAll('.rot').forEach(b=>b.onpointerdown=ev=>dragRot(ev,d));
-  el.querySelectorAll('.sz').forEach(b=>b.onpointerdown=ev=>dragScale(ev,d));
+  el.querySelectorAll('.body').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,'body'); });
+  el.querySelectorAll('.end').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,+b.dataset.i); });
+  el.querySelectorAll('.rot').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragRot(ev,d); });
+  el.querySelectorAll('.sz').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragScale(ev,d); });
 }
 
 function drag(ev,d,mode){
@@ -1002,7 +1073,7 @@ function dragRot(ev,d){
     d.rot=((a%360)+360)%360;
     draw();
   };
-  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); };
+  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
   addEventListener('pointermove',mv); addEventListener('pointerup',up);
 }
 function dragScale(ev,d){
@@ -1028,11 +1099,33 @@ function guide(v,vert){
 }
 function select(d){ sel=d; draw(); }
 
+function normRot(v){
+  const n=typeof v==='number'?v:parseFloat(v);
+  if(!Number.isFinite(n)) return null;
+  return ((n%360)+360)%360;
+}
+function formatRot(n){
+  const v=normRot(n);
+  if(v===null) return '0';
+  return String(Math.round(v*10)/10);
+}
+function setRot(v){
+  if(!canXF(sel)) return;
+  const n=normRot(v);
+  if(n===null) return;
+  const cur=normRot(rotOf(sel));
+  if(cur!==null && Math.abs(n-cur)<0.05) return;
+  snapshot();
+  sel.rot=n;
+  draw();
+  scheduleSave();
+}
 function rotateSel(deg){
   if(!canXF(sel)) return;
   snapshot();
-  sel.rot=(((rotOf(sel)+deg)%360)+360)%360;
+  sel.rot=normRot(rotOf(sel)+deg);
   draw();
+  scheduleSave();
 }
 function resizeSel(){
   if(!canXF(sel)) return;
@@ -1055,10 +1148,88 @@ search.addEventListener('mousedown',e=>{
   showModal('<b>Search arrives in Phase C.</b><br><br>It will look up things like “Micro LED” or “Theater” and hand off to a bundle or Auto Designer.', [['OK']]);
 });
 
-stage.addEventListener('pointerdown',e=>{ if(e.target===stage || e.target.tagName==='CANVAS'){ sel=null; draw(); }});
+/* Empty-canvas drag pans. Space or middle-button also pans, so a future marquee can take left-drag. */
+let spacePan=false;
+function typingTarget(el){
+  return !!(el && el.closest && el.closest('input, textarea, select, [contenteditable], button, a, .gh'));
+}
+function clearNativeSelection(){
+  const native=window.getSelection&&window.getSelection();
+  if(!native) return;
+  try{ native.removeAllRanges(); }catch(e){}
+}
+function updatePanAffordance(){
+  const over=main.scrollWidth>main.clientWidth+2 || main.scrollHeight>main.clientHeight+2;
+  main.classList.toggle('can-pan', over);
+}
+function panGesture(ev){
+  if(!ev || ev.pointerType==='touch') return false;
+  if(ev.button===1) return true;
+  return !!(spacePan && ev.button===0);
+}
+function isPanSurface(t){
+  if(!t || !main.contains(t)) return false;
+  if(t.closest && t.closest('.body, .end, .rot, .sz')) return false;
+  if(typingTarget(t)) return false;
+  return true;
+}
+function onMainScrollbar(e){
+  const r=main.getBoundingClientRect();
+  return e.clientX>=r.left+main.clientWidth-1 || e.clientY>=r.top+main.clientHeight-1;
+}
+main.addEventListener('selectstart', e=>e.preventDefault());
+main.addEventListener('dragstart', e=>{ if(e.target&&e.target.tagName==='CANVAS') e.preventDefault(); });
+addEventListener('pointerdown', e=>{ if(!typingTarget(e.target)) clearNativeSelection(); });
+main.addEventListener('mousedown', e=>{
+  if(onMainScrollbar(e)) return;
+  if(e.button===0 || e.button===1) e.preventDefault();
+}, true);
+main.addEventListener('pointerdown', e=>{
+  if(e.pointerType==='touch'){
+    if(e.button!==0 || !isPanSurface(e.target) || onMainScrollbar(e)) return;
+    const sx=e.clientX, sy=e.clientY;
+    const up=m=>{
+      removeEventListener('pointerup', up);
+      if(Math.hypot(m.clientX-sx, m.clientY-sy)<8 && sel){ sel=null; draw(); }
+    };
+    addEventListener('pointerup', up);
+    return;
+  }
+  if(onMainScrollbar(e)) return;
+  const middle=e.button===1;
+  const space=spacePan && e.button===0;
+  const emptyLeft=e.button===0 && isPanSurface(e.target);
+  if(!middle && !space && !emptyLeft) return;
+  e.preventDefault();
+  const sl=main.scrollLeft, stTop=main.scrollTop, sx=e.clientX, sy=e.clientY;
+  let moved=false;
+  try{ main.setPointerCapture(e.pointerId); }catch(err){}
+  const mv=m=>{
+    const dx=m.clientX-sx, dy=m.clientY-sy;
+    if(!moved && Math.hypot(dx,dy)<4) return;
+    moved=true;
+    main.classList.add('panning');
+    main.scrollLeft=sl-dx;
+    main.scrollTop=stTop-dy;
+  };
+  const up=()=>{
+    removeEventListener('pointermove', mv);
+    removeEventListener('pointerup', up);
+    try{ main.releasePointerCapture(e.pointerId); }catch(err){}
+    main.classList.remove('panning');
+    clearNativeSelection();
+    if(!moved && emptyLeft && !space && sel){ sel=null; draw(); }
+  };
+  addEventListener('pointermove', mv);
+  addEventListener('pointerup', up);
+});
 
 addEventListener('keydown',e=>{
   const meta=e.metaKey||e.ctrlKey;
+  if((e.code==='Space'||e.key===' ') && !typingTarget(e.target)){
+    if(!e.repeat){ spacePan=true; main.classList.add('space-pan'); }
+    e.preventDefault();
+  }
   if(meta && (e.key==='z'||e.key==='Z')){
     e.preventDefault();
     if(e.shiftKey) redo(); else undo();
@@ -1068,6 +1239,11 @@ addEventListener('keydown',e=>{
   if(meta && e.key==='-'){ e.preventDefault(); setZoom(zoom/1.25); }
   if(meta && e.key==='0'){ e.preventDefault(); setZoom(1); }
 });
+addEventListener('keyup', e=>{
+  if(e.code==='Space'||e.key===' '){ spacePan=false; main.classList.remove('space-pan'); }
+});
+addEventListener('blur', ()=>{ spacePan=false; main.classList.remove('space-pan'); });
+addEventListener('resize', ()=>updatePanAffordance());
 main.addEventListener('wheel',e=>{ if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }},{passive:false});
 
 btnPrevPage.onclick=()=>showPage(pageNum-1,true);
@@ -1079,17 +1255,30 @@ openProj.onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(f)
 if(projName){ projName.onchange=projName.onblur=()=>{ projectName=projName.value.trim()||'Untitled project'; scheduleSave(); }; }
 btnHifi.onclick=()=>{ hifi=!hifi; btnHifi.classList.toggle('on',hifi); if(!hifi) devs.forEach(d=>{ if(d.tier==='hifi') applyTier(d,'best'); }); draw(); scheduleSave(); };
 document.getElementById('bundles').querySelectorAll('button[data-b]').forEach(b=>b.onclick=()=>dropBundle(b.dataset.b));
+const bundleToggle=document.getElementById('bundleToggle'), bundleGroup=document.getElementById('bundleGroup');
+function toggleBundles(){
+  const open=bundleGroup.classList.toggle('open');
+  bundleToggle.setAttribute('aria-expanded', open?'true':'false');
+}
+if(bundleToggle){
+  bundleToggle.addEventListener('click', toggleBundles);
+  bundleToggle.addEventListener('keydown', e=>{
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); toggleBundles(); }
+  });
+}
 addEventListener('click',e=>{ if(!e.target.closest('#tierPop')) hideTierPop(); });
 
 snapshot();
 draw();
 updatePageLbl();
+updatePanAffordance();
 restoreLast().catch(()=>{});
 
 window.__LT={
   loadPdfFromUrl: async url=>{ const r=await fetch(url); if(!r.ok) throw new Error('pdf '+r.status); await loadPdfBuffer(await r.arrayBuffer(), url.split('/').pop()); },
-  placeAt, assign, select, setZoom, fitZoom, rotateSel, resizeSel, undo, redo, setType, canXF, WALL,
-  showPage, dropBundle, applyTier, linePrice, keyFor, isPlaceholder, catalogList, syncSeparates,
+  placeAt, assign, select, setZoom, fitZoom, rotateSel, setRot, resizeSel, undo, redo, setType, canXF, WALL,
+  showPage, dropBundle, applyTier, linePrice, lineLabel, keyFor, isPlaceholder, catalogList, syncSeparates,
+  tierOptions, distinctTiers, normRot, showTierPop,
   state:()=>({devs,rooms,active:active&&active.name,sel:sel&&{id:sel.id,type:sel.type,rot:sel.rot,scale:sel.scale,x:sel.x,y:sel.y,room:sel.room,tier:sel.tier,catalogKey:sel.catalogKey,page:sel.page},zoom,total:pkgTotal(),nid,openGroups:[...openGroups],page:pageNum,numPages,hifi,projectId,projectName}),
   setActive: name=>{ active=rooms.find(r=>r.name===name)||null; draw(); },
   addRoomNamed: name=>{ let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase()); if(!rm){ snapshot(); rm={id:nid++,name}; rooms.push(rm);} active=rm; draw(); return rm; },
