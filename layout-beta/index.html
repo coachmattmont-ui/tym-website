@@ -96,7 +96,12 @@ button,input,select{font:inherit;color:inherit}
 }
 .file-btn{display:block;text-align:center;padding:8px 10px;margin-bottom:6px}
 #pdf{display:none}
-#pg{font-size:11px;color:var(--muted);margin:0 0 14px;min-height:1em}
+#pg{display:none}
+#floorName{display:block;width:100%;margin:0 0 8px;padding:6px 8px;border:0;background:var(--fill);border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
+#floorName[hidden]{display:none !important}
+#ctlRow{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+#ctlRow span{font-size:12px;color:var(--muted);flex:0 0 auto}
+#ctlRow select{flex:1;min-width:0}
 .sec{margin-bottom:16px}
 .sec-h{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);font-weight:600;margin:0 0 8px}
@@ -169,17 +174,17 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #stage{position:relative;display:inline-block;margin:28px;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
 #stage canvas{display:block;background:#fff;border-radius:8px}
 
-.devwrap{position:absolute;left:0;top:0}
-.devsvg{position:absolute;overflow:visible}
+.devwrap{position:absolute;left:0;top:0;pointer-events:none}
+.devsvg{position:absolute;overflow:visible;pointer-events:none}
+.devsvg .body,.devsvg .end,.devsvg .edge{pointer-events:auto}
 .devsvg .body{cursor:move}
 .devsvg .end{cursor:grab}
-.devsvg .rot{cursor:grab}
-.devsvg .sz{cursor:nwse-resize}
-.devsvg line:not(.body){pointer-events:none}
+.devsvg .edge{fill:transparent}
 .tag{position:absolute;transform:translateX(-50%);font-size:10px;background:rgba(29,29,31,.86);color:#fff;
-  padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none;letter-spacing:.02em}
+  padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none !important;letter-spacing:.02em;z-index:2}
 .devwrap:hover .tag,.devwrap.sel .tag{display:block}
 .guide{position:absolute;pointer-events:none;z-index:3}
+.marquee{position:absolute;border:1px solid #0071e3;background:rgba(0,113,227,.12);pointer-events:none;z-index:4}
 
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;align-items:center;justify-content:center;z-index:20}
 #modal .card{background:#fff;padding:22px;border-radius:16px;width:380px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
@@ -210,10 +215,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #bundleGroup:not(.open) #bundles{display:none}
 #bundles button{width:100%;text-align:left}
 #bundles .tbd-note{font-size:11px;color:var(--muted);margin:4px 0 0}
-#floorNameWrap{display:block;font-size:11px;color:var(--muted);margin:0 0 12px}
-#btnAddPlan[hidden], #floorNameWrap[hidden]{display:none !important}
-#floorNameWrap input{display:block;width:100%;margin-top:4px;padding:6px 8px;border:0;background:var(--fill);border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
-#btnAddPlan{margin-bottom:8px}
+#floorNameWrap{display:none}
 #ctlRow select,#audMode button{font-size:12px}
 #audMode{display:flex;gap:6px;margin:0 0 8px}
 #audMode button.on{background:#0071e3;color:#fff;box-shadow:none}
@@ -274,6 +276,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 <header class="hdr">
   <div class="brand"><svg class="tym-logo-svg" role="img" aria-label="SmartHome Brothers by TYM" viewBox="0 0 212.7 59.89" xmlns="http://www.w3.org/2000/svg"><defs><style>.tym-none{fill:none;}.tym-fill{fill:#00acec;}.tym-clip{clip-path:url(#tym-logo-clip);}</style><clipPath id="tym-logo-clip"><rect height="59.89" width="212.7" x="0" class="tym-none"></rect></clipPath></defs><g class="tym-clip"><path d="M192.51,59.89c1.46,0,2.8-.22,4.04-.67,1.24-.45,2.3-1.08,3.19-1.9.89-.82,1.59-1.81,2.1-2.97.51-1.16.76-2.45.76-3.88,0-2.2-.6-4.09-1.81-5.67-1.21-1.58-2.91-2.86-5.11-3.84l-1.7-.76c-1.46-.65-2.54-1.25-3.24-1.78-.7-.53-1.05-1.22-1.05-2.05,0-.71.26-1.26.78-1.63.52-.37,1.08-.56,1.67-.56.74,0,1.41.15,1.99.45.58.3,1.27.94,2.07,1.92l4.82-5.09c-1.34-1.55-2.71-2.6-4.13-3.15-1.41-.55-3-.83-4.75-.83-1.25,0-2.45.22-3.61.65-1.16.43-2.19,1.05-3.08,1.85-.89.8-1.61,1.77-2.14,2.9-.54,1.13-.8,2.38-.8,3.75,0,2.14.63,4.07,1.9,5.78,1.26,1.71,3.1,3.1,5.51,4.17l1.79.8c1.34.6,2.29,1.15,2.86,1.67.57.52.85,1.14.85,1.85,0,1.52-1.01,2.28-3.04,2.28-1.1,0-2.18-.38-3.24-1.14-1.06-.76-1.93-1.69-2.61-2.79l-5.4,4.42c1.1,2.05,2.63,3.6,4.6,4.64,1.96,1.04,4.22,1.56,6.78,1.56M168.86,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M164.93,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.32-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM135.53,27.85v31.68h19.63v-7.05h-12.49v-5.35h9.82v-6.87h-9.82v-5.35h12.49v-7.05h-19.63ZM104.82,27.85v31.68h7.14v-12.41h12.67v12.41h7.14v-31.68h-7.14v12.41h-12.67v-12.41h-7.14ZM88.45,34.9v24.63h7.14v-24.63h7.63v-7.05h-22.36v7.05h7.59ZM65.51,59.89c2.23,0,4.33-.42,6.29-1.27,1.96-.85,3.68-2.01,5.15-3.48,1.47-1.47,2.63-3.19,3.48-5.15.85-1.96,1.27-4.06,1.27-6.29s-.42-4.33-1.27-6.29c-.85-1.96-2.01-3.68-3.48-5.15-1.47-1.47-3.19-2.63-5.15-3.48-1.96-.85-4.06-1.27-6.29-1.27s-4.33.42-6.29,1.27c-1.96.85-3.68,2.01-5.15,3.48-1.47,1.47-2.63,3.19-3.48,5.15-.85,1.96-1.27,4.06-1.27,6.29s.42,4.33,1.27,6.29c.85,1.96,2.01,3.68,3.48,5.15,1.47,1.47,3.19,2.63,5.15,3.48,1.96.85,4.06,1.27,6.29,1.27M65.51,53.01c-1.28,0-2.47-.24-3.57-.74-1.1-.49-2.05-1.16-2.86-2.01-.8-.85-1.44-1.84-1.9-2.97-.46-1.13-.69-2.33-.69-3.61s.23-2.48.69-3.61c.46-1.13,1.09-2.12,1.9-2.97.8-.85,1.76-1.52,2.86-2.01,1.1-.49,2.29-.74,3.57-.74s2.47.25,3.57.74c1.1.49,2.05,1.16,2.86,2.01s1.44,1.84,1.9,2.97c.46,1.13.69,2.34.69,3.61s-.23,2.48-.69,3.61c-.46,1.13-1.09,2.12-1.9,2.97s-1.76,1.52-2.86,2.01c-1.1.49-2.29.74-3.57.74M38.02,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M34.09,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.33-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM12.5,40.65h-3.97v-6.29h3.97c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M14.68,52.97h-6.16v-6.29h6.16c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.92-2.36.92M1.38,27.85v31.68h13.97c1.34,0,2.59-.25,3.75-.74,1.16-.49,2.18-1.16,3.06-2.01.88-.85,1.56-1.84,2.05-2.99.49-1.14.74-2.37.74-3.68,0-1.7-.41-3.18-1.23-4.44-.82-1.26-1.9-2.25-3.23-2.97.68-.68,1.23-1.48,1.63-2.39.4-.91.6-1.93.6-3.06,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74H1.38Z" class="tym-fill"></path><path d="M185.93.28v24.6h15.25v-5.48h-9.7v-4.16h7.62v-5.34h-7.62v-4.16h9.7V.28h-15.25ZM158.49,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L158.49,0ZM144.14,25.16c1.73,0,3.36-.33,4.89-.99,1.52-.66,2.86-1.56,4-2.7,1.14-1.14,2.04-2.48,2.7-4,.66-1.53.99-3.15.99-4.89s-.33-3.36-.99-4.89c-.66-1.52-1.56-2.86-2.7-4-1.14-1.14-2.48-2.04-4-2.7C147.5.33,145.88,0,144.14,0s-3.36.33-4.88.99c-1.53.66-2.86,1.56-4,2.7-1.14,1.14-2.04,2.48-2.7,4-.66,1.53-.99,3.15-.99,4.89s.33,3.36.99,4.89c.66,1.52,1.56,2.86,2.7,4,1.14,1.14,2.48,2.04,4,2.7,1.52.66,3.15.99,4.88.99M144.14,19.82c-.99,0-1.92-.19-2.77-.57-.85-.38-1.59-.9-2.22-1.56-.62-.66-1.12-1.43-1.47-2.3-.36-.88-.54-1.81-.54-2.81s.18-1.93.54-2.81c.36-.88.85-1.65,1.47-2.3.62-.66,1.36-1.18,2.22-1.56.86-.38,1.78-.57,2.77-.57s1.92.19,2.77.57c.85.38,1.59.9,2.22,1.56.62.66,1.11,1.43,1.47,2.3.36.88.54,1.81.54,2.81s-.18,1.93-.54,2.81c-.36.88-.85,1.65-1.47,2.3-.62.66-1.36,1.18-2.22,1.56-.85.38-1.78.57-2.77.57M108.87.28v24.6h5.54v-9.63h9.84v9.63h5.54V.28h-5.54v9.63h-9.84V.28h-5.54ZM90.26,5.75v19.13h5.54V5.75h5.93V.28h-17.36v5.47h5.89ZM75.95,10.22h-3.12v-4.89h3.12c.74,0,1.35.24,1.84.73s.73,1.06.73,1.73-.24,1.24-.73,1.72c-.49.47-1.1.71-1.84.71M72.9,14.9l7.62,9.98h6.62l-8-10.43c1.43-.55,2.58-1.45,3.45-2.69.87-1.24,1.3-2.63,1.3-4.18,0-.99-.19-1.93-.57-2.82-.38-.89-.91-1.67-1.58-2.34-.67-.67-1.45-1.2-2.34-1.58s-1.83-.57-2.82-.57h-9.29v24.6h5.54v-9.98h.07ZM57.24,16.56h-4.64l2.32-5.13,2.32,5.13ZM54.92,0l-12.13,24.88h5.82l1.77-3.81h9.08l1.77,3.81h5.82L54.92,0ZM18.02,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L18.02,0ZM8.84,25.16c1.13,0,2.18-.17,3.14-.52.96-.35,1.78-.84,2.48-1.47.69-.64,1.24-1.4,1.63-2.31.39-.9.59-1.91.59-3.01,0-1.71-.47-3.18-1.4-4.4-.94-1.22-2.26-2.22-3.97-2.98l-1.32-.59c-1.13-.51-1.97-.97-2.51-1.39-.54-.42-.81-.95-.81-1.59,0-.55.2-.98.61-1.26.4-.29.84-.43,1.3-.43.58,0,1.09.12,1.54.35.45.23.99.73,1.61,1.49l3.74-3.95c-1.04-1.2-2.11-2.02-3.2-2.44C11.15.21,9.92,0,8.56,0,7.59,0,6.65.17,5.75.5c-.9.33-1.7.81-2.39,1.44-.69.62-1.25,1.37-1.66,2.25-.42.88-.62,1.85-.62,2.91,0,1.66.49,3.16,1.47,4.49.98,1.33,2.41,2.41,4.28,3.24l1.39.62c1.04.46,1.78.9,2.22,1.3.44.41.66.88.66,1.44,0,1.18-.78,1.77-2.36,1.77-.86,0-1.69-.29-2.51-.88s-1.5-1.31-2.03-2.17l-4.19,3.43c.86,1.59,2.05,2.79,3.57,3.6,1.53.81,3.28,1.21,5.27,1.21" class="tym-fill"></path><path d="M208.38,54.74v-1.08c0-.3.12-.36.39-.36.24,0,.72.12.72.69,0,.3-.09.51-.33.63-.12.09-.36.12-.51.12h-.27ZM211.02,56.63c-.12-.06-.24-.15-.39-.3-.45-.51-.69-.84-.99-1.41.48-.18.81-.51.81-1.02,0-.87-.78-1.05-1.44-1.05h-2.04v.45c.48.03.54.03.54.57v2.04c0,.54-.06.54-.57.57v.48h2.01v-.48c-.51-.03-.57-.03-.57-.57v-.72h.12c.15,0,.3.03.42.21.12.21.27.6.54.96.36.48.78.63,1.44.63l.12-.36ZM208.8,51.74c1.74,0,3.03,1.41,3.03,3.18s-1.29,3.15-3.03,3.15-3-1.35-3-3.15,1.23-3.18,3-3.18M208.8,51.05c-2.19,0-3.87,1.77-3.87,3.87s1.65,3.87,3.87,3.87,3.9-1.83,3.9-3.87-1.68-3.87-3.9-3.87" class="tym-fill"></path></g></svg><small>Layout</small></div>
   <div class="tools">
+    <button type="button" id="btnSelect" title="Select. Drag a rectangle, or shift-click. Space or middle-drag still pans.">Select</button>
     <button type="button" id="btnRot" title="Rotate 15° (Shift for 1°)">Rotate</button>
     <button type="button" id="btnSz" title="Step size 0.75× – 1.5×">Resize</button>
     <span class="sep"></span>
@@ -306,20 +309,16 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 <div class="aside-scroll">
   <label class="file-btn" for="pdf">Upload floor plan</label>
   <input type="file" id="pdf" accept="application/pdf">
-  <button type="button" class="file-btn" id="btnAddPlan" hidden>Add floor plan</button>
-  <input type="file" id="pdfAdd" accept="application/pdf" hidden>
-  <div id="pg"></div>
-  <label id="floorNameWrap" hidden>Floor name
-    <input id="floorName" list="floorNames" placeholder="Main, Upper, Basement" autocomplete="off">
-  </label>
+  <input id="floorName" list="floorNames" placeholder="Floor name" autocomplete="off" hidden>
   <datalist id="floorNames">
     <option value="Main"></option>
     <option value="Upper"></option>
     <option value="Basement"></option>
   </datalist>
+  <div id="pg" hidden></div>
 
-  <div class="sec" id="ctlRow">
-    <div class="sec-h">Control</div>
+  <div id="ctlRow">
+    <span>Control</span>
     <select id="ctlPlat" title="Control platform">
       <option value="josh">Josh.ai</option>
       <option value="control4">Control4</option>
@@ -338,15 +337,6 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <button type="button" data-aud="amps">Room amps</button>
       <button type="button" data-aud="matrix">Whole-home</button>
     </div>
-    <div id="catFilters">
-      <button type="button" data-cat="all" class="on">All</button>
-      <button type="button" data-cat="Audio">Audio</button>
-      <button type="button" data-cat="Video">Video</button>
-      <button type="button" data-cat="Network">Network</button>
-      <button type="button" data-cat="Control">Control</button>
-      <button type="button" data-cat="Security">Security</button>
-    </div>
-    <button type="button" id="btnSortCost">Sort by cost</button>
   </div>
 
   <section class="sec" id="roomsPanel" hidden>
@@ -358,7 +348,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   <div id="wholeHome" hidden></div>
 
 </div>
-  <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Project total</span><br><b id="sideTotalAmt">$0</b><div id="filterNote" hidden></div></div>
+  <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Project total</span><br><b id="sideTotalAmt">$0</b></div>
 </aside>
 <main id="main">
   <div id="empty">Upload a PDF floor plan to begin.</div>
@@ -742,11 +732,7 @@ function updatePageLbl(){
   const nm=pageNames[String(pageNum)]||'';
   pageLbl.textContent=pdfDoc?(on?`Page ${pageNum} / ${numPages}`:`Page 1`)+(nm?` · ${nm}`:''):'—';
   const fn=document.getElementById('floorName');
-  const wrap=document.getElementById('floorNameWrap');
-  if(wrap) wrap.hidden=!pdfDoc;
-  if(fn && document.activeElement!==fn) fn.value=nm;
-  const addBtn=document.getElementById('btnAddPlan');
-  if(addBtn) addBtn.hidden=!pdfDoc;
+  if(fn){ fn.hidden=!pdfDoc; if(document.activeElement!==fn) fn.value=nm; }
 }
 async function showPage(n, keepZoom){
   if(!pdfDoc) return;
@@ -760,7 +746,7 @@ async function showPage(n, keepZoom){
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   stage.prepend(c);
   empty.style.display='none';
-  pg.textContent=`${pdfName||'Floor plan'} — page ${pageNum} of ${numPages}`+(pageNames[String(pageNum)]?` (${pageNames[String(pageNum)]})`:'');
+  pg.textContent='';
   updatePageLbl();
   if(!keepZoom) fitZoom(); else { setZoom(zoom); }
   draw();
@@ -812,6 +798,7 @@ function applyProject(st){
   active=rooms.find(r=>r.id===st.activeRoomId)||null;
   lastAdded=devs.find(d=>d.id===st.lastAddedId)||null;
   sel=null;
+  multi=[];
   if(projName) projName.value=projectName;
   btnHifi.classList.toggle('on', hifi);
 }
@@ -853,7 +840,7 @@ async function openProjectFile(file){
 function newProject(){
   if((devs.length||rooms.length||pdfDoc) && !confirm('Start a new project? The current layout will be cleared from the editor (the last autosave stays in this browser until you overwrite it).')) return;
   projectId=crypto.randomUUID(); projectName='Untitled project';
-  devs=[]; rooms=[]; active=null; sel=null; lastAdded=null; nid=1; hifi=false;
+  devs=[]; rooms=[]; active=null; sel=null; multi=[]; lastAdded=null; nid=1; hifi=false;
   pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false;
   pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
@@ -917,7 +904,8 @@ function makeDevice(type,cx,cy){
 
 
 const GAP=60,R=13,SC_MIN=0.75,SC_MAX=1.5,SC_STEPS=[0.75,1,1.25,1.5];
-let devs=[],sel=null,nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
+let devs=[],sel=null,multi=[],nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
+let selectMode=false;
 let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
 let pageNames={}, controlPlatform='', audioSystem='amps', matrixDismissed=false, controlPrompted=false;
 let projectId=crypto.randomUUID(), projectName='Untitled project', hifi=false, saveTimer=null;
@@ -934,7 +922,7 @@ const scOf=d=>d.scale||1;
 
 function snapshot(){
   hist=hist.slice(0,hidx+1);
-  hist.push(JSON.stringify({devs,rooms,active:active&&active.id,sel:sel&&sel.id,last:lastAdded&&lastAdded.id,nid,audioSystem,controlPlatform,matrixDismissed,pageNames}));
+  hist.push(JSON.stringify({devs,rooms,active:active&&active.id,sel:sel&&sel.id,multi:selectedList().map(d=>d.id),last:lastAdded&&lastAdded.id,nid,audioSystem,controlPlatform,matrixDismissed,pageNames}));
   if(hist.length>80) hist.shift();
   hidx=hist.length-1;
   updateTools();
@@ -948,6 +936,8 @@ function restore(s){
   if(st.pageNames) pageNames=st.pageNames;
   active=rooms.find(r=>r.id===st.active)||null;
   sel=devs.find(d=>d.id===st.sel)||null;
+  multi=(st.multi||[]).map(id=>devs.find(d=>d.id===id)).filter(Boolean);
+  if(!multi.length && sel) multi=[sel];
   lastAdded=devs.find(d=>d.id===st.last)||null;
   draw();
 }
@@ -974,12 +964,6 @@ pdf.onchange=async e=>{
   if(pdfDoc) askAddOrReplace(buf, f.name);
   else openPlanPicker(buf, f.name, 'new');
 };
-pdfAdd.onchange=async e=>{
-  const f=e.target.files[0]; e.target.value='';
-  if(!f) return;
-  openPlanPicker(await f.arrayBuffer(), f.name, pdfDoc?'add':'new');
-};
-btnAddPlan.onclick=()=>pdfAdd.click();
 floorName.addEventListener('change', ()=>{
   const v=floorName.value.trim();
   if(v) pageNames[String(pageNum)]=v; else delete pageNames[String(pageNum)];
@@ -1328,9 +1312,10 @@ addEventListener('click',hideCtx);
 addEventListener('contextmenu',e=>{ if(!e.target.closest('#stage, #tree, #ctx')) hideCtx(); });
 
 function updateTools(){
-  const ok=canXF(sel);
-  btnRot.disabled=!ok; btnSz.disabled=!ok;
+  const ok=selectedList().some(canXF);
+  btnRot.disabled=!ok; btnSz.disabled=!canXF(sel);
   btnUndo.disabled=hidx<=0;
+  if(btnSelect) btnSelect.classList.toggle('on', selectMode);
 }
 const TYPE_CAT={
   stereo:'Audio', single:'Audio', outdoor:'Audio', lcr:'Audio', surwall:'Audio', surceil:'Audio', subwall:'Audio', subfloor:'Audio', prepro:'Audio',
@@ -1420,7 +1405,7 @@ function draw(){
     const badge=priceBadge(d);
     const tierSel=opts?`<select class="tier" data-d="${d.id}" onclick="event.stopPropagation()">${opts.map(t=>`<option value="${t}" ${curT===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select>`:'';
     const pgHint=numPages>1?` <small style="color:var(--muted)">p.${d.page||1}</small>`:'';
-    return `<div class="item${sel===d?' sel':''}" data-d="${d.id}">
+    return `<div class="item${isSelected(d)?' sel':''}" data-d="${d.id}">
       <span class="lb">${lineLabel(d)}${badge?`<span class="ph">${badge}</span>`:''}${pgHint}</span>
       ${tierSel}
       <select data-d="${d.id}" onclick="event.stopPropagation()">${roomOptions(d.room)}</select>
@@ -1464,7 +1449,10 @@ function draw(){
     active=active===rm?null:rm;
     draw();
   });
-  tree.querySelectorAll('.item[data-d]').forEach(el=>el.onclick=()=>select(devs.find(d=>d.id==el.dataset.d)));
+  tree.querySelectorAll('.item[data-d]').forEach(el=>el.onclick=ev=>{
+    const d=devs.find(x=>x.id==el.dataset.d);
+    if(ev.shiftKey) select(d,{shift:true}); else select(d);
+  });
   tree.querySelectorAll('.item select:not(.tier)').forEach(s=>s.onchange=()=>{
     const d=devs.find(x=>x.id==s.dataset.d);
     if(s.value==='__new__'){ s.value=d.room||''; askRoom(d,false); }
@@ -1486,6 +1474,13 @@ function draw(){
 
   updateTotals();
 
+  const picked=selectedList();
+  if(picked.length>1){
+    selBox.innerHTML=`<b>${picked.length} devices</b><div class="sel-sub">Drag them together. Shift-click to change the selection.</div><div class="rowbtns"><button type="button" id="btnDel">Delete</button></div>`;
+    btnDel.onclick=()=>deleteSelection();
+    updateTools();
+    return;
+  }
   if(!sel) selBox.innerHTML='Click a device to edit.';
   else {
     const topts=tierOptions(sel);
@@ -1523,7 +1518,7 @@ function draw(){
       ri.addEventListener('keydown', ev=>{ ev.stopPropagation(); if(ev.key==='Enter'){ ev.preventDefault(); setRot(ri.value); } });
       ri.onchange=()=>setRot(ri.value);
     }
-    btnDel.onclick=()=>{ snapshot(); devs=devs.filter(x=>x!==sel); if(lastAdded===sel) lastAdded=null; sel=null; draw(); scheduleSave(); };
+    btnDel.onclick=()=>deleteSelection();
   }
   updateTools();
 }
@@ -1536,11 +1531,11 @@ function setType(d,t){
 function pts(d){ return d.type==='stereo'?[[d.x,d.y],[d.x2,d.y2]]:[[d.x,d.y]]; }
 
 function renderDev(d,el){
-  const z=zoom, P=pts(d), on=sel===d, sc=scOf(d), rot=rotOf(d), xf=canXF(d);
+  const z=zoom, P=pts(d), on=isSelected(d), sc=scOf(d), rot=rotOf(d), xf=canXF(d);
   const wide=barWidthFor(d);
   const base=Math.max(SHAPES[d.type]?19:R, wide/2)*sc;
-  const pad=on&&xf?36:10;
-  const reach=base*1.5+pad;
+  const pad=10;
+  const reach=base+pad;
   const minx=Math.min(...P.map(p=>p[0]))*z-reach*z, miny=Math.min(...P.map(p=>p[1]))*z-reach*z;
   const maxx=Math.max(...P.map(p=>p[0]))*z+reach*z, maxy=Math.max(...P.map(p=>p[1]))*z+reach*z;
   let h=`<svg class="devsvg" style="left:${minx}px;top:${miny}px" width="${maxx-minx}" height="${maxy-miny}" viewBox="${minx} ${miny} ${maxx-minx} ${maxy-miny}">`;
@@ -1559,59 +1554,78 @@ function renderDev(d,el){
         ? `<rect x="${-wide/2}" y="-3.5" width="${wide}" height="7" fill="${d.type==='tv'?C.org:C.grn}" stroke="${d.type==='tv'?C.ok:C.gk}" ${sw}/>`
         : SHAPES[d.type];
       h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
-      if(on) h+=`<rect x="${-hw}" y="${-hh}" width="${hw*2}" height="${hh*2}" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
-      h+=`<rect x="${-hw+1}" y="${-hh+1}" width="${hw*2-2}" height="${hh*2-2}" fill="transparent"/>${shape}</g>`;
+      if(on) h+=`<rect class="outline" x="${-hw}" y="${-hh}" width="${hw*2}" height="${hh*2}" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.1/sc}"/>`;
+      h+=`<rect x="${-hw+1}" y="${-hh+1}" width="${hw*2-2}" height="${hh*2-2}" fill="transparent"/>${shape}`;
       if(on&&xf){
-        const rad=(rot-90)*Math.PI/180, hr=(base+14)*z;
-        const hx=x*z+Math.cos(rad)*hr, hy=y*z+Math.sin(rad)*hr;
-        h+=`<line x1="${x*z}" y1="${y*z}" x2="${hx}" y2="${hy}" stroke="${selCol}" stroke-width="1.25"/>`;
-        h+=`<circle class="rot" cx="${hx}" cy="${hy}" r="6" fill="#fff" stroke="${selCol}" stroke-width="2"/>`;
-        const br=(rot-45)*Math.PI/180, brl=base*z*0.85;
-        const sx=x*z+Math.cos(br)*brl, sy=y*z+Math.sin(br)*brl;
-        h+=`<rect class="sz" x="${sx-5}" y="${sy-5}" width="10" height="10" fill="#fff" stroke="${selCol}" stroke-width="2" transform="rotate(${rot} ${sx} ${sy})"/>`;
+        const edge=(dir,ex,ey,ew,eh,cur)=>`<rect class="edge" data-dir="${dir}" x="${ex-ew/2}" y="${ey-eh/2}" width="${ew}" height="${eh}" fill="transparent" style="cursor:${cur}"/>`;
+        h+=edge('n',0,-hh,hw*2,8,'ns-resize')+edge('s',0,hh,hw*2,8,'ns-resize')+edge('e',hw,0,8,hh*2,'ew-resize')+edge('w',-hw,0,8,hh*2,'ew-resize');
+        h+=edge('nw',-hw,-hh,12,12,'nwse-resize')+edge('ne',hw,-hh,12,12,'nesw-resize')+edge('sw',-hw,hh,12,12,'nesw-resize')+edge('se',hw,hh,12,12,'nwse-resize');
       }
+      h+='</g>';
       return;
     }
     if(d.type!=='stereo' && d.type!=='single'){
       const title=(lineLabel(d)||d.type).split(' ').slice(0,2);
       h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
-      if(on) h+=`<rect x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
+      if(on) h+=`<rect class="outline" x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.1/sc}"/>`;
       h+=`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#555" stroke="#222" stroke-width="1.5"/><text y="2.5" font-size="5" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">${title[0]||''}</text></g>`;
       return;
     }
     const rr=R*z;
-    h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
+    h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${on?2.5*z:2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
       `<text x="${x*z}" y="${y*z}" font-size="${fs}" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Helvetica" font-weight="bold">${badge}</text></g>`;
   });
   h+='</svg>';
-  const mid=P.reduce((a,p)=>[a[0]+p[0]/P.length,a[1]+p[1]/P.length],[0,0]);
-  const tagY=mid[1]*z + base*z + 6;
-  h+=`<span class="tag" style="left:${mid[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
+  const top=Math.min(...P.map(p=>p[1]));
+  const tagY=top*z - base*z - 16;
+  h+=`<span class="tag" style="left:${deviceCenter(d)[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
+  el.classList.toggle('sel', on);
   el.innerHTML=h;
   el.querySelectorAll('.body').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,'body'); });
   el.querySelectorAll('.end').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,+b.dataset.i); });
-  el.querySelectorAll('.rot').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragRot(ev,d); });
-  el.querySelectorAll('.sz').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragScale(ev,d); });
+  el.querySelectorAll('.edge').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragScale(ev,d); });
 }
 
 function drag(ev,d,mode){
   ev.preventDefault(); ev.stopPropagation();
-  if(sel!==d) select(d);
-  snapshot();
-  const start=[ev.clientX/zoom, ev.clientY/zoom], o={x:d.x,y:d.y,x2:d.x2,y2:d.y2};
-  const others=devs.filter(x=>x!==d).flatMap(pts), T=6/zoom;
+  if(mode==='body' && ev.shiftKey){ select(d,{shift:true}); return; }
+  if(mode==='body'){
+    if(multi.includes(d) && multi.length>1) select(d,{keep:true});
+    else select(d);
+  } else if(!isSelected(d)) select(d);
+  const group=(mode==='body' && multi.includes(d) && multi.length>1)?multi.filter(x=>devs.includes(x)):[d];
+  const origins=group.map(g=>({d:g,x:g.x,y:g.y,x2:g.x2,y2:g.y2}));
+  const start=[ev.clientX/zoom, ev.clientY/zoom];
+  let snappedOnce=false, holdRot=false, timer=null;
+  const arm=()=>{ if(!snappedOnce){ snapshot(); snappedOnce=true; } };
+  if((ev.pointerType==='touch'||ev.pointerType==='pen') && mode==='body' && canXF(d)){
+    timer=setTimeout(()=>{ holdRot=true; arm(); }, 480);
+  } else arm();
   const mv=m=>{
+    if(timer && !holdRot){
+      if(Math.hypot(m.clientX-ev.clientX, m.clientY-ev.clientY)<8) return;
+      clearTimeout(timer); timer=null; arm();
+    }
+    if(holdRot){
+      const rect=stage.getBoundingClientRect();
+      const cx=rect.left+d.x*zoom, cy=rect.top+d.y*zoom;
+      let a=Math.atan2(m.clientY-cy, m.clientX-cx)*180/Math.PI+90;
+      if(!m.shiftKey) a=Math.round(a/15)*15;
+      d.rot=((a%360)+360)%360;
+      draw();
+      return;
+    }
     let dx=m.clientX/zoom-start[0], dy=m.clientY/zoom-start[1], gx=null, gy=null;
     if(mode==='body'){
-      const P0=pts(Object.assign({},d,o)); let best=[T,T];
-      P0.forEach(([px,py])=>others.forEach(([qx,qy])=>{
-        const ex=qx-(px+dx), ey=qy-(py+dy);
-        if(Math.abs(ex)<best[0]){ best[0]=Math.abs(ex); gx=qx; dx+=ex; }
-        if(Math.abs(ey)<best[1]){ best[1]=Math.abs(ey); gy=qy; dy+=ey; }
-      }));
-      d.x=o.x+dx; d.y=o.y+dy;
-      if(d.type==='stereo'){ d.x2=o.x2+dx; d.y2=o.y2+dy; }
+      const snap=snapShift(dx, dy, origins);
+      dx=snap.dx; dy=snap.dy; gx=snap.gx; gy=snap.gy;
+      origins.forEach(o=>{
+        o.d.x=o.x+dx; o.d.y=o.y+dy;
+        if(o.d.type==='stereo'){ o.d.x2=o.x2+dx; o.d.y2=o.y2+dy; }
+      });
     } else {
+      const o=origins[0];
+      const T=6/zoom;
       const k=mode?['x2','y2']:['x','y'], f=mode?['x','y']:['x2','y2'];
       let nx=o[k[0]]+dx, ny=o[k[1]]+dy;
       if(Math.abs(ny-o[f[1]])<T*2){ ny=o[f[1]]; gy=ny; }
@@ -1624,7 +1638,7 @@ function drag(ev,d,mode){
     if(gx!==null) guide(gx,true);
     if(gy!==null) guide(gy,false);
   };
-  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
+  const up=()=>{ clearTimeout(timer); removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
   addEventListener('pointermove',mv); addEventListener('pointerup',up);
 }
 function dragRot(ev,d){
@@ -1659,11 +1673,64 @@ function dragScale(ev,d){
 }
 function guide(v,vert){
   const g=document.createElement('div'); g.className='guide';
-  g.style.cssText=vert?`left:${v*zoom}px;top:0;width:0;height:100%;border-left:1px dashed #af52de`
-    :`top:${v*zoom}px;left:0;height:0;width:100%;border-top:1px dashed #af52de`;
+  const w=Math.max(baseW*zoom, stage.clientWidth||0), h=Math.max(baseH*zoom, stage.clientHeight||0);
+  g.style.cssText=vert?`left:${v*zoom}px;top:0;width:0;height:${h}px;border-left:1px dashed #af52de`
+    :`top:${v*zoom}px;left:0;height:0;width:${w}px;border-top:1px dashed #af52de`;
   stage.appendChild(g);
 }
-function select(d){ sel=d; draw(); }
+function deviceCenter(d){
+  const P=pts(d);
+  return P.reduce((a,p)=>[a[0]+p[0]/P.length, a[1]+p[1]/P.length],[0,0]);
+}
+function selectedList(){
+  multi=multi.filter(d=>devs.includes(d));
+  if(sel && !devs.includes(sel)) sel=null;
+  if(!multi.length && sel) return [sel];
+  return multi;
+}
+function isSelected(d){ return selectedList().includes(d); }
+function select(d, opts={}){
+  if(!d){ sel=null; multi=[]; draw(); return; }
+  if(opts.shift){
+    if(!multi.length && sel && sel!==d) multi=[sel];
+    const i=multi.indexOf(d);
+    if(i>=0){ multi.splice(i,1); sel=multi[multi.length-1]||null; }
+    else { multi.push(d); sel=d; }
+    draw(); return;
+  }
+  if(opts.keep && multi.includes(d) && multi.length>1){ sel=d; return; }
+  multi=[d]; sel=d; draw();
+}
+function deleteSelection(){
+  const kill=selectedList();
+  if(!kill.length) return;
+  snapshot();
+  devs=devs.filter(x=>!kill.includes(x));
+  if(kill.includes(lastAdded)) lastAdded=null;
+  sel=null; multi=[];
+  draw(); scheduleSave();
+}
+function snapShift(dx, dy, moving){
+  const T=8/zoom;
+  const lead=moving[0];
+  const base=deviceCenter(Object.assign({}, lead.d, {x:lead.x,y:lead.y,x2:lead.x2,y2:lead.y2}));
+  const cx=base[0]+dx, cy=base[1]+dy;
+  let bestX=T, bestY=T, gx=null, gy=null, adx=0, ady=0;
+  const skip=new Set(moving.map(m=>m.d));
+  devs.forEach(o=>{
+    if(skip.has(o) || (o.page||1)!==pageNum) return;
+    const P=pts(o), c=deviceCenter(o);
+    [c[0], ...P.map(p=>p[0])].forEach(x=>{
+      const ex=x-cx;
+      if(Math.abs(ex)<bestX){ bestX=Math.abs(ex); gx=x; adx=ex; }
+    });
+    [c[1], ...P.map(p=>p[1])].forEach(y=>{
+      const ey=y-cy;
+      if(Math.abs(ey)<bestY){ bestY=Math.abs(ey); gy=y; ady=ey; }
+    });
+  });
+  return {dx:dx+adx, dy:dy+ady, gx, gy};
+}
 
 function normRot(v){
   const n=typeof v==='number'?v:parseFloat(v);
@@ -1687,9 +1754,10 @@ function setRot(v){
   scheduleSave();
 }
 function rotateSel(deg){
-  if(!canXF(sel)) return;
+  const list=selectedList().filter(canXF);
+  if(!list.length) return;
   snapshot();
-  sel.rot=normRot(rotOf(sel)+deg);
+  list.forEach(d=>{ d.rot=normRot((d.rot||0)+deg); });
   draw();
   scheduleSave();
 }
@@ -1735,13 +1803,50 @@ function panGesture(ev){
 }
 function isPanSurface(t){
   if(!t || !main.contains(t)) return false;
-  if(t.closest && t.closest('.body, .end, .rot, .sz')) return false;
+  if(t.closest && t.closest('.body, .end, .edge')) return false;
   if(typingTarget(t)) return false;
   return true;
 }
 function onMainScrollbar(e){
   const r=main.getBoundingClientRect();
   return e.clientX>=r.left+main.clientWidth-1 || e.clientY>=r.top+main.clientHeight-1;
+}
+function startMarquee(e){
+  e.preventDefault();
+  const rect=stage.getBoundingClientRect();
+  const x0=e.clientX, y0=e.clientY;
+  const box=document.createElement('div');
+  box.className='marquee';
+  stage.appendChild(box);
+  let moved=false;
+  const mv=m=>{
+    if(Math.hypot(m.clientX-x0, m.clientY-y0)>3) moved=true;
+    const left=Math.min(x0,m.clientX)-rect.left, top=Math.min(y0,m.clientY)-rect.top;
+    box.style.cssText=`left:${left}px;top:${top}px;width:${Math.abs(m.clientX-x0)}px;height:${Math.abs(m.clientY-y0)}px`;
+  };
+  const up=m=>{
+    removeEventListener('pointermove', mv);
+    removeEventListener('pointerup', up);
+    box.remove();
+    if(!moved){ if(!m.shiftKey) select(null); return; }
+    const xA=(Math.min(x0,m.clientX)-rect.left)/zoom, yA=(Math.min(y0,m.clientY)-rect.top)/zoom;
+    const xB=(Math.max(x0,m.clientX)-rect.left)/zoom, yB=(Math.max(y0,m.clientY)-rect.top)/zoom;
+    const hits=devs.filter(d=>{
+      if((d.page||1)!==pageNum) return false;
+      const c=deviceCenter(d);
+      return c[0]>=xA && c[0]<=xB && c[1]>=yA && c[1]<=yB;
+    });
+    if(m.shiftKey){
+      hits.forEach(d=>{ if(!multi.includes(d)) multi.push(d); });
+      sel=multi[multi.length-1]||null;
+    } else {
+      multi=hits.slice();
+      sel=hits[0]||null;
+    }
+    draw();
+  };
+  addEventListener('pointermove', mv);
+  addEventListener('pointerup', up);
 }
 main.addEventListener('selectstart', e=>e.preventDefault());
 main.addEventListener('dragstart', e=>{ if(e.target&&e.target.tagName==='CANVAS') e.preventDefault(); });
@@ -1756,7 +1861,7 @@ main.addEventListener('pointerdown', e=>{
     const sx=e.clientX, sy=e.clientY;
     const up=m=>{
       removeEventListener('pointerup', up);
-      if(Math.hypot(m.clientX-sx, m.clientY-sy)<8 && sel){ sel=null; draw(); }
+      if(Math.hypot(m.clientX-sx, m.clientY-sy)<8 && (sel||multi.length)) select(null);
     };
     addEventListener('pointerup', up);
     return;
@@ -1765,6 +1870,7 @@ main.addEventListener('pointerdown', e=>{
   const middle=e.button===1;
   const space=spacePan && e.button===0;
   const emptyLeft=e.button===0 && isPanSurface(e.target);
+  if(selectMode && emptyLeft && !space && !middle){ startMarquee(e); return; }
   if(!middle && !space && !emptyLeft) return;
   e.preventDefault();
   const sl=main.scrollLeft, stTop=main.scrollTop, sx=e.clientX, sy=e.clientY;
@@ -1784,7 +1890,7 @@ main.addEventListener('pointerdown', e=>{
     try{ main.releasePointerCapture(e.pointerId); }catch(err){}
     main.classList.remove('panning');
     clearNativeSelection();
-    if(!moved && emptyLeft && !space && sel){ sel=null; draw(); }
+    if(!moved && emptyLeft && !space){ select(null); }
   };
   addEventListener('pointermove', mv);
   addEventListener('pointerup', up);
@@ -1795,6 +1901,9 @@ addEventListener('keydown',e=>{
   if((e.code==='Space'||e.key===' ') && !typingTarget(e.target)){
     if(!e.repeat){ spacePan=true; main.classList.add('space-pan'); }
     e.preventDefault();
+  }
+  if((e.key==='Backspace'||e.key==='Delete') && !typingTarget(e.target)){
+    e.preventDefault(); deleteSelection(); return;
   }
   if(meta && (e.key==='z'||e.key==='Z')){
     e.preventDefault();
@@ -1810,7 +1919,28 @@ addEventListener('keyup', e=>{
 });
 addEventListener('blur', ()=>{ spacePan=false; main.classList.remove('space-pan'); });
 addEventListener('resize', ()=>updatePanAffordance());
-main.addEventListener('wheel',e=>{ if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }},{passive:false});
+main.addEventListener('wheel',e=>{
+  if(e.shiftKey && !e.ctrlKey && selectedList().some(canXF)){
+    e.preventDefault();
+    rotateSel(e.deltaY>0?-5:5);
+    return;
+  }
+  if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }
+},{passive:false});
+let gestRot=null;
+addEventListener('gesturestart', e=>{
+  if(!selectedList().some(canXF)) return;
+  e.preventDefault();
+  gestRot=selectedList().filter(canXF).map(d=>({d, rot:d.rot||0}));
+  snapshot();
+});
+addEventListener('gesturechange', e=>{
+  if(!gestRot) return;
+  e.preventDefault();
+  gestRot.forEach(g=>{ g.d.rot=normRot(g.rot+(e.rotation||0)); });
+  draw();
+});
+addEventListener('gestureend', ()=>{ if(gestRot){ gestRot=null; scheduleSave(); } });
 
 btnPrevPage.onclick=()=>showPage(pageNum-1,true);
 btnNextPage.onclick=()=>showPage(pageNum+1,true);
@@ -1846,8 +1976,7 @@ document.querySelectorAll('#audMode button').forEach(b=>b.onclick=()=>{
   if(audioSystem==='matrix') matrixDismissed=true;
   draw(); scheduleSave();
 });
-document.querySelectorAll('#catFilters button').forEach(b=>b.onclick=()=>{ costFilter=b.dataset.cat; draw(); });
-btnSortCost.onclick=()=>{ roomSort=roomSort==='cost'?'name':'cost'; draw(); };
+btnSelect.onclick=()=>{ selectMode=!selectMode; updateTools(); };
 btnHideRight.onclick=()=>setRight(false);
 btnRail.onclick=()=>setRight(true);
 setRight(rightOpen);
