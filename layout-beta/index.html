@@ -5,7 +5,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>YourTech Layout Tool — Beta</title>
+<title>Layout Tool | SmartHome Brothers</title>
+<script src="/assets/hp.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
@@ -2381,7 +2382,7 @@ async function sendCheckout(attempt){
     res=await fetch('/api/checkout', {
       method:'POST',
       headers:{'content-type':'application/json', authorization:'Bearer '+token},
-      body:JSON.stringify((()=>{ const payload={name:projectName||'Untitled project', seed:readBuySeed()}; if(cloudState&&cloudState.id) payload.projectId=cloudState.id; return payload; })())
+      body:JSON.stringify((()=>{ const payload={name:projectName||'Untitled project', seed:readBuySeed()}; if(cloudState&&cloudState.id) payload.projectId=cloudState.id; if(window.tymHpVariant){ const hp=window.tymHpVariant(); if(hp) payload.hpVariant=hp; } return payload; })())
     });
     body=await res.json();
   }catch(e){
@@ -2405,6 +2406,7 @@ async function sendCheckout(attempt){
   try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){}
   await persistPdf();
   ph('layout_checkout_start', {});
+  if(window.tymTrack) window.tymTrack('layout_checkout_started');
   location.assign(body.url);
 }
 function planStoragePath(uid, projectId){

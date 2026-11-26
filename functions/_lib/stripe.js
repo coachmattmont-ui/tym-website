@@ -1,4 +1,4 @@
-export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents, projectId, userId, email, origin, name, seed, idempotencyKey }) {
+export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents, projectId, userId, email, origin, name, seed, idempotencyKey, hpVariant }) {
   const success = origin + '/layout-beta/?checkout=success&project_id=' + encodeURIComponent(projectId) + '&session_id={CHECKOUT_SESSION_ID}';
   const cancel = origin + '/layout-beta/?checkout=cancel&project_id=' + encodeURIComponent(projectId);
   const pairs = [
@@ -11,6 +11,7 @@ export async function createCheckoutSession({ env, fetchImpl = fetch, priceCents
     ['metadata[project_name]', name || 'Untitled project'],
     ['metadata[seed_rooms]', ((seed && seed.rooms) || []).join('|').slice(0, 450)],
     ['metadata[seed_tier]', (seed && seed.tier) || ''],
+    ...(hpVariant === 'a' || hpVariant === 'b' ? [['metadata[hp_variant]', hpVariant]] : []),
     ['line_items[0][quantity]', '1'],
     ['line_items[0][price_data][currency]', 'usd'],
     ['line_items[0][price_data][unit_amount]', String(priceCents)],

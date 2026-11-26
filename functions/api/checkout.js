@@ -2,6 +2,7 @@ import { json } from '../_lib/http.js';
 import { cleanProjectName, editWindowOpen, isUuid, paymentsConfigured, resolvePriceCents } from '../_lib/billing.js';
 import { cleanSeed } from '../_lib/grant.js';
 import { applyCheckoutSession } from '../_lib/grant.js';
+import { cleanHpVariant } from '../_lib/events.js';
 import { createCheckoutSession, retrieveCheckoutSession } from '../_lib/stripe.js';
 import { dbFromEnv, getUser } from '../_lib/supabase.js';
 
@@ -89,6 +90,7 @@ export async function handleCheckout(request, env, fetchImpl = fetch) {
     email: user.email,
     name,
     seed,
+    hpVariant: cleanHpVariant(body.hpVariant),
     idempotencyKey: 'yt_' + inserted.row.id
   });
   if (session.error || !session.url) {

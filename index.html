@@ -3,78 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Home &amp; Theater Design, Priced in Seconds — SmartHome Brothers by TYM</title>
-<meta name="description" content="Need help designing the tech for your home or theater? Use our free design tool to get a price range for music, TV, theater, lighting and Wi-Fi in seconds, or book a free 15-minute call.">
-<style>
-  :root{--bg:#0b0d10;--text:#f2f4f7;--accent:#2563EB;--accent-strong:#3B7AFF}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--tym-font,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif);background:var(--tym-bg,#0b0d10);color:var(--tym-text,#f2f4f7);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  img{max-width:100%;display:block}
-  a{color:var(--tym-accent-strong,#3B7AFF)}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,5vw,24px)}
-  /* Landing page (mobile-first) */
-  .lp-wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-  .lp-accent{color:var(--tym-accent-strong)}
-  .lp-hero{position:relative;padding:56px 0 52px;background:linear-gradient(180deg,rgba(11,13,16,.55) 0%,rgba(11,13,16,.82) 60%,#0b0d10 100%),url('/images/bocaraton.webp') center/cover no-repeat}
-  .lp-eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tym-text-soft);margin-bottom:14px}
-  .lp-hero h1{font-size:clamp(34px,9vw,60px);line-height:1.06;letter-spacing:-.03em;font-weight:800;max-width:780px;text-wrap:balance}
-  .lp-sub{font-size:clamp(17px,4.4vw,20px);color:var(--tym-text-soft);max-width:600px;margin:16px 0 26px}
-  .lp-hero-btn{display:block;text-align:center;width:100%}
-  .lp-micro{font-size:13px;color:var(--tym-text-muted);margin-top:12px;text-align:center}
-  .lp-proof{border-top:1px solid var(--tym-border);border-bottom:1px solid var(--tym-border);background:var(--tym-bg-elev);padding:26px 0}
-  .lp-stats{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:18px 12px}
-  .lp-stats li{display:flex;flex-direction:column}
-  .lp-stats strong{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--tym-text)}
-  .lp-stats span{font-size:13px;color:var(--tym-text-muted)}
-  .lp-press{margin-top:18px;font-size:13px;color:var(--tym-text-soft);line-height:1.6}
-  .lp-press span{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tym-text-muted);margin-bottom:4px}
-  .lp-section{padding:56px 0}
-  .lp-tight{padding:8px 0 40px}
-  .lp-tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tym-accent-strong);margin-bottom:10px}
-  .lp-section h2{font-size:clamp(26px,6.6vw,40px);line-height:1.12;letter-spacing:-.025em;font-weight:800;margin-bottom:18px;text-wrap:balance}
-  .lp-body{color:var(--tym-text-soft);font-size:17px;margin-bottom:14px}
-  .lp-link{font-weight:600;text-decoration:none;color:var(--tym-accent-strong)}
-  .lp-link:hover{text-decoration:underline}
-  .lp-split{display:grid;gap:28px}
-  .lp-figure img{width:100%;height:auto;border-radius:14px;border:1px solid var(--tym-border)}
-  .lp-steps{list-style:none;counter-reset:s;display:grid;gap:16px}
-  .lp-steps li{counter-increment:s;position:relative;padding-left:48px;color:var(--tym-text-soft);font-size:16px}
-  .lp-steps li b{display:block;color:var(--tym-text);font-size:17px}
-  .lp-steps li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--tym-accent-soft);border:1px solid var(--tym-accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
-  .lp-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
-  .lp-chips li{padding:8px 14px;border:1px solid var(--tym-border-strong);border-radius:999px;background:var(--tym-bg-card);font-size:14px;font-weight:600;color:var(--tym-text-soft)}
-  .lp-narrow{max-width:720px}
-  .lp-faq{border-bottom:1px solid var(--tym-border);padding:16px 0}
-  .lp-faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px}
-  .lp-faq summary::-webkit-details-marker{display:none}
-  .lp-faq summary::after{content:"+";color:var(--tym-accent-strong);font-size:22px;line-height:1}
-  .lp-faq[open] summary::after{content:"–"}
-  .lp-faq p{color:var(--tym-text-soft);margin-top:10px}
-  .lp-cta2{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:30px;text-align:center}
-  .lp-cta2 .tym-btn{width:100%;text-align:center}
-  .lp-hub{padding-bottom:72px}
-  .lp-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .lp-card{display:flex;flex-direction:column;background:var(--tym-bg-card);border:1px solid var(--tym-border);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--tym-text);transition:border-color .15s,transform .15s}
-  .lp-card:hover{border-color:var(--tym-accent);transform:translateY(-2px)}
-  .lp-card img{width:100%;aspect-ratio:16/10;object-fit:cover}
-  .lp-card-k{font-weight:800;font-size:15px;padding:12px 12px 2px}
-  .lp-card-t{font-size:13px;color:var(--tym-text-muted);padding:0 12px 14px;line-height:1.45}
-  @media (min-width:760px){
-    .lp-wrap{padding:0 24px}
-    .lp-hero{padding:110px 0 96px}
-    .lp-hero-btn{display:inline-block;width:auto}
-    .lp-micro{text-align:left}
-    .lp-stats{grid-template-columns:repeat(4,1fr)}
-    .lp-section{padding:88px 0}
-    .lp-split{grid-template-columns:1.1fr .9fr;align-items:center;gap:56px}
-    .lp-split-rev{grid-template-columns:.9fr 1.1fr}
-    .lp-cta2 .tym-btn{width:auto}
-    .lp-cards{grid-template-columns:repeat(3,1fr);gap:18px}
-    .lp-card-k{font-size:17px;padding:16px 16px 4px}.lp-card-t{font-size:14px;padding:0 16px 18px}
-  }
-  @media (min-width:1100px){.lp-cards{grid-template-columns:repeat(4,1fr)}}
-</style>
+<title>Plan your smart home on your floor plan | SmartHome Brothers</title>
+<meta name="description" content="Plan your smart home on your own floor plan. One project, every floor, 30 days of editing. Or get a free Instant Quote first.">
+<link rel="canonical" href="/">
+<link rel="preload" as="image" href="/images/hero-house-dusk.webp" type="image/webp" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/home.css">
+<!-- Cloudflare Web Analytics. Matt: replace YOUR_CLOUDFLARE_WEB_ANALYTICS_TOKEN
+     with the token from the Cloudflare dashboard (Web Analytics, Manage site).
+     The beacon stays off until that placeholder is replaced. -->
+<script>window.TYM_CF_BEACON_TOKEN = 'YOUR_CLOUDFLARE_WEB_ANALYTICS_TOKEN';</script>
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -101,14 +42,6 @@ src="https://www.facebook.com/tr?id=522485526738484&ev=PageView&noscript=1"
   gtag('config', 'G-C44FWQVXVS');
 </script>
 <!-- End Google tag -->
-<style>
-  /* Instant-quote CTA: long label on desktop, short on phones */
-  
-  
-  
-  
-</style>
-<link rel="stylesheet" href="/assets/site.css">
 <!-- PostHog -->
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -116,14 +49,13 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 </script>
 <!-- End PostHog -->
 </head>
-<body>
+<body class="hp">
 
-<!-- NAV (universal, sticky, hamburger on mobile) -->
 <nav class="tym-nav" aria-label="Main">
   <div class="wrap">
     <a href="/" class="logo tym-logo" aria-label="SmartHome Brothers by TYM, home"><img src="/assets/smarthome-brothers-logo.svg" alt="SmartHome Brothers by TYM" width="142" height="40"></a>
     <ul class="nav-menu" id="nav-menu">
-      <li class="nav-mobile-cta"><a href="/qualify/">Get My Instant Quote</a></li>
+      <li class="nav-mobile-cta"><a href="/layout/" data-hp="hero">Start My Layout · $29</a></li>
       <li><a href="/packages/aetherion-max/">Theater Package</a></li>
       <li><a href="/design-service/">Custom Design</a></li>
       <li><a href="/learn/">Learn</a></li>
@@ -131,7 +63,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <li><a href="/about/">About</a></li>
     </ul>
     <div class="nav-right">
-      <a href="/qualify/" class="btn"><span class="cta-long">Get My Instant Quote</span><span class="cta-short">Instant Quote</span></a>
+      <a href="/layout/" class="btn" data-hp="hero"><span class="cta-long">Start My Layout · $29</span><span class="cta-short">Layout · $29</span></a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
         <span></span>
         <span></span>
@@ -141,23 +73,24 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   </div>
 </nav>
 
-<main class="lp">
-
-<!-- 1. HERO: one job, one CTA -->
-<section class="lp-hero">
-  <div class="lp-wrap">
-    <p class="lp-eyebrow">Smart home &amp; theater design · Nationwide</p>
-    <h1>Need help designing the tech for your <span class="lp-accent">home or theater?</span></h1>
-    <p class="lp-sub">We can help. Use our free design tool to see a real price range for your music, TV, theater, lighting and Wi‑Fi in seconds.</p>
-    <a href="/qualify/" class="tym-btn tym-btn-lg lp-hero-btn">Get My Instant Quote</a>
-    <p class="lp-micro">Free · Takes less than 60 seconds</p>
+<main>
+<section class="hero">
+  <div class="hero-photo">
+    <img src="/images/hero-house-dusk.webp" alt="A house at dusk, lit from the inside" width="1000" height="1000" fetchpriority="high">
+    <div class="hero-shade" aria-hidden="true"></div>
+  </div>
+  <div class="hero-copy">
+    <p class="kicker">Layout</p>
+    <h1>Plan your smart home on your own floor plan.</h1>
+    <a class="hp-btn" href="/layout/" data-hp="hero">Start My Layout · $29</a>
+    <p class="sub">One project, every floor, 30 days of editing.</p>
+    <a class="textlink" href="/qualify/" data-hp="secondary">Just want a ballpark first? Get a free Instant Quote</a>
   </div>
 </section>
 
-<!-- 2. PROOF (existing site facts only: /about stats + /theater press list) -->
-<section class="lp-proof" aria-label="By the numbers">
-  <div class="lp-wrap">
-    <ul class="lp-stats">
+<section class="stats" aria-label="By the numbers">
+  <div class="hp-wrap">
+    <ul>
       <li><strong>15+</strong><span>years installing</span></li>
       <li><strong>All 50</strong><span>states designed in</span></li>
       <li><strong>28M+</strong><span>YouTube views</span></li>
@@ -166,73 +99,71 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   </div>
 </section>
 
-<!-- 3. HOW IT WORKS -->
-<section class="lp-section" id="how-it-works">
-  <div class="lp-wrap lp-split">
+<section class="band-sec gray" id="how-it-works">
+  <div class="hp-wrap">
+    <p class="kicker">How it works</p>
+    <h2>Your floor plan, priced device by device.</h2>
+    <ol class="steps">
+      <li><span class="num">1</span><div><b>Upload your plan</b><p>Use the PDF floor plan you already have.</p></div></li>
+      <li><span class="num">2</span><div><b>Place your devices</b><p>Speakers, screens, lights, and the network, on the drawing.</p></div></li>
+      <li><span class="num">3</span><div><b>See your total</b><p>Every device shows its list price, and the project adds them up.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band-sec white">
+  <div class="hp-wrap">
+    <p class="kicker">What you can place</p>
+    <h2>The gear, on the plan.</h2>
+    <ul class="place">
+      <li><h3>Audio</h3><p>Sonos, TruAudio, Paradigm</p></li>
+      <li><h3>TV &amp; Theater</h3><p>Sony, Epson, AWOL</p></li>
+      <li><h3>Lighting</h3><p>Lutron, Control4</p></li>
+      <li><h3>Wi-Fi</h3><p>Ubiquiti, Alta Labs</p></li>
+      <li><h3>Control</h3><p>Control4, Josh.ai</p></li>
+      <li><h3>Security</h3><p>Ubiquiti cameras and recorders</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="band-sec gray">
+  <div class="hp-wrap split">
     <div>
-      <p class="lp-tag">How it works</p>
-      <h2>From “where do I start?” to a real number.</h2>
-      <ol class="lp-steps">
-        <li><b>Tell us about your home.</b> Size, rooms, and what matters most to you. Just taps, no forms.</li>
-        <li><b>See your price range instantly.</b> Music, TV, theater, lighting and Wi‑Fi, priced on screen.</li>
-        <li><b>Keep it or talk it through.</b> Email yourself the estimate, or book a free 15-minute call with a designer.</li>
-      </ol>
+      <p class="kicker">Before the walls close</p>
+      <h2>Fix it on paper, not in drywall.</h2>
+      <p class="lede">Sightlines, speaker spots, and screen size get settled on the plan. The walls stay closed until the design is right.</p>
     </div>
-    <figure class="lp-figure"><img src="/images/DesigniPad.webp" alt="A TYM smart home design plan on an iPad" loading="lazy" width="500" height="372"></figure>
+    <figure><img src="/images/GrayscaleSitelines.webp" alt="A floor plan with sightlines drawn to the screen" width="800" height="600" loading="lazy"></figure>
   </div>
 </section>
 
-
-<!-- 5. WHO WE ARE -->
-<section class="lp-section">
-  <div class="lp-wrap lp-split lp-split-rev">
-    <figure class="lp-figure"><img src="/images/MattandGreg.webp" alt="Matt and Greg, the SmartHome Brothers" loading="lazy" width="1284" height="1274"></figure>
-    <div>
-      <p class="lp-tag">Who you’ll work with</p>
-      <h2>Two brothers who’ve spent 15 years installing this stuff.</h2>
-      <p class="lp-body">We’re the SmartHome Brothers. Now we focus on design: planning the tech before the walls close, so your system works the first time.</p>
-      <a href="/about/" class="lp-link">Our story →</a>
-    </div>
+<section class="brothers">
+  <img src="/images/Brothers.webp" alt="Matt, Greg, and Brad of SmartHome Brothers" width="1600" height="900" loading="lazy">
+  <div class="brothers-shade" aria-hidden="true"></div>
+  <div class="brothers-copy hp-wrap">
+    <p class="kicker">Who you'll work with</p>
+    <h2>Matt, Greg, and Brad.</h2>
+    <p>Three brothers. Fifteen years installing this work, now spent planning it on your floor plan before the drywall goes up. <a href="/about/">Our story</a></p>
   </div>
 </section>
 
-<!-- 6. OBJECTIONS + second (and last) CTA -->
-<section class="lp-section" id="questions">
-  <div class="lp-wrap lp-narrow">
-    <p class="lp-tag">Quick answers</p>
-    <h2>Before you tap “start.”</h2>
-    <details class="lp-faq"><summary>Is the design tool really free?</summary><p>Yes. You see your price range on screen. There’s nothing to buy to use it.</p></details>
-    <details class="lp-faq"><summary>Do I have to talk to a salesperson?</summary><p>No. The call is optional. If you want one, it’s 15 minutes with a designer, not a pitch.</p></details>
-    <details class="lp-faq"><summary>Do you work outside Utah?</summary><p>Yes. We’ve designed in all 50 states. Design happens remotely, and packages ship nationwide.</p></details>
-    <details class="lp-faq"><summary>I only want a home theater.</summary><p>Start with the tool and pick your theater room, or see our <a href="/packages/aetherion-max/">ready-to-order Theater Package</a>.</p></details>
-    <div class="lp-cta2">
-      <a href="/qualify/" class="tym-btn tym-btn-lg">Get My Instant Quote</a>
-      <a href="https://calendly.com/smartdesigns/quick-call-project-review" class="lp-link" target="_blank" rel="noopener">or book a free 15-min call →</a>
-    </div>
+<section class="band-sec gray" id="questions">
+  <div class="hp-wrap faq">
+    <p class="kicker">FAQ</p>
+    <h2>Before you start.</h2>
+    <details><summary>Is the design tool really free?</summary><p>Yes. You see your price range on screen. There’s nothing to buy to use it.</p></details>
+    <details><summary>Do I have to talk to a salesperson?</summary><p>No. The call is optional. If you want one, it’s 15 minutes with a designer, not a pitch.</p></details>
+    <details><summary>Do you work outside Utah?</summary><p>Yes. We’ve designed in all 50 states. Design happens remotely, and packages ship nationwide.</p></details>
+    <details><summary>I only want a home theater.</summary><p>Start with the tool and pick your theater room, or see our <a href="/packages/aetherion-max/">ready-to-order Theater Package</a>.</p></details>
   </div>
 </section>
 
-<!-- 7. FUNNEL HUB: everything else, secondary -->
-<section class="lp-section lp-hub" id="more">
-  <div class="lp-wrap">
-    <p class="lp-tag">More ways we can help</p>
-    <h2>Not ready for a quote? Start here.</h2>
-    <div class="lp-cards">
-      <a class="lp-card" href="/packages/aetherion-max/"><img src="/images/theater-hero.webp" alt="" loading="lazy"><span class="lp-card-k">Theater Package</span><span class="lp-card-t">A ready-to-order theater, drop-shipped to your door.</span></a>
-      <a class="lp-card" href="/design-service/"><img src="/images/DesignSample.webp" alt="" loading="lazy"><span class="lp-card-k">Custom Design</span><span class="lp-card-t">A full, dimensioned plan for your whole home.</span></a>
-      <a class="lp-card" href="/free-bundle/"><img src="/images/guides/how-to-prewire.webp" alt="" loading="lazy"><span class="lp-card-k">Free Wiring Bundle</span><span class="lp-card-t">How to wire your smart home: free guide + ebook.</span></a>
-      <!-- LEAD-MAGNET SLOT: add future ebooks (e.g. Josh.ai) as more .lp-card links here -->
-      <a class="lp-card" href="/guides/"><img src="/images/guides/prewire-quick-guide.webp" alt="" loading="lazy"><span class="lp-card-k">Free Guides</span><span class="lp-card-t">Everything we know, for free.</span></a>
-      <a class="lp-card" href="/learn/"><img src="/images/learn/smarthome-brothers-back.webp" alt="" loading="lazy"><span class="lp-card-k">Blog</span><span class="lp-card-t">Theaters, MicroLED and media rooms, explained.</span></a>
-      <a class="lp-card" href="https://www.youtube.com/@SmartHomeBrothers" target="_blank" rel="noopener"><img src="/images/HolladayTheater.webp" alt="" loading="lazy"><span class="lp-card-k">YouTube</span><span class="lp-card-t">Project tours, gear reviews and install walkthroughs.</span></a>
-      <a class="lp-card" href="https://www.skool.com/smarthomeclub/about" target="_blank" rel="noopener"><img src="/images/Brothers.webp" alt="" loading="lazy"><span class="lp-card-k">Smart Home Club</span><span class="lp-card-t">Build it right with us in your corner.</span></a>
-    </div>
-  </div>
+<section class="close">
+  <h2>Your plan. Your devices. Your number.</h2>
+  <a class="hp-btn" href="/layout/" data-hp="hero">Start My Layout · $29</a>
 </section>
-
 </main>
 
-<!-- FOOTER -->
 <footer class="tym-footer">
   <div class="tym-footer-wrap">
     <div class="tym-footer-grid">
@@ -277,40 +208,6 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <div class="tym-footer-bottom">© 2026 Tym, LLC · SmartHome Brothers™</div>
   </div>
 </footer>
-
-<script>
-// Universal nav — mobile hamburger toggle
-(function() {
-  var toggle = document.getElementById('nav-toggle');
-  var menu   = document.getElementById('nav-menu');
-  if (!toggle || !menu) return;
-
-  function closeMenu() {
-    menu.classList.remove('open');
-    toggle.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-  }
-  function openMenu() {
-    menu.classList.add('open');
-    toggle.classList.add('open');
-    toggle.setAttribute('aria-expanded', 'true');
-  }
-
-  toggle.addEventListener('click', function() {
-    menu.classList.contains('open') ? closeMenu() : openMenu();
-  });
-
-  // Close on link click (nice for anchor links that scroll to sections)
-  menu.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', closeMenu);
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeMenu();
-  });
-})();
-</script>
-
+<script src="/assets/hp.js"></script>
 </body>
 </html>

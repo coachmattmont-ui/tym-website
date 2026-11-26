@@ -206,6 +206,7 @@ test('checkout uses the env price, refuses a locked-out config, and will not dou
       assert.match(body, /session_id=\{CHECKOUT_SESSION_ID\}/);
       assert.match(body, /seed_rooms%5D=Great%20Room%7CKitchen/);
       assert.equal(body.includes('dealer'), false);
+      assert.equal(body.includes('hp_variant'), false);
       assert.equal(options.headers['Idempotency-Key'], 'yt_33333333-3333-4333-8333-333333333333');
       return new Response(JSON.stringify({ id: 'cs_test_new', url: 'https://checkout.stripe.com/c/pay/cs_test_new' }), { status: 200 });
     }
