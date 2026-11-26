@@ -38,7 +38,7 @@ Set these on the Cloudflare Pages project (Production and Preview). Mark the thr
 
 1. Create a project. Authentication, Email, enable email sign-in. Magic link is enough. Leave phone off.
 2. Authentication, URL configuration. Add every origin the tool is opened from, with path `/layout-beta/`. Include production (`https://tymhomes.com/layout-beta/` or the live host), the Pages preview URL, and `http://localhost:8788/layout-beta/` if you use Wrangler locally.
-3. Open the SQL editor and run `supabase/migrations/20261125120000_layout_projects.sql`, then `20261125130000_layout_projects_function_search_path.sql` and `20261126160000_plan_pdf_storage_policies.sql`. The last one is what lets the signed-in owner upload and reopen the floor plan.
+3. Open the SQL editor and run, in order: `supabase/migrations/20261125120000_layout_projects.sql`, `20261125130000_layout_projects_function_search_path.sql`, `20261126160000_plan_pdf_storage_policies.sql`, and `20261126180000_plan_pdf_upsert_rls.sql`. The last one is what lets a second save replace the floor plan without a row-level security error.
 4. Copy the project URL, anon key, and service role key into the Pages variables above.
 
 The migration also creates `pending_checkouts` for an in-flight Stripe session. That is not a project. A second click while one is open returns the same Checkout URL. The project row is inserted only when the payment is paid, together with the entitlement.

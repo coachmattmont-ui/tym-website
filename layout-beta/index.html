@@ -982,7 +982,7 @@ function newProject(){
   projectName=projectName||'Untitled project';
   devs=[]; rooms=[]; active=null; sel=null; multi=[]; lastAdded=null; nid=1; hifi=false;
   pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false;
-  pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   empty.style.display=''; empty.textContent='Upload a PDF floor plan to begin.';
   pg.textContent=''; paintProjectName();
@@ -1048,7 +1048,7 @@ function makeDevice(type,cx,cy){
 const GAP=60,R=13,SC_MIN=0.75,SC_MAX=1.5,SC_STEPS=[0.75,1,1.25,1.5];
 let devs=[],sel=null,multi=[],nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
 let selectMode=false;
-let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
+let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null, pdfRemoteSig='';
 let pageNames={}, controlPlatform='', audioSystem='amps', matrixDismissed=false, controlPrompted=false;
 /* Room amps is the default. Set this true to show Room amps / Whole-home again. */
 const SHOW_AUDIO_MODE=false;
@@ -2413,6 +2413,14 @@ function planStoragePath(uid, projectId){
   if(!/^[0-9a-f-]{36}$/.test(user) || !/^[0-9a-f-]{36}$/.test(project)) return '';
   return user+'/'+project+'.pdf';
 }
+async function pdfBytesSig(){
+  if(!pdfBuf || !pdfBuf.byteLength) return '';
+  const digest=await crypto.subtle.digest('SHA-256', pdfBuf);
+  return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function storageErrorText(error){
+  return String((error&&(error.message||error.error))||'');
+}
 async function pushPdf(opts){
   opts=opts||{};
   if(!pdfBuf || !pdfBuf.byteLength || !sb || !cloudState || !editOpen()) return !pdfBuf;
@@ -2420,24 +2428,32 @@ async function pushPdf(opts){
   const uid=data.session&&data.session.user&&data.session.user.id;
   const path=planStoragePath(uid, cloudState.id);
   if(!path) return false;
+  const sig=await pdfBytesSig();
+  const key=path+'|'+sig;
+  if(pdfRemoteSig===key && cloudState.pdfPath===path) return true;
   const bytes=new Uint8Array(pdfBuf.slice(0));
-  let up=await sb.storage.from('plan-pdfs').upload(path, bytes, {contentType:'application/pdf', upsert:false});
-  const exists=up.error && /exists|duplicate/i.test(String(up.error.message||up.error.error||''));
-  if(exists) up=await sb.storage.from('plan-pdfs').update(path, bytes, {contentType:'application/pdf', upsert:true});
+  const replacing=cloudState.pdfPath===path;
+  const up=await sb.storage.from('plan-pdfs').upload(path, bytes, {contentType:'application/pdf', upsert:replacing});
   if(up.error){
-    if(!opts.quiet){
-      const why=up.error.message||up.error.error||'The storage service refused the file.';
-      showModal('<b>The floor plan did not upload</b><br><br>'+esc(why), [['OK']]);
+    const why=storageErrorText(up.error);
+    const already=/exists|duplicate/i.test(why);
+    if(already && cloudState.pdfPath===path){
+      pdfRemoteSig=key;
+      return true;
     }
+    if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>'+esc(why||'The storage service refused the file.'), [['OK']]);
     return false;
   }
-  const saved=await sb.from('projects').update({pdf_path:path}).eq('id', cloudState.id).select('pdf_path').maybeSingle();
-  if(saved.error || !saved.data || saved.data.pdf_path!==path){
-    if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>The file reached storage, but this project did not record it. Use Save to try again.', [['OK']]);
-    return false;
+  if(cloudState.pdfPath!==path){
+    const saved=await sb.from('projects').update({pdf_path:path}).eq('id', cloudState.id).select('pdf_path').maybeSingle();
+    if(saved.error || !saved.data || saved.data.pdf_path!==path){
+      if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>The file reached storage, but this project did not record it. Use Save to try again.', [['OK']]);
+      return false;
+    }
+    cloudState.pdfPath=path;
+    rememberCloud();
   }
-  cloudState.pdfPath=path;
-  rememberCloud();
+  pdfRemoteSig=key;
   return true;
 }
 async function pushCloud(opts){
@@ -2516,7 +2532,10 @@ async function openCloudProject(id){
     }
   } else planOpts.skipCloud=true;
   if(planBuf){
-    try{ await loadPdfBuffer(planBuf, planName, planOpts); }
+    try{
+      await loadPdfBuffer(planBuf, planName, planOpts);
+      if(planOpts.skipCloud && data.pdf_path) pdfRemoteSig=data.pdf_path+'|'+(await pdfBytesSig());
+    }
     catch(err){
       pdfDoc=null; pdfBuf=null;
       empty.style.display='';
@@ -2984,7 +3003,7 @@ function beginLocalTest(editUntil, source){
   defaultTier=seed.tier||'';
   nid=rooms.length+1;
   pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false; hifi=false;
-  pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   empty.style.display='';
   empty.textContent='Upload a PDF floor plan to begin.';
