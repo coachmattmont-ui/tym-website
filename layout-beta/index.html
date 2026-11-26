@@ -161,7 +161,6 @@ button,input,select{font:inherit;color:inherit}
 #sideTotal .side-kicker{color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 #sideTotal b{font-size:18px;letter-spacing:-.02em}
 #sideCount{color:var(--muted);font-size:11px;margin-top:2px}
-#btnHifi{display:block;width:100%;text-align:left;margin:0 0 8px}
 #selSec{margin-bottom:2px}
 #selBox .sel-row{margin-top:6px}
 #selBox .sel-sub{margin-top:4px;color:var(--muted)}
@@ -208,8 +207,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #ctx button:hover{background:var(--fill)}
 #ctx button.on{color:var(--blue);font-weight:600}
 
-.tools button.on, #btnHifi.on{background:#0071e3;color:#fff;box-shadow:none}
-#btnHifi.on:hover{background:#0071e3;color:#fff}
+.tools button.on{background:#0071e3;color:#fff;box-shadow:none}
 #pageLbl{min-width:72px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
 .ph{display:inline-block;margin-left:4px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#9a6700;background:#fff4d6;border-radius:4px;padding:0 4px;vertical-align:middle}
 .tbd{color:#9a6700}
@@ -456,7 +454,6 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <button type="button" data-aud="amps">Room amps</button>
       <button type="button" data-aud="matrix">Whole-home</button>
     </div>
-    <button type="button" id="btnHifi" aria-pressed="false" title="Adds the Hi-Fi speaker choice, Paradigm CI Elite, for in-wall and in-ceiling speakers.">Hi-Fi speakers</button>
   </div>
 
   <section class="sec" id="roomsPanel" hidden>
@@ -795,7 +792,7 @@ function distinctTiers(d){
   }
   const L=LADDERS[d.type]; if(!L) return null;
   const order=['good','better','best'];
-  if(hifi && L.hifi) order.push('hifi');
+  if(L.hifi && (L.kind==='home'||L.kind==='surround')) order.push('hifi');
   const seen=new Set(), out=[];
   order.forEach(t=>{
     const sig=tierSignature(d.type, t);
@@ -937,7 +934,6 @@ function applyProject(st){
   sel=null;
   multi=[];
   paintProjectName();
-  paintHifi();
 }
 async function restoreLast(){
   let st; try{ st=JSON.parse(localStorage.getItem(LS_CUR)||'null'); }catch(e){ st=null; }
@@ -988,7 +984,7 @@ function newProject(){
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   empty.style.display=''; empty.textContent='Upload a PDF floor plan to begin.';
   pg.textContent=''; paintProjectName();
-  paintHifi(); hist=[]; hidx=-1; snapshot();
+  hist=[]; hidx=-1; snapshot();
   updatePageLbl(); draw(); scheduleSave();
 }
 
@@ -1473,7 +1469,6 @@ addEventListener('contextmenu',e=>{ if(!e.target.closest('#stage, #tree, #ctx'))
 
 function updateTools(){
   if(btnSelect) btnSelect.classList.toggle('on', selectMode);
-  paintHifi();
   applyAccessMode();
 }
 const TYPE_CAT={
@@ -2120,14 +2115,7 @@ function paintProjectName(){
   if(!projName || document.activeElement===projName) return;
   projName.value=(projectName && projectName!=='Untitled project')?projectName:'';
 }
-function paintHifi(){
-  const b=document.getElementById('btnHifi');
-  if(!b) return;
-  b.classList.toggle('on', !!hifi);
-  b.setAttribute('aria-pressed', hifi?'true':'false');
-}
 if(projName){ projName.onchange=projName.onblur=()=>{ if(!guardEdit()){ paintProjectName(); return; } projectName=projName.value.trim()||'Untitled project'; paintProjectName(); scheduleSave(); }; }
-btnHifi.onclick=()=>{ if(!guardEdit()) return; hifi=!hifi; paintHifi(); if(!hifi) devs.forEach(d=>{ if(d.tier==='hifi') applyTier(d,'best'); }); draw(); scheduleSave(); };
 function closeMenu(){
   const menu=document.getElementById('appMenu');
   const btn=document.getElementById('btnMenu');
@@ -2334,7 +2322,6 @@ function applyAccessMode(){
   const add=document.getElementById('addRoom');
   if(add) add.disabled=view;
   document.querySelectorAll('#audMode button').forEach(b=>{ b.disabled=view; });
-  if(btnHifi) btnHifi.disabled=view;
   ['menuSave','menuUpload','menuAddFloor','menuClose','btnUploadPlan'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.disabled=view;
@@ -2959,7 +2946,6 @@ function beginLocalTest(editUntil, source){
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   empty.style.display='';
   empty.textContent='Upload a PDF floor plan to begin.';
-  paintHifi();
   accessStamp='';
   hist=[]; hidx=-1; snapshot();
   updatePageLbl(); draw();
@@ -3108,7 +3094,7 @@ window.__LT={
   state:()=>({devs,rooms,active:active&&active.name,sel:sel&&{id:sel.id,type:sel.type,rot:sel.rot,scale:sel.scale,x:sel.x,y:sel.y,room:sel.room,tier:sel.tier,tvSize:sel.tvSize,catalogKey:sel.catalogKey,page:sel.page},zoom,total:pkgTotal(),nid,openGroups:[...openGroups],page:pageNum,numPages,hifi,projectId,projectName,pageNames,controlPlatform,audioSystem,matrixDismissed}),
   setActive: name=>{ active=rooms.find(r=>r.name===name)||null; draw(); },
   addRoomNamed: name=>{ let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase()); if(!rm){ snapshot(); rm={id:nid++,name}; rooms.push(rm);} active=rm; draw(); return rm; },
-  setHifi: on=>{ if(!guardEdit()) return; hifi=!!on; paintHifi(); draw(); },
+  setHifi: on=>{ if(!guardEdit()) return; hifi=!!on; },
   serializeProject, newProject, repriceLoadedDevices,
   quoteModel: ()=>currentQuote(),
   access: ()=>({editOpen:editOpen(), cloud:cloudState?{id:cloudState.id, editUntil:cloudState.editUntil}:null, paymentsConfigured:!!payConfig.paymentsConfigured, priceCents:payConfig.priceCents}),
