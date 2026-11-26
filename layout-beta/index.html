@@ -6,20 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Layout Tool | SmartHome Brothers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400&display=swap" rel="stylesheet">
 <script src="/assets/hp.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
 :root{
-  --ink:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.08); --bg:#e8e8ed; --panel:rgba(255,255,255,.78);
-  --blue:#0071e3; --tym:#00acec; --fill:#f5f5f7; --shadow:0 8px 28px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.04);
-  --radius:14px;
+  --ink:#121212; --muted:rgba(18,18,18,.75); --line:rgba(18,18,18,.12); --bg:#F3F3F3; --panel:#fff;
+  --blue:#103747; --tym:#00acec; --fill:#F3F3F3; --shadow:0 8px 28px rgba(18,18,18,.06);
+  --radius:0;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;display:flex;flex-direction:column;color:var(--ink);
-  font:13px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;
+  font:13px/1.45 Lato,sans-serif;
   background:var(--bg); -webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
+h1,h2,h3{font-family:Oswald,sans-serif;font-weight:400;letter-spacing:.01em}
 /* Visible scrollbars (macOS otherwise hides them) */
 *{scrollbar-width:thin;scrollbar-color:#b0b0b5 #ececf0}
 *::-webkit-scrollbar{width:11px;height:11px}
@@ -28,7 +32,7 @@ button,input,select{font:inherit;color:inherit}
 *::-webkit-scrollbar-thumb:hover{background:#8e8e93}
 
 /* Status line above the tool */
-.beta-banner{flex-shrink:0;background:#111318;color:#f2f4f7;font-size:12px;line-height:1.35;letter-spacing:.01em;text-align:center;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.08);z-index:9}
+.beta-banner{flex-shrink:0;background:#F3F3F3;color:#121212;font-size:12px;line-height:1.35;letter-spacing:.01em;text-align:center;padding:8px 16px;border-bottom:1px solid rgba(18,18,18,.12);z-index:9}
 
 
 .hdr{min-height:0;height:auto;display:flex;flex-direction:column;gap:0;padding:0;
@@ -53,15 +57,15 @@ button,input,select{font:inherit;color:inherit}
 .tools{flex:none;width:100%;display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px;padding:6px 12px 8px 14px;border-top:1px solid var(--line)}
 .tools .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
 .tools button,.file-btn,aside button,dialog button,#ctx button{
-  appearance:none;border:0;background:var(--fill);padding:6px 11px;border-radius:9px;cursor:pointer;
+  appearance:none;border:1px solid rgba(18,18,18,.22);background:#fff;padding:6px 11px;border-radius:0;cursor:pointer;
   color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 .tools button:hover,aside button:hover,.file-btn:hover{background:#ececf0}
 .tools button:disabled,#appMenu button:disabled{opacity:.4;cursor:default}
 #btnUploadPlan{margin-right:auto;margin-bottom:0;flex:0 0 auto}
 #btnSelect{width:36px;height:34px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 #btnSelect svg{display:block}
-#btnQuote{margin-left:8px;background:#2563EB;color:#fff;font-weight:700;padding:8px 16px;box-shadow:none}
-#btnQuote:hover{background:#1d4ed8;color:#fff}
+#btnQuote{margin-left:8px;background:#103747;color:#fff;font-weight:700;padding:8px 16px;box-shadow:none;border:1px solid #103747;border-radius:0}
+#btnQuote:hover{background:#0c2c38;color:#fff}
 .zl{display:inline-block;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
 .search{width:150px;border:0;background:var(--fill);border-radius:9px;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
 
@@ -153,7 +157,7 @@ button,input,select{font:inherit;color:inherit}
 #layoutTools{margin:0 0 12px}
 #catFilters{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 8px}
 #catFilters button,#btnSortCost{font-size:11px;padding:4px 7px}
-#catFilters button.on,#btnSortCost.on{background:#0071e3;color:#fff;box-shadow:none}
+#catFilters button.on,#btnSortCost.on{background:#103747;color:#fff;box-shadow:none}
 #wholeHome{margin:8px 0 4px}
 #filterNote{font-size:11px;color:var(--muted);margin-top:4px}
 .un .room{color:#b15c00}
@@ -195,7 +199,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
   padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none !important;letter-spacing:.02em;z-index:2}
 .devwrap:hover .tag,.devwrap.sel .tag{display:block}
 .guide{position:absolute;pointer-events:none;z-index:3}
-.marquee{position:absolute;border:1px solid #0071e3;background:rgba(0,113,227,.12);pointer-events:none;z-index:4}
+.marquee{position:absolute;border:1px solid #103747;background:rgba(16,55,71,.12);pointer-events:none;z-index:4}
 
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;align-items:center;justify-content:center;z-index:20}
 #modal .card{background:#fff;padding:22px;border-radius:16px;width:380px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
@@ -209,7 +213,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #ctx button:hover{background:var(--fill)}
 #ctx button.on{color:var(--blue);font-weight:600}
 
-.tools button.on{background:#0071e3;color:#fff;box-shadow:none}
+.tools button.on{background:#103747;color:#fff;box-shadow:none}
 #pageLbl{min-width:72px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
 .ph{display:inline-block;margin-left:4px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#9a6700;background:#fff4d6;border-radius:4px;padding:0 4px;vertical-align:middle}
 .tbd{color:#9a6700}
@@ -228,7 +232,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #floorNameWrap{display:none}
 #ctlRow select,#audMode button{font-size:12px}
 #audMode{display:flex;gap:6px;margin:0 0 8px}
-#audMode button.on{background:#0071e3;color:#fff;box-shadow:none}
+#audMode button.on{background:#103747;color:#fff;box-shadow:none}
 #included{margin:0 0 8px}
 #included .inc{display:flex;gap:6px;align-items:baseline;font-size:12px;padding:3px 0}
 #included .inc b{font-weight:560}
@@ -247,40 +251,40 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 .pthumb .pgno{font-size:12px;font-weight:600}
 .pthumb input[type=text]{width:100%;padding:4px 6px;border:0;background:#fff;border-radius:6px;box-shadow:inset 0 0 0 1px var(--line)}
 #planPick .plan-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
-#accessBanner{flex-shrink:0;background:#3a2a10;color:#fff8eb;font-size:13px;line-height:1.45;text-align:center;padding:8px 14px}
+#accessBanner{flex-shrink:0;background:#fff;color:#7D6232;font-size:13px;line-height:1.45;text-align:center;padding:8px 14px;border-bottom:1px solid rgba(125,98,50,.35)}
 #accessBanner[hidden]{display:none !important}
-#accessBanner button{margin-left:8px;background:#fff;color:#1d1d1f;border:0;border-radius:8px;padding:5px 10px;font-weight:650;cursor:pointer}
+#accessBanner button{margin-left:8px;background:#fff;color:#121212;border:1px solid #121212;border-radius:0;padding:5px 10px;font-weight:700;cursor:pointer}
 body.viewonly .pal,body.viewonly #bundles button{opacity:.45;pointer-events:none}
 body.viewonly select,body.viewonly #projName,body.viewonly #floorName,body.viewonly .x{pointer-events:none}
-body.locked{background:#0b0d10}
+body.locked{background:#fff}
 body.locked .beta-banner,body.locked .hdr,body.locked .app,body.locked #accessBanner{display:none !important}
 #buyScreen{display:none}
-body.locked #buyScreen{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px;background:#0b0d10;color:#f2f4f7}
+body.locked #buyScreen{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px;background:#fff;color:#121212}
 body.locked #buyScreen[hidden]{display:none !important}
-.buy-card{width:min(440px,100%);background:#14161b;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:28px 26px}
-.buy-card h1{font-size:28px;letter-spacing:-.03em;margin:0 0 8px}
-.buy-card .buy-price{font-size:32px;font-weight:700;margin:0 0 12px}
-.buy-card ul{margin:0 0 16px;padding-left:18px;color:#d5d8de;line-height:1.5}
-.buy-card p{margin:0 0 10px;color:#b6bcc6;line-height:1.45}
-.buy-card input{width:100%;margin:8px 0 12px;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7}
-.buy-card button{width:100%;padding:12px 14px;border:0;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;cursor:pointer}
+.buy-card{width:min(440px,100%);background:#fff;border:1px solid rgba(18,18,18,.12);border-radius:0;padding:28px 26px}
+.buy-card h1{font-size:28px;letter-spacing:.01em;margin:0 0 8px}
+.buy-card .buy-price{font-size:32px;font-weight:400;font-family:Oswald,sans-serif;margin:0 0 12px}
+.buy-card ul{margin:0 0 16px;padding-left:18px;color:rgba(18,18,18,.75);line-height:1.5}
+.buy-card p{margin:0 0 10px;color:rgba(18,18,18,.75);line-height:1.45}
+.buy-card input{width:100%;margin:8px 0 12px;padding:11px 12px;border-radius:0;border:1px solid rgba(18,18,18,.22);background:#F3F3F3;color:#121212}
+.buy-card button{width:100%;padding:12px 14px;border:1px solid #103747;border-radius:0;background:#103747;color:#fff;font-weight:700;cursor:pointer}
 .buy-card button:disabled{opacity:.45;cursor:default}
-.buy-card button.buy-link{width:auto;display:inline;background:transparent;color:#9ec1ff;font-weight:600;font-size:13px;padding:0}
+.buy-card button.buy-link{width:auto;display:inline;background:transparent;border:0;color:#103747;font-weight:600;font-size:13px;padding:0}
 .buy-code{margin:16px 0 0;text-align:center}
 #quoteView{position:fixed;inset:0;z-index:60;background:#e8e8ed;display:none;overflow:auto}
 #quoteView.on{display:block}
 .quote-wrap{max-width:880px;margin:0 auto;padding:22px 16px 48px}
 .quote-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.quote-actions button{appearance:none;border:0;background:#2563EB;color:#fff;font-weight:700;padding:10px 14px;border-radius:8px;cursor:pointer}
+.quote-actions button{appearance:none;border:1px solid #103747;background:#103747;color:#fff;font-weight:700;padding:10px 14px;border-radius:0;cursor:pointer}
 .quote-actions button.ghost{background:#fff;color:#1d1d1f;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
 .quote-sheet{background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.08);overflow:hidden}
-.quote-brand{background:#2563EB;color:#fff;padding:22px 24px 18px}
+.quote-brand{background:#103747;color:#fff;padding:22px 24px 18px}
 .quote-brand b{display:block;font-size:20px;letter-spacing:-.02em}
 .quote-brand span{display:block;margin-top:2px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
 .quote-body{padding:22px 24px 28px}
 .quote-body h1{margin:0 0 6px;font-size:28px;letter-spacing:-.03em}
 .quote-meta{color:#6e6e73;margin:0 0 16px;line-height:1.45}
-.quote-floor{margin:18px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2563EB;font-weight:700}
+.quote-floor{margin:18px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7D6232;font-weight:700}
 .quote-room{margin:16px 0 8px;font-size:16px}
 .quote-table{width:100%;border-collapse:collapse;font-size:13px}
 .quote-table th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6e6e73;padding:6px 8px 6px 0;border-bottom:1px solid rgba(0,0,0,.08)}
@@ -301,9 +305,9 @@ body.locked #buyScreen[hidden]{display:none !important}
 .call-card input,.call-card textarea{width:100%;padding:9px 10px;border:0;border-radius:10px;background:#f5f5f7;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 .call-card textarea{min-height:72px;resize:vertical}
 .call-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.call-actions button{appearance:none;border:0;background:#2563EB;color:#fff;font-weight:700;padding:10px 14px;border-radius:8px;cursor:pointer}
+.call-actions button{appearance:none;border:1px solid #103747;background:#103747;color:#fff;font-weight:700;padding:10px 14px;border-radius:0;cursor:pointer}
 .call-actions button.ghost{background:#f5f5f7;color:#1d1d1f}
-#buyConfigNote{color:#ffd7a8}
+#buyConfigNote{color:#7D6232}
 #acctModal{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:24px}
 #acctModal.on{display:flex}
 #acctModal .acct-card{background:#fff;border-radius:16px;width:min(460px,100%);max-height:min(80vh,640px);overflow:auto;padding:18px 18px 14px;box-shadow:0 24px 60px rgba(0,0,0,.25);color:#1d1d1f}
@@ -1710,7 +1714,7 @@ function renderDev(d,el){
   }
   const badge=d.type==='stereo'?'SPEAKERS':'SPEAKER';
   const fs=(badge.length>7?3.15:3.6)*z;
-  const selCol='#0071e3';
+  const selCol='#103747';
   P.forEach(([x,y],i)=>{
     if(SHAPES[d.type]){
       const hw=Math.max(18, wide/2+2), hh=13;
