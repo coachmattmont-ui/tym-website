@@ -914,8 +914,9 @@ function scheduleSave(){
     scheduleCloudPush();
   }, 400);
 }
-async function persistPdf(){
+async function persistPdf(opts){
   if(pdfBuf&&projectId) await idbPut(projectId, {name:pdfName, buf:pdfBuf});
+  if(!opts || !opts.skipCloud) await pushPdf({quiet:!!(opts&&opts.quiet)});
   scheduleCloudPush();
 }
 function applyProject(st){
@@ -1098,7 +1099,7 @@ async function loadPdfBuffer(buf,name,opts={}){
   pdfDoc=await pdfjsLib.getDocument({data:src.slice()}).promise;
   numPages=pdfDoc.numPages; pdfName=name||pdfName||'Floor plan';
   empty.style.display='none';
-  await persistPdf();
+  await persistPdf({skipCloud:!!opts.skipCloud});
   await showPage(opts.keepPage||1, !!opts.keepZoom);
   if(opts.keepZoom && opts.keepZoom!==true) setZoom(opts.keepZoom);
   scheduleSave();
@@ -2144,7 +2145,7 @@ async function saveProject(){
   if(!guardEdit()) return;
   projectName=(projName&&projName.value.trim())||projectName||'Untitled project';
   paintProjectName();
-  await persistPdf();
+  await persistPdf({quiet:true});
   try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){}
   const canCloud=!!(sb && cloudState && editOpen() && payConfig.paymentsConfigured);
   if(canCloud){
@@ -2171,6 +2172,7 @@ document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
 document.getElementById('menuOut').onclick=async()=>{
   closeMenu();
   if(!sb) return;
+  if(cloudState && editOpen()) await pushCloud().catch(()=>{});
   await sb.auth.signOut();
   showBuyLanding();
   await paintBuyAccount();
@@ -2405,23 +2407,38 @@ async function sendCheckout(attempt){
   ph('layout_checkout_start', {});
   location.assign(body.url);
 }
+function planStoragePath(uid, projectId){
+  const user=String(uid||'').toLowerCase();
+  const project=String(projectId||'').toLowerCase();
+  if(!/^[0-9a-f-]{36}$/.test(user) || !/^[0-9a-f-]{36}$/.test(project)) return '';
+  return user+'/'+project+'.pdf';
+}
 async function pushPdf(opts){
-  if(!pdfBuf || !sb || !cloudState || !editOpen()) return;
+  opts=opts||{};
+  if(!pdfBuf || !pdfBuf.byteLength || !sb || !cloudState || !editOpen()) return !pdfBuf;
   const {data}=await sb.auth.getSession();
   const uid=data.session&&data.session.user&&data.session.user.id;
-  if(!uid) return;
-  const path=uid+'/'+cloudState.id+'.pdf';
-  const blob=new Blob([pdfBuf], {type:'application/pdf'});
-  const up=await sb.storage.from('plan-pdfs').upload(path, blob, {upsert:true, contentType:'application/pdf'});
+  const path=planStoragePath(uid, cloudState.id);
+  if(!path) return false;
+  const bytes=new Uint8Array(pdfBuf.slice(0));
+  let up=await sb.storage.from('plan-pdfs').upload(path, bytes, {contentType:'application/pdf', upsert:false});
+  const exists=up.error && /exists|duplicate/i.test(String(up.error.message||up.error.error||''));
+  if(exists) up=await sb.storage.from('plan-pdfs').update(path, bytes, {contentType:'application/pdf', upsert:true});
   if(up.error){
-    if(!opts || !opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>The layout saved. Use Save to try the plan again.', [['OK']]);
-    return;
+    if(!opts.quiet){
+      const why=up.error.message||up.error.error||'The storage service refused the file.';
+      showModal('<b>The floor plan did not upload</b><br><br>'+esc(why), [['OK']]);
+    }
+    return false;
   }
-  if(cloudState.pdfPath!==path){
-    cloudState.pdfPath=path;
-    await sb.from('projects').update({pdf_path:path}).eq('id', cloudState.id);
-    rememberCloud();
+  const saved=await sb.from('projects').update({pdf_path:path}).eq('id', cloudState.id).select('pdf_path').maybeSingle();
+  if(saved.error || !saved.data || saved.data.pdf_path!==path){
+    if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>The file reached storage, but this project did not record it. Use Save to try again.', [['OK']]);
+    return false;
   }
+  cloudState.pdfPath=path;
+  rememberCloud();
+  return true;
 }
 async function pushCloud(opts){
   opts=opts||{};
@@ -2448,7 +2465,8 @@ async function pushCloud(opts){
     }
     return false;
   }
-  await pushPdf(opts);
+  const pdfOk=await pushPdf(opts);
+  if(pdfBuf && pdfBuf.byteLength && !pdfOk) return false;
   rememberCloud();
   ph('layout_cloud_save', {});
   return true;
@@ -2483,18 +2501,38 @@ async function openCloudProject(id){
   accessStamp='';
   repriceLoadedDevices();
   hist=[]; hidx=-1; snapshot();
+  const planOpts={keepPage:layout.page||1, keepZoom:layout.zoom||true, skipNewId:true};
+  const planName=(layout.pdf&&layout.pdf.name)||'Floor plan';
+  let planBuf=null;
   if(data.pdf_path){
     const file=await sb.storage.from('plan-pdfs').download(data.pdf_path);
-    if(file.data){
-      await loadPdfBuffer(await file.data.arrayBuffer(), (layout.pdf&&layout.pdf.name)||'Floor plan', {keepPage:layout.page||1, keepZoom:layout.zoom||true, skipNewId:true});
-    } else {
+    if(file.data && file.data.size) planBuf=await file.data.arrayBuffer();
+  }
+  if(!planBuf){
+    const localIds=[data.id, layout.id, layout.pdf&&layout.pdf.id].filter(Boolean);
+    for(const key of localIds){
+      const local=await idbGet(key).catch(()=>null);
+      if(local&&local.buf&&local.buf.byteLength){ planBuf=local.buf; planOpts.skipCloud=false; break; }
+    }
+  } else planOpts.skipCloud=true;
+  if(planBuf){
+    try{ await loadPdfBuffer(planBuf, planName, planOpts); }
+    catch(err){
       pdfDoc=null; pdfBuf=null;
       empty.style.display='';
-      empty.textContent='The floor plan is not in your account yet. You can upload it again while editing is open.';
+      empty.textContent='The floor plan file could not be opened. Upload it again while editing is open.';
       updatePageLbl();
       draw();
     }
-  } else draw();
+  } else {
+    pdfDoc=null; pdfBuf=null;
+    empty.style.display='';
+    empty.textContent=(data.pdf_path||(layout.pdf&&layout.pdf.name))
+      ? 'The floor plan is not in your account yet. You can upload it again while editing is open.'
+      : 'Upload a PDF floor plan to begin.';
+    updatePageLbl();
+    draw();
+  }
   rememberCloud();
   applyAccessMode();
   scheduleSave();
@@ -2905,7 +2943,6 @@ async function enterAccountProjects(preferId){
   const {data, error}=await sb.from('projects').select('id,edit_until,updated_at').order('updated_at', {ascending:false});
   if(error || !data){ showBuyLanding(); await paintBuyAccount(); return; }
   let row=preferId?data.find(item=>item.id===preferId):null;
-  if(!row) row=data.find(item=>editWindowOpen(item.edit_until))||null;
   if(!row) row=data[0]||null;
   if(!row){
     showBuyLanding();
