@@ -37,15 +37,6 @@
     else if (kind === 'secondary') track('secondary_link_click');
   });
 
-  var token = window.TYM_CF_BEACON_TOKEN || '';
-  if (token && token.indexOf('YOUR_') !== 0) {
-    var beacon = document.createElement('script');
-    beacon.defer = true;
-    beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-    beacon.setAttribute('data-cf-beacon', JSON.stringify({ token: token }));
-    document.head.appendChild(beacon);
-  }
-
   if (!document.body || !document.body.classList.contains('hp')) return;
   var toggle = document.getElementById('nav-toggle');
   var menu = document.getElementById('nav-menu');
