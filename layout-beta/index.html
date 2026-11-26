@@ -7,6 +7,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>YourTech Layout Tool — Beta</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
 :root{
   --ink:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.08); --bg:#e8e8ed; --panel:rgba(255,255,255,.78);
@@ -14,7 +15,7 @@
   --radius:14px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;color:var(--ink);
+html,body{margin:0;height:100%;display:flex;flex-direction:column;color:var(--ink);
   font:13px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;
   background:var(--bg); -webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
@@ -25,59 +26,90 @@ button,input,select{font:inherit;color:inherit}
 *::-webkit-scrollbar-thumb{background:#b0b0b5;border-radius:6px;border:2px solid #ececf0}
 *::-webkit-scrollbar-thumb:hover{background:#8e8e93}
 
-/* Beta shell: banner, password gate, feedback */
+/* Status line above the tool */
 .beta-banner{flex-shrink:0;background:#111318;color:#f2f4f7;font-size:12px;line-height:1.35;letter-spacing:.01em;text-align:center;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,.08);z-index:9}
-#btnFeedback{font-weight:600}
-#gate{position:fixed;inset:0;z-index:20000;background:#0b0d10;color:#f2f4f7;display:flex;align-items:center;justify-content:center;padding:24px}
-#gate.ok{display:none}
-.gate-card{width:min(400px,100%);background:#14161b;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 26px 24px;box-shadow:0 20px 50px rgba(0,0,0,.45)}
-.gate-card h1{font-size:22px;letter-spacing:-.03em;margin:0 0 8px;font-weight:700}
-.gate-card p{margin:0 0 16px;color:#b6bcc6;font-size:14px;line-height:1.45}
-.gate-card input[type=password]{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7;margin-bottom:12px}
-.gate-card input:focus{outline:2px solid #3B7AFF;outline-offset:1px}
-.gate-card button[type=submit]{width:100%;padding:11px 14px;border-radius:10px;border:0;background:#2563EB;color:#fff;font-weight:650;cursor:pointer}
-.gate-card button[type=submit]:hover{background:#3B7AFF}
-#gateErr{color:#ff8a8a;font-size:13px;margin:12px 0 0}
-#fbModal{position:fixed;inset:0;z-index:15000;background:rgba(15,16,20,.45);display:none;align-items:center;justify-content:center;padding:24px}
-#fbModal.on{display:flex}
-#fbModal .fb-card{width:min(440px,100%);background:#fff;border-radius:16px;padding:22px 22px 18px;box-shadow:0 20px 50px rgba(0,0,0,.22);color:#1d1d1f}
-#fbModal h2{margin:0 0 14px;font-size:18px;letter-spacing:-.02em}
-#fbModal label{display:block;font-size:12px;font-weight:600;margin:10px 0 5px}
-#fbModal label span{font-weight:500;color:#6e6e73}
-#fbModal textarea,#fbModal input[type=email]{width:100%;padding:9px 10px;border-radius:10px;border:1px solid rgba(0,0,0,.12);background:#f5f5f7;font:inherit}
-#fbModal textarea{min-height:72px;resize:vertical}
-#fbModal .fb-row{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-#fbThanks{color:#22863a;font-size:13px;margin:10px 0 0}
 
 
-.hdr{min-height:54px;height:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:6px 14px;
+.hdr{min-height:0;height:auto;display:flex;flex-direction:column;gap:0;padding:0;
   background:rgba(255,255,255,.84);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
   border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(255,255,255,.8), 0 8px 24px rgba(0,0,0,.04);
   position:relative;z-index:8;flex-shrink:0}
-.brand{display:flex;align-items:center;gap:10px;min-width:auto;flex-shrink:0;text-decoration:none;color:var(--ink)}
+.hdr-name{display:flex;align-items:center;justify-content:center;min-height:48px;padding:4px 14px;position:relative}
+.brand{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px;min-width:auto;flex-shrink:0;text-decoration:none;color:var(--ink)}
 .tym-logo-svg{height:28px;width:auto;display:block}
 .brand small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.tools{flex:1 1 640px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px}
-.tools .sep{width:1px;height:20px;background:var(--line);margin:0 6px}
+#btnMenu{position:absolute;right:8px;top:50%;transform:translateY(-50%);appearance:none;border:0;background:transparent;width:36px;height:36px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);padding:0}
+#btnMenu:hover,#btnMenu[aria-expanded="true"]{background:var(--fill)}
+#projName{width:min(480px,calc(100% - 360px));text-align:center;font-size:16px;font-weight:650;letter-spacing:-.02em;border:0;background:transparent;border-radius:8px;padding:6px 10px;box-shadow:none}
+#projName:hover,#projName:focus{background:var(--fill);box-shadow:inset 0 0 0 1px var(--line);outline:none}
+#projName::placeholder{color:#8e8e93;font-weight:500}
+#appMenu{position:absolute;top:calc(100% - 2px);right:8px;left:auto;z-index:40;min-width:228px;background:#fff;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.16),0 0 0 1px var(--line);padding:6px;display:flex;flex-direction:column}
+#appMenu[hidden]{display:none}
+#appMenu button{appearance:none;border:0;background:transparent;box-shadow:none;text-align:left;width:100%;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink)}
+#appMenu button:hover{background:var(--fill)}
+#appMenu button:disabled{opacity:.4;cursor:default}
+#appMenu button[hidden]{display:none}
+.tools{flex:none;width:100%;display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px;padding:6px 12px 8px 14px;border-top:1px solid var(--line)}
+.tools .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
 .tools button,.file-btn,aside button,dialog button,#ctx button{
   appearance:none;border:0;background:var(--fill);padding:6px 11px;border-radius:9px;cursor:pointer;
   color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 .tools button:hover,aside button:hover,.file-btn:hover{background:#ececf0}
-.tools button:disabled{opacity:.4;cursor:default}
+.tools button:disabled,#appMenu button:disabled{opacity:.4;cursor:default}
+#btnUploadPlan{margin-right:auto;margin-bottom:0;flex:0 0 auto}
+#btnSelect{width:36px;height:34px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+#btnSelect svg{display:block}
+#btnQuote{margin-left:8px;background:#2563EB;color:#fff;font-weight:700;padding:8px 16px;box-shadow:none}
+#btnQuote:hover{background:#1d4ed8;color:#fff}
 .zl{display:inline-block;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
 .search{width:150px;border:0;background:var(--fill);border-radius:9px;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
-.total{min-width:140px;text-align:right;margin-left:auto;flex-shrink:0}
-.total b{font-size:16px;font-weight:600;letter-spacing:-.02em}
-.total span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
-.app{display:flex;height:calc(100% - 54px);min-height:0}
-aside{width:348px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
-  background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px);
-  border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
-.aside-scroll{flex:1;min-height:0;overflow:auto;padding:16px 14px 8px}
+.app{display:flex;flex:1;height:auto;min-height:0;position:relative}
+#colLeft,#colRight{flex-shrink:0;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden;
+  background:var(--panel);backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px)}
+#colLeft{width:312px;border-right:1px solid var(--line);box-shadow:8px 0 28px rgba(0,0,0,.05)}
+#colRight{width:252px;border-left:1px solid var(--line);box-shadow:-8px 0 28px rgba(0,0,0,.05);z-index:5}
+#colRight.collapsed{width:40px}
+#colRight.collapsed .right-body{display:none}
+#btnRail{display:none;flex:1;border:0;background:transparent;cursor:pointer;writing-mode:vertical-rl;transform:rotate(180deg);
+  letter-spacing:.08em;text-transform:uppercase;font-size:11px;font-weight:650;color:var(--muted);padding:12px 0}
+#colRight.collapsed #btnRail{display:block}
+.right-head{display:flex;gap:6px;align-items:center;padding:12px 12px 0}
+.right-head .search{flex:1;width:auto;min-width:0}
+.right-body{display:flex;flex-direction:column;min-height:0;flex:1}
+.right-selected{padding:8px 12px 0;max-height:46%;overflow:auto;flex-shrink:0}
+.aside-scroll{flex:1;min-height:0;overflow:auto;padding:12px 14px 8px}
+@media (max-width:1180px){
+  #colRight{position:absolute;top:0;right:0;bottom:0;width:min(280px,88vw);box-shadow:-12px 0 30px rgba(0,0,0,.16)}
+  #colRight.collapsed{width:40px;box-shadow:none}
+  #colLeft{width:280px}
+  .hdr-name{min-height:44px}
+  #projName{font-size:15px}
+  .tools{gap:4px;padding:6px 8px 8px 14px}
+  #floorName{width:108px}
+  #pageLbl{min-width:0}
+  #btnQuote{padding:8px 12px}
+}
+@media (max-width:780px){
+  #colLeft{width:220px}
+  .brand small{display:none}
+  .tym-logo-svg{height:22px}
+  #projName{width:min(220px,calc(100% - 200px));font-size:15px}
+  .tools{row-gap:8px}
+  .tools button{padding:6px 8px}
+  .zl{min-width:36px}
+  #pageLbl{min-width:0}
+  #floorName{width:92px}
+  #btnQuote{flex:1 0 100%;margin-left:0}
+}
 .file-btn{display:block;text-align:center;padding:8px 10px;margin-bottom:6px}
 #pdf{display:none}
-#pg{font-size:11px;color:var(--muted);margin:0 0 14px;min-height:1em}
+#pg{display:none}
+#floorName{width:140px;margin:0;padding:6px 8px;border:0;background:var(--fill);border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
+#floorName[hidden]{display:none !important}
+#ctlRow{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+#ctlRow span{font-size:12px;color:var(--muted);flex:0 0 auto}
+#ctlRow select{flex:1;min-width:0}
 .sec{margin-bottom:16px}
 .sec-h{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);font-weight:600;margin:0 0 8px}
@@ -115,14 +147,21 @@ aside{width:348px;flex-shrink:0;display:flex;flex-direction:column;gap:0;min-hei
 .item .ip{margin-left:auto;flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--muted)}
 .item select{font-size:11px;border:0;background:var(--fill);border-radius:6px;padding:2px 4px;max-width:118px;flex:0 0 auto;box-shadow:inset 0 0 0 1px var(--line)}
 .item select.tier{max-width:78px}
-#tree{max-height:min(200px,28vh);overflow:auto}
+#tree{overflow:visible}
+.item.auto{cursor:default;color:var(--muted)}
+#layoutTools{margin:0 0 12px}
+#catFilters{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 8px}
+#catFilters button,#btnSortCost{font-size:11px;padding:4px 7px}
+#catFilters button.on,#btnSortCost.on{background:#0071e3;color:#fff;box-shadow:none}
+#wholeHome{margin:8px 0 4px}
+#filterNote{font-size:11px;color:var(--muted);margin-top:4px}
 .un .room{color:#b15c00}
 
-#editorStack{position:sticky;top:0;z-index:4;margin:0 -14px 12px;padding:8px 14px 6px;
-  background:#f4f4f6;border-bottom:1px solid var(--line)}
-#sideTotal{flex-shrink:0;margin:0 0 8px;padding:2px 0 4px;background:transparent;
-  border-top:0;font-size:13px;text-align:right}
+#sideTotal{flex-shrink:0;margin:0;padding:10px 14px 14px;background:rgba(255,255,255,.94);
+  border-top:1px solid var(--line);font-size:13px;text-align:right}
+#sideTotal .side-kicker{color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 #sideTotal b{font-size:18px;letter-spacing:-.02em}
+#sideCount{color:var(--muted);font-size:11px;margin-top:2px}
 #selSec{margin-bottom:2px}
 #selBox .sel-row{margin-top:6px}
 #selBox .sel-sub{margin-top:4px;color:var(--muted)}
@@ -145,17 +184,17 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #stage{position:relative;display:inline-block;margin:28px;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
 #stage canvas{display:block;background:#fff;border-radius:8px}
 
-.devwrap{position:absolute;left:0;top:0}
-.devsvg{position:absolute;overflow:visible}
+.devwrap{position:absolute;left:0;top:0;pointer-events:none}
+.devsvg{position:absolute;overflow:visible;pointer-events:none}
+.devsvg .body,.devsvg .end,.devsvg .edge{pointer-events:auto}
 .devsvg .body{cursor:move}
 .devsvg .end{cursor:grab}
-.devsvg .rot{cursor:grab}
-.devsvg .sz{cursor:nwse-resize}
-.devsvg line:not(.body){pointer-events:none}
+.devsvg .edge{fill:transparent}
 .tag{position:absolute;transform:translateX(-50%);font-size:10px;background:rgba(29,29,31,.86);color:#fff;
-  padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none;letter-spacing:.02em}
+  padding:2px 6px;border-radius:6px;white-space:nowrap;display:none;pointer-events:none !important;letter-spacing:.02em;z-index:2}
 .devwrap:hover .tag,.devwrap.sel .tag{display:block}
 .guide{position:absolute;pointer-events:none;z-index:3}
+.marquee{position:absolute;border:1px solid #0071e3;background:rgba(0,113,227,.12);pointer-events:none;z-index:4}
 
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:none;align-items:center;justify-content:center;z-index:20}
 #modal .card{background:#fff;padding:22px;border-radius:16px;width:380px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
@@ -169,8 +208,7 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #ctx button:hover{background:var(--fill)}
 #ctx button.on{color:var(--blue);font-weight:600}
 
-.tools button.on, #btnHifi.on{background:#0071e3;color:#fff;box-shadow:none}
-#projName{width:118px;border:0;background:var(--fill);border-radius:9px;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--line);font-size:12px}
+.tools button.on{background:#0071e3;color:#fff;box-shadow:none}
 #pageLbl{min-width:72px;text-align:center;font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
 .ph{display:inline-block;margin-left:4px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#9a6700;background:#fff4d6;border-radius:4px;padding:0 4px;vertical-align:middle}
 .tbd{color:#9a6700}
@@ -186,6 +224,95 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 #bundleGroup:not(.open) #bundles{display:none}
 #bundles button{width:100%;text-align:left}
 #bundles .tbd-note{font-size:11px;color:var(--muted);margin:4px 0 0}
+#floorNameWrap{display:none}
+#ctlRow select,#audMode button{font-size:12px}
+#audMode{display:flex;gap:6px;margin:0 0 8px}
+#audMode button.on{background:#0071e3;color:#fff;box-shadow:none}
+#included{margin:0 0 8px}
+#included .inc{display:flex;gap:6px;align-items:baseline;font-size:12px;padding:3px 0}
+#included .inc b{font-weight:560}
+#included .inc span{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+#matrixPrompt{background:#fff8e8;border-radius:10px;padding:8px 10px;margin:0 0 8px;font-size:12px;line-height:1.4}
+#matrixPrompt p{margin:0 0 8px}
+#matrixPrompt .rowbtns{display:flex;flex-wrap:wrap;gap:6px}
+#planPick{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:24px}
+#planPick.on{display:flex}
+#planPick .plan-card{background:#fff;border-radius:16px;width:min(920px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;padding:18px 18px 14px;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+#planPick h2{margin:0 0 6px;font-size:18px}
+#planPick .hint{margin:0 0 12px;color:var(--muted);font-size:13px}
+#planThumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;overflow:auto;padding:2px}
+.pthumb{display:flex;flex-direction:column;gap:4px;background:var(--fill);border-radius:10px;padding:8px;box-shadow:inset 0 0 0 1px var(--line)}
+.pthumb img{width:100%;height:110px;object-fit:contain;background:#fff;border-radius:6px}
+.pthumb .pgno{font-size:12px;font-weight:600}
+.pthumb input[type=text]{width:100%;padding:4px 6px;border:0;background:#fff;border-radius:6px;box-shadow:inset 0 0 0 1px var(--line)}
+#planPick .plan-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+#accessBanner{flex-shrink:0;background:#3a2a10;color:#fff8eb;font-size:13px;line-height:1.45;text-align:center;padding:8px 14px}
+#accessBanner[hidden]{display:none !important}
+#accessBanner button{margin-left:8px;background:#fff;color:#1d1d1f;border:0;border-radius:8px;padding:5px 10px;font-weight:650;cursor:pointer}
+body.viewonly .pal,body.viewonly #bundles button{opacity:.45;pointer-events:none}
+body.viewonly select,body.viewonly #projName,body.viewonly #floorName,body.viewonly .x{pointer-events:none}
+body.locked{background:#0b0d10}
+body.locked .beta-banner,body.locked .hdr,body.locked .app,body.locked #accessBanner{display:none !important}
+#buyScreen{display:none}
+body.locked #buyScreen{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px;background:#0b0d10;color:#f2f4f7}
+body.locked #buyScreen[hidden]{display:none !important}
+.buy-card{width:min(440px,100%);background:#14161b;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:28px 26px}
+.buy-card h1{font-size:28px;letter-spacing:-.03em;margin:0 0 8px}
+.buy-card .buy-price{font-size:32px;font-weight:700;margin:0 0 12px}
+.buy-card ul{margin:0 0 16px;padding-left:18px;color:#d5d8de;line-height:1.5}
+.buy-card p{margin:0 0 10px;color:#b6bcc6;line-height:1.45}
+.buy-card input{width:100%;margin:8px 0 12px;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0b0d10;color:#f2f4f7}
+.buy-card button{width:100%;padding:12px 14px;border:0;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;cursor:pointer}
+.buy-card button:disabled{opacity:.45;cursor:default}
+.buy-card button.buy-link{width:auto;display:inline;background:transparent;color:#9ec1ff;font-weight:600;font-size:13px;padding:0}
+.buy-code{margin:16px 0 0;text-align:center}
+#quoteView{position:fixed;inset:0;z-index:60;background:#e8e8ed;display:none;overflow:auto}
+#quoteView.on{display:block}
+.quote-wrap{max-width:880px;margin:0 auto;padding:22px 16px 48px}
+.quote-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.quote-actions button{appearance:none;border:0;background:#2563EB;color:#fff;font-weight:700;padding:10px 14px;border-radius:8px;cursor:pointer}
+.quote-actions button.ghost{background:#fff;color:#1d1d1f;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.quote-sheet{background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.08);overflow:hidden}
+.quote-brand{background:#2563EB;color:#fff;padding:22px 24px 18px}
+.quote-brand b{display:block;font-size:20px;letter-spacing:-.02em}
+.quote-brand span{display:block;margin-top:2px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.quote-body{padding:22px 24px 28px}
+.quote-body h1{margin:0 0 6px;font-size:28px;letter-spacing:-.03em}
+.quote-meta{color:#6e6e73;margin:0 0 16px;line-height:1.45}
+.quote-floor{margin:18px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2563EB;font-weight:700}
+.quote-room{margin:16px 0 8px;font-size:16px}
+.quote-table{width:100%;border-collapse:collapse;font-size:13px}
+.quote-table th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6e6e73;padding:6px 8px 6px 0;border-bottom:1px solid rgba(0,0,0,.08)}
+.quote-table td{padding:8px 8px 8px 0;border-bottom:1px solid rgba(0,0,0,.06);vertical-align:top}
+.quote-table .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.quote-table .tbd{color:#9a6700;font-weight:650}
+.quote-sub{text-align:right;margin:8px 0 0;font-size:13px}
+.quote-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:12px;border-top:2px solid #1d1d1f}
+.quote-total b{font-size:28px;letter-spacing:-.03em}
+.quote-note{color:#6e6e73;font-size:13px;line-height:1.45}
+#callSheet{position:fixed;inset:0;z-index:70;background:rgba(11,13,16,.45);display:none;align-items:center;justify-content:center;padding:20px}
+#callSheet.on{display:flex}
+.call-card{width:min(440px,100%);background:#fff;border-radius:16px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.call-card h2{margin:0 0 8px;font-size:20px}
+.call-card p{margin:0 0 10px;color:#6e6e73;line-height:1.45}
+.call-card label{display:block;font-size:12px;font-weight:650;margin:10px 0 4px}
+.call-card label span{font-weight:500;color:#6e6e73}
+.call-card input,.call-card textarea{width:100%;padding:9px 10px;border:0;border-radius:10px;background:#f5f5f7;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.call-card textarea{min-height:72px;resize:vertical}
+.call-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.call-actions button{appearance:none;border:0;background:#2563EB;color:#fff;font-weight:700;padding:10px 14px;border-radius:8px;cursor:pointer}
+.call-actions button.ghost{background:#f5f5f7;color:#1d1d1f}
+#buyConfigNote{color:#ffd7a8}
+#acctModal{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:24px}
+#acctModal.on{display:flex}
+#acctModal .acct-card{background:#fff;border-radius:16px;width:min(460px,100%);max-height:min(80vh,640px);overflow:auto;padding:18px 18px 14px;box-shadow:0 24px 60px rgba(0,0,0,.25);color:#1d1d1f}
+#acctModal h2{margin:0 0 8px;font-size:18px}
+#acctModal p{margin:0 0 10px;color:#3a3a3c;font-size:13px;line-height:1.45}
+#acctModal input{width:100%;padding:8px 10px;border:0;background:var(--fill);border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
+#acctModal .acct-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.proj-list{display:flex;flex-direction:column;gap:6px}
+.proj-list .proj{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:#fff}
+.proj-list .proj span{color:var(--muted);font-size:12px}
 
 </style>
 <script>
@@ -193,73 +320,142 @@ main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,m
 posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
 </script>
 </head>
-<body>
+<body class="locked">
 
-<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
-  <form class="gate-card" id="gateForm" autocomplete="off">
-    <h1 id="gateTitle">Layout Tool beta</h1>
-    <p>This page is a private preview. Enter the access password to continue.</p>
-    <input type="password" id="gatePw" name="password" placeholder="Password" required autocomplete="current-password" autofocus>
-    <button type="submit">Enter</button>
-    <p id="gateErr" hidden>That password doesn’t match.</p>
-  </form>
-</div>
-<div id="fbModal" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
-  <form class="fb-card" id="fbForm">
-    <h2 id="fbTitle">Send feedback</h2>
-    <label for="fbDoing">What were you doing?</label>
-    <textarea id="fbDoing" required></textarea>
-    <label for="fbHappened">What happened?</label>
-    <textarea id="fbHappened" required></textarea>
-    <label for="fbEmail">Email <span>(optional)</span></label>
-    <input type="email" id="fbEmail" autocomplete="email">
-    <div class="fb-row">
-      <button type="button" id="fbCancel">Cancel</button>
-      <button type="submit" id="fbSend">Send</button>
+<div class="beta-banner">List prices can change. This project is saved to your account.</div>
+<div id="buyScreen">
+  <div class="buy-card">
+    <h1 id="buyTitle">Design your home on the floor plan</h1>
+    <p class="buy-price" id="buyPrice">$29.00</p>
+    <ul>
+      <li>One project, with every floor and page</li>
+      <li>30 days to place devices and edit the plan</li>
+      <li>The project stays saved, and you can still view it after that</li>
+      <li>Pay again when you want another 30 days of editing</li>
+    </ul>
+    <div id="buySignedOut">
+      <p>Sign in with your email. We will send you a link, then take you to payment.</p>
+      <input id="buyEmail" type="email" placeholder="Email" autocomplete="email">
+      <button type="button" id="buySend">Email me a link</button>
+      <p id="buyMsg"></p>
     </div>
-    <p id="fbThanks" hidden>Thanks — we got it.</p>
+    <div id="buySignedIn" hidden>
+      <p id="buyWho"></p>
+      <button type="button" id="buyGo">Continue to payment</button>
+    </div>
+    <p id="buyConfigNote" hidden>Payments not configured. The Layout Tool stays locked until payments are connected.</p>
+    <p class="buy-code"><button type="button" class="buy-link" id="buyCodeLink">Have an access code?</button></p>
+    <div id="buyCodeBox" hidden>
+      <input id="buyCode" type="password" autocomplete="off" placeholder="Access code" aria-label="Access code">
+      <button type="button" id="buyCodeGo">Continue</button>
+      <p id="buyCodeMsg"></p>
+    </div>
+  </div>
+</div>
+<div id="accessBanner" hidden></div>
+<div id="quoteView" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="quote-wrap">
+    <div class="quote-actions">
+      <button type="button" id="quotePdf">Download PDF</button>
+      <button type="button" id="quoteCall">Schedule a Call with Tym</button>
+      <button type="button" class="ghost" id="quoteClose">Close</button>
+    </div>
+    <div class="quote-sheet">
+      <div class="quote-brand"><b>SmartHome Brothers</b><span>Tym</span></div>
+      <div class="quote-body" id="quoteBody"></div>
+    </div>
+  </div>
+</div>
+<div id="callSheet" role="dialog" aria-modal="true" aria-labelledby="callTitle">
+  <form class="call-card" id="callForm">
+    <h2 id="callTitle">Schedule a Call with Tym</h2>
+    <p>Tell us how to reach you. We will use this only to follow up on this quote.</p>
+    <label for="callName">Name</label>
+    <input id="callName" name="name" required autocomplete="name">
+    <label for="callEmail">Email</label>
+    <input id="callEmail" name="email" type="email" required autocomplete="email">
+    <label for="callPhone">Phone <span>(optional)</span></label>
+    <input id="callPhone" name="phone" autocomplete="tel">
+    <label for="callWhen">Preferred time</label>
+    <input id="callWhen" name="when" placeholder="Weekday afternoon">
+    <label for="callNotes">Notes</label>
+    <textarea id="callNotes" name="notes"></textarea>
+    <p id="callMsg"></p>
+    <div class="call-actions">
+      <button type="button" class="ghost" id="callCancel">Cancel</button>
+      <button type="submit" id="callSend">Send</button>
+    </div>
   </form>
 </div>
-
-<div class="beta-banner">Beta: prices are estimates; saves stay in this browser.</div>
 <header class="hdr">
-  <div class="brand"><svg class="tym-logo-svg" role="img" aria-label="SmartHome Brothers by TYM" viewBox="0 0 212.7 59.89" xmlns="http://www.w3.org/2000/svg"><defs><style>.tym-none{fill:none;}.tym-fill{fill:#00acec;}.tym-clip{clip-path:url(#tym-logo-clip);}</style><clipPath id="tym-logo-clip"><rect height="59.89" width="212.7" x="0" class="tym-none"></rect></clipPath></defs><g class="tym-clip"><path d="M192.51,59.89c1.46,0,2.8-.22,4.04-.67,1.24-.45,2.3-1.08,3.19-1.9.89-.82,1.59-1.81,2.1-2.97.51-1.16.76-2.45.76-3.88,0-2.2-.6-4.09-1.81-5.67-1.21-1.58-2.91-2.86-5.11-3.84l-1.7-.76c-1.46-.65-2.54-1.25-3.24-1.78-.7-.53-1.05-1.22-1.05-2.05,0-.71.26-1.26.78-1.63.52-.37,1.08-.56,1.67-.56.74,0,1.41.15,1.99.45.58.3,1.27.94,2.07,1.92l4.82-5.09c-1.34-1.55-2.71-2.6-4.13-3.15-1.41-.55-3-.83-4.75-.83-1.25,0-2.45.22-3.61.65-1.16.43-2.19,1.05-3.08,1.85-.89.8-1.61,1.77-2.14,2.9-.54,1.13-.8,2.38-.8,3.75,0,2.14.63,4.07,1.9,5.78,1.26,1.71,3.1,3.1,5.51,4.17l1.79.8c1.34.6,2.29,1.15,2.86,1.67.57.52.85,1.14.85,1.85,0,1.52-1.01,2.28-3.04,2.28-1.1,0-2.18-.38-3.24-1.14-1.06-.76-1.93-1.69-2.61-2.79l-5.4,4.42c1.1,2.05,2.63,3.6,4.6,4.64,1.96,1.04,4.22,1.56,6.78,1.56M168.86,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M164.93,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.32-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM135.53,27.85v31.68h19.63v-7.05h-12.49v-5.35h9.82v-6.87h-9.82v-5.35h12.49v-7.05h-19.63ZM104.82,27.85v31.68h7.14v-12.41h12.67v12.41h7.14v-31.68h-7.14v12.41h-12.67v-12.41h-7.14ZM88.45,34.9v24.63h7.14v-24.63h7.63v-7.05h-22.36v7.05h7.59ZM65.51,59.89c2.23,0,4.33-.42,6.29-1.27,1.96-.85,3.68-2.01,5.15-3.48,1.47-1.47,2.63-3.19,3.48-5.15.85-1.96,1.27-4.06,1.27-6.29s-.42-4.33-1.27-6.29c-.85-1.96-2.01-3.68-3.48-5.15-1.47-1.47-3.19-2.63-5.15-3.48-1.96-.85-4.06-1.27-6.29-1.27s-4.33.42-6.29,1.27c-1.96.85-3.68,2.01-5.15,3.48-1.47,1.47-2.63,3.19-3.48,5.15-.85,1.96-1.27,4.06-1.27,6.29s.42,4.33,1.27,6.29c.85,1.96,2.01,3.68,3.48,5.15,1.47,1.47,3.19,2.63,5.15,3.48,1.96.85,4.06,1.27,6.29,1.27M65.51,53.01c-1.28,0-2.47-.24-3.57-.74-1.1-.49-2.05-1.16-2.86-2.01-.8-.85-1.44-1.84-1.9-2.97-.46-1.13-.69-2.33-.69-3.61s.23-2.48.69-3.61c.46-1.13,1.09-2.12,1.9-2.97.8-.85,1.76-1.52,2.86-2.01,1.1-.49,2.29-.74,3.57-.74s2.47.25,3.57.74c1.1.49,2.05,1.16,2.86,2.01s1.44,1.84,1.9,2.97c.46,1.13.69,2.34.69,3.61s-.23,2.48-.69,3.61c-.46,1.13-1.09,2.12-1.9,2.97s-1.76,1.52-2.86,2.01c-1.1.49-2.29.74-3.57.74M38.02,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M34.09,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.33-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM12.5,40.65h-3.97v-6.29h3.97c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M14.68,52.97h-6.16v-6.29h6.16c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.92-2.36.92M1.38,27.85v31.68h13.97c1.34,0,2.59-.25,3.75-.74,1.16-.49,2.18-1.16,3.06-2.01.88-.85,1.56-1.84,2.05-2.99.49-1.14.74-2.37.74-3.68,0-1.7-.41-3.18-1.23-4.44-.82-1.26-1.9-2.25-3.23-2.97.68-.68,1.23-1.48,1.63-2.39.4-.91.6-1.93.6-3.06,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74H1.38Z" class="tym-fill"></path><path d="M185.93.28v24.6h15.25v-5.48h-9.7v-4.16h7.62v-5.34h-7.62v-4.16h9.7V.28h-15.25ZM158.49,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L158.49,0ZM144.14,25.16c1.73,0,3.36-.33,4.89-.99,1.52-.66,2.86-1.56,4-2.7,1.14-1.14,2.04-2.48,2.7-4,.66-1.53.99-3.15.99-4.89s-.33-3.36-.99-4.89c-.66-1.52-1.56-2.86-2.7-4-1.14-1.14-2.48-2.04-4-2.7C147.5.33,145.88,0,144.14,0s-3.36.33-4.88.99c-1.53.66-2.86,1.56-4,2.7-1.14,1.14-2.04,2.48-2.7,4-.66,1.53-.99,3.15-.99,4.89s.33,3.36.99,4.89c.66,1.52,1.56,2.86,2.7,4,1.14,1.14,2.48,2.04,4,2.7,1.52.66,3.15.99,4.88.99M144.14,19.82c-.99,0-1.92-.19-2.77-.57-.85-.38-1.59-.9-2.22-1.56-.62-.66-1.12-1.43-1.47-2.3-.36-.88-.54-1.81-.54-2.81s.18-1.93.54-2.81c.36-.88.85-1.65,1.47-2.3.62-.66,1.36-1.18,2.22-1.56.86-.38,1.78-.57,2.77-.57s1.92.19,2.77.57c.85.38,1.59.9,2.22,1.56.62.66,1.11,1.43,1.47,2.3.36.88.54,1.81.54,2.81s-.18,1.93-.54,2.81c-.36.88-.85,1.65-1.47,2.3-.62.66-1.36,1.18-2.22,1.56-.85.38-1.78.57-2.77.57M108.87.28v24.6h5.54v-9.63h9.84v9.63h5.54V.28h-5.54v9.63h-9.84V.28h-5.54ZM90.26,5.75v19.13h5.54V5.75h5.93V.28h-17.36v5.47h5.89ZM75.95,10.22h-3.12v-4.89h3.12c.74,0,1.35.24,1.84.73s.73,1.06.73,1.73-.24,1.24-.73,1.72c-.49.47-1.1.71-1.84.71M72.9,14.9l7.62,9.98h6.62l-8-10.43c1.43-.55,2.58-1.45,3.45-2.69.87-1.24,1.3-2.63,1.3-4.18,0-.99-.19-1.93-.57-2.82-.38-.89-.91-1.67-1.58-2.34-.67-.67-1.45-1.2-2.34-1.58s-1.83-.57-2.82-.57h-9.29v24.6h5.54v-9.98h.07ZM57.24,16.56h-4.64l2.32-5.13,2.32,5.13ZM54.92,0l-12.13,24.88h5.82l1.77-3.81h9.08l1.77,3.81h5.82L54.92,0ZM18.02,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L18.02,0ZM8.84,25.16c1.13,0,2.18-.17,3.14-.52.96-.35,1.78-.84,2.48-1.47.69-.64,1.24-1.4,1.63-2.31.39-.9.59-1.91.59-3.01,0-1.71-.47-3.18-1.4-4.4-.94-1.22-2.26-2.22-3.97-2.98l-1.32-.59c-1.13-.51-1.97-.97-2.51-1.39-.54-.42-.81-.95-.81-1.59,0-.55.2-.98.61-1.26.4-.29.84-.43,1.3-.43.58,0,1.09.12,1.54.35.45.23.99.73,1.61,1.49l3.74-3.95c-1.04-1.2-2.11-2.02-3.2-2.44C11.15.21,9.92,0,8.56,0,7.59,0,6.65.17,5.75.5c-.9.33-1.7.81-2.39,1.44-.69.62-1.25,1.37-1.66,2.25-.42.88-.62,1.85-.62,2.91,0,1.66.49,3.16,1.47,4.49.98,1.33,2.41,2.41,4.28,3.24l1.39.62c1.04.46,1.78.9,2.22,1.3.44.41.66.88.66,1.44,0,1.18-.78,1.77-2.36,1.77-.86,0-1.69-.29-2.51-.88s-1.5-1.31-2.03-2.17l-4.19,3.43c.86,1.59,2.05,2.79,3.57,3.6,1.53.81,3.28,1.21,5.27,1.21" class="tym-fill"></path><path d="M208.38,54.74v-1.08c0-.3.12-.36.39-.36.24,0,.72.12.72.69,0,.3-.09.51-.33.63-.12.09-.36.12-.51.12h-.27ZM211.02,56.63c-.12-.06-.24-.15-.39-.3-.45-.51-.69-.84-.99-1.41.48-.18.81-.51.81-1.02,0-.87-.78-1.05-1.44-1.05h-2.04v.45c.48.03.54.03.54.57v2.04c0,.54-.06.54-.57.57v.48h2.01v-.48c-.51-.03-.57-.03-.57-.57v-.72h.12c.15,0,.3.03.42.21.12.21.27.6.54.96.36.48.78.63,1.44.63l.12-.36ZM208.8,51.74c1.74,0,3.03,1.41,3.03,3.18s-1.29,3.15-3.03,3.15-3-1.35-3-3.15,1.23-3.18,3-3.18M208.8,51.05c-2.19,0-3.87,1.77-3.87,3.87s1.65,3.87,3.87,3.87,3.9-1.83,3.9-3.87-1.68-3.87-3.9-3.87" class="tym-fill"></path></g></svg><small>Layout</small></div>
+  <div class="hdr-name">
+    <div class="brand"><svg class="tym-logo-svg" role="img" aria-label="SmartHome Brothers by TYM" viewBox="0 0 212.7 59.89" xmlns="http://www.w3.org/2000/svg"><defs><style>.tym-none{fill:none;}.tym-fill{fill:#00acec;}.tym-clip{clip-path:url(#tym-logo-clip);}</style><clipPath id="tym-logo-clip"><rect height="59.89" width="212.7" x="0" class="tym-none"></rect></clipPath></defs><g class="tym-clip"><path d="M192.51,59.89c1.46,0,2.8-.22,4.04-.67,1.24-.45,2.3-1.08,3.19-1.9.89-.82,1.59-1.81,2.1-2.97.51-1.16.76-2.45.76-3.88,0-2.2-.6-4.09-1.81-5.67-1.21-1.58-2.91-2.86-5.11-3.84l-1.7-.76c-1.46-.65-2.54-1.25-3.24-1.78-.7-.53-1.05-1.22-1.05-2.05,0-.71.26-1.26.78-1.63.52-.37,1.08-.56,1.67-.56.74,0,1.41.15,1.99.45.58.3,1.27.94,2.07,1.92l4.82-5.09c-1.34-1.55-2.71-2.6-4.13-3.15-1.41-.55-3-.83-4.75-.83-1.25,0-2.45.22-3.61.65-1.16.43-2.19,1.05-3.08,1.85-.89.8-1.61,1.77-2.14,2.9-.54,1.13-.8,2.38-.8,3.75,0,2.14.63,4.07,1.9,5.78,1.26,1.71,3.1,3.1,5.51,4.17l1.79.8c1.34.6,2.29,1.15,2.86,1.67.57.52.85,1.14.85,1.85,0,1.52-1.01,2.28-3.04,2.28-1.1,0-2.18-.38-3.24-1.14-1.06-.76-1.93-1.69-2.61-2.79l-5.4,4.42c1.1,2.05,2.63,3.6,4.6,4.64,1.96,1.04,4.22,1.56,6.78,1.56M168.86,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M164.93,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.32-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM135.53,27.85v31.68h19.63v-7.05h-12.49v-5.35h9.82v-6.87h-9.82v-5.35h12.49v-7.05h-19.63ZM104.82,27.85v31.68h7.14v-12.41h12.67v12.41h7.14v-31.68h-7.14v12.41h-12.67v-12.41h-7.14ZM88.45,34.9v24.63h7.14v-24.63h7.63v-7.05h-22.36v7.05h7.59ZM65.51,59.89c2.23,0,4.33-.42,6.29-1.27,1.96-.85,3.68-2.01,5.15-3.48,1.47-1.47,2.63-3.19,3.48-5.15.85-1.96,1.27-4.06,1.27-6.29s-.42-4.33-1.27-6.29c-.85-1.96-2.01-3.68-3.48-5.15-1.47-1.47-3.19-2.63-5.15-3.48-1.96-.85-4.06-1.27-6.29-1.27s-4.33.42-6.29,1.27c-1.96.85-3.68,2.01-5.15,3.48-1.47,1.47-2.63,3.19-3.48,5.15-.85,1.96-1.27,4.06-1.27,6.29s.42,4.33,1.27,6.29c.85,1.96,2.01,3.68,3.48,5.15,1.47,1.47,3.19,2.63,5.15,3.48,1.96.85,4.06,1.27,6.29,1.27M65.51,53.01c-1.28,0-2.47-.24-3.57-.74-1.1-.49-2.05-1.16-2.86-2.01-.8-.85-1.44-1.84-1.9-2.97-.46-1.13-.69-2.33-.69-3.61s.23-2.48.69-3.61c.46-1.13,1.09-2.12,1.9-2.97.8-.85,1.76-1.52,2.86-2.01,1.1-.49,2.29-.74,3.57-.74s2.47.25,3.57.74c1.1.49,2.05,1.16,2.86,2.01s1.44,1.84,1.9,2.97c.46,1.13.69,2.34.69,3.61s-.23,2.48-.69,3.61c-.46,1.13-1.09,2.12-1.9,2.97s-1.76,1.52-2.86,2.01c-1.1.49-2.29.74-3.57.74M38.02,40.65h-4.02v-6.29h4.02c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M34.09,46.68l9.82,12.85h8.52l-10.31-13.43c1.85-.71,3.33-1.87,4.44-3.46,1.12-1.59,1.67-3.38,1.67-5.38,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74h-11.96v31.68h7.14v-12.85h.09ZM12.5,40.65h-3.97v-6.29h3.97c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.91-2.36.91M14.68,52.97h-6.16v-6.29h6.16c.95,0,1.74.31,2.36.94.62.62.94,1.37.94,2.23s-.31,1.6-.94,2.21c-.62.61-1.41.92-2.36.92M1.38,27.85v31.68h13.97c1.34,0,2.59-.25,3.75-.74,1.16-.49,2.18-1.16,3.06-2.01.88-.85,1.56-1.84,2.05-2.99.49-1.14.74-2.37.74-3.68,0-1.7-.41-3.18-1.23-4.44-.82-1.26-1.9-2.25-3.23-2.97.68-.68,1.23-1.48,1.63-2.39.4-.91.6-1.93.6-3.06,0-1.28-.25-2.49-.74-3.64-.49-1.15-1.17-2.15-2.03-3.01-.86-.86-1.87-1.54-3.01-2.03-1.15-.49-2.36-.74-3.64-.74H1.38Z" class="tym-fill"></path><path d="M185.93.28v24.6h15.25v-5.48h-9.7v-4.16h7.62v-5.34h-7.62v-4.16h9.7V.28h-15.25ZM158.49,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L158.49,0ZM144.14,25.16c1.73,0,3.36-.33,4.89-.99,1.52-.66,2.86-1.56,4-2.7,1.14-1.14,2.04-2.48,2.7-4,.66-1.53.99-3.15.99-4.89s-.33-3.36-.99-4.89c-.66-1.52-1.56-2.86-2.7-4-1.14-1.14-2.48-2.04-4-2.7C147.5.33,145.88,0,144.14,0s-3.36.33-4.88.99c-1.53.66-2.86,1.56-4,2.7-1.14,1.14-2.04,2.48-2.7,4-.66,1.53-.99,3.15-.99,4.89s.33,3.36.99,4.89c.66,1.52,1.56,2.86,2.7,4,1.14,1.14,2.48,2.04,4,2.7,1.52.66,3.15.99,4.88.99M144.14,19.82c-.99,0-1.92-.19-2.77-.57-.85-.38-1.59-.9-2.22-1.56-.62-.66-1.12-1.43-1.47-2.3-.36-.88-.54-1.81-.54-2.81s.18-1.93.54-2.81c.36-.88.85-1.65,1.47-2.3.62-.66,1.36-1.18,2.22-1.56.86-.38,1.78-.57,2.77-.57s1.92.19,2.77.57c.85.38,1.59.9,2.22,1.56.62.66,1.11,1.43,1.47,2.3.36.88.54,1.81.54,2.81s-.18,1.93-.54,2.81c-.36.88-.85,1.65-1.47,2.3-.62.66-1.36,1.18-2.22,1.56-.85.38-1.78.57-2.77.57M108.87.28v24.6h5.54v-9.63h9.84v9.63h5.54V.28h-5.54v9.63h-9.84V.28h-5.54ZM90.26,5.75v19.13h5.54V5.75h5.93V.28h-17.36v5.47h5.89ZM75.95,10.22h-3.12v-4.89h3.12c.74,0,1.35.24,1.84.73s.73,1.06.73,1.73-.24,1.24-.73,1.72c-.49.47-1.1.71-1.84.71M72.9,14.9l7.62,9.98h6.62l-8-10.43c1.43-.55,2.58-1.45,3.45-2.69.87-1.24,1.3-2.63,1.3-4.18,0-.99-.19-1.93-.57-2.82-.38-.89-.91-1.67-1.58-2.34-.67-.67-1.45-1.2-2.34-1.58s-1.83-.57-2.82-.57h-9.29v24.6h5.54v-9.98h.07ZM57.24,16.56h-4.64l2.32-5.13,2.32,5.13ZM54.92,0l-12.13,24.88h5.82l1.77-3.81h9.08l1.77,3.81h5.82L54.92,0ZM18.02,0v24.88h5.54v-12.06l6.72,6.72,6.72-6.72v12.06h5.54V0l-12.27,12.3L18.02,0ZM8.84,25.16c1.13,0,2.18-.17,3.14-.52.96-.35,1.78-.84,2.48-1.47.69-.64,1.24-1.4,1.63-2.31.39-.9.59-1.91.59-3.01,0-1.71-.47-3.18-1.4-4.4-.94-1.22-2.26-2.22-3.97-2.98l-1.32-.59c-1.13-.51-1.97-.97-2.51-1.39-.54-.42-.81-.95-.81-1.59,0-.55.2-.98.61-1.26.4-.29.84-.43,1.3-.43.58,0,1.09.12,1.54.35.45.23.99.73,1.61,1.49l3.74-3.95c-1.04-1.2-2.11-2.02-3.2-2.44C11.15.21,9.92,0,8.56,0,7.59,0,6.65.17,5.75.5c-.9.33-1.7.81-2.39,1.44-.69.62-1.25,1.37-1.66,2.25-.42.88-.62,1.85-.62,2.91,0,1.66.49,3.16,1.47,4.49.98,1.33,2.41,2.41,4.28,3.24l1.39.62c1.04.46,1.78.9,2.22,1.3.44.41.66.88.66,1.44,0,1.18-.78,1.77-2.36,1.77-.86,0-1.69-.29-2.51-.88s-1.5-1.31-2.03-2.17l-4.19,3.43c.86,1.59,2.05,2.79,3.57,3.6,1.53.81,3.28,1.21,5.27,1.21" class="tym-fill"></path><path d="M208.38,54.74v-1.08c0-.3.12-.36.39-.36.24,0,.72.12.72.69,0,.3-.09.51-.33.63-.12.09-.36.12-.51.12h-.27ZM211.02,56.63c-.12-.06-.24-.15-.39-.3-.45-.51-.69-.84-.99-1.41.48-.18.81-.51.81-1.02,0-.87-.78-1.05-1.44-1.05h-2.04v.45c.48.03.54.03.54.57v2.04c0,.54-.06.54-.57.57v.48h2.01v-.48c-.51-.03-.57-.03-.57-.57v-.72h.12c.15,0,.3.03.42.21.12.21.27.6.54.96.36.48.78.63,1.44.63l.12-.36ZM208.8,51.74c1.74,0,3.03,1.41,3.03,3.18s-1.29,3.15-3.03,3.15-3-1.35-3-3.15,1.23-3.18,3-3.18M208.8,51.05c-2.19,0-3.87,1.77-3.87,3.87s1.65,3.87,3.87,3.87,3.9-1.83,3.9-3.87-1.68-3.87-3.9-3.87" class="tym-fill"></path></g></svg><small>Layout</small></div>
+    <input id="projName" placeholder="Name your project" title="Project name" autocomplete="off" maxlength="120">
+    <button type="button" id="btnMenu" aria-label="Menu" aria-expanded="false" aria-controls="appMenu" title="Menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <nav id="appMenu" hidden>
+      <button type="button" id="menuSave">Save</button>
+      <button type="button" id="menuOpen">Open</button>
+      <button type="button" id="menuUpload">Upload floor plan</button>
+      <button type="button" id="menuAddFloor">Add floor</button>
+      <button type="button" id="menuDownload">Download project file</button>
+      <button type="button" id="menuClose">Close project</button>
+      <button type="button" id="menuOut" hidden>Log out</button>
+    </nav>
+  </div>
   <div class="tools">
-    <button type="button" id="btnRot" title="Rotate 15° (Shift for 1°)">Rotate</button>
-    <button type="button" id="btnSz" title="Step size 0.75× – 1.5×">Resize</button>
+    <button type="button" id="btnUploadPlan" class="file-btn">Upload Plan</button>
+    <button type="button" id="btnSelect" title="Select" aria-label="Select">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M5.2 3.4l.4 16.1 4.1-4.2 3.3 6.4 2.4-1.2-3.3-6.3 6.1-1.2L5.2 3.4z"/></svg>
+    </button>
     <span class="sep"></span>
-    <button type="button" id="btnUndo" title="Undo (⌘Z)">Undo</button>
+    <button type="button" id="btnPrevPage" title="Previous page" aria-label="Previous page">‹</button>
+    <span id="pageLbl">No plan</span>
+    <input id="floorName" list="floorNames" placeholder="Floor name" autocomplete="off" hidden>
+    <datalist id="floorNames">
+      <option value="Main"></option>
+      <option value="Upper"></option>
+      <option value="Basement"></option>
+    </datalist>
+    <button type="button" id="btnNextPage" title="Next page" aria-label="Next page">›</button>
     <span class="sep"></span>
-    <input id="projName" placeholder="Project name" title="Project name" value="Untitled project">
-    <button type="button" id="btnNew" title="New project">New</button>
-    <button type="button" id="btnOpen" title="Open a saved project">Open</button>
-    <button type="button" id="btnSave" title="Save project JSON (PDF stays in this browser)">Save</button>
-    <input type="file" id="openProj" accept="application/json,.json" hidden>
-    <span class="sep"></span>
-    <button type="button" id="btnHifi" title="Unlock Audiophile / Hi-Fi (Paradigm CI Elite; Sonance not yet in the catalog)">Hi-Fi</button>
-    <span class="sep"></span>
-    <button type="button" id="btnPrevPage" title="Previous page">‹</button>
-    <span id="pageLbl">—</span>
-    <button type="button" id="btnNextPage" title="Next page">›</button>
-    <span class="sep"></span>
-    <button type="button" id="btnZmOut" title="Zoom out">Zoom −</button>
+    <button type="button" id="btnZmOut" title="Zoom out" aria-label="Zoom out">−</button>
     <span class="zl" id="zl">100%</span>
-    <button type="button" id="btnZmIn" title="Zoom in">Zoom +</button>
+    <button type="button" id="btnZmIn" title="Zoom in" aria-label="Zoom in">+</button>
     <button type="button" id="btnFit">Fit</button>
     <button type="button" id="btn100">100%</button>
-    <span class="sep"></span>
-    <input class="search" id="search" placeholder="Search" title="Search arrives in Phase C" readonly>
-    <span class="sep"></span>
-    <button type="button" id="btnFeedback" title="Send feedback">Feedback</button>
+    <button type="button" id="btnQuote" title="Get a priced quote">Get Quote</button>
+    <input type="file" id="openProj" accept="application/json,.json" hidden>
+    <input type="file" id="pdf" accept="application/pdf" hidden>
   </div>
-  <div class="total"><span>Package total</span><b id="hdrTotal">$0</b></div>
 </header>
 <div class="app">
-<aside>
+<aside id="colLeft">
 <div class="aside-scroll">
-  <label class="file-btn" for="pdf">Upload floor plan</label>
-  <input type="file" id="pdf" accept="application/pdf">
-  <div id="pg"></div>
+  <div id="pg" hidden></div>
+
+  <div id="ctlRow">
+    <span>Control</span>
+    <select id="ctlPlat" title="Control platform">
+      <option value="josh">Josh.ai</option>
+      <option value="control4">Control4</option>
+      <option value="alexa">Alexa</option>
+    </select>
+  </div>
+  <div id="matrixPrompt" hidden>
+    <p>You can save money with a whole-home audio system: a matrix switch and multi-zone amp with Sonos Port, run by Josh.ai or Control4.</p>
+    <div class="rowbtns">
+      <button type="button" id="matrixYes">Use whole-home audio</button>
+      <button type="button" id="matrixNo">Keep room amps</button>
+    </div>
+  </div>
+  <div id="layoutTools" hidden>
+    <div id="audMode">
+      <button type="button" data-aud="amps">Room amps</button>
+      <button type="button" data-aud="matrix">Whole-home</button>
+    </div>
+  </div>
 
   <section class="sec" id="roomsPanel" hidden>
     <div class="sec-h">Rooms <button type="button" id="addRoom">Add Room</button></div>
@@ -267,38 +463,68 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <div id="tree"></div>
     <div id="lastAdded">Last added: —</div>
   </section>
-
-  <div id="editorStack">
-    <div id="sideTotal"><span style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Package total</span><br><b id="sideTotalAmt">$0</b></div>
-    <section class="sec" id="selSec">
-      <div class="sec-h">Selected</div>
-      <div id="selBox">Click a device to edit.</div>
-    </section>
-  </div>
-
-  <section class="sec" id="bundlePanel" hidden>
-    <div class="g" id="bundleGroup">
-      <div class="gh" id="bundleToggle" role="button" tabindex="0" aria-expanded="false"><span class="ch">▾</span> Bundles</div>
-      <div class="gb" id="bundles">
-        <button type="button" data-b="5.1">Add 5.1 Surround</button>
-        <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
-        <button type="button" data-b="microled">Add Micro LED Screen</button>
-        <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
-      </div>
-    </div>
-  </section>
-  <section class="sec" id="palette"></section>
+  <div id="wholeHome" hidden></div>
 
 </div>
+  <div id="sideTotal"><div class="side-kicker">Package total</div><b id="sideTotalAmt">$0</b><div id="sideCount"></div></div>
 </aside>
 <main id="main">
   <div id="empty">Upload a PDF floor plan to begin.</div>
   <div id="stage"></div>
 </main>
+<aside id="colRight">
+  <button type="button" id="btnRail" aria-expanded="true">Devices</button>
+  <div class="right-body">
+    <div class="right-head">
+      <input class="search" id="search" placeholder="Search" title="Search arrives in Phase C" readonly>
+      <button type="button" id="btnHideRight" title="Hide device list">Hide</button>
+    </div>
+    <div class="right-selected">
+      <section class="sec" id="selSec">
+        <div class="sec-h">Selected</div>
+        <div id="selBox">Click a device to edit.</div>
+      </section>
+    </div>
+    <div class="aside-scroll">
+      <section class="sec" id="bundlePanel" hidden>
+        <div class="g" id="bundleGroup">
+          <div class="gh" id="bundleToggle" role="button" tabindex="0" aria-expanded="false"><span class="ch">▾</span> Bundles</div>
+          <div class="gb" id="bundles">
+            <button type="button" data-b="5.1">Add 5.1 Surround</button>
+            <button type="button" data-b="7.1.2">Add 7.1.2 Surround</button>
+            <button type="button" data-b="microled">Add Micro LED Screen</button>
+            <div class="tbd-note">Kit contents are default guesses, marked TBD.</div>
+          </div>
+        </div>
+      </section>
+      <section class="sec" id="palette"></section>
+    </div>
+  </div>
+</aside>
 </div>
 <div id="modal"><div class="card"><div id="mBody"></div><div id="mBtns" style="margin-top:16px;text-align:right"></div></div></div>
+<div id="planPick" role="dialog" aria-modal="true" aria-labelledby="planPickTitle">
+  <div class="plan-card">
+    <h2 id="planPickTitle">Choose plan pages</h2>
+    <p class="hint" id="planPickHint"></p>
+    <div id="planThumbs"></div>
+    <div class="plan-actions">
+      <button type="button" id="planCancel">Cancel</button>
+      <button type="button" id="planKeep">Keep selected pages</button>
+    </div>
+  </div>
+</div>
 <div id="ctx"></div>
 <div id="tierPop"></div>
+<div id="acctModal" role="dialog" aria-modal="true" aria-labelledby="acctTitle">
+  <div class="acct-card">
+    <h2 id="acctTitle">Account</h2>
+    <div id="acctBody"></div>
+    <div class="acct-actions"><button type="button" id="acctClose">Close</button></div>
+  </div>
+</div>
+<script src="yt-access.js"></script>
+<script src="quote-model.js"></script>
 <script>
 /* Client-safe catalog: list prices only. Generated by build_layout_catalog.py. */
 const CATALOG={"meta":{"safe":true,"note":"Client catalog: list prices only. No dealer cost."},"items":{"Sonos-Amp":{"key":"Sonos-Amp","sku":"Sonos-Amp","name":"Sonos Amp","brand":"Sonos","cat":"audio","list":799},"Sonos-Port":{"key":"Sonos-Port","sku":"Sonos-Port","name":"Sonos Port","brand":"Sonos","cat":"audio","list":499},"SONOS-ARC-2-BL":{"key":"SONOS-ARC-2-BL","sku":"SONOS-ARC-2-BL","name":"Sonos Arc Ultra soundbar","brand":"Sonos","cat":"audio","list":1099},"SONOS-SUB-M-BL":{"key":"SONOS-SUB-M-BL","sku":"SONOS-SUB-M-WH","name":"Sonos Sub Mini","brand":"Sonos","cat":"audio","list":499},"SONOS-ERA-100-BL":{"key":"SONOS-ERA-100-BL","sku":"SONOS-ERA-100-BL","name":"Sonos Era 100 (wireless surround)","brand":"Sonos","cat":"audio","list":219},"SONOS-ARC-2-WM":{"key":"SONOS-ARC-2-WM","sku":"SONOS-ARC-2-WM","name":"Sonos Arc Ultra wall mount set","brand":"Sonos","cat":"mount","list":79},"SAN-WSSCAM1-B2":{"key":"SAN-WSSCAM1-B2","sku":"SAN-WSSCAM1-B2","name":"Sanus slim wall mount for Sonos Amp","brand":"Sanus","cat":"mount","list":65.99},"SP-6":{"key":"SP-6","sku":"SP-6","name":"TruAudio Shadow 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":93},"PG-6":{"key":"PG-6","sku":"PG-6","name":"TruAudio Phantom 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":374},"PG-8":{"key":"PG-8","sku":"PG-8","name":"TruAudio Phantom 8\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":467},"RC-6":{"key":"RC-6","sku":"RC-6","name":"TruAudio speaker ring (pre-construction bracket) 6.5\"","brand":"TruAudio","cat":"accessory","list":34},"RC-879":{"key":"RC-879","sku":"RC-879","name":"TruAudio speaker ring (pre-construction bracket) 8\"","brand":"TruAudio","cat":"accessory","list":34},"GHT-66P":{"key":"GHT-66P","sku":"GHT-66P","name":"TruAudio Ghost HT in-wall LCR speaker","brand":"TruAudio","cat":"speaker","list":826.5},"GHT-SUR-P":{"key":"GHT-SUR-P","sku":"GHT-SUR-P","name":"TruAudio Ghost HT in-wall surround speaker","brand":"TruAudio","cat":"speaker","list":652.5},"DFS-10BK":{"key":"DFS-10BK","sku":"DFS-10BK","name":"TruAudio 10\" powered down-firing subwoofer","brand":"TruAudio","cat":"speaker","list":1334},"RW-G66":{"key":"RW-G66","sku":"RW-G66","name":"TruAudio rough-in ring for Ghost HT LCR","brand":"TruAudio","cat":"accessory","list":65},"RW-GSUR":{"key":"RW-GSUR","sku":"RW-GSUR","name":"TruAudio rough-in ring for Ghost HT surround","brand":"TruAudio","cat":"accessory","list":63},"OP6-BK":{"key":"OP6-BK","sku":"OP6-BK","name":"TruAudio 6.5\" outdoor speaker (black)","brand":"TruAudio","cat":"speaker","list":580},"SM-RBX-14-WH":{"key":"SM-RBX-14-WH","sku":"SM-RBX-14-WH","name":"Strong VersaBox recessed box (behind TV, houses Sonos Amp)","brand":"Strong","cat":"mount","list":139.98},"SM-RBX-14-BKT":{"key":"SM-RBX-14-BKT","sku":"SM-RBX-14-BKT","name":"VersaBox pre-construction bracket","brand":"Strong","cat":"accessory","list":27.98},"CHF-MTM1U":{"key":"CHF-MTM1U","sku":"CHF-MTM1U","name":"Chief Fusion tilt TV mount 32-65\"","brand":"Chief","cat":"mount","list":279},"CHF-LTM1U":{"key":"CHF-LTM1U","sku":"CHF-LTM1U","name":"Chief Fusion tilt TV mount 42-86\"","brand":"Chief","cat":"mount","list":438},"CHF-XTM1U":{"key":"CHF-XTM1U","sku":"CHF-XTM1U","name":"Chief Fusion tilt TV mount 55-100\"","brand":"Chief","cat":"mount","list":519},"SAN-VMPL50A-B1":{"key":"SAN-VMPL50A-B1","sku":"SAN-VMPL50A-B1","name":"Sanus tilting TV wall mount","brand":"Sanus","cat":"mount","list":189.99},"SM-PROJ-XL-BLK":{"key":"SM-PROJ-XL-BLK","sku":"SM-PROJ-XL-BLK","name":"Strong projector ceiling mount","brand":"Strong","cat":"mount","list":399.99},"B6-4K2-1":{"key":"B6-4K2-1","sku":"B6-4K2-1","name":"Binary 4K HDMI cable 1 m","brand":"Binary","cat":"cable","list":19.99},"B6-4K2-2":{"key":"B6-4K2-2","sku":"B6-4K2-2","name":"Binary 4K HDMI cable 2 m","brand":"Binary","cat":"cable","list":31.99},"B6A-4K2-10":{"key":"B6A-4K2-10","sku":"B6A-4K2-10","name":"Binary active 4K HDMI cable 10 m (projector run)","brand":"Binary","cat":"cable","list":145.99},"B6-XLR-3FM-2FT":{"key":"B6-XLR-3FM-2FT","sku":"B6-XLR-3FM-2FT","name":"Binary XLR patch cable","brand":"Binary","cat":"cable","list":17.99},"SR-SHELF-FIXED-4U":{"key":"SR-SHELF-FIXED-4U","sku":"SR-SHELF-FIXED-4U","name":"Strong rack shelf 4U","brand":"Strong","cat":"rack","list":149.98},"SR-SHELF-FIXED-2U":{"key":"SR-SHELF-FIXED-2U","sku":"SR-SHELF-FIXED-2U","name":"Strong rack shelf 2U","brand":"Strong","cat":"rack","list":109.98},"SR-CS-RACK-21U":{"key":"SR-CS-RACK-21U","sku":"SR-CS-RACK-21U","name":"Strong 21U equipment rack","brand":"Strong","cat":"rack","list":599.98},"WB-150-IPW-1B-2":{"key":"WB-150-IPW-1B-2","sku":"WB-150-IPW-1B-2","name":"WattBox IP power outlet (OvrC)","brand":"WattBox","cat":"power","list":268.79},"WB-700CH-IPV-12":{"key":"WB-700CH-IPV-12","sku":"WB-700CH-IPV-12","name":"WattBox IP power conditioner, 12 outlets (OvrC)","brand":"WattBox","cat":"power","list":1241.99},"NST-162-500-WH":{"key":"NST-162-500-WH","sku":"NST-162-500-WH","name":"Wirepath 16/2 speaker wire, 500 ft","brand":"Wirepath","cat":"cable","list":147.95},"YA-RX-V6A":{"key":"YA-RX-V6A","sku":"YA-RX-V6A","name":"Yamaha 7.2-ch AV receiver (RX-V6A)","brand":"Yamaha","cat":"av","list":849.95},"YA-RX-A4A":{"key":"YA-RX-A4A","sku":"YA-RX-A4A","name":"Yamaha AVENTAGE 7.2-ch AV receiver (RX-A4A)","brand":"Yamaha","cat":"av","list":1599.95},"VPLXW5000ES":{"key":"VPLXW5000ES","sku":"VPLXW5000ES","name":"Sony VPL-XW5000ES 4K laser projector (2,000 lm)","brand":"Sony","cat":"projector","list":5999.99},"VPLXW5100ES":{"key":"VPLXW5100ES","sku":"VPLXW5100ES","name":"Sony VPL-XW5100ES 4K laser projector (2,200 lm)","brand":"Sony","cat":"projector","list":9999.99},"V11HA47020MB":{"key":"V11HA47020MB","sku":"V11HA47020MB","name":"Epson Pro Cinema LS12000 4K laser projector (2,700 lm)","brand":"Epson","cat":"projector","list":4999},"DF-SL-92-UAW":{"key":"DF-SL-92-UAW","sku":"DF-SL-92-UAW","name":"Dragonfly 92\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":3168.99},"DF-SL-100-UAW":{"key":"DF-SL-100-UAW","sku":"DF-SL-100-UAW","name":"Dragonfly 100\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1816.29},"DF-SL-106-UAW":{"key":"DF-SL-106-UAW","sku":"DF-SL-106-UAW","name":"Dragonfly 106\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1925.91},"DF-TB-110-UAW":{"key":"DF-TB-110-UAW","sku":"DF-TB-110-UAW","name":"Dragonfly 110\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4308.99},"Aetherion Max":{"key":"Aetherion Max","sku":"Aetherion Max","name":"AWOL Vision Aetherion Max 4K triple-laser UST projector (3,300 lm)","brand":"AWOL Vision","cat":"projector","list":3999},"Aetherion Pro":{"key":"Aetherion Pro","sku":"Aetherion Pro","name":"AWOL Vision Aetherion Pro 4K triple-laser UST projector (2,600 lm)","brand":"AWOL Vision","cat":"projector","list":2999},"ALR-F220C Pro":{"key":"ALR-F220C Pro","sku":"ALR-F220C Pro","name":"AWOL Vision 120\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":2999},"ALR-F230C Pro":{"key":"ALR-F230C Pro","sku":"ALR-F230C Pro","name":"AWOL Vision 130\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":3799},"AS-S120":{"key":"AS-S120","sku":"AS-S120","name":"AWOL Smart Station cabinet 120\"","brand":"AWOL Vision","cat":"cabinet","list":749},"AS-S130":{"key":"AS-S130","sku":"AS-S130","name":"AWOL Smart Station cabinet 130\"","brand":"AWOL Vision","cat":"cabinet","list":849},"TB-412":{"key":"TB-412","sku":"TB-412","name":"AWOL ThunderBeat 4.1.2 surround system","brand":"AWOL Vision","cat":"audio","list":1199},"LUT-PD-6WCL-WH":{"key":"LUT-PD-6WCL-WH","sku":"LUT-PD-6WCL-WH","name":"Lutron Caseta smart dimmer","brand":"Lutron","cat":"lighting","list":79.3},"LUT-P-PKG1W-WH":{"key":"LUT-P-PKG1W-WH","sku":"LUT-P-PKG1W-WH","name":"Lutron Caseta dimmer + Pico 3-way kit","brand":"Lutron","cat":"lighting","list":96.3},"LUT-L-BDGPRO2-WH":{"key":"LUT-L-BDGPRO2-WH","sku":"LUT-L-BDGPRO2-WH","name":"Lutron Caseta Smart Bridge PRO","brand":"Lutron","cat":"lighting","list":180},"LUT-PD-REP-WH":{"key":"LUT-PD-REP-WH","sku":"LUT-PD-REP-WH","name":"Lutron Caseta wireless repeater","brand":"Lutron","cat":"lighting","list":110},"RRD-PRO":{"key":"RRD-PRO","sku":"RRD-PRO","name":"Lutron Select smart dimmer (Maestro PRO LED+, neutral optional)","brand":"Lutron","cat":"lighting","list":219.5},"PJ2-WALL-WH-L01":{"key":"PJ2-WALL-WH-L01","sku":"PJ2-WALL-WH-L01","name":"Lutron Pico remote + wall-mount kit (3-way / multi-location)","brand":"Lutron","cat":"lighting","list":39.95},"RR-SEL-REP2":{"key":"RR-SEL-REP2","sku":"RR-SEL-REP2","name":"Lutron Select main repeater","brand":"Lutron","cat":"lighting","list":384},"L-REPPRO":{"key":"L-REPPRO","sku":"L-REPPRO","name":"Lutron wireless repeater (Select / RA3)","brand":"Lutron","cat":"lighting","list":252},"RR-PROC3-KIT1":{"key":"RR-PROC3-KIT1","sku":"RR-PROC3-KIT1","name":"Lutron RadioRA 3 processor kit (with PoE injector)","brand":"Lutron","cat":"lighting","list":548.64},"ROUTE10":{"key":"ROUTE10","sku":"ROUTE10","name":"Alta Labs Route10 router","brand":"Alta Labs","cat":"network","list":318.99},"AP6":{"key":"AP6","sku":"AP6","name":"Alta Labs AP6 Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":120.25},"AP6-PRO-OUTDOOR":{"key":"AP6-PRO-OUTDOOR","sku":"AP6-PRO-OUTDOOR","name":"Alta Labs outdoor Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":284.81},"S8-POE":{"key":"S8-POE","sku":"S8-POE","name":"Alta Labs 8-port PoE switch","brand":"Alta Labs","cat":"network","list":164.56},"S16-POE":{"key":"S16-POE","sku":"S16-POE","name":"Alta Labs 16-port PoE switch","brand":"Alta Labs","cat":"network","list":436.71},"S24-POE":{"key":"S24-POE","sku":"S24-POE","name":"Alta Labs 24-port PoE switch","brand":"Alta Labs","cat":"network","list":588.61},"S48-APOE":{"key":"S48-APOE","sku":"S48-APOE","name":"Alta Labs 48-port PoE+ switch","brand":"Alta Labs","cat":"network","list":1125.32},"0E-CAT6RGN":{"key":"0E-CAT6RGN","sku":"0E-CAT6RGN","name":"Cat6 network cable (1,000 ft reel)","brand":"ADI PRO","cat":"cable","list":359.98},"K43XR30M2":{"key":"K43XR30M2","sku":"K43XR30M2","name":"Sony BRAVIA 43\" 4K TV (K43XR30M2)","brand":"Sony","cat":"tv","list":638.27},"K50S30":{"key":"K50S30","sku":"K50S30","name":"Sony BRAVIA 50\" 4K TV (K50S30)","brand":"Sony","cat":"tv","list":698.04},"K55XR30M2":{"key":"K55XR30M2","sku":"K55XR30M2","name":"Sony BRAVIA 55\" 4K TV (K55XR30M2)","brand":"Sony","cat":"tv","list":851.02},"K65XR30M2":{"key":"K65XR30M2","sku":"K65XR30M2","name":"Sony BRAVIA 65\" 4K TV (K65XR30M2)","brand":"Sony","cat":"tv","list":899.99},"K65XR50":{"key":"K65XR50","sku":"K65XR50","name":"Sony BRAVIA 65\" 4K TV (K65XR50)","brand":"Sony","cat":"tv","list":1499.99},"K75XR30M2":{"key":"K75XR30M2","sku":"K75XR30M2","name":"Sony BRAVIA 75\" 4K TV (K75XR30M2)","brand":"Sony","cat":"tv","list":1246.53},"K75XR50":{"key":"K75XR50","sku":"K75XR50","name":"Sony BRAVIA 75\" 4K TV (K75XR50)","brand":"Sony","cat":"tv","list":2040.82},"K85XR50":{"key":"K85XR50","sku":"K85XR50","name":"Sony BRAVIA 85\" 4K TV (K85XR50)","brand":"Sony","cat":"tv","list":2485.88},"K98XR50":{"key":"K98XR50","sku":"K98XR50","name":"Sony BRAVIA 98\" 4K TV (K98XR50)","brand":"Sony","cat":"tv","list":4744.19},"K100XR30M2":{"key":"K100XR30M2","sku":"K100XR30M2","name":"Sony BRAVIA 100\" 4K TV (K100XR30M2)","brand":"Sony","cat":"tv","list":2685.05},"J-ON-100":{"key":"J-ON-100","sku":"J-ON-100","name":"Josh One processor","brand":"Josh.ai","cat":"control","list":1000},"J-CR-BLK-100":{"key":"J-CR-BLK-100","sku":"J-CR-BLK-100","name":"Josh Core processor","brand":"Josh.ai","cat":"control","list":3500},"J-WHT-100":{"key":"J-WHT-100","sku":"J-WHT-100","name":"Josh Micro (room voice endpoint)","brand":"Josh.ai","cat":"control","list":899},"J-EDG-1":{"key":"J-EDG-1","sku":"J-EDG-1","name":"Josh Edge remote","brand":"Josh.ai","cat":"control","list":599},"AVA-RM-RX2-US-AL":{"key":"AVA-RM-RX2-US-AL","sku":"AVA-RM-RX2-US-AL","name":"Josh AVA Cinema remote","brand":"Josh.ai","cat":"control","list":1299},"J-ACC-MNT-CR-S":{"key":"J-ACC-MNT-CR-S","sku":"J-ACC-MNT-CR-S","name":"Josh Core 1U rack mount","brand":"Josh.ai","cat":"control","list":248},"J-SFT-ON1:Y":{"key":"J-SFT-ON1:Y","sku":"J-SFT-ON1","name":"Josh One software plan, year 1","brand":"Josh.ai","cat":"control","list":220},"J-SFT-ON1:5Y":{"key":"J-SFT-ON1:5Y","sku":"J-SFT-ON1","name":"Josh One software plan, 5 years","brand":"Josh.ai","cat":"control","list":1100},"J-SFT-CR1:Y":{"key":"J-SFT-CR1:Y","sku":"J-SFT-CR1","name":"Josh Core software plan, year 1","brand":"Josh.ai","cat":"control","list":720},"J-SFT-CR1:5Y":{"key":"J-SFT-CR1:5Y","sku":"J-SFT-CR1","name":"Josh Core software plan, 5 years","brand":"Josh.ai","cat":"control","list":3600},"AC-MAX-24":{"key":"AC-MAX-24","sku":"AC-MAX-24","name":"AVPro 24x24 audio matrix","brand":"AVPro Edge","cat":"audio","list":3017},"TS-PAMP8-125-V2":{"key":"TS-PAMP8-125-V2","sku":"TS-PAMP8-125-V2","name":"Triad 8-zone power amplifier (16 ch x 125 W)","brand":"Triad","cat":"audio","list":2498.99},"C4-CORE-LITE-RSK":{"key":"C4-CORE-LITE-RSK","sku":"C4-CORE-LITE-RSK","name":"Control4 CORE lite + SR260 remote bundle","brand":"Control4","cat":"control","list":936.35},"PH-APPLETV":{"key":"PH-APPLETV","sku":"PH-APPLETV","name":"Apple TV 4K","brand":"Apple","cat":"source","list":149},"PH-SUBCABLE":{"key":"PH-SUBCABLE","sku":"PH-SUBCABLE","name":"Subwoofer cable (RCA)","brand":"","cat":"cable","list":35.71},"PH-SALAMANDER":{"key":"PH-SALAMANDER","sku":"PH-SALAMANDER","name":"Salamander cabinet for AWOL UST (C2/AWOL/245CH/BK)","brand":"Salamander","cat":"cabinet","list":3799},"PH-DF120-AT":{"key":"PH-DF120-AT","sku":"PH-DF120-AT","name":"Dragonfly 120\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4181.82},"PH-C4-LIC":{"key":"PH-C4-LIC","sku":"PH-C4-LIC","name":"Control4 licenses / drivers","brand":"","cat":"control","list":571.43},"PH-STARK-ALLOW":{"key":"PH-STARK-ALLOW","sku":"PH-STARK-ALLOW","name":"Custom-design scope allowance (premium lighting, shades, security, premium AV)","brand":"","cat":"allowance","list":0},"PH-SHADE":{"key":"PH-SHADE","sku":"PH-SHADE","name":"Motorized window shade (estimate)","brand":"Lutron","cat":"shades","list":850},"PH-ECHODOT":{"key":"PH-ECHODOT","sku":"PH-ECHODOT","name":"Alexa smart speaker (Echo Dot)","brand":"Amazon","cat":"voice","list":50},"WB-300VB-IP-5":{"key":"WB-300VB-IP-5","sku":"WB-300VB-IP-5","name":"WattBox IP power conditioner, VersaBox, 5 outlets (OvrC)","brand":"WattBox","cat":"power","list":647.7},"WB-300-IP-3":{"key":"WB-300-IP-3","sku":"WB-300-IP-3","name":"WattBox IP power conditioner, compact, 3 outlets (OvrC)","brand":"WattBox","cat":"power","list":492.18},"WB-UPS-OL-1500-8":{"key":"WB-UPS-OL-1500-8","sku":"WB-UPS-OL-1500-8","name":"WattBox online double-conversion UPS, 1500VA","brand":"WattBox","cat":"power","list":1989.99},"SR-CUSTOM-27U-24IN":{"key":"SR-CUSTOM-27U-24IN","sku":"SR-CUSTOM-27U-24IN","name":"Strong Custom Series 27U floor rack, 24\" depth","brand":"Strong","cat":"rack","list":739.98},"SR-FS-SYSTEM-DC-27U":{"key":"SR-FS-SYSTEM-DC-27U","sku":"SR-FS-SYSTEM-DC-27U","name":"Strong FS Series 27U rack system with DC fans, 24\" depth","brand":"Strong","cat":"rack","list":1699.98},"SR-CUST-DOOR-27U-GLS":{"key":"SR-CUST-DOOR-27U-GLS","sku":"SR-CUST-DOOR-27U-GLS","name":"Strong Custom Series 27U glass rack door","brand":"Strong","cat":"rack","list":679.98},"SONOS-SUB-4-BL":{"key":"SONOS-SUB-4-BL","sku":"SONOS-SUB-4-WH","name":"Sonos Sub 4 subwoofer","brand":"Sonos","cat":"audio","list":899},"UVC-G6-Turret-W":{"key":"UVC-G6-Turret-W","sku":"UVC-G6-Turret-W","name":"UniFi Protect G6 Turret camera (4K PoE)","brand":"Ubiquiti","cat":"camera","list":199},"UVC-G6-Bullet-W":{"key":"UVC-G6-Bullet-W","sku":"UVC-G6-Bullet-W","name":"UniFi Protect G6 Bullet camera (4K PoE)","brand":"Ubiquiti","cat":"camera","list":199},"UVC-G6-Pro-Turret-W":{"key":"UVC-G6-Pro-Turret-W","sku":"UVC-G6-Pro-Turret-W","name":"UniFi Protect G6 Pro Turret camera","brand":"Ubiquiti","cat":"camera","list":479},"UVC-G6-Pro-Bullet-W":{"key":"UVC-G6-Pro-Bullet-W","sku":"UVC-G6-Pro-Bullet-W","name":"UniFi Protect G6 Pro Bullet camera","brand":"Ubiquiti","cat":"camera","list":479},"UVC-G6-PTZ-W":{"key":"UVC-G6-PTZ-W","sku":"UVC-G6-PTZ-W","name":"UniFi Protect G6 PTZ camera","brand":"Ubiquiti","cat":"camera","list":399},"UVC-G6-180-W":{"key":"UVC-G6-180-W","sku":"UVC-G6-180-W","name":"UniFi Protect G6 180 camera","brand":"Ubiquiti","cat":"camera","list":299},"UVC-G6-INS-W-US":{"key":"UVC-G6-INS-W-US","sku":"UVC-G6-INS-W-US","name":"UniFi Protect G6 Instant Wi-Fi camera","brand":"Ubiquiti","cat":"camera","list":179},"UP-FloodLight":{"key":"UP-FloodLight","sku":"UP-FloodLight","name":"UniFi Protect floodlight","brand":"Ubiquiti","cat":"camera","list":99},"UVC-Doorbell-Lite-W":{"key":"UVC-Doorbell-Lite-W","sku":"UVC-Doorbell-Lite-W","name":"UniFi Protect Doorbell Lite","brand":"Ubiquiti","cat":"doorbell","list":99},"UVC-G6-Entry":{"key":"UVC-G6-Entry","sku":"UVC-G6-Entry","name":"UniFi G6 Entry PoE+ video doorbell","brand":"Ubiquiti","cat":"doorbell","list":249},"UP-Chime-US":{"key":"UP-Chime-US","sku":"UP-Chime-US","name":"UniFi Protect Smart Wi-Fi Chime","brand":"Ubiquiti","cat":"doorbell","list":59},"UNVR-Pro":{"key":"UNVR-Pro","sku":"UNVR-Pro","name":"UniFi Protect UNVR Pro network video recorder","brand":"Ubiquiti","cat":"nvr","list":499},"UNVR-G2-Pro":{"key":"UNVR-G2-Pro","sku":"UNVR-G2-Pro","name":"UniFi Protect UNVR G2 Pro network video recorder","brand":"Ubiquiti","cat":"nvr","list":999},"AI-Key-US":{"key":"AI-Key-US","sku":"AI-Key-US","name":"UniFi Protect AI Key","brand":"Ubiquiti","cat":"nvr","list":799},"UDM-Pro":{"key":"UDM-Pro","sku":"UDM-Pro","name":"UniFi Dream Machine Pro gateway","brand":"Ubiquiti","cat":"network","list":379},"USW-Pro-Max-48-PoE":{"key":"USW-Pro-Max-48-PoE","sku":"USW-Pro-Max-48-PoE","name":"UniFi Switch Pro Max 48 PoE","brand":"Ubiquiti","cat":"network","list":1299},"USW-Pro-Max-16-PoE":{"key":"USW-Pro-Max-16-PoE","sku":"USW-Pro-Max-16-PoE","name":"UniFi Switch Pro Max 16 PoE","brand":"Ubiquiti","cat":"network","list":399},"USW-Pro-24-POE":{"key":"USW-Pro-24-POE","sku":"USW-Pro-24-POE","name":"UniFi Switch Pro 24 PoE","brand":"Ubiquiti","cat":"network","list":699},"UPS-Tower-US":{"key":"UPS-Tower-US","sku":"UPS-Tower-US","name":"UniFi UPS Tower","brand":"Ubiquiti","cat":"power","list":159},"PDP-6":{"key":"PDP-6","sku":"PDP-6","name":"TruAudio Phantom 6.5\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":371.0,"added":"soundvision_msrp"},"PDP-8":{"key":"PDP-8","sku":"PDP-8","name":"TruAudio Phantom 8\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":362.5,"added":"soundvision_msrp"},"CI-PRO-P3-LCR":{"key":"CI-PRO-P3-LCR","sku":"330-10006813","name":"Paradigm CI Pro P3-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":1749.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-IW":{"key":"CI-PRO-P65-IW","sku":"340-10006822","name":"Paradigm CI Pro P65-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":449.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-R":{"key":"CI-PRO-P65-R","sku":"336-10006818","name":"Paradigm CI Pro P65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":349.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E5-LCR":{"key":"CI-ELITE-E5-LCR","sku":"342-10006824","name":"Paradigm CI Elite E5-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":3249.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E80-IW":{"key":"CI-ELITE-E80-IW","sku":"347-10006829","name":"Paradigm CI Elite E80-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":799.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E65-R":{"key":"CI-ELITE-E65-R","sku":"346-10006828","name":"Paradigm CI Elite E65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":549.99,"added":"paradigm_anthem_msrp"},"DEF-S12":{"key":"DEF-S12","sku":"1375-10006863","name":"Paradigm Defiance S12 subwoofer","brand":"Paradigm","cat":"speaker","list":1599.99,"added":"paradigm_anthem_msrp"},"DCS-208IW3":{"key":"DCS-208IW3","sku":"312-10006793","name":"Paradigm DCS-208IW3 in-wall subwoofer","brand":"Paradigm","cat":"speaker","list":679.99,"added":"paradigm_anthem_msrp"},"AVM-70-8K":{"key":"AVM-70-8K","sku":"318-10006799","name":"Anthem AVM 70 8K AV processor (pre-pro)","brand":"Anthem","cat":"av","list":3999.99,"added":"paradigm_anthem_msrp"},"MCA-525":{"key":"MCA-525","sku":"295-10006351","name":"Anthem MCA 525 Gen 2 5-channel amplifier","brand":"Anthem","cat":"av","list":3799.99,"added":"paradigm_anthem_msrp"}}};
@@ -309,7 +535,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/p
 const PRICES={stereo:{label:'Speakers',qty:2,unit:350},single:{label:'Speaker',qty:1,unit:450}};
 const ROOMS=['Great Room','Kitchen','Primary Bedroom','Primary Bath','Office','Dining','Patio','Laundry','Powder Bath','Shower'];
 const SMALL=['shower','laundry','powder','closet','pantry','half bath'];
-const WALL=new Set(['lcr','surwall','subwall','tv','doorbell','touch','shades','keypad','camera']);
+const WALL=new Set(['lcr','surwall','subwall','tv','doorbell','touch','voice','ipad','shades','keypad','camera']);
 const C={blue:'#1e88e5',bk:'#0d47a1',grn:'#7ed321',gk:'#2e6b0a',org:'#f5a623',ok:'#8a5200',yel:'#f8e71c',teal:'#3fb6b0',lb:'#7fc8f8',pur:'#7b3fa0',pink:'#e94ca8',red:'#e02020',rk:'#7a0000'};
 const sw='stroke-width="1.5"';
 const SHAPES={
@@ -324,6 +550,8 @@ const SHAPES={
  doorbell:`<path d="M0 -10L10 -2L6 9H-6L-10 -2Z" fill="${C.org}" stroke="${C.ok}" ${sw}/>`,
  rack:`<rect x="-10" y="-10" width="20" height="20" fill="${C.org}" stroke="${C.ok}" ${sw}/><rect x="-6" y="-6" width="12" height="12" fill="${C.yel}"/>`,
  touch:`<rect x="-9" y="-5" width="18" height="10" rx="1.5" fill="${C.teal}" stroke="#14605c" ${sw}/>`,
+ voice:`<circle r="8" fill="${C.teal}" stroke="#14605c" ${sw}/><path d="M-4 0 H4 M-2.5 -3.2 H2.5 M-1.2 3.2 H1.2" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>`,
+ ipad:`<rect x="-6.5" y="-10" width="13" height="20" rx="1.6" fill="${C.teal}" stroke="#14605c" ${sw}/><circle cy="7.2" r="0.9" fill="#fff"/>`,
  garage:`<path d="M-9 0L-4.5 -8H4.5L9 0L4.5 8H-4.5Z" fill="${C.lb}" stroke="#2a6f9e" ${sw}/>`,
  shades:`<path d="M0 -10L10 0L0 10L-10 0Z" fill="${C.teal}" stroke="#14605c" ${sw}/>`,
  lvcan:`<rect x="-12" y="-6" width="24" height="12" rx="4" fill="${C.pur}" stroke="#3d1a55" ${sw}/>`,
@@ -338,7 +566,7 @@ const SHAPES={
  microled:`<rect x="-18" y="-6" width="36" height="12" rx="1" fill="#111" stroke="#f5a623" ${sw}/><text y="2.5" font-size="5" text-anchor="middle" fill="#f5a623" font-family="Helvetica" font-weight="bold">MICRO LED</text>`
 };
 const ADD={outdoor:['Outdoor speaker','Audio',400],lcr:['Soundbar','Audio',900],surwall:['Surround','Audio',300],surceil:['Ceiling surround','Audio',300],subwall:['Wall sub','Audio',800],subfloor:['Subwoofer','Audio',900],
- tv:['TV','Video / Control',250],tvport:['Pre-wire only','Video / Control',150],doorbell:['Doorbell','Video / Control',300],rack:['Rack','Video / Control',1500],touch:['Touchscreen','Video / Control',200],garage:['Garage door','Video / Control',150],shades:['Shades','Video / Control',100],
+ tv:['TV','Video / Control',250],tvport:['Pre-wire only','Video / Control',150],doorbell:['Doorbell','Video / Control',300],rack:['Rack','Video / Control',1500],touch:['Touchscreen','Video / Control',200],voice:['Voice control','Video / Control',899],ipad:['iPad dock','Video / Control',349],garage:['Garage door','Video / Control',150],shades:['Shades','Video / Control',100],
  lvcan:['Low-voltage box','Network',75],wap:['Wi-Fi','Network',250],data:['Data','Network',100],phone:['Phone','Network',75],
  keypad:['Keypad','Security',200],motion:['Motion','Security',75],camera:['Camera','Security',350],contact:['Door sensor','Security',50]};
 for(const k in ADD) PRICES[k]={label:ADD[k][0],qty:1,unit:ADD[k][2],group:ADD[k][1]};
@@ -385,11 +613,9 @@ const LADDERS={
   surceil: {kind:'surround', qty:1, good:'GHT-SUR-P', better:'CI-PRO-P65-R', best:'CI-PRO-P65-R', hifi:'CI-ELITE-E65-R'},
   subfloor:{kind:'surround', qty:1, good:'DFS-10BK', better:'DEF-S12', best:'DEF-S12', hifi:'DEF-S12'},
   subwall: {kind:'surround', qty:1, good:'DFS-10BK', better:'DCS-208IW3', best:'DCS-208IW3'},
-  tv:      {kind:'tv', qty:1, good:'K55XR30M2', better:'K65XR50', best:'K75XR50'},
   rack:    {kind:'one', qty:1, good:'SR-CS-RACK-21U', better:'SR-CUSTOM-27U-24IN', best:'SR-FS-SYSTEM-DC-27U'},
   camera:  {kind:'one', qty:1, good:'UVC-G6-Turret-W', better:'UVC-G6-Pro-Turret-W', best:'UVC-G6-Pro-Turret-W'},
   doorbell:{kind:'one', qty:1, good:'UVC-Doorbell-Lite-W', better:'UVC-G6-Entry', best:'UVC-G6-Entry'},
-  touch:   {kind:'one', qty:1, good:'J-WHT-100', better:'J-WHT-100', best:'J-WHT-100'},
   shades:  {kind:'one', qty:1, good:'PH-SHADE', better:'PH-SHADE', best:'PH-SHADE'},
   wap:     {kind:'one', qty:1, good:'AP6', better:'AP6', best:'AP6'}
 };
@@ -399,7 +625,26 @@ const PLACEHOLDERS={
   data:{label:'Data',unit:100}, phone:{label:'Phone',unit:75},
   keypad:{label:'Keypad',unit:200}, motion:{label:'Motion',unit:75},
   contact:{label:'Door sensor',unit:50},
-  microled:{label:'Micro LED',unit:0,tbd:true}
+  microled:{label:'Micro LED',unit:0,tbd:true},
+  ipad:{label:'iPad dock',unit:349,tbd:true}
+};
+/* Client-safe mirror of Instant Quote counts. List prices only. No dealer cost, no YTEngine import.
+   MATRIX_ZONE_THRESHOLD and the matrix quantities match qualify CONFIG / buildQuote.
+   A Sonos Amp feeds 4 speaker-loads. A dual-voice single counts as 2 (two voice coils). */
+const RULES={
+  AMP_SPEAKER_MAX:4,
+  MATRIX_ZONE_THRESHOLD:8,
+  JOSH_ONE_MAX_DEVICES:80,
+  DVC:new Set(['PDP-6','PDP-8']),
+  matrixQty(zones){
+    const nz=Math.max(0, zones|0);
+    if(!nz) return [];
+    return [
+      {key:'AC-MAX-24', qty:1, label:'Audio matrix'},
+      {key:'TS-PAMP8-125-V2', qty:Math.ceil(nz/8), label:'Multi-zone amp'},
+      {key:'Sonos-Port', qty:Math.min(6, Math.max(2, Math.ceil(nz/4))), label:'Sonos Port'}
+    ];
+  }
 };
 const PREPRO_KEYS=['AVM-70-8K','MCA-525']; // TBD pack: Anthem pre-pro + 5-ch amp
 const SURROUND_TYPES=new Set(['lcr','surwall','surceil','subfloor','subwall','prepro']);
@@ -423,29 +668,108 @@ const BUNDLES={
   ]}
 };
 
+function tvInches(it){
+  const m=String(it&&it.name||'').match(/(\d+)\s*"/);
+  return m?+m[1]:null;
+}
+function tvCatalog(){
+  const by={};
+  Object.keys(CAT).forEach(k=>{
+    const it=CAT[k];
+    if(!it||it.cat!=='tv') return;
+    const s=tvInches(it);
+    if(!s) return;
+    (by[s]=by[s]||[]).push(it);
+  });
+  Object.keys(by).forEach(s=>by[s].sort((a,b)=>(a.list||0)-(b.list||0)));
+  return by;
+}
+function tvSizes(){ return Object.keys(tvCatalog()).map(Number).sort((a,b)=>a-b); }
+function tvTierList(size){
+  const models=tvCatalog()[size]||[];
+  const names=['good','better','best'];
+  return models.slice(0,3).map((it,i)=>({tier:names[i], key:it.key, list:it.list}));
+}
+function tvKeyFor(d){
+  const list=tvTierList(d.tvSize||65);
+  if(!list.length) return d.catalogKey||null;
+  return (list.find(t=>t.tier===(d.tier||'better'))||list[list.length-1]).key;
+}
+function tvBarWidth(size){
+  const s=Number(size)||65;
+  const linear=s/65;
+  const factor=s<=65?linear:(1+(linear-1)*1.8);
+  return Math.round(28*Math.max(0.55,factor)*10)/10;
+}
+function voiceKey(){
+  if(controlPlatform==='alexa') return 'PH-ECHODOT';
+  if(controlPlatform==='control4') return null;
+  return 'J-WHT-100';
+}
 function keyFor(d){
+  if(!d) return null;
+  if(d.type==='tv') return tvKeyFor(d);
+  if(d.type==='voice') return voiceKey();
   const L=LADDERS[d.type]; if(!L) return d.catalogKey||null;
   const t=d.tier||'better';
   if(t==='hifi' && L.hifi) return L.hifi;
   return L[t]||L.better||L.good;
 }
-function isPlaceholder(d){ return !LADDERS[d.type] || d.type==='microled'; }
+function placeholderFor(d){
+  if(!d) return null;
+  if(d.type==='ipad') return PLACEHOLDERS.ipad;
+  if(d.type==='touch'){
+    const unit=controlPlatform==='control4'?899:controlPlatform==='alexa'?199:649;
+    return {label:'Touchscreen', unit, tbd:true};
+  }
+  if(d.type==='voice' && controlPlatform==='control4') return {label:'Voice control', unit:499, tbd:true};
+  if(d.type==='microled') return PLACEHOLDERS.microled;
+  return null;
+}
+function isPlaceholder(d){
+  if(placeholderFor(d)) return true;
+  if(d.type==='tv'||d.type==='voice') return false;
+  return !LADDERS[d.type] || d.type==='microled';
+}
 function linePrice(d){
+  const ph=placeholderFor(d);
+  if(ph) return (ph.qty||1)*(ph.unit||0);
   if(d.type==='prepro') return PREPRO_KEYS.reduce((a,k)=>a+catalogList(k),0);
   if(isPlaceholder(d)){ const p=PLACEHOLDERS[d.type]||PRICES[d.type]; return p?(p.qty||1)*(p.unit||0):0; }
   const L=LADDERS[d.type], key=keyFor(d);
-  return catalogList(key)*(L.qty||1);
+  return catalogList(key)*((L&&L.qty)||1);
 }
 function lineLabel(d){
   if(d.type==='prepro') return 'Theater electronics (TBD)';
   if(d.type==='microled') return 'Micro LED (TBD)';
+  if(d.type==='tv') return 'TV '+(d.tvSize||65)+'"';
   const p=PRICES[d.type];
   return (p&&p.label)||d.type;
 }
+function priceBadge(d){
+  const p=placeholderFor(d);
+  if(p&&p.tbd) return 'price TBD';
+  if(d.tbd||d.type==='microled'||d.type==='prepro') return 'TBD';
+  if(isPlaceholder(d)) return 'Placeholder';
+  return '';
+}
 function applyTier(d,tier){
   d.tier=tier;
-  const L=LADDERS[d.type];
-  d.catalogKey=L?keyFor(d):null;
+  d.catalogKey=keyFor(d);
+}
+function ensureTv(d){
+  if(!d||d.type!=='tv') return;
+  if(!d.tvSize){
+    const it=CAT[d.catalogKey||''];
+    d.tvSize=(it&&tvInches(it))||65;
+  }
+  const list=tvTierList(d.tvSize);
+  if(!list.length) return;
+  const hit=list.find(t=>t.key===d.catalogKey);
+  if(hit){ d.tier=hit.tier; return; }
+  if(!list.some(t=>t.tier===d.tier)) d.tier=list[Math.min(1, list.length-1)].tier;
+  const next=tvKeyFor(d);
+  if(d.catalogKey!==next) d.catalogKey=next;
 }
 
 function resolvedKey(type, tier){
@@ -463,9 +787,13 @@ function tierSignature(type, tier){
 }
 function distinctTiers(d){
   if(!d || d.type==='prepro' || d.type==='microled' || isPlaceholder(d)) return null;
+  if(d.type==='tv'){
+    const list=tvTierList(d.tvSize||65);
+    return list.length>=2?list.map(t=>t.tier):null;
+  }
   const L=LADDERS[d.type]; if(!L) return null;
   const order=['good','better','best'];
-  if(hifi && L.hifi) order.push('hifi');
+  if(L.hifi && (L.kind==='home'||L.kind==='surround')) order.push('hifi');
   const seen=new Set(), out=[];
   order.forEach(t=>{
     const sig=tierSignature(d.type, t);
@@ -488,7 +816,8 @@ function shownTier(d){
   const sig=tierSignature(d.type, cur);
   return opts.find(t=>tierSignature(d.type, t)===sig)||opts[0];
 }
-function tierPrice(type,tier){
+function tierPrice(type,tier,d){
+  if(type==='tv') return catalogList(tvKeyFor({type:'tv', tvSize:(d&&d.tvSize)||65, tier:tier}));
   if(type==='prepro') return PREPRO_KEYS.reduce((a,k)=>a+catalogList(k),0);
   const L=LADDERS[type]; if(!L) return null;
   const key=(tier==='hifi'&&L.hifi)?L.hifi:(L[tier]||L.better);
@@ -527,7 +856,10 @@ function updatePageLbl(){
   const on=numPages>1 && pdfDoc;
   btnPrevPage.disabled=!on||pageNum<=1;
   btnNextPage.disabled=!on||pageNum>=numPages;
-  pageLbl.textContent=pdfDoc?(on?`Page ${pageNum} / ${numPages}`:`Page 1`):'—';
+  const nm=pageNames[String(pageNum)]||'';
+  pageLbl.textContent=pdfDoc?`Page ${pageNum} / ${numPages}`:'No plan';
+  const fn=document.getElementById('floorName');
+  if(fn){ fn.hidden=!pdfDoc; if(document.activeElement!==fn) fn.value=nm; }
 }
 async function showPage(n, keepZoom){
   if(!pdfDoc) return;
@@ -541,7 +873,7 @@ async function showPage(n, keepZoom){
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   stage.prepend(c);
   empty.style.display='none';
-  pg.textContent=`${pdfName||'Floor plan'} — page ${pageNum} of ${numPages}`;
+  pg.textContent='';
   updatePageLbl();
   if(!keepZoom) fitZoom(); else { setZoom(zoom); }
   draw();
@@ -570,25 +902,40 @@ function serializeProject(){
     version:PROJ_VER, id:projectId, name:projectName, updated:new Date().toISOString(),
     pdf: pdfName?{id:projectId, name:pdfName, numPages}:null,
     page:pageNum, zoom, hifi, nid,
+    pageNames, controlPlatform, audioSystem, matrixDismissed, defaultTier,
     rooms, activeRoomId:active&&active.id, lastAddedId:lastAdded&&lastAdded.id,
-    devices:devs
+    devices:devs.map(stripStoredPrice)
   };
 }
 function scheduleSave(){
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{ try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){} }, 400);
+  saveTimer=setTimeout(()=>{
+    try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){}
+    scheduleCloudPush();
+  }, 400);
 }
-async function persistPdf(){ if(pdfBuf&&projectId) await idbPut(projectId, {name:pdfName, buf:pdfBuf}); }
+async function persistPdf(opts){
+  if(pdfBuf&&projectId) await idbPut(projectId, {name:pdfName, buf:pdfBuf});
+  if(!opts || !opts.skipCloud) await pushPdf({quiet:!!(opts&&opts.quiet)});
+  scheduleCloudPush();
+}
 function applyProject(st){
   projectId=st.id||crypto.randomUUID();
   projectName=st.name||'Untitled project';
   pageNum=st.page||1; zoom=st.zoom||1; hifi=!!st.hifi; nid=st.nid||1;
   rooms=st.rooms||[]; devs=st.devices||[];
+  pageNames=(st.pageNames&&typeof st.pageNames==='object')?Object.assign({}, st.pageNames):{};
+  controlPlatform=st.controlPlatform||'';
+  audioSystem=st.audioSystem==='matrix'?'matrix':'amps';
+  matrixDismissed=!!st.matrixDismissed;
+  controlPrompted=!!controlPlatform;
+  defaultTier=(st.defaultTier==='good'||st.defaultTier==='better')?st.defaultTier:'';
   active=rooms.find(r=>r.id===st.activeRoomId)||null;
   lastAdded=devs.find(d=>d.id===st.lastAddedId)||null;
+  repriceLoadedDevices();
   sel=null;
-  if(projName) projName.value=projectName;
-  btnHifi.classList.toggle('on', hifi);
+  multi=[];
+  paintProjectName();
 }
 async function restoreLast(){
   let st; try{ st=JSON.parse(localStorage.getItem(LS_CUR)||'null'); }catch(e){ st=null; }
@@ -616,7 +963,11 @@ async function saveProjectFile(){
 async function openProjectFile(file){
   const st=JSON.parse(await file.text());
   if(!st||!st.version) throw new Error('Not a Layout Tool project');
+  if(!guardEdit()) return;
+  const keepCloud=cloudState;
+  const keepId=projectId;
   applyProject(st);
+  if(keepCloud){ cloudState=keepCloud; projectId=keepId; }
   hist=[]; hidx=-1; snapshot();
   if(st.pdf&&st.pdf.id){
     const rec=await idbGet(st.pdf.id);
@@ -626,14 +977,16 @@ async function openProjectFile(file){
   scheduleSave();
 }
 function newProject(){
-  if((devs.length||rooms.length||pdfDoc) && !confirm('Start a new project? The current layout will be cleared from the editor (the last autosave stays in this browser until you overwrite it).')) return;
-  projectId=crypto.randomUUID(); projectName='Untitled project';
-  devs=[]; rooms=[]; active=null; sel=null; lastAdded=null; nid=1; hifi=false;
-  pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  if(!guardEdit()) return;
+  if((devs.length||rooms.length||pdfDoc) && !confirm('Close this project? The floor plan, rooms, and devices in the editor will be removed.')) return;
+  projectName=projectName||'Untitled project';
+  devs=[]; rooms=[]; active=null; sel=null; multi=[]; lastAdded=null; nid=1; hifi=false;
+  pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
   empty.style.display=''; empty.textContent='Upload a PDF floor plan to begin.';
-  pg.textContent=''; if(projName) projName.value=projectName;
-  btnHifi.classList.remove('on'); hist=[]; hidx=-1; snapshot();
+  pg.textContent=''; paintProjectName();
+  hist=[]; hidx=-1; snapshot();
   updatePageLbl(); draw(); scheduleSave();
 }
 
@@ -642,24 +995,28 @@ function hideTierPop(){ tierPop.style.display='none'; }
 function showTierPop(d, cx, cy){
   const opts=tierOptions(d);
   if(!opts){ hideTierPop(); return; }
-  const L=LADDERS[d.type], names=TIER_SUB[L.kind]||TIER_NAME;
+  const L=LADDERS[d.type]||{kind:d.type==='tv'?'tv':'one'}, names=TIER_SUB[L.kind]||TIER_NAME;
   const curT=shownTier(d);
-  tierPop.innerHTML='<div class="tp-h">Choose a tier</div>'+opts.map(t=>{
-    const pr=tierPrice(d.type,t), on=curT===t;
-    return `<button data-t="${t}" class="${on?'on':''}"><b>${TIER_NAME[t]}</b> <span>${names[t]||''}</span><em>${money(pr)}</em></button>`;
+  tierPop.innerHTML='<div class="tp-h">'+(d.type==='tv'?'Choose a tier for '+(d.tvSize||65)+'"':'Choose a tier')+'</div>'+opts.map(t=>{
+  const pr=tierPrice(d.type,t,d), on=curT===t;
+    const sub=d.type==='tv'?((tvTierList(d.tvSize||65).find(x=>x.tier===t)||{}).key||''):(names[t]||'');
+    return `<button data-t="${t}" class="${on?'on':''}"><b>${TIER_NAME[t]}</b> <span>${sub}</span><em>${money(pr)}</em></button>`;
   }).join('');
   if(L.kind==='surround' && opts.some(t=>tierAddsPack(d.type, t))) tierPop.innerHTML+='<div class="tp-n">Best adds theater electronics for this room (TBD kit).</div>';
   if(L.kind==='home'&&d.type==='stereo'&&opts.includes('best')) tierPop.innerHTML+='<div class="tp-n">Best uses an in-wall speaker, the closest match for a ceiling pair.</div>';
   tierPop.style.display='block';
   const x=Math.min(cx, innerWidth-260), y=Math.min(cy, innerHeight-20-tierPop.offsetHeight);
   tierPop.style.left=x+'px'; tierPop.style.top=y+'px';
-  tierPop.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  tierPop.querySelectorAll('button').forEach(b=>b.onclick=ev=>{
+    ev.stopPropagation();
+    if(!guardEdit()) return;
     snapshot(); applyTier(d,b.dataset.t); ph('layout_tier_switch',{type:d.type,tier:d.tier}); syncSeparates(); hideTierPop(); draw(); scheduleSave();
   });
 }
 
 /* ---- bundles ---- */
 function dropBundle(id){
+  if(!guardEdit()) return;
   if(!stage.querySelector('canvas')) return;
   if(!active){ showModal('<b>Select a room first.</b><br><br>Bundles drop into the active room so you can position the icons on the plan.', [['OK']]); return; }
   const b=BUNDLES[id]; if(!b) return;
@@ -681,29 +1038,38 @@ function makeDevice(type,cx,cy){
   const d=type==='stereo'
     ? {id:nid++,type:'stereo',x:cx-GAP/2,y:cy,x2:cx+GAP/2,y2:cy,room:'',rot:0,scale:1}
     : {id:nid++,type,x:cx,y:cy,room:'',rot:0,scale:1};
-  d.page=pageNum; d.tier='better'; applyTier(d,'better');
+  d.page=pageNum; d.tier=(defaultTier==='good'||defaultTier==='better')?defaultTier:'better';
+  if(type==='tv') d.tvSize=65;
+  applyTier(d,d.tier);
   return d;
 }
 
 
 const GAP=60,R=13,SC_MIN=0.75,SC_MAX=1.5,SC_STEPS=[0.75,1,1.25,1.5];
-let devs=[],sel=null,nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
-let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null;
+let devs=[],sel=null,multi=[],nid=1,rooms=[],active=null,zoom=1,baseW=0,baseH=0,lastAdded=null;
+let selectMode=false;
+let pdfDoc=null, pageNum=1, numPages=1, pdfName='', pdfBuf=null, pdfRemoteSig='';
+let pageNames={}, controlPlatform='', audioSystem='amps', matrixDismissed=false, controlPrompted=false;
+/* Room amps is the default. Set this true to show Room amps / Whole-home again. */
+const SHOW_AUDIO_MODE=false;
 let projectId=crypto.randomUUID(), projectName='Untitled project', hifi=false, saveTimer=null;
+let cloudState=null, cloudTimer=null, guardNoteAt=0, checkoutBusy=false, sb=null, defaultTier='';
+let testMode=false, testEditUntil=null, testSource='';
+let payConfig={authConfigured:false,paymentsConfigured:false,priceCents:2900,editDays:30,leadsConfigured:false,schedulingConfigured:false};
 let hist=[],hidx=-1;
 const stage=document.getElementById('stage');
 const modalEl=document.getElementById('modal');
 const ctxEl=document.getElementById('ctx');
 
 const money=n=>'$'+Math.round(n).toLocaleString();
-const pkgTotal=()=>devs.reduce((a,d)=>a+linePrice(d),0);
+const pkgTotal=()=>devs.reduce((a,d)=>a+linePrice(d),0)+packageLines().reduce((a,l)=>a+catalogList(l.key)*(l.qty||1),0);
 const canXF=d=>d && WALL.has(d.type);
 const rotOf=d=>d.rot||0;
 const scOf=d=>d.scale||1;
 
 function snapshot(){
   hist=hist.slice(0,hidx+1);
-  hist.push(JSON.stringify({devs,rooms,active:active&&active.id,sel:sel&&sel.id,last:lastAdded&&lastAdded.id,nid}));
+  hist.push(JSON.stringify({devs,rooms,active:active&&active.id,sel:sel&&sel.id,multi:selectedList().map(d=>d.id),last:lastAdded&&lastAdded.id,nid,audioSystem,controlPlatform,matrixDismissed,pageNames}));
   if(hist.length>80) hist.shift();
   hidx=hist.length-1;
   updateTools();
@@ -711,13 +1077,19 @@ function snapshot(){
 function restore(s){
   const st=JSON.parse(s);
   devs=st.devs; rooms=st.rooms; nid=st.nid;
+  if(st.audioSystem) audioSystem=st.audioSystem;
+  if('controlPlatform' in st) controlPlatform=st.controlPlatform||'';
+  if('matrixDismissed' in st) matrixDismissed=!!st.matrixDismissed;
+  if(st.pageNames) pageNames=st.pageNames;
   active=rooms.find(r=>r.id===st.active)||null;
   sel=devs.find(d=>d.id===st.sel)||null;
+  multi=(st.multi||[]).map(id=>devs.find(d=>d.id===id)).filter(Boolean);
+  if(!multi.length && sel) multi=[sel];
   lastAdded=devs.find(d=>d.id===st.last)||null;
   draw();
 }
-function undo(){ if(hidx<=0) return; hidx--; restore(hist[hidx]); }
-function redo(){ if(hidx>=hist.length-1) return; hidx++; restore(hist[hidx]); }
+function undo(){ if(!guardEdit()) return; if(hidx<=0) return; hidx--; restore(hist[hidx]); }
+function redo(){ if(!guardEdit()) return; if(hidx>=hist.length-1) return; hidx++; restore(hist[hidx]); }
 
 async function loadPdfBuffer(buf,name,opts={}){
   const src=buf instanceof Uint8Array ? buf : new Uint8Array(buf);
@@ -727,27 +1099,265 @@ async function loadPdfBuffer(buf,name,opts={}){
   pdfDoc=await pdfjsLib.getDocument({data:src.slice()}).promise;
   numPages=pdfDoc.numPages; pdfName=name||pdfName||'Floor plan';
   empty.style.display='none';
-  await persistPdf();
+  await persistPdf({skipCloud:!!opts.skipCloud});
   await showPage(opts.keepPage||1, !!opts.keepZoom);
   if(opts.keepZoom && opts.keepZoom!==true) setZoom(opts.keepZoom);
   scheduleSave();
 }
-pdf.onchange=async e=>{const f=e.target.files[0]; if(!f) return; await loadPdfBuffer(await f.arrayBuffer(), f.name);};
+pdf.onchange=async e=>{
+  const f=e.target.files[0];
+  const intent=pdf.dataset.intent||'';
+  pdf.dataset.intent='';
+  e.target.value='';
+  if(!f) return;
+  if(!guardEdit()) return;
+  const buf=await f.arrayBuffer();
+  if(intent==='add' && pdfDoc) openPlanPicker(buf, f.name, 'add');
+  else if(pdfDoc) askAddOrReplace(buf, f.name);
+  else openPlanPicker(buf, f.name, 'new');
+};
+floorName.addEventListener('change', ()=>{
+  if(!guardEdit()){ floorName.value=pageNames[String(pageNum)]||''; return; }
+  const v=floorName.value.trim();
+  if(v) pageNames[String(pageNum)]=v; else delete pageNames[String(pageNum)];
+  updatePageLbl(); scheduleSave();
+});
+ctlPlat.onchange=()=>{ if(!guardEdit()){ ctlPlat.value=controlPlatform||'josh'; return; } controlPlatform=ctlPlat.value; controlPrompted=true; draw(); scheduleSave(); };
+matrixYes.onclick=()=>{ if(!guardEdit()) return; audioSystem='matrix'; matrixDismissed=true; draw(); scheduleSave(); };
+matrixNo.onclick=()=>{ if(!guardEdit()) return; audioSystem='amps'; matrixDismissed=true; draw(); scheduleSave(); };
+
+function askAddOrReplace(buf, name){
+  showModal('<b>A floor plan is already open.</b><br><br>Add these pages to the project, or replace the current plan?<br><br>Replace removes the current pages. Devices stay, but a shorter plan can leave some of them on a page you can no longer see.',
+    [['Cancel'],
+     ['Add pages', ()=>openPlanPicker(buf, name, 'add')],
+     ['Replace plan', ()=>openPlanPicker(buf, name, 'replace')]]);
+}
+function planBytes(buf){
+  const src=buf instanceof Uint8Array?buf:new Uint8Array(buf);
+  return src.slice();
+}
+async function subsetPages(bytes, indexes){
+  if(typeof PDFLib==='undefined') throw new Error('PDF tools are still loading. Try again in a moment.');
+  const src=await PDFLib.PDFDocument.load(bytes);
+  const out=await PDFLib.PDFDocument.create();
+  const copied=await out.copyPages(src, indexes);
+  copied.forEach(p=>out.addPage(p));
+  return out.save();
+}
+async function appendPages(baseBytes, extraBytes, indexes){
+  if(typeof PDFLib==='undefined') throw new Error('PDF tools are still loading. Try again in a moment.');
+  const base=await PDFLib.PDFDocument.load(baseBytes);
+  const extra=await PDFLib.PDFDocument.load(extraBytes);
+  const copied=await base.copyPages(extra, indexes);
+  copied.forEach(p=>base.addPage(p));
+  return base.save();
+}
+let planJob=null;
+async function openPlanPicker(buf, name, mode){
+  const bytes=planBytes(buf);
+  planJob={bytes, name:name||'Floor plan', mode:mode||'new'};
+  const title=document.getElementById('planPickTitle');
+  const hint=document.getElementById('planPickHint');
+  const box=document.getElementById('planThumbs');
+  title.textContent=mode==='add'?'Add floor plan':mode==='replace'?'Replace floor plan':'Choose plan pages';
+  hint.textContent=mode==='add'
+    ?'These pages are added after the ones you already have. Existing devices keep their page numbers. Uncheck sheets you do not want.'
+    :mode==='replace'
+      ?'Uncheck title pages. The pages you keep replace the current plan. Devices stay in the project.'
+      :'Uncheck title pages and other sheets you do not want on the plan.';
+  box.innerHTML='<p class="hint">Reading pages…</p>';
+  document.getElementById('planPick').classList.add('on');
+  try{
+    const doc=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+    box.innerHTML='';
+    for(let i=1;i<=doc.numPages;i++){
+      const p=await doc.getPage(i);
+      const vp=p.getViewport({scale:0.18});
+      const c=document.createElement('canvas');
+      c.width=Math.max(1,vp.width|0); c.height=Math.max(1,vp.height|0);
+      await p.render({canvasContext:c.getContext('2d'), viewport:vp}).promise;
+      const lab=document.createElement('label');
+      lab.className='pthumb';
+      lab.innerHTML=`<input type="checkbox" checked data-i="${i-1}"><img alt="Page ${i}"><span class="pgno">Page ${i}</span><input class="pname" type="text" placeholder="Floor name" list="floorNames" autocomplete="off">`;
+      lab.querySelector('img').src=c.toDataURL('image/jpeg',0.72);
+      box.appendChild(lab);
+    }
+  }catch(err){
+    box.innerHTML='<p class="hint">Could not read that PDF.</p>';
+  }
+}
+function closePlanPicker(){
+  document.getElementById('planPick').classList.remove('on');
+  planJob=null;
+}
+document.getElementById('planCancel').onclick=closePlanPicker;
+document.getElementById('planPick').addEventListener('click', e=>{ if(e.target.id==='planPick') closePlanPicker(); });
+document.getElementById('planKeep').onclick=async()=>{
+  if(!guardEdit()) return;
+  if(!planJob) return;
+  const picks=[...document.querySelectorAll('#planThumbs .pthumb')].map(lab=>{
+    const cb=lab.querySelector('input[type=checkbox]');
+    return {index:+cb.dataset.i, keep:cb.checked, name:lab.querySelector('.pname').value.trim()};
+  }).filter(p=>p.keep);
+  if(!picks.length){ showModal('<b>Pick at least one page.</b>', [['OK']]); return; }
+  const job=planJob;
+  try{
+    const indexes=picks.map(p=>p.index);
+    let out;
+    if(job.mode==='add' && pdfBuf) out=await appendPages(planBytes(pdfBuf), job.bytes, indexes);
+    else out=await subsetPages(job.bytes, indexes);
+    const start=job.mode==='add'?numPages:0;
+    if(job.mode!=='add') pageNames={};
+    picks.forEach((p,i)=>{ if(p.name) pageNames[String(start+i+1)]=p.name; });
+    closePlanPicker();
+    await loadPdfBuffer(out, job.mode==='add'?(pdfName||job.name):job.name, {keepPage:job.mode==='add'?start+1:1, keepZoom:job.mode==='add'});
+  }catch(err){
+    showModal('<b>Could not build that plan.</b><br><br>'+(err&&err.message?err.message:'Try a different PDF.'), [['OK']]);
+  }
+};
+
+function ceilingLoad(d){
+  if(!d||d.auto) return 0;
+  if(d.type==='stereo') return 2;
+  if(d.type==='single') return RULES.DVC.has(keyFor(d))?2:1;
+  return 0;
+}
+function loadsByRoom(){
+  const map={};
+  devs.forEach(d=>{
+    const n=ceilingLoad(d);
+    if(!n) return;
+    const room=d.room||'Unassigned';
+    map[room]=(map[room]||0)+n;
+  });
+  return map;
+}
+function musicRoomCount(){
+  return Object.keys(loadsByRoom()).filter(n=>n!=='Unassigned').length;
+}
+function audioLines(){
+  const map=loadsByRoom();
+  const names=Object.keys(map);
+  const counted=names.filter(n=>n!=='Unassigned').length;
+  if(audioSystem==='matrix' && counted){
+    return RULES.matrixQty(counted).map(l=>Object.assign({room:'Whole home'}, l));
+  }
+  const lines=[];
+  names.forEach(room=>{
+    const n=Math.ceil(map[room]/RULES.AMP_SPEAKER_MAX);
+    if(!n) return;
+    lines.push({key:'Sonos-Amp', qty:n, room, label:'Sonos Amp'});
+    lines.push({key:'SAN-WSSCAM1-B2', qty:n, room, label:'Amp mount'});
+  });
+  return lines;
+}
+function joshCore(){
+  return audioSystem==='matrix' || devs.filter(d=>!d.auto).length>RULES.JOSH_ONE_MAX_DEVICES;
+}
+function hasControlDevice(){
+  return devs.some(d=>d.type==='touch'||d.type==='voice'||d.type==='ipad');
+}
+function controlLines(){
+  if(!hasControlDevice()) return [];
+  const plat=controlPlatform||(hasControlDevice()?'josh':'');
+  if(plat==='josh' || (!controlPlatform && hasControlDevice())){
+    const core=joshCore();
+    return [
+      {key:core?'J-CR-BLK-100':'J-ON-100', qty:1, room:'Whole home', label:core?'Josh Core processor':'Josh One processor'},
+      {key:core?'J-SFT-CR1:Y':'J-SFT-ON1:Y', qty:1, room:'Whole home', label:'Software plan, year 1'}
+    ];
+  }
+  if(plat==='control4'){
+    return [
+      {key:'C4-CORE-LITE-RSK', qty:1, room:'Whole home', label:'Control4 hub'},
+      {key:'PH-C4-LIC', qty:1, room:'Whole home', label:'Control4 licenses'}
+    ];
+  }
+  return [];
+}
+function packageLines(){ return audioLines().concat(controlLines()); }
+function noteControl(d, silent){
+  if(!d) return;
+  if(d.type==='ipad'){
+    if(!controlPlatform) controlPlatform='josh';
+    return;
+  }
+  if(d.type!=='touch' && d.type!=='voice') return;
+  if(controlPlatform) return;
+  controlPlatform='josh';
+  if(silent) return;
+  controlPrompted=true;
+  showModal('<b>Control platform</b><br><br>Our default for pricing is Josh.ai. You can change this to Control4 or Alexa anytime.',
+    [['Use Josh.ai', ()=>{ controlPlatform='josh'; draw(); scheduleSave(); }],
+     ['Control4', ()=>{ controlPlatform='control4'; draw(); scheduleSave(); }],
+     ['Alexa', ()=>{ controlPlatform='alexa'; draw(); scheduleSave(); }]]);
+}
+function nearestTv(d){
+  const tvs=devs.filter(t=>t.type==='tv' && (t.room||'') && (t.room||'')===(d.room||''));
+  if(!tvs.length) return null;
+  const same=tvs.filter(t=>(t.page||1)===(d.page||1));
+  const pool=same.length?same:tvs;
+  let best=pool[0], bd=Infinity;
+  pool.forEach(t=>{
+    const dx=(t.x||0)-(d.x||0), dy=(t.y||0)-(d.y||0), dist=dx*dx+dy*dy;
+    if(dist<bd){ bd=dist; best=t; }
+  });
+  return best;
+}
+function barWidthFor(d){
+  if(d.type==='tv') return tvBarWidth(d.tvSize||65);
+  if(d.type==='lcr'){
+    const tv=nearestTv(d);
+    return tv?tvBarWidth(tv.tvSize||65):32;
+  }
+  return 0;
+}
+function showSizePop(d, cx, cy){
+  const sizes=tvSizes();
+  tierPop.innerHTML='<div class="tp-h">Choose a TV size</div>'+sizes.map(s=>{
+    const list=tvTierList(s);
+    const from=list.length?list[0].list:0;
+    const on=(d.tvSize||65)===s;
+    return `<button data-s="${s}" class="${on?'on':''}"><b>${s}"</b> <span>${list.length>1?list.length+' options':'One option'}</span><em>${money(from)}</em></button>`;
+  }).join('');
+  tierPop.style.display='block';
+  const x=Math.min(cx||80, innerWidth-260), y=Math.min(cy||80, innerHeight-20-tierPop.offsetHeight);
+  tierPop.style.left=x+'px'; tierPop.style.top=y+'px';
+  tierPop.querySelectorAll('button').forEach(b=>b.onclick=ev=>{
+    ev.stopPropagation();
+    if(!guardEdit()) return;
+    snapshot();
+    d.tvSize=+b.dataset.s;
+    const list=tvTierList(d.tvSize);
+    d.tier=list.some(t=>t.tier==='better')?'better':(list[0]?list[0].tier:'better');
+    applyTier(d, d.tier);
+    hideTierPop();
+    if(list.length>1) showTierPop(d, x, y);
+    draw(); scheduleSave();
+  });
+}
 
 function placeAt(type,cx,cy,opts={}){
+  if(!guardEdit()) return null;
   const d=makeDevice(type,cx,cy);
   if(!opts.silent) snapshot();
   devs.push(d);
   lastAdded=d;
   if(active) assign(d,active.name,true);
   else { select(d); if(!opts.skipRoom) askRoom(d,true); }
-  if(!opts.silent){ showTierPop(d, opts.cx||0, opts.cy||0); ph('layout_drop',{type:d.type}); }
+  if(!opts.silent){
+    if(d.type==='tv') showSizePop(d, opts.cx||0, opts.cy||0);
+    else showTierPop(d, opts.cx||0, opts.cy||0);
+    ph('layout_drop',{type:d.type});
+  }
+  noteControl(d, !!opts.silent);
   scheduleSave();
   return d;
 }
 stage.ondragover=e=>e.preventDefault();
 stage.ondrop=e=>{
   e.preventDefault();
+  if(!guardEdit()) return;
   const t=e.dataTransfer.getData('text')||'stereo';
   if(!stage.querySelector('canvas')) return;
   const r=stage.getBoundingClientRect();
@@ -755,6 +1365,7 @@ stage.ondrop=e=>{
 };
 
 function assign(d,name,fromSnap){
+  if(!guardEdit()) return;
   if(!fromSnap) snapshot();
   if(!name){ d.room=''; select(d); return; }
   let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase());
@@ -799,13 +1410,14 @@ function roomPrompt(title,cb,val=''){
     [['Cancel'],['OK',()=>{ const v=(document.getElementById('rc').value.trim()||document.getElementById('rs').value); if(v) cb(v); }]]
   );
 }
-addRoom.onclick=()=>roomPrompt('Add Room',v=>{
+addRoom.onclick=()=>{ if(!guardEdit()) return; roomPrompt('Add Room',v=>{
   snapshot();
   let rm=rooms.find(r=>r.name.toLowerCase()===v.toLowerCase());
   if(!rm){ rm={id:nid++,name:v}; rooms.push(rm); }
   active=rm; draw();
-});
+}); };
 function renameRoom(rm){
+  if(!guardEdit()) return;
   roomPrompt('Rename room',v=>{
     snapshot();
     devs.forEach(d=>{ if(d.room===rm.name) d.room=v; });
@@ -813,6 +1425,7 @@ function renameRoom(rm){
   }, rm.name);
 }
 function delRoom(rm){
+  if(!guardEdit()) return;
   snapshot();
   devs.forEach(d=>{ if(d.room===rm.name) d.room=''; });
   rooms=rooms.filter(r=>r!==rm);
@@ -859,20 +1472,80 @@ addEventListener('click',hideCtx);
 addEventListener('contextmenu',e=>{ if(!e.target.closest('#stage, #tree, #ctx')) hideCtx(); });
 
 function updateTools(){
-  const ok=canXF(sel);
-  btnRot.disabled=!ok; btnSz.disabled=!ok;
-  btnUndo.disabled=hidx<=0;
+  if(btnSelect) btnSelect.classList.toggle('on', selectMode);
+  applyAccessMode();
 }
+const TYPE_CAT={
+  stereo:'Audio', single:'Audio', outdoor:'Audio', lcr:'Audio', surwall:'Audio', surceil:'Audio', subwall:'Audio', subfloor:'Audio', prepro:'Audio',
+  tv:'Video', tvport:'Video', doorbell:'Video', microled:'Video', rack:'Video', shades:'Video', garage:'Video',
+  lvcan:'Network', wap:'Network', data:'Network', phone:'Network',
+  touch:'Control', voice:'Control', ipad:'Control',
+  keypad:'Security', motion:'Security', camera:'Security', contact:'Security'
+};
+let costFilter='all', roomSort='name', rightOpen=innerWidth>=1180;
+function costCat(d){ return TYPE_CAT[d.type]||'Video'; }
+function lineCat(l){
+  const k=l.key||'';
+  if(k.startsWith('J-')||k.startsWith('C4-')||k==='PH-C4-LIC') return 'Control';
+  return 'Audio';
+}
+function lineMoney(l){ return catalogList(l.key)*(l.qty||1); }
+function roomNames(){
+  const names=new Set(rooms.map(r=>r.name));
+  names.add('Unassigned');
+  return names;
+}
+function linesFor(name){
+  return packageLines().filter(l=>l.room===name && (costFilter==='all'||lineCat(l)===costFilter));
+}
+function wholeLines(){
+  const names=roomNames();
+  return packageLines().filter(l=>!names.has(l.room||'') && (costFilter==='all'||lineCat(l)===costFilter));
+}
+function autoHtml(l){
+  return `<div class="item auto"><span class="lb">${l.qty>1?l.qty+' × ':''}${l.label}</span><span class="ip">${money(lineMoney(l))}</span></div>`;
+}
+
 function updateTotals(){
   const tot=pkgTotal();
   const sp=devs.filter(d=>d.type==='stereo'||d.type==='single').reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
   const n=devs.length;
-  hdrTotal.textContent=money(tot);
   sideTotalAmt.textContent=money(tot);
-  sideTotalAmt.parentElement.querySelector('span').textContent=`${n} device${n===1?'':'s'} · ${sp} speaker${sp===1?'':'s'}`;
+  const count=document.getElementById('sideCount');
+  if(count) count.textContent=`${n} device${n===1?'':'s'} · ${sp} speaker${sp===1?'':'s'}`;
+  const note=document.getElementById('filterNote');
+  if(note){
+    if(costFilter==='all') note.hidden=true;
+    else {
+      const shown=devs.filter(d=>costCat(d)===costFilter).reduce((a,d)=>a+linePrice(d),0)
+        + packageLines().filter(l=>lineCat(l)===costFilter).reduce((a,l)=>a+lineMoney(l),0);
+      note.hidden=false;
+      note.textContent=costFilter+' shown · '+money(shown);
+    }
+  }
+}
+
+function renderPackageExtras(){
+  const prompt=document.getElementById('matrixPrompt');
+  const tools=document.getElementById('layoutTools');
+  if(tools) tools.hidden=!SHOW_AUDIO_MODE;
+  if(prompt) prompt.hidden=!(SHOW_AUDIO_MODE && musicRoomCount()>=RULES.MATRIX_ZONE_THRESHOLD && audioSystem!=='matrix' && !matrixDismissed);
+  const ctl=document.getElementById('ctlPlat');
+  if(ctl && document.activeElement!==ctl) ctl.value=controlPlatform||'josh';
+  document.querySelectorAll('#audMode button').forEach(b=>{
+    b.classList.toggle('on', (b.dataset.aud==='matrix')===(audioSystem==='matrix'));
+  });
+  document.querySelectorAll('#catFilters button').forEach(b=>b.classList.toggle('on', b.dataset.cat===costFilter));
+  const sortBtn=document.getElementById('btnSortCost');
+  if(sortBtn){
+    sortBtn.classList.toggle('on', roomSort==='cost');
+    sortBtn.textContent=roomSort==='cost'?'Sorted by cost':'Sort by cost';
+  }
 }
 
 function draw(){
+  devs.forEach(ensureTv);
+  renderPackageExtras();
   stage.querySelectorAll('.dev,.devwrap,.guide').forEach(x=>x.remove());
   devs.filter(d=>(d.page||1)===pageNum).forEach(d=>{
     const el=document.createElement('div');
@@ -882,32 +1555,52 @@ function draw(){
     el.oncontextmenu=ev=>showCtx(ev,d);
   });
 
-  const showRooms=rooms.length||devs.length;
+  const showRooms=rooms.length||devs.length||packageLines().length;
   roomsPanel.hidden=!showRooms; bundlePanel.hidden=!showRooms;
   const groups=rooms.map(r=>({r,ds:devs.filter(d=>d.room===r.name)}));
   const un=devs.filter(d=>!d.room);
   const item=d=>{
-    const ph=isPlaceholder(d), tbd=d.tbd||d.type==='microled'||d.type==='prepro';
     const opts=tierOptions(d);
     const curT=shownTier(d);
+    const badge=priceBadge(d);
     const tierSel=opts?`<select class="tier" data-d="${d.id}" onclick="event.stopPropagation()">${opts.map(t=>`<option value="${t}" ${curT===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select>`:'';
     const pgHint=numPages>1?` <small style="color:var(--muted)">p.${d.page||1}</small>`:'';
-    return `<div class="item${sel===d?' sel':''}" data-d="${d.id}">
-      <span class="lb">${lineLabel(d)}${ph||tbd?'<span class="ph">'+(tbd?'TBD':'Placeholder')+'</span>':''}${pgHint}</span>
+    return `<div class="item${isSelected(d)?' sel':''}" data-d="${d.id}">
+      <span class="lb">${lineLabel(d)}${badge?`<span class="ph">${badge}</span>`:''}${pgHint}</span>
       ${tierSel}
       <select data-d="${d.id}" onclick="event.stopPropagation()">${roomOptions(d.room)}</select>
       <span class="ip">${money(linePrice(d))}</span>
     </div>`;
   };
-  const roomRow=(r,ds,open)=>{
-    const $ = ds.reduce((a,d)=>a+linePrice(d),0);
-    const q=ds.reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
-    return `<div class="room${open?' act':''}" data-r="${r.id}"><span>${open?'▾':'▸'}</span><span class="nm">${r.name}</span><span class="tot">${q} · ${money($)}</span><span class="x" data-ren="${r.id}">✎</span><span class="x" data-del="${r.id}">✕</span></div>`
-      +(open?ds.map(item).join(''):'');
+  const roomMoney=(name,ds)=>{
+    const devsSum=ds.filter(d=>costFilter==='all'||costCat(d)===costFilter).reduce((a,d)=>a+linePrice(d),0);
+    const extra=linesFor(name).reduce((a,l)=>a+lineMoney(l),0);
+    return devsSum+extra;
   };
+  const roomRow=(r,ds,open)=>{
+    const shownDevs=ds.filter(d=>costFilter==='all'||costCat(d)===costFilter);
+    const autos=linesFor(r.name);
+    if(costFilter!=='all' && !shownDevs.length && !autos.length) return '';
+    const $ = roomMoney(r.name, ds);
+    const q=ds.reduce((a,d)=>a+((PRICES[d.type]&&PRICES[d.type].qty)||1),0);
+    return `<div class="room${open?' act':''}" data-r="${r.id}"><span>${open?'▾':'▸'}</span><span class="nm">${r.name}</span><span class="tot">${q?q+' · ':''}${money($)}</span><span class="x" data-ren="${r.id}">✎</span><span class="x" data-del="${r.id}">✕</span></div>`
+      +(open?shownDevs.map(item).join('')+autos.map(autoHtml).join(''):'');
+  };
+  let ordered=groups.slice();
+  if(roomSort==='cost') ordered.sort((a,b)=>roomMoney(b.r.name,b.ds)-roomMoney(a.r.name,a.ds));
   hint.innerHTML=active?`New devices go to <b>${active.name}</b>`:'Select or add a room, then drag devices onto the plan.';
-  tree.innerHTML=groups.map(({r,ds})=>roomRow(r,ds,active===r)).join('')
+  tree.innerHTML=ordered.map(({r,ds})=>roomRow(r,ds,active===r)).join('')
     +(un.length?`<div class="un">${roomRow({id:'un',name:'Unassigned'},un,true).replace('data-r="un"','data-un="1"').replace(/<span class="x"[^>]*>[^<]*<\/span>/g,'')}</div>`:'');
+  const home=wholeLines();
+  const homeEl=document.getElementById('wholeHome');
+  if(homeEl){
+    if(!home.length){ homeEl.hidden=true; homeEl.innerHTML=''; }
+    else {
+      const sum=home.reduce((a,l)=>a+lineMoney(l),0);
+      homeEl.hidden=false;
+      homeEl.innerHTML=`<div class="room"><span>▾</span><span class="nm">Whole home</span><span class="tot">${money(sum)}</span></div>`+home.map(autoHtml).join('');
+    }
+  }
   tree.querySelectorAll('[data-r]').forEach(el=>el.onclick=e=>{
     const rm=rooms.find(r=>r.id==el.dataset.r);
     if(!rm) return;
@@ -916,17 +1609,21 @@ function draw(){
     active=active===rm?null:rm;
     draw();
   });
-  tree.querySelectorAll('.item').forEach(el=>el.onclick=()=>select(devs.find(d=>d.id==el.dataset.d)));
+  tree.querySelectorAll('.item[data-d]').forEach(el=>el.onclick=ev=>{
+    const d=devs.find(x=>x.id==el.dataset.d);
+    if(ev.shiftKey) select(d,{shift:true}); else select(d);
+  });
   tree.querySelectorAll('.item select:not(.tier)').forEach(s=>s.onchange=()=>{
     const d=devs.find(x=>x.id==s.dataset.d);
     if(s.value==='__new__'){ s.value=d.room||''; askRoom(d,false); }
     else assign(d,s.value,false);
   });
   tree.querySelectorAll('select.tier').forEach(s=>s.onchange=()=>{
+    if(!guardEdit()){ draw(); return; }
     const d=devs.find(x=>x.id==s.dataset.d);
     snapshot(); applyTier(d,s.value); ph('layout_tier_switch',{type:d.type,tier:d.tier}); syncSeparates(); draw(); scheduleSave();
   });
-  tree.querySelectorAll('.item').forEach(el=>el.oncontextmenu=ev=>{
+  tree.querySelectorAll('.item[data-d]').forEach(el=>el.oncontextmenu=ev=>{
     const d=devs.find(x=>x.id==el.dataset.d); if(d) showCtx(ev,d);
   });
 
@@ -938,14 +1635,26 @@ function draw(){
 
   updateTotals();
 
+  const picked=selectedList();
+  if(picked.length>1){
+    selBox.innerHTML=`<b>${picked.length} devices</b><div class="sel-sub">Drag them together. Shift-click to change the selection.</div><div class="rowbtns"><button type="button" id="btnDel">Delete</button></div>`;
+    btnDel.onclick=()=>deleteSelection();
+    updateTools();
+    return;
+  }
   if(!sel) selBox.innerHTML='Click a device to edit.';
   else {
     const topts=tierOptions(sel);
     const curT=shownTier(sel);
     const tsel=topts?`<div class="sel-row">Tier: <select id="selTier">${topts.map(t=>`<option value="${t}" ${curT===t?'selected':''}>${TIER_NAME[t]}</option>`).join('')}</select></div>`:'';
+    const sizeSel=sel.type==='tv'?`<div class="sel-row">Size: <select id="selSize">${tvSizes().map(s=>`<option value="${s}" ${(sel.tvSize||65)===s?'selected':''}>${s}"</option>`).join('')}</select></div>`:'';
+    const linkTv=sel.type==='lcr'?nearestTv(sel):null;
+    const barNote=sel.type==='lcr'?(linkTv?`<div class="sel-sub">Width follows the ${linkTv.tvSize||65}" TV in this room.</div>`:'<div class="sel-sub">Add a TV in this room and the soundbar will match its width.</div>'):'';
+    const ipadNote=sel.type==='ipad'?'<div class="sel-sub">In-wall charging station. You supply the iPad.</div>':'';
     const rotCtl=canXF(sel)?`<label class="rotlbl">Angle <input id="selRot" type="number" step="any" inputmode="decimal" value="${formatRot(rotOf(sel))}" aria-label="Angle in degrees" title="Type any angle in degrees">°</label><button type="button" id="btnRot15">Rotate 15°</button><button type="button" id="btnSzStep">Resize</button>`:'';
-    selBox.innerHTML=`<b>${lineLabel(sel)}</b>${sel.catalogKey?`<div class="sel-sub">${catalogName(sel.catalogKey)}</div>`:''}<div class="sel-row">Room:
+    selBox.innerHTML=`<b>${lineLabel(sel)}</b>${sel.catalogKey?`<div class="sel-sub">${catalogName(sel.catalogKey)}</div>`:''}${barNote}${ipadNote}<div class="sel-row">Room:
       <select id="selRoom">${roomOptions(sel.room)}</select></div>
+      ${sizeSel}
       ${tsel}
       <div class="rowbtns">
         ${sel.type==='single'?'<button type="button" id="btnMakePair">Make a pair</button>':''}
@@ -953,7 +1662,16 @@ function draw(){
         <button type="button" id="btnDel">Delete</button>
       </div>`;
     selRoom.onchange=()=>{ if(selRoom.value==='__new__'){ selRoom.value=sel.room||''; askRoom(sel,false);} else assign(sel,selRoom.value,false); };
-    const st=document.getElementById('selTier'); if(st) st.onchange=()=>{ snapshot(); applyTier(sel,st.value); ph('layout_tier_switch',{type:sel.type,tier:sel.tier}); syncSeparates(); draw(); scheduleSave(); };
+    const st=document.getElementById('selTier'); if(st) st.onchange=()=>{ if(!guardEdit()) return; snapshot(); applyTier(sel,st.value); ph('layout_tier_switch',{type:sel.type,tier:sel.tier}); syncSeparates(); draw(); scheduleSave(); };
+    const ss=document.getElementById('selSize'); if(ss) ss.onchange=()=>{
+      if(!guardEdit()) return;
+      snapshot();
+      sel.tvSize=+ss.value;
+      const list=tvTierList(sel.tvSize);
+      if(!list.some(t=>t.tier===sel.tier)) sel.tier=list.some(t=>t.tier==='better')?'better':(list[0]&&list[0].tier);
+      applyTier(sel, sel.tier||'better');
+      draw(); scheduleSave();
+    };
     const bp=document.getElementById('btnMakePair'); if(bp) bp.onclick=()=>{ snapshot(); setType(sel,'stereo'); };
     const br=document.getElementById('btnRot15'); if(br) br.onclick=()=>rotateSel(15);
     const bs=document.getElementById('btnSzStep'); if(bs) bs.onclick=()=>resizeSel();
@@ -962,12 +1680,13 @@ function draw(){
       ri.addEventListener('keydown', ev=>{ ev.stopPropagation(); if(ev.key==='Enter'){ ev.preventDefault(); setRot(ri.value); } });
       ri.onchange=()=>setRot(ri.value);
     }
-    btnDel.onclick=()=>{ snapshot(); devs=devs.filter(x=>x!==sel); if(lastAdded===sel) lastAdded=null; sel=null; draw(); };
+    btnDel.onclick=()=>deleteSelection();
   }
   updateTools();
 }
 
 function setType(d,t){
+  if(!guardEdit()) return;
   if(t==='single'){ d.x=(d.x+d.x2)/2; d.y=(d.y+d.y2)/2; }
   else { d.x2=d.x+GAP/2; d.x-=GAP/2; d.y2=d.y; }
   d.type=t; applyTier(d,d.tier||'better'); draw(); scheduleSave();
@@ -975,10 +1694,11 @@ function setType(d,t){
 function pts(d){ return d.type==='stereo'?[[d.x,d.y],[d.x2,d.y2]]:[[d.x,d.y]]; }
 
 function renderDev(d,el){
-  const z=zoom, P=pts(d), on=sel===d, sc=scOf(d), rot=rotOf(d), xf=canXF(d);
-  const base=(SHAPES[d.type]?19:R)*sc;
-  const pad=on&&xf?36:10;
-  const reach=base*1.5+pad;
+  const z=zoom, P=pts(d), on=isSelected(d), sc=scOf(d), rot=rotOf(d), xf=canXF(d);
+  const wide=barWidthFor(d);
+  const base=Math.max(SHAPES[d.type]?19:R, wide/2)*sc;
+  const pad=10;
+  const reach=base+pad;
   const minx=Math.min(...P.map(p=>p[0]))*z-reach*z, miny=Math.min(...P.map(p=>p[1]))*z-reach*z;
   const maxx=Math.max(...P.map(p=>p[0]))*z+reach*z, maxy=Math.max(...P.map(p=>p[1]))*z+reach*z;
   let h=`<svg class="devsvg" style="left:${minx}px;top:${miny}px" width="${maxx-minx}" height="${maxy-miny}" viewBox="${minx} ${miny} ${maxx-minx} ${maxy-miny}">`;
@@ -992,60 +1712,88 @@ function renderDev(d,el){
   const selCol='#0071e3';
   P.forEach(([x,y],i)=>{
     if(SHAPES[d.type]){
+      const hw=Math.max(18, wide/2+2), hh=13;
+      const shape=(d.type==='tv'||d.type==='lcr')
+        ? `<rect x="${-wide/2}" y="-3.5" width="${wide}" height="7" fill="${d.type==='tv'?C.org:C.grn}" stroke="${d.type==='tv'?C.ok:C.gk}" ${sw}/>`
+        : SHAPES[d.type];
       h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
-      if(on) h+=`<rect x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
-      h+=`<rect x="-17" y="-12" width="34" height="24" fill="transparent"/>${SHAPES[d.type]}</g>`;
+      if(on) h+=`<rect class="outline" x="${-hw}" y="${-hh}" width="${hw*2}" height="${hh*2}" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.1/sc}"/>`;
+      h+=`<rect x="${-hw+1}" y="${-hh+1}" width="${hw*2-2}" height="${hh*2-2}" fill="transparent"/>${shape}`;
       if(on&&xf){
-        const rad=(rot-90)*Math.PI/180, hr=(base+14)*z;
-        const hx=x*z+Math.cos(rad)*hr, hy=y*z+Math.sin(rad)*hr;
-        h+=`<line x1="${x*z}" y1="${y*z}" x2="${hx}" y2="${hy}" stroke="${selCol}" stroke-width="1.25"/>`;
-        h+=`<circle class="rot" cx="${hx}" cy="${hy}" r="6" fill="#fff" stroke="${selCol}" stroke-width="2"/>`;
-        const br=(rot-45)*Math.PI/180, brl=base*z*0.85;
-        const sx=x*z+Math.cos(br)*brl, sy=y*z+Math.sin(br)*brl;
-        h+=`<rect class="sz" x="${sx-5}" y="${sy-5}" width="10" height="10" fill="#fff" stroke="${selCol}" stroke-width="2" transform="rotate(${rot} ${sx} ${sy})"/>`;
+        const edge=(dir,ex,ey,ew,eh,cur)=>`<rect class="edge" data-dir="${dir}" x="${ex-ew/2}" y="${ey-eh/2}" width="${ew}" height="${eh}" fill="transparent" style="cursor:${cur}"/>`;
+        h+=edge('n',0,-hh,hw*2,8,'ns-resize')+edge('s',0,hh,hw*2,8,'ns-resize')+edge('e',hw,0,8,hh*2,'ew-resize')+edge('w',-hw,0,8,hh*2,'ew-resize');
+        h+=edge('nw',-hw,-hh,12,12,'nwse-resize')+edge('ne',hw,-hh,12,12,'nesw-resize')+edge('sw',-hw,hh,12,12,'nesw-resize')+edge('se',hw,hh,12,12,'nwse-resize');
       }
+      h+='</g>';
       return;
     }
     if(d.type!=='stereo' && d.type!=='single'){
       const title=(lineLabel(d)||d.type).split(' ').slice(0,2);
       h+=`<g class="body" transform="translate(${x*z},${y*z}) rotate(${rot}) scale(${z*sc})">`;
-      if(on) h+=`<rect x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.25/sc}" stroke-dasharray="3 2"/>`;
+      if(on) h+=`<rect class="outline" x="-18" y="-13" width="36" height="26" rx="2" fill="none" stroke="${selCol}" stroke-width="${1.1/sc}"/>`;
       h+=`<rect x="-16" y="-8" width="32" height="16" rx="2" fill="#555" stroke="#222" stroke-width="1.5"/><text y="2.5" font-size="5" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">${title[0]||''}</text></g>`;
       return;
     }
     const rr=R*z;
-    h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
+    h+=`<g class="${P.length>1?'end':'body'}" data-i="${i}"><circle cx="${x*z}" cy="${y*z}" r="${rr}" fill="#1e88e5" stroke="${on?selCol:'#0d47a1'}" stroke-width="${on?2.5*z:2*z}" ${d.type==='single'?`stroke-dasharray="${3*z} ${2*z}"`:''}/>`+
       `<text x="${x*z}" y="${y*z}" font-size="${fs}" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Helvetica" font-weight="bold">${badge}</text></g>`;
   });
   h+='</svg>';
-  const mid=P.reduce((a,p)=>[a[0]+p[0]/P.length,a[1]+p[1]/P.length],[0,0]);
-  const tagY=mid[1]*z + base*z + 6;
-  h+=`<span class="tag" style="left:${mid[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
+  const top=Math.min(...P.map(p=>p[1]));
+  const tagY=top*z - base*z - 16;
+  h+=`<span class="tag" style="left:${deviceCenter(d)[0]*z}px;top:${tagY}px">${d.room||'Unassigned'}</span>`;
+  el.classList.toggle('sel', on);
   el.innerHTML=h;
   el.querySelectorAll('.body').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,'body'); });
   el.querySelectorAll('.end').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; drag(ev,d,+b.dataset.i); });
-  el.querySelectorAll('.rot').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragRot(ev,d); });
-  el.querySelectorAll('.sz').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragScale(ev,d); });
+  el.querySelectorAll('.edge').forEach(b=>b.onpointerdown=ev=>{ clearNativeSelection(); if(panGesture(ev)) return; dragScale(ev,d); });
 }
 
 function drag(ev,d,mode){
   ev.preventDefault(); ev.stopPropagation();
-  if(sel!==d) select(d);
-  snapshot();
-  const start=[ev.clientX/zoom, ev.clientY/zoom], o={x:d.x,y:d.y,x2:d.x2,y2:d.y2};
-  const others=devs.filter(x=>x!==d).flatMap(pts), T=6/zoom;
+  if(mode==='body' && ev.shiftKey){ select(d,{shift:true}); return; }
+  if(!editOpen()){
+    if(mode==='body') select(d);
+    guardEdit();
+    return;
+  }
+  if(mode==='body'){
+    if(multi.includes(d) && multi.length>1) select(d,{keep:true});
+    else select(d);
+  } else if(!isSelected(d)) select(d);
+  const group=(mode==='body' && multi.includes(d) && multi.length>1)?multi.filter(x=>devs.includes(x)):[d];
+  const origins=group.map(g=>({d:g,x:g.x,y:g.y,x2:g.x2,y2:g.y2}));
+  const start=[ev.clientX/zoom, ev.clientY/zoom];
+  let snappedOnce=false, holdRot=false, timer=null;
+  const arm=()=>{ if(!snappedOnce){ snapshot(); snappedOnce=true; } };
+  if((ev.pointerType==='touch'||ev.pointerType==='pen') && mode==='body' && canXF(d)){
+    timer=setTimeout(()=>{ holdRot=true; arm(); }, 480);
+  } else arm();
   const mv=m=>{
+    if(timer && !holdRot){
+      if(Math.hypot(m.clientX-ev.clientX, m.clientY-ev.clientY)<8) return;
+      clearTimeout(timer); timer=null; arm();
+    }
+    if(holdRot){
+      const rect=stage.getBoundingClientRect();
+      const cx=rect.left+d.x*zoom, cy=rect.top+d.y*zoom;
+      let a=Math.atan2(m.clientY-cy, m.clientX-cx)*180/Math.PI+90;
+      if(!m.shiftKey) a=Math.round(a/15)*15;
+      d.rot=((a%360)+360)%360;
+      draw();
+      return;
+    }
     let dx=m.clientX/zoom-start[0], dy=m.clientY/zoom-start[1], gx=null, gy=null;
     if(mode==='body'){
-      const P0=pts(Object.assign({},d,o)); let best=[T,T];
-      P0.forEach(([px,py])=>others.forEach(([qx,qy])=>{
-        const ex=qx-(px+dx), ey=qy-(py+dy);
-        if(Math.abs(ex)<best[0]){ best[0]=Math.abs(ex); gx=qx; dx+=ex; }
-        if(Math.abs(ey)<best[1]){ best[1]=Math.abs(ey); gy=qy; dy+=ey; }
-      }));
-      d.x=o.x+dx; d.y=o.y+dy;
-      if(d.type==='stereo'){ d.x2=o.x2+dx; d.y2=o.y2+dy; }
+      const snap=snapShift(dx, dy, origins);
+      dx=snap.dx; dy=snap.dy; gx=snap.gx; gy=snap.gy;
+      origins.forEach(o=>{
+        o.d.x=o.x+dx; o.d.y=o.y+dy;
+        if(o.d.type==='stereo'){ o.d.x2=o.x2+dx; o.d.y2=o.y2+dy; }
+      });
     } else {
+      const o=origins[0];
+      const T=6/zoom;
       const k=mode?['x2','y2']:['x','y'], f=mode?['x','y']:['x2','y2'];
       let nx=o[k[0]]+dx, ny=o[k[1]]+dy;
       if(Math.abs(ny-o[f[1]])<T*2){ ny=o[f[1]]; gy=ny; }
@@ -1058,11 +1806,12 @@ function drag(ev,d,mode){
     if(gx!==null) guide(gx,true);
     if(gy!==null) guide(gy,false);
   };
-  const up=()=>{ removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
+  const up=()=>{ clearTimeout(timer); removeEventListener('pointermove',mv); removeEventListener('pointerup',up); draw(); scheduleSave(); };
   addEventListener('pointermove',mv); addEventListener('pointerup',up);
 }
 function dragRot(ev,d){
   ev.preventDefault(); ev.stopPropagation();
+  if(!guardEdit()){ select(d); return; }
   if(sel!==d) select(d);
   snapshot();
   const rect=stage.getBoundingClientRect();
@@ -1078,6 +1827,7 @@ function dragRot(ev,d){
 }
 function dragScale(ev,d){
   ev.preventDefault(); ev.stopPropagation();
+  if(!guardEdit()){ select(d); return; }
   if(sel!==d) select(d);
   snapshot();
   const rect=stage.getBoundingClientRect();
@@ -1093,11 +1843,65 @@ function dragScale(ev,d){
 }
 function guide(v,vert){
   const g=document.createElement('div'); g.className='guide';
-  g.style.cssText=vert?`left:${v*zoom}px;top:0;width:0;height:100%;border-left:1px dashed #af52de`
-    :`top:${v*zoom}px;left:0;height:0;width:100%;border-top:1px dashed #af52de`;
+  const w=Math.max(baseW*zoom, stage.clientWidth||0), h=Math.max(baseH*zoom, stage.clientHeight||0);
+  g.style.cssText=vert?`left:${v*zoom}px;top:0;width:0;height:${h}px;border-left:1px dashed #af52de`
+    :`top:${v*zoom}px;left:0;height:0;width:${w}px;border-top:1px dashed #af52de`;
   stage.appendChild(g);
 }
-function select(d){ sel=d; draw(); }
+function deviceCenter(d){
+  const P=pts(d);
+  return P.reduce((a,p)=>[a[0]+p[0]/P.length, a[1]+p[1]/P.length],[0,0]);
+}
+function selectedList(){
+  multi=multi.filter(d=>devs.includes(d));
+  if(sel && !devs.includes(sel)) sel=null;
+  if(!multi.length && sel) return [sel];
+  return multi;
+}
+function isSelected(d){ return selectedList().includes(d); }
+function select(d, opts={}){
+  if(!d){ sel=null; multi=[]; draw(); return; }
+  if(opts.shift){
+    if(!multi.length && sel && sel!==d) multi=[sel];
+    const i=multi.indexOf(d);
+    if(i>=0){ multi.splice(i,1); sel=multi[multi.length-1]||null; }
+    else { multi.push(d); sel=d; }
+    draw(); return;
+  }
+  if(opts.keep && multi.includes(d) && multi.length>1){ sel=d; return; }
+  multi=[d]; sel=d; draw();
+}
+function deleteSelection(){
+  if(!guardEdit()) return;
+  const kill=selectedList();
+  if(!kill.length) return;
+  snapshot();
+  devs=devs.filter(x=>!kill.includes(x));
+  if(kill.includes(lastAdded)) lastAdded=null;
+  sel=null; multi=[];
+  draw(); scheduleSave();
+}
+function snapShift(dx, dy, moving){
+  const T=8/zoom;
+  const lead=moving[0];
+  const base=deviceCenter(Object.assign({}, lead.d, {x:lead.x,y:lead.y,x2:lead.x2,y2:lead.y2}));
+  const cx=base[0]+dx, cy=base[1]+dy;
+  let bestX=T, bestY=T, gx=null, gy=null, adx=0, ady=0;
+  const skip=new Set(moving.map(m=>m.d));
+  devs.forEach(o=>{
+    if(skip.has(o) || (o.page||1)!==pageNum) return;
+    const P=pts(o), c=deviceCenter(o);
+    [c[0], ...P.map(p=>p[0])].forEach(x=>{
+      const ex=x-cx;
+      if(Math.abs(ex)<bestX){ bestX=Math.abs(ex); gx=x; adx=ex; }
+    });
+    [c[1], ...P.map(p=>p[1])].forEach(y=>{
+      const ey=y-cy;
+      if(Math.abs(ey)<bestY){ bestY=Math.abs(ey); gy=y; ady=ey; }
+    });
+  });
+  return {dx:dx+adx, dy:dy+ady, gx, gy};
+}
 
 function normRot(v){
   const n=typeof v==='number'?v:parseFloat(v);
@@ -1110,6 +1914,7 @@ function formatRot(n){
   return String(Math.round(v*10)/10);
 }
 function setRot(v){
+  if(!guardEdit()) return;
   if(!canXF(sel)) return;
   const n=normRot(v);
   if(n===null) return;
@@ -1121,13 +1926,16 @@ function setRot(v){
   scheduleSave();
 }
 function rotateSel(deg){
-  if(!canXF(sel)) return;
+  if(!guardEdit()) return;
+  const list=selectedList().filter(canXF);
+  if(!list.length) return;
   snapshot();
-  sel.rot=normRot(rotOf(sel)+deg);
+  list.forEach(d=>{ d.rot=normRot((d.rot||0)+deg); });
   draw();
   scheduleSave();
 }
 function resizeSel(){
+  if(!guardEdit()) return;
   if(!canXF(sel)) return;
   snapshot();
   const cur=scOf(sel);
@@ -1136,9 +1944,6 @@ function resizeSel(){
   draw();
 }
 
-btnRot.onclick=e=>rotateSel(e.shiftKey?1:15);
-btnSz.onclick=()=>resizeSel();
-btnUndo.onclick=()=>undo();
 btnZmOut.onclick=()=>setZoom(zoom/1.25);
 btnZmIn.onclick=()=>setZoom(zoom*1.25);
 btnFit.onclick=()=>fitZoom();
@@ -1169,13 +1974,50 @@ function panGesture(ev){
 }
 function isPanSurface(t){
   if(!t || !main.contains(t)) return false;
-  if(t.closest && t.closest('.body, .end, .rot, .sz')) return false;
+  if(t.closest && t.closest('.body, .end, .edge')) return false;
   if(typingTarget(t)) return false;
   return true;
 }
 function onMainScrollbar(e){
   const r=main.getBoundingClientRect();
   return e.clientX>=r.left+main.clientWidth-1 || e.clientY>=r.top+main.clientHeight-1;
+}
+function startMarquee(e){
+  e.preventDefault();
+  const rect=stage.getBoundingClientRect();
+  const x0=e.clientX, y0=e.clientY;
+  const box=document.createElement('div');
+  box.className='marquee';
+  stage.appendChild(box);
+  let moved=false;
+  const mv=m=>{
+    if(Math.hypot(m.clientX-x0, m.clientY-y0)>3) moved=true;
+    const left=Math.min(x0,m.clientX)-rect.left, top=Math.min(y0,m.clientY)-rect.top;
+    box.style.cssText=`left:${left}px;top:${top}px;width:${Math.abs(m.clientX-x0)}px;height:${Math.abs(m.clientY-y0)}px`;
+  };
+  const up=m=>{
+    removeEventListener('pointermove', mv);
+    removeEventListener('pointerup', up);
+    box.remove();
+    if(!moved){ if(!m.shiftKey) select(null); return; }
+    const xA=(Math.min(x0,m.clientX)-rect.left)/zoom, yA=(Math.min(y0,m.clientY)-rect.top)/zoom;
+    const xB=(Math.max(x0,m.clientX)-rect.left)/zoom, yB=(Math.max(y0,m.clientY)-rect.top)/zoom;
+    const hits=devs.filter(d=>{
+      if((d.page||1)!==pageNum) return false;
+      const c=deviceCenter(d);
+      return c[0]>=xA && c[0]<=xB && c[1]>=yA && c[1]<=yB;
+    });
+    if(m.shiftKey){
+      hits.forEach(d=>{ if(!multi.includes(d)) multi.push(d); });
+      sel=multi[multi.length-1]||null;
+    } else {
+      multi=hits.slice();
+      sel=hits[0]||null;
+    }
+    draw();
+  };
+  addEventListener('pointermove', mv);
+  addEventListener('pointerup', up);
 }
 main.addEventListener('selectstart', e=>e.preventDefault());
 main.addEventListener('dragstart', e=>{ if(e.target&&e.target.tagName==='CANVAS') e.preventDefault(); });
@@ -1190,7 +2032,7 @@ main.addEventListener('pointerdown', e=>{
     const sx=e.clientX, sy=e.clientY;
     const up=m=>{
       removeEventListener('pointerup', up);
-      if(Math.hypot(m.clientX-sx, m.clientY-sy)<8 && sel){ sel=null; draw(); }
+      if(Math.hypot(m.clientX-sx, m.clientY-sy)<8 && (sel||multi.length)) select(null);
     };
     addEventListener('pointerup', up);
     return;
@@ -1199,6 +2041,7 @@ main.addEventListener('pointerdown', e=>{
   const middle=e.button===1;
   const space=spacePan && e.button===0;
   const emptyLeft=e.button===0 && isPanSurface(e.target);
+  if(selectMode && emptyLeft && !space && !middle){ startMarquee(e); return; }
   if(!middle && !space && !emptyLeft) return;
   e.preventDefault();
   const sl=main.scrollLeft, stTop=main.scrollTop, sx=e.clientX, sy=e.clientY;
@@ -1218,7 +2061,7 @@ main.addEventListener('pointerdown', e=>{
     try{ main.releasePointerCapture(e.pointerId); }catch(err){}
     main.classList.remove('panning');
     clearNativeSelection();
-    if(!moved && emptyLeft && !space && sel){ sel=null; draw(); }
+    if(!moved && emptyLeft && !space){ select(null); }
   };
   addEventListener('pointermove', mv);
   addEventListener('pointerup', up);
@@ -1229,6 +2072,9 @@ addEventListener('keydown',e=>{
   if((e.code==='Space'||e.key===' ') && !typingTarget(e.target)){
     if(!e.repeat){ spacePan=true; main.classList.add('space-pan'); }
     e.preventDefault();
+  }
+  if((e.key==='Backspace'||e.key==='Delete') && !typingTarget(e.target)){
+    e.preventDefault(); deleteSelection(); return;
   }
   if(meta && (e.key==='z'||e.key==='Z')){
     e.preventDefault();
@@ -1244,16 +2090,94 @@ addEventListener('keyup', e=>{
 });
 addEventListener('blur', ()=>{ spacePan=false; main.classList.remove('space-pan'); });
 addEventListener('resize', ()=>updatePanAffordance());
-main.addEventListener('wheel',e=>{ if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }},{passive:false});
+main.addEventListener('wheel',e=>{
+  if(e.shiftKey && !e.ctrlKey && selectedList().some(canXF)){
+    e.preventDefault();
+    rotateSel(e.deltaY>0?-5:5);
+    return;
+  }
+  if(e.ctrlKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); }
+},{passive:false});
+let gestRot=null;
+addEventListener('gesturestart', e=>{
+  if(!selectedList().some(canXF)) return;
+  if(!guardEdit()) return;
+  e.preventDefault();
+  gestRot=selectedList().filter(canXF).map(d=>({d, rot:d.rot||0}));
+  snapshot();
+});
+addEventListener('gesturechange', e=>{
+  if(!gestRot) return;
+  e.preventDefault();
+  gestRot.forEach(g=>{ g.d.rot=normRot(g.rot+(e.rotation||0)); });
+  draw();
+});
+addEventListener('gestureend', ()=>{ if(gestRot){ gestRot=null; scheduleSave(); } });
 
 btnPrevPage.onclick=()=>showPage(pageNum-1,true);
 btnNextPage.onclick=()=>showPage(pageNum+1,true);
-btnNew.onclick=()=>newProject();
-btnOpen.onclick=()=>openProj.click();
-btnSave.onclick=()=>saveProjectFile();
 openProj.onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(f) try{ await openProjectFile(f);}catch(err){ showModal('<b>Could not open project.</b><br><br>'+err.message, [['OK']]); } };
-if(projName){ projName.onchange=projName.onblur=()=>{ projectName=projName.value.trim()||'Untitled project'; scheduleSave(); }; }
-btnHifi.onclick=()=>{ hifi=!hifi; btnHifi.classList.toggle('on',hifi); if(!hifi) devs.forEach(d=>{ if(d.tier==='hifi') applyTier(d,'best'); }); draw(); scheduleSave(); };
+function paintProjectName(){
+  if(!projName || document.activeElement===projName) return;
+  projName.value=(projectName && projectName!=='Untitled project')?projectName:'';
+}
+if(projName){ projName.onchange=projName.onblur=()=>{ if(!guardEdit()){ paintProjectName(); return; } projectName=projName.value.trim()||'Untitled project'; paintProjectName(); scheduleSave(); }; }
+function closeMenu(){
+  const menu=document.getElementById('appMenu');
+  const btn=document.getElementById('btnMenu');
+  if(menu) menu.hidden=true;
+  if(btn) btn.setAttribute('aria-expanded','false');
+}
+function toggleMenu(ev){
+  if(ev) ev.stopPropagation();
+  const menu=document.getElementById('appMenu');
+  const btn=document.getElementById('btnMenu');
+  if(!menu) return;
+  const open=menu.hidden;
+  menu.hidden=!open;
+  if(btn) btn.setAttribute('aria-expanded', open?'true':'false');
+}
+document.getElementById('btnMenu').onclick=toggleMenu;
+document.getElementById('appMenu').addEventListener('click', ev=>ev.stopPropagation());
+addEventListener('click', closeMenu);
+addEventListener('keydown', ev=>{ if(ev.key==='Escape') closeMenu(); });
+async function saveProject(){
+  if(!guardEdit()) return;
+  projectName=(projName&&projName.value.trim())||projectName||'Untitled project';
+  paintProjectName();
+  await persistPdf({quiet:true});
+  try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){}
+  const canCloud=!!(sb && cloudState && editOpen() && payConfig.paymentsConfigured);
+  if(canCloud){
+    const ok=await pushCloud();
+    if(ok) showModal('<b>Saved</b><br><br>This project is saved to your account.', [['OK']]);
+    return;
+  }
+  ph('layout_save',{name:projectName});
+  showModal('<b>Saved</b><br><br>This copy stays in this browser.', [['OK']]);
+}
+document.getElementById('menuSave').onclick=()=>{ closeMenu(); saveProject(); };
+document.getElementById('menuOpen').onclick=async()=>{
+  closeMenu();
+  let email='';
+  if(sb){ try{ const {data}=await sb.auth.getSession(); email=(data.session&&data.session.user&&data.session.user.email)||''; }catch(e){} }
+  if(email) openProjects();
+  else openProj.click();
+};
+document.getElementById('menuUpload').onclick=()=>{ closeMenu(); pdf.dataset.intent=''; pdf.click(); };
+document.getElementById('btnUploadPlan').onclick=()=>{ pdf.dataset.intent=''; pdf.click(); };
+document.getElementById('menuAddFloor').onclick=()=>{ closeMenu(); pdf.dataset.intent=pdfDoc?'add':''; pdf.click(); };
+document.getElementById('menuDownload').onclick=()=>{ closeMenu(); saveProjectFile(); };
+document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
+document.getElementById('menuOut').onclick=async()=>{
+  closeMenu();
+  if(!sb) return;
+  if(cloudState && editOpen()) await pushCloud().catch(()=>{});
+  await sb.auth.signOut();
+  showBuyLanding();
+  await paintBuyAccount();
+  renderAccountBtn();
+};
 document.getElementById('bundles').querySelectorAll('button[data-b]').forEach(b=>b.onclick=()=>dropBundle(b.dataset.b));
 const bundleToggle=document.getElementById('bundleToggle'), bundleGroup=document.getElementById('bundleGroup');
 function toggleBundles(){
@@ -1268,73 +2192,979 @@ if(bundleToggle){
 }
 addEventListener('click',e=>{ if(!e.target.closest('#tierPop')) hideTierPop(); });
 
+function setRight(open){
+  rightOpen=!!open;
+  const col=document.getElementById('colRight');
+  if(col) col.classList.toggle('collapsed', !rightOpen);
+  const rail=document.getElementById('btnRail');
+  if(rail) rail.setAttribute('aria-expanded', rightOpen?'true':'false');
+}
+document.querySelectorAll('#audMode button').forEach(b=>b.onclick=()=>{
+  if(!guardEdit()) return;
+  audioSystem=b.dataset.aud==='matrix'?'matrix':'amps';
+  if(audioSystem==='matrix') matrixDismissed=true;
+  draw(); scheduleSave();
+});
+btnSelect.onclick=()=>{ selectMode=!selectMode; updateTools(); };
+btnHideRight.onclick=()=>setRight(false);
+btnRail.onclick=()=>setRight(true);
+setRight(rightOpen);
+
+const STORED_PRICE_FIELDS=['price','list','unit','cost','dealer','dealerCost','fr','msrp'];
+function stripStoredPrice(d){
+  const copy=Object.assign({}, d);
+  STORED_PRICE_FIELDS.forEach(k=>delete copy[k]);
+  return copy;
+}
+function repriceLoadedDevices(){
+  devs.forEach(d=>{
+    if(!d) return;
+    STORED_PRICE_FIELDS.forEach(k=>{ if(k in d) delete d[k]; });
+    if(d.type==='tv') ensureTv(d);
+    if(d.type==='tv' || LADDERS[d.type]){
+      const key=keyFor(d);
+      if(key) d.catalogKey=key;
+    }
+  });
+}
+function editWindowOpen(iso, now){
+  if(window.YTAccess && YTAccess.editWindowOpen) return YTAccess.editWindowOpen(iso, now);
+  const t=Date.parse(iso||'');
+  return Number.isFinite(t) && t>(now||Date.now());
+}
+function editOpen(){
+  if(testMode) return editWindowOpen(testEditUntil);
+  if(!cloudState || !cloudState.editUntil) return false;
+  return editWindowOpen(cloudState.editUntil);
+}
+function guardEdit(){
+  if(testMode){
+    if(editOpen()) return true;
+    showModal('<b>Test mode</b><br><br>This test session has ended. The copy in this browser stays here to view.', [['OK']]);
+    return false;
+  }
+  if(!cloudState) return false;
+  if(editOpen()) return true;
+  const now=Date.now();
+  if(now-guardNoteAt>1200){ guardNoteAt=now; showUnlock(); }
+  return false;
+}
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function fmtDate(iso){
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+}
+function formatCents(cents){ return '$'+(Number(cents||0)/100).toFixed(2); }
+function accountReturnUrl(){
+  let path=location.pathname.replace(/index\.html$/, '');
+  if(!path.endsWith('/')) path+='/';
+  const q=new URLSearchParams(location.search);
+  q.set('buy','1');
+  q.delete('checkout');
+  q.delete('session_id');
+  return location.origin+path+'?'+q.toString();
+}
+function rememberCloud(){
+  try{
+    if(!cloudState) localStorage.removeItem('yt-layout-cloud');
+    else localStorage.setItem('yt-layout-cloud', JSON.stringify({id:cloudState.id, editUntil:cloudState.editUntil, pdfPath:cloudState.pdfPath||null}));
+  }catch(e){}
+}
+function restoreCloudLink(){
+  try{
+    const raw=JSON.parse(localStorage.getItem('yt-layout-cloud')||'null');
+    if(raw && raw.id===projectId) cloudState={id:raw.id, editUntil:raw.editUntil||null, pdfPath:raw.pdfPath||null};
+  }catch(e){}
+}
+function detachCloud(){
+  clearTimeout(cloudTimer);
+  cloudState=null;
+  try{ localStorage.removeItem('yt-layout-cloud'); }catch(e){}
+  applyAccessMode();
+}
+let accessStamp='';
+function applyAccessMode(){
+  const linked=!!cloudState;
+  const testing=!!testMode && !linked;
+  const open=editOpen();
+  const view=(linked || testing) && !open;
+  document.body.classList.toggle('locked', !linked && !testing);
+  document.body.classList.toggle('viewonly', view);
+  const buy=document.getElementById('buyScreen');
+  if(buy) buy.hidden=linked || testing;
+  const beta=document.querySelector('.beta-banner');
+  if(beta) beta.textContent=testing?(testSource==='preview_unlock'?'Test mode. Preview. List prices can change. This copy stays in this browser.':'Test mode. List prices can change. This copy stays in this browser.'):'List prices can change. This project is saved to your account.';
+  const banner=document.getElementById('accessBanner');
+  const stamp=(testing?'test':view?'view':linked?'open':'local')+'|'+(testEditUntil||'')+'|'+(cloudState&&cloudState.editUntil||'');
+  if(banner && stamp!==accessStamp){
+    accessStamp=stamp;
+    if(testing){
+      banner.hidden=false;
+      const until=fmtDate(testEditUntil);
+      const label=testSource==='preview_unlock'?'Test mode. Preview.':'Test mode.';
+      banner.textContent=open
+        ? (label+' This copy stays in this browser.'+(until?' Editing is open until '+until+'.':''))
+        : (label+' Editing has ended. This copy stays in this browser.');
+    } else if(view){
+      banner.hidden=false;
+      banner.innerHTML='This project is view only. It stays saved in your account. <button type="button" id="btnUnlock">Unlock editing</button>';
+      const unlock=document.getElementById('btnUnlock');
+      if(unlock) unlock.onclick=()=>startCheckout();
+    } else if(linked && open){
+      banner.hidden=false;
+      const until=fmtDate(cloudState.editUntil);
+      banner.textContent=until?('Editing is open until '+until+'. This project is saved to your account.'):'Editing is open. This project is saved to your account.';
+    } else banner.hidden=true;
+  }
+  const pdfEl=document.getElementById('pdf');
+  if(pdfEl) pdfEl.disabled=view;
+  const ctl=document.getElementById('ctlPlat');
+  if(ctl) ctl.disabled=view;
+  const floor=document.getElementById('floorName');
+  if(floor) floor.disabled=view;
+  if(projName) projName.readOnly=view;
+  const add=document.getElementById('addRoom');
+  if(add) add.disabled=view;
+  document.querySelectorAll('#audMode button').forEach(b=>{ b.disabled=view; });
+  ['menuSave','menuUpload','menuAddFloor','menuClose','btnUploadPlan'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.disabled=view;
+  });
+}
+function scheduleCloudPush(){
+  if(!cloudState || !editOpen() || !sb) return;
+  clearTimeout(cloudTimer);
+  cloudTimer=setTimeout(()=>{ pushCloud({quiet:true}).catch(()=>{}); }, 1200);
+}
+function paymentsNotConfigured(){
+  if(cloudState){
+    showModal('<b>Payments not configured</b><br><br>Payments are not configured yet, so editing cannot be unlocked right now.', [['OK']]);
+    return;
+  }
+  showBuyLanding();
+}
+function showUnlock(){
+  if(!payConfig.paymentsConfigured){ paymentsNotConfigured(); return; }
+  const price=formatCents(payConfig.priceCents);
+  const days=payConfig.editDays||30;
+  showModal('<b>Unlock editing</b><br><br>This project is view only. One payment of '+esc(price)+' unlocks editing for '+days+' days. You can save it, open it on any device, and export the priced quote. After that it stays here to view.', [
+    ['Not now'],
+    ['Unlock editing', ()=>{ sendCheckout(); }]
+  ]);
+}
+function startCheckout(){
+  if(!payConfig.paymentsConfigured || !sb){ paymentsNotConfigured(); return; }
+  sb.auth.getSession().then(({data})=>{
+    if(!data.session){ openSignIn('Sign in to unlock this project. We will email you a link.'); return; }
+    if(cloudState && editWindowOpen(cloudState.editUntil)){
+      showModal('<b>Editing is already open</b><br><br>This project is unlocked until '+esc(fmtDate(cloudState.editUntil))+'.', [['OK']]);
+      return;
+    }
+    const price=formatCents(payConfig.priceCents);
+    const days=payConfig.editDays||30;
+    showModal('<b>Unlock this project</b><br><br>One payment of '+esc(price)+' unlocks this project for '+days+' days. That includes saving it to your account, opening it on any device, and exporting the priced quote. After '+days+' days the project stays here to view, and editing locks until you unlock it again.', [
+      ['Not now'],
+      ['Continue to payment', ()=>{ sendCheckout(); }]
+    ]);
+  }).catch(()=>paymentsNotConfigured());
+}
+async function sendCheckout(attempt){
+  attempt=attempt||0;
+  const {data}=await sb.auth.getSession();
+  const token=data.session&&data.session.access_token;
+  if(!token){ openSignIn(); return; }
+  let res, body;
+  try{
+    res=await fetch('/api/checkout', {
+      method:'POST',
+      headers:{'content-type':'application/json', authorization:'Bearer '+token},
+      body:JSON.stringify((()=>{ const payload={name:projectName||'Untitled project', seed:readBuySeed()}; if(cloudState&&cloudState.id) payload.projectId=cloudState.id; return payload; })())
+    });
+    body=await res.json();
+  }catch(e){
+    showModal('<b>Payment could not start</b><br><br>Check the connection and try again.', [['OK']]);
+    return;
+  }
+  if(body.alreadyOpen && body.projectId){
+    await openCloudProject(body.projectId);
+    return;
+  }
+  if(res.status===409 && attempt<2){
+    await new Promise(r=>setTimeout(r, 600));
+    return sendCheckout(attempt+1);
+  }
+  if(!res.ok || !body.url){
+    const msg=body&&body.error==='payments_not_configured'?'Payments are not configured yet.':((body&&body.message)||'Try again in a moment.');
+    showModal('<b>Payment could not start</b><br><br>'+esc(msg), [['OK']]);
+    return;
+  }
+  if(body.projectId) projectId=body.projectId;
+  try{ localStorage.setItem(LS_CUR, JSON.stringify(serializeProject())); }catch(e){}
+  await persistPdf();
+  ph('layout_checkout_start', {});
+  location.assign(body.url);
+}
+function planStoragePath(uid, projectId){
+  const user=String(uid||'').toLowerCase();
+  const project=String(projectId||'').toLowerCase();
+  if(!/^[0-9a-f-]{36}$/.test(user) || !/^[0-9a-f-]{36}$/.test(project)) return '';
+  return user+'/'+project+'.pdf';
+}
+async function pdfBytesSig(){
+  if(!pdfBuf || !pdfBuf.byteLength) return '';
+  const digest=await crypto.subtle.digest('SHA-256', pdfBuf);
+  return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function storageErrorText(error){
+  return String((error&&(error.message||error.error))||'');
+}
+async function pushPdf(opts){
+  opts=opts||{};
+  if(!pdfBuf || !pdfBuf.byteLength || !sb || !cloudState || !editOpen()) return !pdfBuf;
+  const {data}=await sb.auth.getSession();
+  const uid=data.session&&data.session.user&&data.session.user.id;
+  const path=planStoragePath(uid, cloudState.id);
+  if(!path) return false;
+  const sig=await pdfBytesSig();
+  const key=path+'|'+sig;
+  if(pdfRemoteSig===key && cloudState.pdfPath===path) return true;
+  const bytes=new Uint8Array(pdfBuf.slice(0));
+  const replacing=cloudState.pdfPath===path;
+  const up=await sb.storage.from('plan-pdfs').upload(path, bytes, {contentType:'application/pdf', upsert:replacing});
+  if(up.error){
+    const why=storageErrorText(up.error);
+    const already=/exists|duplicate/i.test(why);
+    if(already && cloudState.pdfPath===path){
+      pdfRemoteSig=key;
+      return true;
+    }
+    if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>'+esc(why||'The storage service refused the file.'), [['OK']]);
+    return false;
+  }
+  if(cloudState.pdfPath!==path){
+    const saved=await sb.from('projects').update({pdf_path:path}).eq('id', cloudState.id).select('pdf_path').maybeSingle();
+    if(saved.error || !saved.data || saved.data.pdf_path!==path){
+      if(!opts.quiet) showModal('<b>The floor plan did not upload</b><br><br>The file reached storage, but this project did not record it. Use Save to try again.', [['OK']]);
+      return false;
+    }
+    cloudState.pdfPath=path;
+    rememberCloud();
+  }
+  pdfRemoteSig=key;
+  return true;
+}
+async function pushCloud(opts){
+  opts=opts||{};
+  if(!sb || !cloudState || !editOpen()) return false;
+  const {data}=await sb.auth.getSession();
+  if(!data.session){
+    if(!opts.quiet) openSignIn('Sign in to save this project to your account.');
+    return false;
+  }
+  repriceLoadedDevices();
+  projectName=(projName&&projName.value.trim())||projectName||'Untitled project';
+  paintProjectName();
+  const layout=serializeProject();
+  if(JSON.stringify(layout).length>1400000){
+    if(!opts.quiet) showModal('<b>Project is too large</b><br><br>This project is too large to save to your account. Use Download project file to keep a copy in this browser.', [['OK']]);
+    return false;
+  }
+  const {error}=await sb.from('projects').update({name:projectName.slice(0,120), layout}).eq('id', cloudState.id);
+  if(error){
+    await refreshCloud();
+    if(!opts.quiet){
+      if(!editOpen()) showUnlock();
+      else showModal('<b>Could not save</b><br><br>Your copy in this browser is still here.', [['OK']]);
+    }
+    return false;
+  }
+  const pdfOk=await pushPdf(opts);
+  if(pdfBuf && pdfBuf.byteLength && !pdfOk) return false;
+  rememberCloud();
+  ph('layout_cloud_save', {});
+  return true;
+}
+async function refreshCloud(){
+  if(!sb || !cloudState) return;
+  const {data, error}=await sb.from('projects').select('id,edit_until,pdf_path,name').eq('id', cloudState.id).maybeSingle();
+  if(error || !data) return;
+  cloudState.editUntil=data.edit_until;
+  cloudState.pdfPath=data.pdf_path;
+  accessStamp='';
+  rememberCloud();
+  applyAccessMode();
+}
+async function openCloudProject(id){
+  const {data, error}=await sb.from('projects').select('id,name,layout,edit_until,pdf_path').eq('id', id).single();
+  if(error || !data){ showModal('<b>Could not open that project.</b>', [['OK']]); return; }
+  const layout=data.layout||{};
+  if(layout.version) applyProject(layout);
+  else {
+    devs=[]; rooms=[]; active=null; sel=null; multi=[]; lastAdded=null; nid=1;
+    pdfDoc=null; pdfBuf=null; pdfName=''; pageNum=1; numPages=1; baseW=0; baseH=0;
+    stage.querySelectorAll('canvas').forEach(x=>x.remove());
+    empty.style.display='';
+    empty.textContent='This project does not have a saved layout yet.';
+    updatePageLbl();
+  }
+  projectId=data.id;
+  projectName=data.name||projectName||'Untitled project';
+  paintProjectName();
+  cloudState={id:data.id, editUntil:data.edit_until, pdfPath:data.pdf_path};
+  accessStamp='';
+  repriceLoadedDevices();
+  hist=[]; hidx=-1; snapshot();
+  const planOpts={keepPage:layout.page||1, keepZoom:layout.zoom||true, skipNewId:true};
+  const planName=(layout.pdf&&layout.pdf.name)||'Floor plan';
+  let planBuf=null;
+  if(data.pdf_path){
+    const file=await sb.storage.from('plan-pdfs').download(data.pdf_path);
+    if(file.data && file.data.size) planBuf=await file.data.arrayBuffer();
+  }
+  if(!planBuf){
+    const localIds=[data.id, layout.id, layout.pdf&&layout.pdf.id].filter(Boolean);
+    for(const key of localIds){
+      const local=await idbGet(key).catch(()=>null);
+      if(local&&local.buf&&local.buf.byteLength){ planBuf=local.buf; planOpts.skipCloud=false; break; }
+    }
+  } else planOpts.skipCloud=true;
+  if(planBuf){
+    try{
+      await loadPdfBuffer(planBuf, planName, planOpts);
+      if(planOpts.skipCloud && data.pdf_path) pdfRemoteSig=data.pdf_path+'|'+(await pdfBytesSig());
+    }
+    catch(err){
+      pdfDoc=null; pdfBuf=null;
+      empty.style.display='';
+      empty.textContent='The floor plan file could not be opened. Upload it again while editing is open.';
+      updatePageLbl();
+      draw();
+    }
+  } else {
+    pdfDoc=null; pdfBuf=null;
+    empty.style.display='';
+    empty.textContent=(data.pdf_path||(layout.pdf&&layout.pdf.name))
+      ? 'The floor plan is not in your account yet. You can upload it again while editing is open.'
+      : 'Upload a PDF floor plan to begin.';
+    updatePageLbl();
+    draw();
+  }
+  rememberCloud();
+  applyAccessMode();
+  scheduleSave();
+}
+function projectStatus(editUntil){
+  if(!editUntil) return 'Payment not finished';
+  if(editWindowOpen(editUntil)) return 'Editing until '+fmtDate(editUntil);
+  return 'View only';
+}
+function openAcct(title, html){
+  document.getElementById('acctTitle').textContent=title;
+  document.getElementById('acctBody').innerHTML=html;
+  document.getElementById('acctModal').classList.add('on');
+}
+function closeAcct(){ document.getElementById('acctModal').classList.remove('on'); }
+function openSignIn(message){
+  if(!payConfig.authConfigured || !sb){ paymentsNotConfigured(); return; }
+  openAcct('Sign in', '<p>'+esc(message||'Enter your email and we will send you a sign-in link.')+'</p><input id="acctEmail" type="email" placeholder="Email" autocomplete="email"><div class="acct-actions"><button type="button" id="acctSend">Email me a link</button></div><p id="acctMsg"></p>');
+  const emailEl=document.getElementById('acctEmail');
+  if(emailEl) emailEl.focus();
+  document.getElementById('acctSend').onclick=async()=>{
+    const email=document.getElementById('acctEmail').value.trim();
+    const msg=document.getElementById('acctMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent='Enter a valid email.'; return; }
+    msg.textContent='Sending the link.';
+    const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo:accountReturnUrl()}});
+    msg.textContent=error?(error.message||'Could not send the link.'):'Check your email for a sign-in link, then open it on this device.';
+  };
+}
+async function openProjects(){
+  if(!payConfig.paymentsConfigured || !sb){ paymentsNotConfigured(); return; }
+  const {data:sess}=await sb.auth.getSession();
+  if(!sess.session){ openSignIn('Sign in to see projects saved to your account.'); return; }
+  openAcct('Projects', '<p>Loading your projects.</p>');
+  const {data, error}=await sb.from('projects').select('id,name,edit_until,updated_at').order('updated_at', {ascending:false});
+  if(error){ openAcct('Projects', '<p>Could not load projects.</p>'); return; }
+  if(!data || !data.length){ openAcct('Projects', '<p>No projects in your account yet. Unlock this one to save it.</p>'); return; }
+  openAcct('Projects', '<div class="proj-list">'+data.map(row=>'<button type="button" class="proj" data-id="'+esc(row.id)+'"><b>'+esc(row.name||'Untitled project')+'</b><span>'+esc(projectStatus(row.edit_until))+'</span></button>').join('')+'</div>');
+  document.querySelectorAll('#acctBody .proj').forEach(btn=>{
+    btn.onclick=()=>{ closeAcct(); openCloudProject(btn.dataset.id); };
+  });
+}
+function controlLabel(){
+  if(controlPlatform==='josh') return 'Josh.ai';
+  if(controlPlatform==='control4') return 'Control4';
+  if(controlPlatform==='alexa') return 'Alexa';
+  return 'Not selected';
+}
+function deviceQuoteLine(d){
+  const key=keyFor(d)||d.catalogKey;
+  const name=(key && CAT[key] && CAT[key].name) || lineLabel(d);
+  const badge=priceBadge(d);
+  const tbd=badge==='price TBD' || badge==='TBD';
+  const qty=(LADDERS[d.type] && LADDERS[d.type].qty) || 1;
+  const amount=tbd?0:linePrice(d);
+  const unit=tbd?null:(qty?Math.round((amount/qty)*100)/100:amount);
+  return {name, qty, unit, tbd};
+}
+function packageQuoteLine(l){
+  const name=(l.key && CAT[l.key] && CAT[l.key].name) || l.label;
+  const qty=l.qty||1;
+  return {name, qty, unit:catalogList(l.key), tbd:false};
+}
+function collectQuoteInput(){
+  repriceLoadedDevices();
+  const pages=new Set();
+  devs.forEach(d=>pages.add(d.page||1));
+  const pageList=[...pages].filter(n=>n>0).sort((a,b)=>a-b);
+  const multi=pageList.length>1;
+  const firstPage={};
+  devs.forEach(d=>{
+    const room=d.room||'Unassigned';
+    const page=d.page||1;
+    if(firstPage[room]==null || page<firstPage[room]) firstPage[room]=page;
+  });
+  const floors=(multi?pageList:[pageList[0]||1]).map(page=>{
+    const order=[];
+    const by={};
+    function room(name){
+      if(!by[name]){ by[name]=[]; order.push(name); }
+      return by[name];
+    }
+    devs.filter(d=>(d.page||1)===page).forEach(d=>room(d.room||'Unassigned').push(deviceQuoteLine(d)));
+    packageLines().forEach(l=>{
+      if((l.room||'')==='Whole home') return;
+      const roomName=l.room||'Unassigned';
+      const home=firstPage[roomName]||pageList[0]||1;
+      if(home!==page) return;
+      room(roomName).push(packageQuoteLine(l));
+    });
+    const name=multi?(pageNames[String(page)]||('Floor '+page)):'';
+    return {name, rooms:order.map(n=>({name:n, lines:by[n]}))};
+  });
+  return {
+    projectName: projectName||'Project',
+    control: controlLabel(),
+    date: new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
+    floors,
+    wholeHome: packageLines().filter(l=>(l.room||'')==='Whole home').map(packageQuoteLine)
+  };
+}
+function currentQuote(){
+  if(!window.YTQuote) throw new Error('Quote tools are still loading.');
+  return YTQuote.buildQuote(collectQuoteInput());
+}
+function quotePrice(line){
+  if(line.tbd) return '<span class="tbd">price TBD</span>';
+  return esc(YTQuote.money(line.unit));
+}
+function quoteLineTotal(line){
+  if(line.tbd) return '<span class="tbd">price TBD</span>';
+  return esc(YTQuote.money(line.total));
+}
+function renderQuoteTable(lines){
+  const rows=lines.map(line=>'<tr><td>'+esc(line.name)+'</td><td class="num">'+esc(String(line.qty))+'</td><td class="num">'+quotePrice(line)+'</td><td class="num">'+quoteLineTotal(line)+'</td></tr>').join('');
+  return '<table class="quote-table"><thead><tr><th>Item</th><th class="num">Qty</th><th class="num">List price</th><th class="num">Line total</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+function renderQuote(model){
+  const floors=model.floors.map(floor=>{
+    const head=floor.name?'<div class="quote-floor">'+esc(floor.name)+'</div>':'';
+    const rooms=floor.rooms.map(room=>'<h2 class="quote-room">'+esc(room.name)+'</h2>'+renderQuoteTable(room.lines)+'<p class="quote-sub">Room subtotal <b>'+esc(YTQuote.money(room.subtotal))+'</b></p>').join('');
+    return head+rooms;
+  }).join('');
+  const whole=model.wholeHome.lines.length
+    ? '<div class="quote-floor">Whole home</div>'+renderQuoteTable(model.wholeHome.lines)+'<p class="quote-sub">Whole home subtotal <b>'+esc(YTQuote.money(model.wholeHome.subtotal))+'</b></p>'
+    : '';
+  const tbd=model.tbdCount?'<p class="quote-note">Items marked price TBD are shown for planning and are not included in the total.</p>':'';
+  return '<h1 id="quoteTitle">'+esc(model.projectName)+'</h1><p class="quote-meta">Control: '+esc(model.control)+'<br>List prices as of '+esc(model.date)+'. This is an estimate for planning, not an invoice.</p>'+floors+whole+'<div class="quote-total"><span>Project total</span><b>'+esc(YTQuote.money(model.total))+'</b></div>'+tbd;
+}
+function canExportQuote(){ return editOpen(); }
+function openQuote(){
+  if(!canExportQuote()){
+    if(testMode){ showModal('<b>Test mode</b><br><br>This test session has ended. The copy in this browser stays here to view.', [['OK']]); return; }
+    if(!payConfig.paymentsConfigured){ paymentsNotConfigured(); return; }
+    startCheckout();
+    return;
+  }
+  const model=currentQuote();
+  document.getElementById('quoteBody').innerHTML=renderQuote(model);
+  document.getElementById('quoteView').classList.add('on');
+  document.getElementById('quoteView')._model=model;
+  ph('layout_quote_open', {});
+}
+function closeQuote(){
+  document.getElementById('quoteView').classList.remove('on');
+  document.getElementById('callSheet').classList.remove('on');
+}
+async function downloadQuotePdf(){
+  if(typeof PDFLib==='undefined'){ showModal('<b>PDF tools are still loading.</b><br><br>Try again in a moment.', [['OK']]); return; }
+  const model=document.getElementById('quoteView')._model||currentQuote();
+  const {PDFDocument, StandardFonts, rgb}=PDFLib;
+  const doc=await PDFDocument.create();
+  const font=await doc.embedFont(StandardFonts.Helvetica);
+  const bold=await doc.embedFont(StandardFonts.HelveticaBold);
+  const blue=rgb(37/255,99/255,235/255);
+  const ink=rgb(0.11,0.11,0.12);
+  const muted=rgb(0.43,0.43,0.45);
+  const amber=rgb(0.6,0.4,0);
+  const W=612,H=792,M=48;
+  let page=doc.addPage([W,H]);
+  let y=H-36;
+  function addPage(){
+    page=doc.addPage([W,H]);
+    y=H-48;
+    page.drawRectangle({x:0,y:H-6,width:W,height:6,color:blue});
+  }
+  function need(h){ if(y-h<64) addPage(); }
+  function draw(str,x,yy,size,face,color){ page.drawText(String(str),{x,y:yy,size,font:face,color:color||ink}); }
+  function wrap(str,size,face,maxW){
+    const words=String(str||'').split(/\s+/).filter(Boolean);
+    const lines=[]; let cur='';
+    words.forEach(word=>{
+      const next=cur?cur+' '+word:word;
+      if(face.widthOfTextAtSize(next,size)<=maxW) cur=next;
+      else { if(cur) lines.push(cur); cur=word; }
+    });
+    if(cur) lines.push(cur);
+    return lines.length?lines:[''];
+  }
+  page.drawRectangle({x:0,y:H-72,width:W,height:72,color:blue});
+  draw('SmartHome Brothers', M, H-38, 18, bold, rgb(1,1,1));
+  draw('TYM', M, H-56, 10, font, rgb(0.9,0.94,1));
+  y=H-100;
+  need(40);
+  draw(model.projectName, M, y, 20, bold); y-=22;
+  draw('Control: '+model.control, M, y, 11, font, muted); y-=16;
+  draw('List prices as of '+model.date+'. This is an estimate for planning, not an invoice.', M, y, 10, font, muted); y-=22;
+  function headerRow(){
+    need(18);
+    draw('Item', M, y, 9, bold, muted);
+    draw('Qty', 360, y, 9, bold, muted);
+    draw('List price', 410, y, 9, bold, muted);
+    draw('Line total', 500, y, 9, bold, muted);
+    y-=8;
+    page.drawLine({start:{x:M,y},end:{x:W-M,y},thickness:0.6,color:rgb(0.85,0.85,0.87)});
+    y-=14;
+  }
+  function paintLines(lines){
+    headerRow();
+    lines.forEach(line=>{
+      const nameLines=wrap(line.name,10,font,280);
+      need(nameLines.length*13+6);
+      nameLines.forEach((part,i)=>{ draw(part, M, y-i*13, 10, font); });
+      const price=line.tbd?'price TBD':YTQuote.money(line.unit);
+      const total=line.tbd?'price TBD':YTQuote.money(line.total);
+      const color=line.tbd?amber:ink;
+      draw(String(line.qty), 360, y, 10, font);
+      draw(price, 410, y, 10, font, color);
+      draw(total, 500, y, 10, bold, color);
+      y-=nameLines.length*13+6;
+    });
+  }
+  model.floors.forEach(floor=>{
+    if(floor.name){ need(22); draw(floor.name.toUpperCase(), M, y, 10, bold, blue); y-=18; }
+    floor.rooms.forEach(room=>{
+      need(20); draw(room.name, M, y, 13, bold); y-=16;
+      paintLines(room.lines);
+      need(16); draw('Room subtotal  '+YTQuote.money(room.subtotal), 360, y, 10, bold); y-=20;
+    });
+  });
+  if(model.wholeHome.lines.length){
+    need(22); draw('WHOLE HOME', M, y, 10, bold, blue); y-=18;
+    paintLines(model.wholeHome.lines);
+    need(16); draw('Whole home subtotal  '+YTQuote.money(model.wholeHome.subtotal), 330, y, 10, bold); y-=20;
+  }
+  need(36);
+  page.drawLine({start:{x:M,y:y+10},end:{x:W-M,y:y+10},thickness:1.4,color:ink});
+  draw('Project total', M, y-8, 14, bold);
+  draw(YTQuote.money(model.total), 470, y-8, 16, bold);
+  y-=28;
+  if(model.tbdCount){
+    const note=wrap('Items marked price TBD are shown for planning and are not included in the total.', 10, font, W-M*2);
+    need(note.length*13);
+    note.forEach(part=>{ draw(part, M, y, 10, font, muted); y-=13; });
+  }
+  const bytes=await doc.save();
+  const blob=new Blob([bytes], {type:'application/pdf'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(model.projectName.replace(/[^\w\-]+/g,'_')||'layout')+'-quote.pdf';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+  ph('layout_quote_pdf', {});
+}
+function openCallSheet(){
+  document.getElementById('callMsg').textContent='This opens the scheduling page in a new tab.';
+  document.getElementById('callSheet').classList.add('on');
+  document.getElementById('callName').focus();
+}
+function closeCallSheet(){ document.getElementById('callSheet').classList.remove('on'); }
+async function submitCall(ev){
+  ev.preventDefault();
+  const msg=document.getElementById('callMsg');
+  const model=document.getElementById('quoteView')._model||currentQuote();
+  const payload={
+    contact:{
+      name:document.getElementById('callName').value.trim(),
+      email:document.getElementById('callEmail').value.trim(),
+      phone:document.getElementById('callPhone').value.trim(),
+      preferredTime:document.getElementById('callWhen').value.trim(),
+      notes:document.getElementById('callNotes').value.trim()
+    },
+    quote:model
+  };
+  msg.textContent='Sending.';
+  let res, body;
+  try{
+    res=await fetch('/api/lead', {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(payload)});
+    body=await res.json();
+  }catch(e){
+    msg.textContent='The request did not go through. Try again in a moment.';
+    return;
+  }
+  if(!res.ok){ msg.textContent=body&&body.message?body.message:'The request did not go through.'; return; }
+  if(body.schedulingUrl){
+    const opened=window.open(body.schedulingUrl, '_blank', 'noopener');
+    msg.textContent=opened?(body.leadSent?'Sent. The scheduling page is open in a new tab.':'The scheduling page is open in a new tab.'):'Allow pop-ups to open the scheduling page.';
+    if(!opened){
+      const link=document.createElement('a');
+      link.href=body.schedulingUrl;
+      link.target='_blank';
+      link.rel='noopener';
+      link.textContent='Open the scheduling page';
+      msg.appendChild(document.createElement('br'));
+      msg.appendChild(link);
+    }
+    return;
+  }
+  msg.textContent='Sent. Tym will follow up with you.';
+  document.getElementById('callForm').reset();
+}
+function debugSetAccess(state){
+  const host=location.hostname;
+  if(host!=='localhost' && host!=='127.0.0.1') return false;
+  if(!state){ detachCloud(); draw(); return true; }
+  cloudState={id:state.id||projectId, editUntil:state.editUntil||null, pdfPath:state.pdfPath||null};
+  if(state.id) projectId=state.id;
+  accessStamp='';
+  rememberCloud();
+  applyAccessMode();
+  draw();
+  return true;
+}
+function loadSupabase(){
+  if(window.supabase && window.supabase.createClient) return Promise.resolve(window.supabase.createClient.bind(window.supabase));
+  return new Promise((resolve, reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js';
+    s.onload=()=>{
+      if(window.supabase && window.supabase.createClient) resolve(window.supabase.createClient.bind(window.supabase));
+      else reject(new Error('sign in library'));
+    };
+    s.onerror=()=>reject(new Error('sign in library'));
+    document.head.appendChild(s);
+  });
+}
+async function renderAccountBtn(){
+  let email='';
+  if(sb){
+    try{
+      const {data}=await sb.auth.getSession();
+      email=(data.session&&data.session.user&&data.session.user.email)||'';
+    }catch(e){}
+  }
+  const out=document.getElementById('menuOut');
+  if(out) out.hidden=!email;
+}
+async function finishCheckoutReturn(sessionId, returnedId){
+  if(checkoutBusy) return;
+  checkoutBusy=true;
+  try{
+    if(returnedId && /^[0-9a-f-]{36}$/i.test(returnedId)) projectId=returnedId;
+    if(!sb){ showModal('<b>Confirming your payment</b><br><br>Sign-in is not available in this browser yet.', [['OK']]); return; }
+    const {data}=await sb.auth.getSession();
+    if(!data.session){
+      try{ sessionStorage.setItem('yt-checkout-pending', JSON.stringify({sessionId, projectId})); }catch(e){}
+      openSignIn('Sign in with the same email to finish saving this project.');
+      return;
+    }
+    showModal('<b>Confirming your payment</b><br><br>This usually takes a few seconds.', [['Close']]);
+    let last=null;
+    for(let i=0;i<6;i++){
+      const res=await fetch('/api/checkout/confirm', {
+        method:'POST',
+        headers:{'content-type':'application/json', authorization:'Bearer '+data.session.access_token},
+        body:JSON.stringify({sessionId})
+      });
+      last=await res.json().catch(()=>({}));
+      if(res.ok && last.editUntil){
+        try{ sessionStorage.removeItem('yt-checkout-pending'); }catch(e){}
+        if(location.search) history.replaceState({}, '', location.pathname);
+        await openCloudProject(last.projectId||projectId);
+        showModal('<b>Payment received</b><br><br>This project is open. Editing stays available for 30 days.', [['OK']]);
+        return;
+      }
+      if(last && last.error && last.error!=='unpaid') break;
+      await new Promise(r=>setTimeout(r, 1500));
+    }
+    showModal('<b>Payment not confirmed yet</b><br><br>'+esc((last&&last.message)||'Refresh this page in a moment. If you were charged, open Projects after the payment lands.'), [['OK']]);
+  }catch(e){
+    showModal('<b>Payment not confirmed yet</b><br><br>Refresh this page in a moment.', [['OK']]);
+  }finally{
+    checkoutBusy=false;
+  }
+}
+function readBuySeed(){
+  const q=new URLSearchParams(location.search);
+  const rooms=(q.get('rooms')||'').split('|').map(s=>s.trim()).filter(Boolean);
+  const tier=q.get('tier')==='good'||q.get('tier')==='better'?q.get('tier'):'';
+  return {rooms, tier};
+}
+function wantBuy(){ return new URLSearchParams(location.search).get('buy')==='1'; }
+function showBuyLanding(){
+  cloudState=null;
+  accessStamp='';
+  const price=document.getElementById('buyPrice');
+  if(price) price.textContent=formatCents(payConfig.priceCents||2900);
+  const days=payConfig.editDays||30;
+  const list=document.querySelector('#buyScreen ul');
+  if(list) list.innerHTML='<li>One project, with every floor and page</li><li>'+days+' days to place devices and edit the plan</li><li>The project stays saved, and you can still view it after that</li><li>Pay again when you want another '+days+' days of editing</li>';
+  const note=document.getElementById('buyConfigNote');
+  const ready=!!(payConfig.paymentsConfigured && payConfig.authConfigured && sb);
+  if(note) note.hidden=ready;
+  const send=document.getElementById('buySend');
+  const go=document.getElementById('buyGo');
+  if(send) send.disabled=!payConfig.authConfigured || !sb;
+  if(go) go.disabled=!ready;
+  applyAccessMode();
+}
+async function paintBuyAccount(){
+  const out=document.getElementById('buySignedOut');
+  const inn=document.getElementById('buySignedIn');
+  let email='';
+  if(sb){
+    try{ const {data}=await sb.auth.getSession(); email=(data.session&&data.session.user&&data.session.user.email)||''; }catch(e){}
+  }
+  if(out) out.hidden=!!email;
+  if(inn) inn.hidden=!email;
+  const who=document.getElementById('buyWho');
+  if(who) who.textContent=email?('Signed in as '+email+'.'):'';
+  const go=document.getElementById('buyGo');
+  if(go) go.textContent='Continue to payment, '+formatCents(payConfig.priceCents||2900);
+}
+async function enterAccountProjects(preferId){
+  if(!sb){ showBuyLanding(); return; }
+  const {data:sess}=await sb.auth.getSession();
+  if(!sess.session){ showBuyLanding(); await paintBuyAccount(); return; }
+  const {data, error}=await sb.from('projects').select('id,edit_until,updated_at').order('updated_at', {ascending:false});
+  if(error || !data){ showBuyLanding(); await paintBuyAccount(); return; }
+  let row=preferId?data.find(item=>item.id===preferId):null;
+  if(!row) row=data[0]||null;
+  if(!row){
+    showBuyLanding();
+    await paintBuyAccount();
+    if(wantBuy() && payConfig.paymentsConfigured && !sessionStorage.getItem('yt-buy-started')){
+      sessionStorage.setItem('yt-buy-started','1');
+      await sendCheckout();
+    }
+    return;
+  }
+  await openCloudProject(row.id);
+}
+async function restoreLocalTest(){
+  try{
+    const raw=JSON.parse(localStorage.getItem('yt-layout-test')||'null');
+    if(!raw || !raw.editUntil) return false;
+    if(raw.source!=='test_code' && raw.source!=='preview_unlock') return false;
+    if(raw.source==='preview_unlock'){
+      const allowed=await confirmPreviewServer();
+      if(!allowed){ try{ localStorage.removeItem('yt-layout-test'); }catch(e){} return false; }
+    }
+    testMode=true;
+    testEditUntil=raw.editUntil;
+    testSource=raw.source;
+    return true;
+  }catch(e){ return false; }
+}
+function beginLocalTest(editUntil, source){
+  testMode=true;
+  testEditUntil=editUntil;
+  testSource=source==='preview_unlock'?'preview_unlock':'test_code';
+  try{ localStorage.setItem('yt-layout-test', JSON.stringify({editUntil, source:testSource})); }catch(e){}
+  const seed=readBuySeed();
+  projectId=crypto.randomUUID();
+  projectName='Test project';
+  paintProjectName();
+  devs=[]; rooms=seed.rooms.map((name,i)=>({id:i+1, name}));
+  active=null; sel=null; multi=[]; lastAdded=null;
+  defaultTier=seed.tier||'';
+  nid=rooms.length+1;
+  pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false; hifi=false;
+  pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
+  stage.querySelectorAll('canvas').forEach(x=>x.remove());
+  empty.style.display='';
+  empty.textContent='Upload a PDF floor plan to begin.';
+  accessStamp='';
+  hist=[]; hidx=-1; snapshot();
+  updatePageLbl(); draw();
+  try{ localStorage.setItem('yt-layout-current', JSON.stringify(serializeProject())); }catch(e){}
+  scheduleSave();
+  applyAccessMode();
+}
+async function submitAccessCode(){
+  const input=document.getElementById('buyCode');
+  const msg=document.getElementById('buyCodeMsg');
+  const code=(input&&input.value||'').trim();
+  if(!code){ if(msg) msg.textContent='Enter the access code.'; return; }
+  if(msg) msg.textContent='Checking the code.';
+  let res, body;
+  const headers={'content-type':'application/json'};
+  if(sb){
+    try{ const {data}=await sb.auth.getSession(); if(data.session) headers.authorization='Bearer '+data.session.access_token; }catch(e){}
+  }
+  try{
+    res=await fetch('/api/test-access', {
+      method:'POST',
+      headers,
+      body:JSON.stringify({code, name:projectName||'Test project', seed:readBuySeed()})
+    });
+    body=await res.json();
+  }catch(e){
+    if(msg) msg.textContent='The code could not be checked. Try again.';
+    return;
+  }
+  if(input) input.value='';
+  if(!res.ok){
+    if(msg) msg.textContent=body&&body.message?body.message:'That code does not match.';
+    return;
+  }
+  if(body.mode==='account' && body.projectId){
+    await openCloudProject(body.projectId);
+    return;
+  }
+  beginLocalTest(body.editUntil, 'test_code');
+}
+async function confirmPreviewServer(){
+  try{
+    const res=await fetch('/api/preview-unlock', {method:'POST', headers:{'content-type':'application/json'}, body:'{}'});
+    if(!res.ok) return null;
+    const body=await res.json();
+    if(!body || body.testMode!==true || body.source!=='preview_unlock' || !body.editUntil) return null;
+    return body;
+  }catch(e){ return null; }
+}
+async function requestPreviewUnlock(){
+  const body=await confirmPreviewServer();
+  if(!body) return false;
+  beginLocalTest(body.editUntil, 'preview_unlock');
+  return true;
+}
+async function bootAccount(){
+  try{
+    const res=await fetch('/api/config');
+    if(res.ok) payConfig=Object.assign({authConfigured:false,paymentsConfigured:false,priceCents:2900,editDays:30}, await res.json());
+  }catch(e){}
+  showBuyLanding();
+  if(payConfig.authConfigured){
+    try{
+      const create=await loadSupabase();
+      sb=create(payConfig.supabaseUrl, payConfig.supabaseAnonKey);
+      await sb.auth.getSession();
+      sb.auth.onAuthStateChange((_evt, session)=>{
+        renderAccountBtn();
+        if(!session) return;
+        let pending=null;
+        try{ pending=JSON.parse(sessionStorage.getItem('yt-checkout-pending')||'null'); }catch(e){}
+        if(pending && pending.sessionId) finishCheckoutReturn(pending.sessionId, pending.projectId);
+      });
+    }catch(e){ sb=null; }
+  }
+  await renderAccountBtn();
+  await paintBuyAccount();
+  const params=new URLSearchParams(location.search);
+  if(params.get('preview_unlock')==='1' && await requestPreviewUnlock()){
+    /* server allowed this preview host */
+  } else if(params.get('checkout')==='success'){
+    await finishCheckoutReturn(params.get('session_id')||'', params.get('project_id')||'');
+  } else if(params.get('checkout')==='cancel'){
+    history.replaceState({}, '', location.pathname);
+    showBuyLanding();
+    showModal('<b>Payment canceled</b><br><br>Nothing was charged.', [['OK']]);
+  } else if(!payConfig.paymentsConfigured && await restoreLocalTest()){
+    accessStamp='';
+    await restoreLast().catch(()=>{});
+    applyAccessMode();
+  } else if(payConfig.paymentsConfigured){
+    await enterAccountProjects();
+  } else {
+    showBuyLanding();
+    await paintBuyAccount();
+  }
+  const quoteBtn=document.getElementById('btnQuote');
+  if(quoteBtn) quoteBtn.onclick=()=>openQuote();
+  const quotePdf=document.getElementById('quotePdf');
+  const quoteCall=document.getElementById('quoteCall');
+  const quoteClose=document.getElementById('quoteClose');
+  if(quotePdf) quotePdf.onclick=()=>downloadQuotePdf().catch(err=>showModal('<b>Could not build the PDF.</b><br><br>'+esc(err&&err.message?err.message:'Try again.'), [['OK']]));
+  if(quoteCall) quoteCall.onclick=()=>openCallSheet();
+  if(quoteClose) quoteClose.onclick=closeQuote;
+  const callForm=document.getElementById('callForm');
+  if(callForm) callForm.addEventListener('submit', submitCall);
+  const callCancel=document.getElementById('callCancel');
+  if(callCancel) callCancel.onclick=closeCallSheet;
+  const acctClose=document.getElementById('acctClose');
+  if(acctClose) acctClose.onclick=closeAcct;
+  const acctModal=document.getElementById('acctModal');
+  if(acctModal) acctModal.addEventListener('click', ev=>{ if(ev.target===acctModal) closeAcct(); });
+  const buySend=document.getElementById('buySend');
+  if(buySend) buySend.onclick=async()=>{
+    if(!sb || !payConfig.authConfigured){ showBuyLanding(); return; }
+    const email=(document.getElementById('buyEmail').value||'').trim();
+    const msg=document.getElementById('buyMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(msg) msg.textContent='Enter a valid email.'; return; }
+    if(msg) msg.textContent='Sending the link.';
+    const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo:accountReturnUrl()}});
+    if(msg) msg.textContent=error?(error.message||'Could not send the link.'):'Check your email for a sign-in link, then open it on this device.';
+  };
+  const buyGo=document.getElementById('buyGo');
+  if(buyGo) buyGo.onclick=()=>{ try{ sessionStorage.removeItem('yt-buy-started'); }catch(e){} sendCheckout(); };
+  const buyCodeLink=document.getElementById('buyCodeLink');
+  const buyCodeBox=document.getElementById('buyCodeBox');
+  if(buyCodeLink && buyCodeBox) buyCodeLink.onclick=()=>{ buyCodeBox.hidden=!buyCodeBox.hidden; if(!buyCodeBox.hidden){ const el=document.getElementById('buyCode'); if(el) el.focus(); } };
+  const buyCodeGo=document.getElementById('buyCodeGo');
+  if(buyCodeGo) buyCodeGo.onclick=()=>submitAccessCode();
+  if(cloudState && editOpen()) scheduleCloudPush();
+  applyAccessMode();
+}
+
 snapshot();
 draw();
 updatePageLbl();
 updatePanAffordance();
-restoreLast().catch(()=>{});
+bootAccount();
 
 window.__LT={
   loadPdfFromUrl: async url=>{ const r=await fetch(url); if(!r.ok) throw new Error('pdf '+r.status); await loadPdfBuffer(await r.arrayBuffer(), url.split('/').pop()); },
   placeAt, assign, select, setZoom, fitZoom, rotateSel, setRot, resizeSel, undo, redo, setType, canXF, WALL,
   showPage, dropBundle, applyTier, linePrice, lineLabel, keyFor, isPlaceholder, catalogList, syncSeparates,
-  tierOptions, distinctTiers, normRot, showTierPop,
-  state:()=>({devs,rooms,active:active&&active.name,sel:sel&&{id:sel.id,type:sel.type,rot:sel.rot,scale:sel.scale,x:sel.x,y:sel.y,room:sel.room,tier:sel.tier,catalogKey:sel.catalogKey,page:sel.page},zoom,total:pkgTotal(),nid,openGroups:[...openGroups],page:pageNum,numPages,hifi,projectId,projectName}),
+  tierOptions, distinctTiers, normRot, showTierPop, showSizePop,
+  tvSizes, tvTierList, tvBarWidth, ceilingLoad, audioLines, packageLines, musicRoomCount, openPlanPicker, RULES,
+  state:()=>({devs,rooms,active:active&&active.name,sel:sel&&{id:sel.id,type:sel.type,rot:sel.rot,scale:sel.scale,x:sel.x,y:sel.y,room:sel.room,tier:sel.tier,tvSize:sel.tvSize,catalogKey:sel.catalogKey,page:sel.page},zoom,total:pkgTotal(),nid,openGroups:[...openGroups],page:pageNum,numPages,hifi,projectId,projectName,pageNames,controlPlatform,audioSystem,matrixDismissed}),
   setActive: name=>{ active=rooms.find(r=>r.name===name)||null; draw(); },
   addRoomNamed: name=>{ let rm=rooms.find(r=>r.name.toLowerCase()===name.toLowerCase()); if(!rm){ snapshot(); rm={id:nid++,name}; rooms.push(rm);} active=rm; draw(); return rm; },
-  setHifi: on=>{ hifi=!!on; btnHifi.classList.toggle('on',hifi); draw(); },
-  serializeProject, newProject
+  setHifi: on=>{ if(!guardEdit()) return; hifi=!!on; },
+  serializeProject, newProject, repriceLoadedDevices,
+  quoteModel: ()=>currentQuote(),
+  access: ()=>({editOpen:editOpen(), cloud:cloudState?{id:cloudState.id, editUntil:cloudState.editUntil}:null, paymentsConfigured:!!payConfig.paymentsConfigured, priceCents:payConfig.priceCents}),
+  debugSetAccess
 };
 
 
-/* ---- beta: gate, feedback, PostHog ---- */
-const GATE_HASH='2f0bba544eb3a0ee5645bc9fa75b00ba8991d995260638d857e253244fec2509';
-const GATE_LS='tym-layout-beta-unlock';
+/* ---- PostHog ---- */
 function ph(ev,props){ try{ if(window.posthog&&typeof posthog.capture==='function') posthog.capture(ev,props||{}); }catch(e){} }
-async function sha256hex(s){
-  const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-(function initGate(){
-  const g=document.getElementById('gate');
-  const form=document.getElementById('gateForm');
-  const err=document.getElementById('gateErr');
-  const pw=document.getElementById('gatePw');
-  const unlock=()=>{ g.classList.add('ok'); g.setAttribute('aria-hidden','true'); };
-  try{ if(localStorage.getItem(GATE_LS)===GATE_HASH) unlock(); }catch(e){}
-  form.addEventListener('submit', async ev=>{
-    ev.preventDefault();
-    err.hidden=true;
-    const val=pw.value;
-    pw.value='';
-    const h=await sha256hex(val);
-    if(h===GATE_HASH){ try{ localStorage.setItem(GATE_LS,h); }catch(e){} unlock(); }
-    else { err.hidden=false; pw.focus(); }
-  });
-})();
-(function initFeedback(){
-  const modal=document.getElementById('fbModal');
-  const form=document.getElementById('fbForm');
-  const thanks=document.getElementById('fbThanks');
-  const open=()=>{ thanks.hidden=true; modal.classList.add('on'); document.getElementById('fbDoing').focus(); };
-  const close=()=>{ modal.classList.remove('on'); form.reset(); thanks.hidden=true; };
-  const btn=document.getElementById('btnFeedback');
-  if(btn) btn.onclick=open;
-  document.getElementById('fbCancel').onclick=close;
-  modal.addEventListener('click', ev=>{ if(ev.target===modal) close(); });
-  form.addEventListener('submit', ev=>{
-    ev.preventDefault();
-    const doing=document.getElementById('fbDoing').value.trim();
-    const happened=document.getElementById('fbHappened').value.trim();
-    const email=document.getElementById('fbEmail').value.trim();
-    if(!doing||!happened) return;
-    const props={doing,happened};
-    if(email) props.email=email;
-    ph('layout_feedback', props);
-    thanks.hidden=false;
-    setTimeout(close, 900);
-  });
-})();
 
 </script>
 </body>
