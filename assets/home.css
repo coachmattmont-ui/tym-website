@@ -215,11 +215,11 @@ body.hp nav.tym-nav .nav-right a.btn:hover{
   border-radius:0;
   box-shadow:0 10px 28px rgba(8,12,16,.22);
 }
-.hero-b .hero-demo .demo{border:none}
+.hero-b .hero-demo.demo{border:none}
 .hero-b .hero-demo .demo-dev{width:44px;height:34px}
 .hero-b .hero-demo .demo-dev.wide{width:72px;height:28px}
 .hero-b .hero-demo .demo-tag{font-size:10px;padding:2px 5px}
-.hero-b .hero-demo .demo-lines{max-height:64px}
+.hero-b .hero-demo .demo-lines{max-height:none}
 .hero-b .hero-demo .demo-total b{font-size:16px}
 @media (min-width:860px){
   .hero-b .hero-stage{

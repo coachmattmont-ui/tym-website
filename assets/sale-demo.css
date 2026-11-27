@@ -13,8 +13,8 @@
 .demo-bill{padding:8px 10px 10px;border-top:1px solid rgba(18,18,18,.08);background:rgba(255,255,255,.94)}
 .demo-bill .side-kicker{color:rgba(18,18,18,.62);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .demo-count{margin:4px 0 0;font-size:11px;color:rgba(18,18,18,.62);letter-spacing:.04em}
-.demo-lines{list-style:none;margin:4px 0 0;padding:0;max-height:96px;overflow:auto}
-.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
+.demo-lines{list-style:none;margin:4px 0 0;padding:0;overflow:visible}
+.demo-lines li{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;line-height:1.35;color:#121212;padding:4px 0;border-bottom:1px solid rgba(18,18,18,.08)}
 .demo-lines li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .demo-lines li.flash{animation:demoFlash .45s ease}
 @keyframes demoFlash{from{background:#F3F3F3}to{background:transparent}}
