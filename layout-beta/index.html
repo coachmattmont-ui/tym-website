@@ -346,6 +346,14 @@ body.locked #roomGuide{display:none !important}
 #roomGuide #guideNext{background:#103747;color:#fff;border-color:#103747}
 #guideNext[hidden]{display:none !important}
 .pal.guide-hot,#selBox button.guide-hot,#selBox .rotlbl.guide-hot{outline:2px solid #00ACEC;outline-offset:1px;background:#F3F3F3}
+/* Test aid. Set SHOW_GUIDE_RESTART to false to hide it. */
+#guideRestart{display:none}
+body.guide-restart-on #guideRestart{
+  display:inline-flex;align-items:center;position:fixed;z-index:37;left:12px;bottom:12px;
+  height:28px;padding:0 10px;border:1px solid #121212;border-radius:999px;background:#fff;color:#121212;
+  font-size:11px;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(18,18,18,.12)
+}
+body.locked #guideRestart{display:none !important}
 @media (max-width:780px){
   #roomGuide{align-self:stretch;width:auto;margin:0 12px 12px;max-height:min(420px,52vh)}
   #guideCollapse{display:inline-flex;align-items:center;justify-content:center}
@@ -679,6 +687,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     </div>
   </div>
 </div>
+<button type="button" id="guideRestart" class="guide-restart">Restart guide</button>
 <div id="modal"><div class="card"><div id="mBody"></div><div id="mBtns" style="margin-top:16px;text-align:right"></div></div></div>
 <div id="planPick" role="dialog" aria-modal="true" aria-labelledby="planPickTitle">
   <div class="plan-card">
@@ -2372,7 +2381,9 @@ document.getElementById('guideCollapse').onclick=()=>{
   btn.setAttribute('aria-expanded', collapsed?'false':'true');
   btn.setAttribute('aria-label', collapsed?'Expand guide':'Collapse guide');
   btn.textContent=collapsed?'+':'−';
+  placeGuideRestart();
 };
+document.getElementById('guideRestart').onclick=()=>restartGuide();
 document.getElementById('menuOut').onclick=async()=>{
   closeMenu();
   if(!sb) return;
@@ -2537,6 +2548,7 @@ function applyAccessMode(){
     const el=document.getElementById(id);
     if(el) el.disabled=view;
   });
+  placeGuideRestart();
 }
 function scheduleCloudPush(){
   if(!cloudState || !editOpen() || !sb) return;
@@ -3371,6 +3383,7 @@ function showGuideStep(index, opts){
       guideTrack('guide_completed','done');
     }
   }
+  placeGuideRestart();
 }
 function closeGuide(status){
   clearTimeout(guideTimer);
@@ -3394,6 +3407,7 @@ function closeGuide(status){
   document.body.classList.remove('guide-edit');
   guideStep=-1;
   highlightGuide(null);
+  placeGuideRestart();
 }
 function guideNoteDrop(d){
   if(guideBusy || guideAwaitNext || guideStep<0 || !d) return;
@@ -3443,6 +3457,34 @@ function reopenGuide(){
   guideStarted=false;
   showGuideStep(0);
 }
+/* Test aid. Set false to hide the Restart guide button. */
+const SHOW_GUIDE_RESTART=true;
+function placeGuideRestart(){
+  const btn=document.getElementById('guideRestart');
+  if(!btn) return;
+  btn.style.left='12px';
+  btn.style.bottom='12px';
+  const card=document.getElementById('roomGuide');
+  if(card && !card.hidden){
+    const g=card.getBoundingClientRect();
+    if(g.width>0 && g.left<180) btn.style.bottom=Math.round(window.innerHeight-g.top+8)+'px';
+  }
+  const total=document.getElementById('sideTotal');
+  if(total && !document.body.classList.contains('locked')){
+    const b=btn.getBoundingClientRect();
+    const t=total.getBoundingClientRect();
+    if(b.left<t.right && b.right>t.left && b.top<t.bottom && b.bottom>t.top){
+      btn.style.bottom=Math.round(window.innerHeight-t.top+8)+'px';
+    }
+  }
+}
+function restartGuide(){
+  guideTrack('guide_restart','intro');
+  reopenGuide();
+}
+if(SHOW_GUIDE_RESTART) document.body.classList.add('guide-restart-on');
+placeGuideRestart();
+addEventListener('resize', placeGuideRestart);
 function startSaleDemo(){
   if (window.tymStartSaleDemo) window.tymStartSaleDemo(document.getElementById('saleDemo'), {catalog: (typeof CATALOG !== 'undefined' ? CATALOG : null), source: 'layout'});
 }
