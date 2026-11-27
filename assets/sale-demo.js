@@ -4,7 +4,7 @@
   var FALLBACK = {
     'SP-6': { name: 'TruAudio Shadow 6.5" in-ceiling speaker', cents: 12398 },
     'PG-6': { name: 'TruAudio Phantom 6.5" in-ceiling speaker', cents: 27550 },
-    'GHT-66P': { name: 'TruAudio Ghost HT in-wall LCR speaker', cents: 82650 },
+    'CI-ELITE-E65-R': { name: 'Paradigm CI Elite E65-R v2 in-ceiling speaker', cents: 54999 },
     'K65XR50': { name: 'Sony BRAVIA 65" 4K TV (K65XR50)', cents: 149999 },
     'SONOS-ARC-2-BL': { name: 'Sonos Arc Ultra soundbar', cents: 109900 },
     'C4-CORE-LITE-RSK': { name: 'Control4 CORE lite + SR260 remote bundle', cents: 93635 },
@@ -54,13 +54,13 @@
     }
     var shadow = priced('SP-6');
     var phantom = priced('PG-6');
-    var ghost = priced('GHT-66P');
+    var elite = priced('CI-ELITE-E65-R');
     var joshRemote = priced('J-EDG-1');
     var joshMicro = priced('J-WHT-100');
     var echoDot = priced('PH-ECHODOT');
     var items = SPECS.map(function (spec) {
       var row = priced(spec.key);
-      if (!row || row.cents == null || !shadow || !phantom || !ghost || !joshRemote || !joshMicro || !echoDot) return null;
+      if (!row || row.cents == null || !shadow || !phantom || !elite || !joshRemote || !joshMicro || !echoDot) return null;
       return { name: row.name, cents: row.cents, sel: spec.sel, role: spec.role };
     }).filter(Boolean);
     var latest = root.querySelector('.demo-latest');
@@ -86,13 +86,13 @@
     var P2_APPLY = P2 + 2720;
     var CYCLE = P2_APPLY + BEAT + 1800 + FADE;
     function rowCents(it, mode) {
-      if (it.role === 'speaker' && mode.upgraded) return ghost.cents;
+      if (it.role === 'speaker' && mode.upgraded) return elite.cents;
       if (it.role === 'remote' && mode.josh) return joshRemote.cents;
       if (it.role === 'keypad' && mode.josh) return joshMicro.cents;
       return it.cents;
     }
     function rowName(it, mode) {
-      if (it.role === 'speaker' && mode.upgraded) return ghost.name;
+      if (it.role === 'speaker' && mode.upgraded) return elite.name;
       if (it.role === 'remote' && mode.josh) return joshRemote.name;
       if (it.role === 'keypad' && mode.josh) return joshMicro.name;
       return it.name;
@@ -144,7 +144,7 @@
       var focus = null;
       if (!fading && step > 0) {
         if (t >= P2_APPLY) focus = { name: joshRemote.name, cents: joshRemote.cents };
-        else if (t >= P1_APPLY) focus = { name: ghost.name, cents: ghost.cents };
+        else if (t >= P1_APPLY) focus = { name: elite.name, cents: elite.cents };
         else focus = { name: rowName(items[step - 1], mode), cents: rowCents(items[step - 1], mode) };
       }
       var key = focus ? focus.name + '|' + focus.cents : '';
@@ -204,7 +204,7 @@
             ? [
               { id: 'good', tier: 'Good', name: shadow.name, price: money(shadow.cents) },
               { id: 'better', tier: 'Better', name: phantom.name, price: money(phantom.cents) },
-              { id: 'best', tier: 'Best', name: ghost.name, price: money(ghost.cents) }
+              { id: 'best', tier: 'Best', name: elite.name, price: money(elite.cents) }
             ]
             : [
               { id: 'c4', tier: 'Control4', name: 'CORE lite + keypad', price: money(rowCents(items.filter(function (it) { return it.role === 'remote'; })[0], base) + rowCents(items.filter(function (it) { return it.role === 'keypad'; })[0], base)) },
@@ -215,7 +215,7 @@
           if (popRows) popRows.innerHTML = rows.map(function (row) {
             return '<button type="button" data-id="' + row.id + '"><b>' + row.tier + '</b><span>' + row.name + '</span><em>' + row.price + '</em></button>';
           }).join('');
-          if (popNote) popNote.textContent = pop === 'speakers' ? 'Best uses an in-wall speaker, the closest match for a ceiling pair.' : '';
+          if (popNote) popNote.textContent = '';
         }
         if (!pop) popKind = '';
         if (popRows) popRows.querySelectorAll('button').forEach(function (btn) {
