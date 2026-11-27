@@ -83,9 +83,12 @@ h1,h2,h3{font-family:Oswald,sans-serif;font-weight:400;letter-spacing:.01em}
 .right-head{display:flex;gap:6px;align-items:center;padding:12px 12px 0}
 .right-head .search{flex:1;width:auto;min-width:0}
 .right-body{display:flex;flex-direction:column;min-height:0;flex:1}
-.right-selected{padding:8px 12px 0;max-height:46%;overflow:auto;flex-shrink:0}
+.right-selected{padding:10px 12px 12px;max-height:48%;overflow:auto;flex:0 1 auto;border-bottom:1px solid rgba(18,18,18,.18)}
 body.guide-edit .right-selected{max-height:none}
-.aside-scroll{flex:1;min-height:0;overflow:auto;padding:12px 14px 8px}
+#selSec{margin:0;background:#F3F3F3;border:1px solid #121212;padding:10px 10px 12px}
+#selSec .sec-h{color:#121212;margin:0 0 8px}
+.add-devices{flex:none;margin:0;padding:12px 14px 8px;border-bottom:1px solid rgba(18,18,18,.12);font-family:Oswald,sans-serif;font-weight:400;font-size:18px;line-height:1;color:#121212;letter-spacing:.01em}
+.aside-scroll{flex:1;min-height:0;overflow:auto;padding:8px 14px 12px}
 @media (max-width:1180px){
   #colRight{position:absolute;top:0;right:0;bottom:0;width:min(280px,88vw);box-shadow:-12px 0 30px rgba(0,0,0,.16)}
   #colRight.collapsed{width:40px;box-shadow:none}
@@ -124,7 +127,7 @@ body.guide-edit .right-selected{max-height:none}
 #hint{font-size:12px;color:var(--muted);margin:0 0 8px}
 #lastAdded{margin-top:8px;padding:8px 10px;background:#fff;border-radius:10px;box-shadow:var(--shadow);font-size:12px}
 #lastAdded b{font-weight:600}
-#selBox{padding:10px;background:#fff;border-radius:12px;box-shadow:var(--shadow);font-size:12px;color:var(--muted)}
+#selBox{padding:10px;background:#fff;border:1px solid rgba(18,18,18,.12);border-radius:0;box-shadow:none;font-size:12px;color:var(--muted)}
 #selBox b{color:var(--ink);font-weight:600}
 #selBox .rowbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 
@@ -303,8 +306,7 @@ body.locked #buyScreen[hidden]{display:none !important}
   .sale-trust{grid-template-columns:220px 1fr;align-items:center}
   .sale-stats{grid-template-columns:repeat(4,1fr)}
 }
-body.guide-open .app{min-height:0}
-#roomGuide{flex:none;align-self:flex-end;width:300px;margin:0 16px 12px 0;background:#fff;border:1px solid #121212;box-shadow:0 12px 32px rgba(18,18,18,.12);display:flex;flex-direction:column;max-height:min(380px,48vh);z-index:6}
+#roomGuide{position:fixed;right:16px;bottom:16px;width:300px;margin:0;background:#fff;border:1px solid #121212;box-shadow:0 12px 32px rgba(18,18,18,.12);display:flex;flex-direction:column;max-height:min(380px,48vh);z-index:35}
 #roomGuide[hidden]{display:none !important}
 body.locked #roomGuide{display:none !important}
 .dh-head{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 10px;border-bottom:1px solid rgba(18,18,18,.12);flex:none}
@@ -313,7 +315,8 @@ body.locked #roomGuide{display:none !important}
 .dh-head-spacer{flex:1}
 #roomGuide .dh-icon{width:28px;height:28px;padding:0;border:1px solid #121212;background:#fff;color:#121212;border-radius:0;cursor:pointer;font-weight:700;line-height:1}
 #guideCollapse{display:none}
-.dh-body{padding:10px 12px 12px;overflow:auto}
+.dh-body{padding:10px 12px 8px;overflow:auto;min-height:0}
+#roomGuide .guide-actions{flex:none;padding:0 12px 12px}
 .dh-dots{display:flex;gap:5px;margin:0 0 8px}
 .dh-dots i{width:7px;height:7px;border-radius:50%;background:#F3F3F3;border:1px solid rgba(18,18,18,.25);display:block}
 .dh-dots i.is-on{background:#103747;border-color:#103747}
@@ -342,7 +345,7 @@ body.locked #roomGuide{display:none !important}
 #guideList{margin:8px 0 0;color:rgba(18,18,18,.75);font-size:13px;line-height:1.4}
 #guideList[hidden]{display:none !important}
 #roomGuide.is-done #guideBody{font-family:Oswald,sans-serif;font-size:22px;line-height:1.15}
-#roomGuide .guide-actions{display:flex;gap:8px;margin-top:10px}
+#roomGuide .guide-actions{display:flex;gap:8px;margin-top:0}
 #roomGuide #guideExit,#roomGuide #guideNext{border:1px solid #121212;background:#fff;color:#121212;font-weight:700;padding:7px 12px;border-radius:0;cursor:pointer}
 #roomGuide #guideNext{background:#103747;color:#fff;border-color:#103747}
 #guideNext[hidden]{display:none !important}
@@ -356,7 +359,7 @@ body.guide-restart-on #guideRestart{
 }
 body.locked #guideRestart{display:none !important}
 @media (max-width:780px){
-  #roomGuide{align-self:stretch;width:auto;margin:0 12px 12px;max-height:min(420px,52vh)}
+  #roomGuide{left:12px;right:12px;width:auto;bottom:12px;max-height:min(420px,52vh)}
   #guideCollapse{display:inline-flex;align-items:center;justify-content:center}
   #roomGuide.is-collapsed{max-height:none}
   #roomGuide.is-collapsed .dh-body{display:none}
@@ -650,6 +653,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
         <div id="selBox">Click a device to edit.</div>
       </section>
     </div>
+    <h2 class="add-devices">Add devices</h2>
     <div class="aside-scroll">
       <section class="sec" id="bundlePanel" hidden>
         <div class="g" id="bundleGroup">
@@ -682,10 +686,10 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <button type="button" id="guideRoom" hidden>Kitchen instead</button>
     <div class="dh-anim" id="guideAnim" aria-hidden="true"></div>
     <p class="dh-saved" id="guideSaved" hidden></p>
-    <div class="guide-actions">
-      <button type="button" id="guideNext" hidden>Next</button>
-      <button type="button" id="guideExit">Not now</button>
-    </div>
+  </div>
+  <div class="guide-actions">
+    <button type="button" id="guideNext">Next</button>
+    <button type="button" id="guideExit">Not now</button>
   </div>
 </div>
 <button type="button" id="guideRestart" class="guide-restart">Restart guide</button>
@@ -2398,12 +2402,7 @@ document.getElementById('menuDownload').onclick=()=>{ closeMenu(); saveProjectFi
 document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
 document.getElementById('menuGuide').onclick=()=>{ closeMenu(); reopenGuide(); };
 document.getElementById('guideExit').onclick=()=>closeGuide('dismissed');
-document.getElementById('guideNext').onclick=()=>{
-  if(guideStep<0) return;
-  if(guideAwaitNext){ guideAwaitNext=false; showGuideStep(guideStep+1); return; }
-  const step=GUIDE_STEPS[guideStep];
-  if(step && step.id==='edit') showGuideStep(guideStep+1);
-};
+document.getElementById('guideNext').onclick=()=>guideGoNext();
 document.getElementById('guideClose').onclick=()=>closeGuide('dismissed');
 document.getElementById('guideRoom').onclick=()=>guideSwitchRoom();
 document.getElementById('guideCollapse').onclick=()=>{
@@ -3218,17 +3217,17 @@ function layoutPriceLabel(){
   return formatCents(cents);
 }
 const GUIDE_STEPS=[
-  {id:'speaker', type:'stereo', accept:['stereo','single'], group:'Audio', chip:'Speaker', anim:'speaker',
+  {id:'speaker', type:'stereo', accept:['stereo','single'], satisfy:['stereo','single'], group:'Audio', chip:'Speaker', anim:'speaker',
     text:room=>"Hey, need some help getting started? Let's pull a speaker into your "+room+"."},
-  {id:'tv', type:'tv', accept:['tv'], group:'Video / Control', chip:'TV', anim:'tv',
+  {id:'tv', type:'tv', accept:['tv'], satisfy:['tv'], group:'Video / Control', chip:'TV', anim:'tv',
     text:()=>"Awesome. Okay, next let's drag a TV in."},
-  {id:'edit', type:'', accept:[], group:'', chip:'', anim:'',
+  {id:'edit', type:'', accept:[], satisfy:[], group:'', chip:'', anim:'',
     text:()=>"Now that the TV is in the layout, you can rotate, resize, or delete it from the side panel."},
-  {id:'soundbar', type:'lcr', accept:['lcr','stereo','single'], group:'Audio', chip:'Soundbar', anim:'soundbar',
+  {id:'soundbar', type:'lcr', accept:['lcr','stereo','single'], satisfy:['lcr'], group:'Audio', chip:'Soundbar', anim:'soundbar',
     text:()=>"Drag a soundbar onto the floor plan."},
-  {id:'touch', type:'touch', accept:['touch','voice'], group:'Video / Control', chip:'Touchscreen', anim:'touch',
+  {id:'touch', type:'touch', accept:['touch','voice'], satisfy:['touch','voice'], group:'Video / Control', chip:'Touchscreen', anim:'touch',
     text:()=>"Drag a touchscreen onto the floor plan."},
-  {id:'wifi', type:'wap', accept:['wap'], group:'Network', chip:'Wi-Fi', anim:'wifi',
+  {id:'wifi', type:'wap', accept:['wap'], satisfy:['wap'], group:'Network', chip:'Wi-Fi', anim:'wifi',
     text:()=>"Drag a Wi-Fi access point onto the floor plan."},
   {id:'done', type:'', accept:[], group:'', chip:'', anim:'',
     text:()=>"You've got it, now do your next room."}
@@ -3353,7 +3352,20 @@ function paintGuide(){
     roomBtn.hidden=step.id!=='speaker';
     if(step.id==='speaker') roomBtn.textContent=guideRoomLinkText();
   }
-  if(nextBtn) nextBtn.hidden=!(step.id==='edit' || guideAwaitNext);
+  if(nextBtn) nextBtn.hidden=step.id==='done';
+}
+function guideRoomHas(types){
+  if(!types || !types.length) return false;
+  const room=guideRoomName().toLowerCase();
+  return devs.some(d=>types.indexOf(d.type)>=0 && String(d.room||'').toLowerCase()===room);
+}
+function guideGoNext(){
+  if(guideStep<0) return;
+  clearTimeout(guideTimer);
+  guideBusy=false;
+  guideAwaitNext=false;
+  const nextIndex=guideStep+1;
+  if(GUIDE_STEPS[nextIndex]) showGuideStep(nextIndex);
 }
 function highlightGuide(step){
   document.querySelectorAll('.guide-hot').forEach(el=>el.classList.remove('guide-hot'));
@@ -3388,6 +3400,13 @@ function showGuideStep(index, opts){
   const card=document.getElementById('roomGuide');
   const step=GUIDE_STEPS[index];
   if(!card || !step) return;
+  if(step.id!=='done' && guideRoomHas(step.satisfy) && GUIDE_STEPS[index+1]){
+    const room=guideRoomName().toLowerCase();
+    const found=devs.find(d=>step.satisfy.indexOf(d.type)>=0 && String(d.room||'').toLowerCase()===room);
+    const name=found ? guidePlacedName(step, found.type) : '';
+    if(name && guidePlaced.indexOf(name)<0) guidePlaced.push(name);
+    return showGuideStep(index+1, opts);
+  }
   clearTimeout(guideTimer);
   guideBusy=false;
   guideAwaitNext=!!(opts && opts.awaitNext);
@@ -3448,7 +3467,8 @@ function guideNoteDrop(d){
   if(!step || !step.accept || step.accept.indexOf(d.type)<0) return;
   if(modalEl) modalEl.style.display='none';
   assign(d, guideRoomName(), true);
-  guidePlaced.push(guidePlacedName(step, d.type));
+  const placedName=guidePlacedName(step, d.type);
+  if(guidePlaced.indexOf(placedName)<0) guidePlaced.push(placedName);
   const saved=document.getElementById('guideSaved');
   if(saved){ saved.hidden=false; saved.textContent=guideSavedText(step, d.type); }
   if(step.id==='tv'){
@@ -3457,11 +3477,10 @@ function guideNoteDrop(d){
     paintGuide();
     return;
   }
-  guideBusy=true;
-  const nextIndex=guideStep+1;
-  const next=GUIDE_STEPS[nextIndex];
+  const next=GUIDE_STEPS[guideStep+1];
   if(next) guideSetObject({status:'progress', step:next.id, room:guideRoomPick, placed:guidePlaced.slice()});
-  guideTimer=setTimeout(()=>{ if(next) showGuideStep(nextIndex); else closeGuide('completed'); }, 800);
+  guideBusy=true;
+  guideTimer=setTimeout(()=>guideGoNext(), 800);
 }
 function maybeOfferGuide(){
   if(!pdfDoc || !editOpen() || document.body.classList.contains('locked')) return;
