@@ -301,6 +301,8 @@ body.locked #buyScreen[hidden]{display:none !important}
 .demo-dev{position:absolute;width:64px;height:32px;opacity:0;transform:translate(-50%,-50%) scale(.45);transform-origin:center}
 .demo-dev svg{display:block;width:100%;height:100%;overflow:visible}
 .demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:opacity .22s ease, transform .28s cubic-bezier(.2,1.6,.3,1)}
+.demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:10px;line-height:1.2;white-space:nowrap;background:#fff;color:#121212;border:1px solid rgba(18,18,18,.2);padding:1px 4px;opacity:0}
+.demo-dev.on .demo-tag{opacity:1}
 .demo-dev.wide{width:78px}
 .demo-lines{list-style:none;margin:10px 0 0;padding:0;min-height:132px}
 .demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
@@ -313,7 +315,17 @@ body.locked #buyScreen[hidden]{display:none !important}
 }
 @media (prefers-reduced-motion:reduce){
   .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .demo-tag{opacity:1}
 }
+#roomGuide{position:fixed;left:16px;bottom:16px;z-index:35;width:min(380px,calc(100% - 32px));background:#fff;border:1px solid #121212;padding:16px 16px 14px;box-shadow:0 12px 32px rgba(18,18,18,.12)}
+#roomGuide[hidden]{display:none !important}
+body.locked #roomGuide{display:none !important}
+#roomGuide h2{margin:0 0 8px;font-size:22px;line-height:1.15;color:#121212}
+#roomGuide p{margin:0 0 14px;color:rgba(18,18,18,.75);font-size:14px;line-height:1.45}
+#roomGuide .guide-actions{display:flex;gap:8px}
+#roomGuide button{border:1px solid #121212;background:#fff;color:#121212;font-weight:700;padding:8px 12px;border-radius:0;cursor:pointer}
+#roomGuide #guideNext{background:#103747;color:#fff;border-color:#103747}
+.pal.guide-hot{outline:2px solid #103747;background:#F3F3F3}
 .buy-card h1{font-size:28px;letter-spacing:.01em;margin:0 0 8px}
 .buy-card .buy-price{font-size:32px;font-weight:400;font-family:Oswald,sans-serif;margin:0 0 12px}
 .buy-card ul{margin:0 0 16px;padding-left:18px;color:rgba(18,18,18,.75);line-height:1.5}
@@ -405,15 +417,21 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
               <path d="M154 11 H246 M154 15 H246" stroke="#00ACEC" stroke-width="1.2"/>
               <path d="M292 242 H352" stroke="#f7f4ee" stroke-width="12"/>
               <path d="M292 236 A 28 28 0 0 0 320 208" fill="none" stroke="#121212" stroke-width="1"/>
-              <rect x="58" y="176" width="168" height="42" rx="3" fill="#fff" stroke="#103747" stroke-width="1.6"/>
-              <path d="M66 184 H218" stroke="#103747" stroke-width="1.2"/>
-              <rect x="92" y="112" width="100" height="40" fill="none" stroke="#7D6232" stroke-width="1.6"/>
+              <g fill="#fff" stroke="#103747" stroke-width="1.5">
+                <rect x="78" y="186" width="148" height="36" rx="2"/>
+                <rect x="62" y="178" width="22" height="50" rx="4"/>
+                <rect x="220" y="178" width="22" height="50" rx="4"/>
+                <rect x="88" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
+                <rect x="132" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
+                <rect x="176" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
+              </g>
+              <rect x="108" y="118" width="88" height="36" fill="none" stroke="#7D6232" stroke-width="1.6"/>
             </svg>
-            <span class="demo-dev sp-l" style="left:11%;top:76%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg></span>
-            <span class="demo-dev sp-r" style="left:64%;top:76%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg></span>
-            <span class="demo-dev wide tv" style="left:50%;top:14%"><svg viewBox="-22 -10 44 20"><rect x="-20" y="-4" width="40" height="8" fill="#f5a623" stroke="#8a5200" stroke-width="1.5"/></svg></span>
-            <span class="demo-dev wide bar" style="left:50%;top:24%"><svg viewBox="-22 -10 44 20"><rect x="-18" y="-3.5" width="36" height="7" fill="#7ed321" stroke="#2e6b0a" stroke-width="1.5"/></svg></span>
-            <span class="demo-dev touch" style="left:96%;top:78%"><svg viewBox="-16 -12 32 24"><rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="#3fb6b0" stroke="#14605c" stroke-width="1.5"/></svg></span>
+            <span class="demo-dev sp-l" style="left:12%;top:78%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev sp-r" style="left:66%;top:78%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev wide tv" style="left:50%;top:13%"><svg viewBox="-40 -10 80 20"><rect x="-36" y="-3" width="72" height="6" fill="#121212"/><rect x="-34" y="-1.4" width="68" height="2.6" fill="#00ACEC"/></svg><em class="demo-tag">TV</em></span>
+            <span class="demo-dev wide bar" style="left:50%;top:20%"><svg viewBox="-36 -8 72 16"><rect x="-30" y="-2.4" width="60" height="4.8" rx="1" fill="#7ed321" stroke="#2e6b0a" stroke-width="1.2"/></svg><em class="demo-tag">Soundbar</em></span>
+            <span class="demo-dev touch" style="left:84%;top:72%"><svg viewBox="-18 -14 36 28"><rect x="-12" y="-8" width="24" height="16" rx="1.6" fill="#3fb6b0" stroke="#14605c" stroke-width="1.6"/></svg><em class="demo-tag">Touchscreen</em></span>
           </div>
           <ol class="demo-lines" id="demoLines"></ol>
           <p class="demo-total"><span>List total</span><b id="demoTotal">$0</b></p>
@@ -539,6 +557,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <button type="button" id="menuAddFloor">Add floor</button>
       <button type="button" id="menuDownload">Download project file</button>
       <button type="button" id="menuClose">Close project</button>
+      <button type="button" id="menuGuide">Show guide</button>
       <button type="button" id="menuOut" hidden>Log out</button>
     </nav>
   </div>
@@ -599,7 +618,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     <div class="sec-h">Rooms <button type="button" id="addRoom">Add Room</button></div>
     <div id="hint"></div>
     <div id="tree"></div>
-    <div id="lastAdded">Last added: —</div>
+    <div id="lastAdded">Last added: none</div>
   </section>
   <div id="wholeHome" hidden></div>
 
@@ -639,6 +658,14 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
     </div>
   </div>
 </aside>
+</div>
+<div id="roomGuide" hidden>
+  <h2 id="guideTitle"></h2>
+  <p id="guideBody"></p>
+  <div class="guide-actions">
+    <button type="button" id="guideNext">Start</button>
+    <button type="button" id="guideExit">Not now</button>
+  </div>
 </div>
 <div id="modal"><div class="card"><div id="mBody"></div><div id="mBtns" style="margin-top:16px;text-align:right"></div></div></div>
 <div id="planPick" role="dialog" aria-modal="true" aria-labelledby="planPickTitle">
@@ -1241,6 +1268,7 @@ async function loadPdfBuffer(buf,name,opts={}){
   await showPage(opts.keepPage||1, !!opts.keepZoom);
   if(opts.keepZoom && opts.keepZoom!==true) setZoom(opts.keepZoom);
   scheduleSave();
+  maybeOfferGuide();
 }
 pdf.onchange=async e=>{
   const f=e.target.files[0];
@@ -1571,7 +1599,7 @@ function delRoom(rm){
   draw();
 }
 function askRoom(d,isNew){
-  roomPrompt(isNew?'No room selected — which room is this in?':'Move to room',v=>{
+  roomPrompt(isNew?'No room selected. Which room is this in?':'Move to room',v=>{
     if(isNew){
       let rm=rooms.find(r=>r.name.toLowerCase()===v.toLowerCase());
       if(!rm){ rm={id:nid++,name:v}; rooms.push(rm); }
@@ -1768,7 +1796,7 @@ function draw(){
   if(lastAdded){
     document.getElementById('lastAdded').innerHTML=`Last added: <b>${lastAdded.room||'Unassigned'}</b> · ${lineLabel(lastAdded)} · ${money(linePrice(lastAdded))}`;
   } else {
-    document.getElementById('lastAdded').textContent='Last added: —';
+    document.getElementById('lastAdded').textContent='Last added: none';
   }
 
   updateTotals();
@@ -2307,6 +2335,19 @@ document.getElementById('btnUploadPlan').onclick=()=>{ pdf.dataset.intent=''; pd
 document.getElementById('menuAddFloor').onclick=()=>{ closeMenu(); pdf.dataset.intent=pdfDoc?'add':''; pdf.click(); };
 document.getElementById('menuDownload').onclick=()=>{ closeMenu(); saveProjectFile(); };
 document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
+document.getElementById('menuGuide').onclick=()=>{ closeMenu(); reopenGuide(); };
+document.getElementById('guideNext').onclick=()=>{
+  const step=GUIDE_STEPS[guideStep];
+  if(!step) return;
+  if(step.id==='intro'){
+    guideTrack('guide_started', 'intro');
+    showGuideStep(1);
+    return;
+  }
+  if(guideStep>=GUIDE_STEPS.length-1){ closeGuide('completed'); return; }
+  showGuideStep(guideStep+1);
+};
+document.getElementById('guideExit').onclick=()=>closeGuide('dismissed');
 document.getElementById('menuOut').onclick=async()=>{
   closeMenu();
   if(!sb) return;
@@ -3106,6 +3147,74 @@ function layoutPriceLabel(){
   if(cents%100===0) return '$'+(cents/100);
   return formatCents(cents);
 }
+const GUIDE_STEPS=[
+  {id:'intro', type:'', next:'Start', title:"Not sure where to start? Let's do your first room.", body:"We'll place a TV, a pair of speakers, and a touchscreen in one room. You can leave this anytime."},
+  {id:'tv', type:'tv', group:'Video / Control', next:'Next', title:'Place the TV', body:'Put it on the main viewing wall. The center of the screen sits at about seated eye height. Plan a mount, and a power or low-voltage box, behind it.'},
+  {id:'speakers', type:'stereo', group:'Audio', next:'Next', title:'Place a pair of speakers', body:'Speakers flank the TV or the seating. Keep them about a quarter of the room width in from the side walls, and away from corners.'},
+  {id:'touch', type:'touch', group:'Video / Control', next:'Next', title:'Place a touchscreen', body:'The touchscreen goes by the main entry, at switch height, where you can reach it as you walk in.'},
+  {id:'wifi', type:'wap', group:'Network', next:'Done', title:'Place the Wi-Fi access point', body:'The Wi-Fi AP goes ceiling-central in open areas. Keep it out of closets and corners.'}
+];
+let guideStep=-1;
+function guideStore(){
+  try{ return JSON.parse(localStorage.getItem('yt-layout-guide')||'{}'); }catch(e){ return {}; }
+}
+function guideStatus(){
+  const all=guideStore();
+  return all && projectId ? all[projectId] : '';
+}
+function guideSet(status){
+  const all=guideStore();
+  if(projectId) all[projectId]=status;
+  try{ localStorage.setItem('yt-layout-guide', JSON.stringify(all)); }catch(e){}
+}
+function guideTrack(name, stepId){
+  if(window.tymTrack) window.tymTrack(name, {path:'/layout-beta/guide/'+(stepId||'intro')});
+}
+function highlightGuide(step){
+  document.querySelectorAll('.pal.guide-hot').forEach(el=>el.classList.remove('guide-hot'));
+  if(!step || !step.type) return;
+  if(step.group && !openGroups.has(step.group)) openGroups.add(step.group);
+  renderPalette();
+  const el=document.querySelector('.pal[data-t="'+step.type+'"]');
+  if(!el) return;
+  el.classList.add('guide-hot');
+  try{ el.scrollIntoView({block:'nearest'}); }catch(e){}
+}
+function showGuideStep(index){
+  const card=document.getElementById('roomGuide');
+  const step=GUIDE_STEPS[index];
+  if(!card || !step) return;
+  guideStep=index;
+  document.getElementById('guideTitle').textContent=step.title;
+  document.getElementById('guideBody').textContent=step.body;
+  document.getElementById('guideNext').textContent=step.next;
+  card.hidden=false;
+  highlightGuide(step);
+  if(step.id!=='intro') guideTrack('guide_step', step.id);
+}
+function closeGuide(status){
+  const card=document.getElementById('roomGuide');
+  const step=GUIDE_STEPS[guideStep]||GUIDE_STEPS[0];
+  if(status) guideSet(status);
+  if(status==='dismissed') guideTrack('guide_dismissed', step.id);
+  if(status==='completed') guideTrack('guide_completed', 'done');
+  if(card) card.hidden=true;
+  guideStep=-1;
+  highlightGuide(null);
+}
+function maybeOfferGuide(){
+  if(!pdfDoc || !editOpen() || document.body.classList.contains('locked')) return;
+  if(guideStatus()) return;
+  showGuideStep(0);
+}
+function reopenGuide(){
+  if(projectId){
+    const all=guideStore();
+    delete all[projectId];
+    try{ localStorage.setItem('yt-layout-guide', JSON.stringify(all)); }catch(e){}
+  }
+  showGuideStep(0);
+}
 function startSaleDemo(){
   const root=document.getElementById('saleDemo');
   if(!root || root.dataset.ready) return;
@@ -3114,7 +3223,7 @@ function startSaleDemo(){
     {key:'PG-6', sel:'.sp-l'},
     {key:'PG-6', sel:'.sp-r'},
     {key:'K65XR50', sel:'.tv'},
-    {key:'CI-PRO-P3-LCR', sel:'.bar'},
+    {key:'SONOS-ARC-2-BL', sel:'.bar'},
     {key:'', name:'Touchscreen', sel:'.touch', tbd:true}
   ];
   const items=specs.map(spec=>{

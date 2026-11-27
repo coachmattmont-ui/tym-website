@@ -5,7 +5,11 @@ const NAMES = new Set([
   'secondary_link_click',
   'instant_quote_completed',
   'layout_checkout_started',
-  'demo_viewed'
+  'demo_viewed',
+  'guide_started',
+  'guide_step',
+  'guide_completed',
+  'guide_dismissed'
 ]);
 
 const takeEventAttempt = createAttemptLimiter({ limit: 40, windowMs: 15 * 60 * 1000 });

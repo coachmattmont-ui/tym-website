@@ -5,12 +5,15 @@
     return match ? match[1] : '';
   }
 
-  function track(name) {
+  function track(name, extra) {
     if (!name) return;
+    var path = location.pathname || '/';
+    if (typeof extra === 'string' && extra.charAt(0) === '/') path = extra.slice(0, 180);
+    else if (extra && typeof extra.path === 'string' && extra.path.charAt(0) === '/') path = extra.path.slice(0, 180);
     var body = JSON.stringify({
       name: name,
       variant: variant(),
-      path: location.pathname || '/'
+      path: path
     });
     try {
       if (navigator.sendBeacon) {
