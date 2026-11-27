@@ -83,12 +83,11 @@ h1,h2,h3{font-family:Oswald,sans-serif;font-weight:400;letter-spacing:.01em}
 .right-head{display:flex;gap:6px;align-items:center;padding:12px 12px 0}
 .right-head .search{flex:1;width:auto;min-width:0}
 .right-body{display:flex;flex-direction:column;min-height:0;flex:1}
-.right-selected{padding:10px 12px 12px;max-height:48%;overflow:auto;flex:0 1 auto;border-bottom:1px solid rgba(18,18,18,.18)}
+.right-selected{padding:8px 12px 10px;max-height:48%;overflow:auto;flex:0 1 auto}
 body.guide-edit .right-selected{max-height:none}
-#selSec{margin:0;background:#F3F3F3;border:1px solid #121212;padding:10px 10px 12px}
-#selSec .sec-h{color:#121212;margin:0 0 8px}
-.add-devices{flex:none;margin:0;padding:12px 14px 8px;border-bottom:1px solid rgba(18,18,18,.12);font-family:Oswald,sans-serif;font-weight:400;font-size:18px;line-height:1;color:#121212;letter-spacing:.01em}
-.aside-scroll{flex:1;min-height:0;overflow:auto;padding:8px 14px 12px}
+#selSec{margin:0 0 4px;padding:0;background:transparent;border:0}
+.add-devices{flex:none;margin:0;padding:10px 14px 6px;border-top:1px solid var(--line);font-family:Oswald,sans-serif;font-weight:400;font-size:16px;line-height:1;color:#121212;letter-spacing:.01em}
+.aside-scroll{flex:1;min-height:0;overflow:auto;padding:6px 14px 12px}
 @media (max-width:1180px){
   #colRight{position:absolute;top:0;right:0;bottom:0;width:min(280px,88vw);box-shadow:-12px 0 30px rgba(0,0,0,.16)}
   #colRight.collapsed{width:40px;box-shadow:none}
@@ -127,7 +126,7 @@ body.guide-edit .right-selected{max-height:none}
 #hint{font-size:12px;color:var(--muted);margin:0 0 8px}
 #lastAdded{margin-top:8px;padding:8px 10px;background:#fff;border-radius:10px;box-shadow:var(--shadow);font-size:12px}
 #lastAdded b{font-weight:600}
-#selBox{padding:10px;background:#fff;border:1px solid rgba(18,18,18,.12);border-radius:0;box-shadow:none;font-size:12px;color:var(--muted)}
+#selBox{padding:10px;background:#fff;border:0;border-radius:12px;box-shadow:var(--shadow);font-size:12px;color:var(--muted)}
 #selBox b{color:var(--ink);font-weight:600}
 #selBox .rowbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 
@@ -306,7 +305,7 @@ body.locked #buyScreen[hidden]{display:none !important}
   .sale-trust{grid-template-columns:220px 1fr;align-items:center}
   .sale-stats{grid-template-columns:repeat(4,1fr)}
 }
-#roomGuide{position:fixed;right:16px;bottom:16px;width:300px;margin:0;background:#fff;border:1px solid #121212;box-shadow:0 12px 32px rgba(18,18,18,.12);display:flex;flex-direction:column;max-height:min(380px,48vh);z-index:35}
+#roomGuide{position:fixed;left:324px;bottom:16px;width:300px;margin:0;background:#fff;border:1px solid #121212;box-shadow:0 12px 32px rgba(18,18,18,.12);display:flex;flex-direction:column;max-height:min(380px,48vh);z-index:35}
 #roomGuide[hidden]{display:none !important}
 body.locked #roomGuide{display:none !important}
 .dh-head{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 10px;border-bottom:1px solid rgba(18,18,18,.12);flex:none}
@@ -3511,24 +3510,58 @@ function reopenGuide(){
 }
 /* Test aid. Set false to hide the Restart guide button. */
 const SHOW_GUIDE_RESTART=true;
+function boxesOverlap(a,b){
+  return a.width>0 && b.width>0 && a.left<b.right && a.right>b.left && a.top<b.bottom && a.bottom>b.top;
+}
+function placeGuideCard(){
+  const card=document.getElementById('roomGuide');
+  if(!card) return;
+  if(window.innerWidth<=780){
+    const quote=document.getElementById('btnQuote');
+    const hdr=document.querySelector('.hdr');
+    const floor=Math.max(hdr?hdr.getBoundingClientRect().bottom:0, quote?quote.getBoundingClientRect().bottom:0);
+    card.style.left='12px';
+    card.style.right='12px';
+    card.style.width='auto';
+    card.style.bottom='12px';
+    card.style.maxHeight=Math.max(160, Math.min(360, Math.round(window.innerHeight*0.42), Math.round(window.innerHeight-floor-24)))+'px';
+    return;
+  }
+  const main=document.querySelector('main');
+  if(!main) return;
+  const m=main.getBoundingClientRect();
+  card.style.right='auto';
+  card.style.width=Math.min(300, Math.max(200, Math.round(m.width-24)))+'px';
+  card.style.left=Math.round(m.left+12)+'px';
+  card.style.bottom=Math.max(12, Math.round(window.innerHeight-m.bottom+12))+'px';
+  card.style.maxHeight='min(380px, 48vh)';
+}
 function placeGuideRestart(){
+  placeGuideCard();
   const btn=document.getElementById('guideRestart');
   if(!btn) return;
   btn.style.left='12px';
+  btn.style.top='auto';
   btn.style.bottom='12px';
   const card=document.getElementById('roomGuide');
-  if(card && !card.hidden){
-    const g=card.getBoundingClientRect();
-    if(g.width>0 && g.left<180) btn.style.bottom=Math.round(window.innerHeight-g.top+8)+'px';
-  }
+  const quote=document.getElementById('btnQuote');
   const total=document.getElementById('sideTotal');
-  if(total && !document.body.classList.contains('locked')){
+  const nudge=()=>{
     const b=btn.getBoundingClientRect();
-    const t=total.getBoundingClientRect();
-    if(b.left<t.right && b.right>t.left && b.top<t.bottom && b.bottom>t.top){
-      btn.style.bottom=Math.round(window.innerHeight-t.top+8)+'px';
+    if(card && !card.hidden && boxesOverlap(b, card.getBoundingClientRect())){
+      btn.style.bottom=Math.round(window.innerHeight-card.getBoundingClientRect().top+8)+'px';
     }
-  }
+    const b2=btn.getBoundingClientRect();
+    if(total && !document.body.classList.contains('locked') && boxesOverlap(b2, total.getBoundingClientRect())){
+      btn.style.bottom=Math.round(window.innerHeight-total.getBoundingClientRect().top+8)+'px';
+    }
+    const b3=btn.getBoundingClientRect();
+    if(quote && boxesOverlap(b3, quote.getBoundingClientRect())){
+      const q=quote.getBoundingClientRect();
+      btn.style.bottom=Math.round(window.innerHeight-(q.bottom+8+btn.offsetHeight))+'px';
+    }
+  };
+  nudge();
 }
 function restartGuide(){
   guideTrack('guide_restart','intro');
