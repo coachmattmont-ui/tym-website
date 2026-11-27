@@ -1,62 +1,75 @@
-/* TYM shared design tokens + site nav (step 1 of site uniformity).
-   Loaded after each page's inline <style>; nav rules are scoped to nav.tym-nav
-   so they override older per-page nav CSS without touching page bodies. */
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400&display=swap");
+/* Shared light palette. Homepage photo nav is overridden in home.css. */
 :root{
-  --tym-bg:#0b0d10;--tym-bg-elev:#14181d;--tym-bg-card:#181d24;--tym-bg-soft:#1c2128;
-  --tym-border:#232a34;--tym-border-strong:#2f3845;
-  --tym-text:#f2f4f7;--tym-text-muted:#9aa4b2;--tym-text-soft:#c8cfd8;
-  --tym-accent:#2563EB;--tym-accent-soft:#2563EB25;--tym-accent-strong:#3B7AFF;
-  --tym-font:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",Roboto,sans-serif;
-  --tym-max:1180px;--tym-radius:8px;
+  --tym-bg:#FFFFFF;--tym-bg-elev:#F3F3F3;--tym-bg-card:#FFFFFF;--tym-bg-soft:#F3F3F3;
+  --tym-border:rgba(18,18,18,.12);--tym-border-strong:rgba(18,18,18,.22);
+  --tym-text:#121212;--tym-text-muted:rgba(18,18,18,.75);--tym-text-soft:rgba(18,18,18,.75);
+  --tym-accent:#103747;--tym-accent-soft:rgba(16,55,71,.1);--tym-accent-strong:#7D6232;
+  --tym-gold:#7D6232;--tym-gold-on-dark:#C2A476;--tym-teal:#103747;--tym-logo:#00ACEC;
+  --tym-font:Lato,sans-serif;
+  --tym-max:1180px;--tym-radius:0;
 }
-/* Shared buttons (opt-in class; not yet applied to page bodies) */
-.tym-btn{display:inline-block;background:var(--tym-accent);color:#fff;font-family:var(--tym-font);font-weight:700;font-size:15px;line-height:1.2;padding:13px 26px;border-radius:var(--tym-radius);border:none;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .15s,transform .15s}
-.tym-btn:hover{background:var(--tym-accent-strong);color:#fff;transform:translateY(-1px)}
-.tym-btn-ghost{background:transparent;color:var(--tym-text);border:1px solid var(--tym-border-strong)}
-.tym-btn-ghost:hover{background:var(--tym-bg-soft);border-color:var(--tym-accent)}
+body{font-family:var(--tym-font);color:var(--tym-text)}
+body h1,body h2,body h3{font-family:Oswald,sans-serif;font-weight:400;letter-spacing:.01em;color:var(--tym-text)}
+/* Square 1px buttons */
+.tym-btn{display:inline-block;background:transparent;color:#121212;font-family:var(--tym-font);font-weight:700;font-size:15px;line-height:1.2;padding:13px 26px;border-radius:0;border:1px solid #121212;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.tym-btn:hover{background:#121212;color:#fff}
+.tym-btn-ghost{background:transparent;color:#121212;border:1px solid #121212}
+.tym-btn-ghost:hover{background:#121212;color:#fff;border-color:#121212}
 .tym-btn-lg{padding:18px 34px;font-size:17px}
+a.btn,button.btn,.btn-lg,.btn-outline,.cta-btn,.cta-pill,.pill-cta,.light-pill{
+  border-radius:0 !important;font-family:Lato,sans-serif}
+main a.btn,main .btn-lg,main .btn-outline,main .cta-btn{
+  display:inline-block;color:#121212;background:transparent;border:1px solid #121212;
+  padding:14px 22px;text-decoration:none;font-weight:700;line-height:1.2}
+main a.btn:hover,main .btn-lg:hover,main .btn-outline:hover,main .cta-btn:hover{background:#121212;color:#fff}
+.hero a.btn,.hero a.btn-lg{color:#fff;border-color:#fff;background:transparent}
+.hero a.btn:hover,.hero a.btn-lg:hover{background:#fff;color:#121212}
+.c-hero .tym-btn,.th-intro .btn-outline.on-hero{
+  color:#fff !important;border:1px solid #fff !important;background:transparent !important}
+.c-hero .tym-btn:hover,.th-intro .btn-outline.on-hero:hover{
+  background:#fff !important;color:#121212 !important}
 
 /* ---- Canonical nav ---- */
 nav.tym-nav{position:sticky;top:0;left:0;right:0;z-index:100;width:100%;box-sizing:border-box;
-  background:rgba(11,13,16,.72);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
-  border-bottom:1px solid rgba(35,42,52,.4);font-family:var(--tym-font);margin:0;padding:0}
+  background:#fff;border-bottom:1px solid rgba(18,18,18,.12);font-family:var(--tym-font);margin:0;padding:0}
 nav.tym-nav *{box-sizing:border-box}
 nav.tym-nav > .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:16px;
   padding:14px 24px !important;max-width:var(--tym-max) !important;width:100%;margin:0 auto !important}
 nav.tym-nav a.logo{font-family:var(--tym-font);font-weight:700;font-size:clamp(14px,3.4vw,19px);line-height:1.2;letter-spacing:-.01em;
-  color:#fff;text-decoration:none;text-shadow:0 1px 8px rgba(0,0,0,.3);flex-shrink:0;font-style:normal}
+  color:#121212;text-decoration:none;text-shadow:none;flex-shrink:0;font-style:normal}
 nav.tym-nav a.logo span{color:var(--tym-accent)}
 nav.tym-nav ul.nav-menu{display:flex;align-items:center;gap:clamp(18px,2.4vw,28px);list-style:none;margin:0;padding:0;flex:1;justify-content:center}
 nav.tym-nav ul.nav-menu li{margin:0;padding:0}
-nav.tym-nav ul.nav-menu a{color:rgba(255,255,255,.85);font-family:var(--tym-font);font-weight:500;font-size:14px;text-decoration:none;
+nav.tym-nav ul.nav-menu a{color:rgba(18,18,18,.75);font-family:var(--tym-font);font-weight:500;font-size:14px;text-decoration:none;
   white-space:nowrap;transition:color .15s;letter-spacing:-.005em;border-bottom:none;padding:0}
-nav.tym-nav ul.nav-menu a:hover,nav.tym-nav ul.nav-menu a[aria-current="page"]{color:#fff}
+nav.tym-nav ul.nav-menu a:hover,nav.tym-nav ul.nav-menu a[aria-current="page"]{color:#121212}
 nav.tym-nav ul.nav-menu li.nav-mobile-cta{display:none}
 nav.tym-nav .nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
-nav.tym-nav .nav-right a.btn{display:inline-block !important;width:auto !important;background:var(--tym-accent) !important;color:#fff !important;
-  padding:clamp(10px,2.4vw,13px) clamp(14px,3.4vw,26px) !important;border-radius:var(--tym-radius) !important;font-weight:700 !important;
-  font-size:clamp(12px,2.9vw,15px) !important;text-decoration:none !important;border:none !important;cursor:pointer !important;
-  transition:all .15s !important;font-family:var(--tym-font) !important;letter-spacing:-.005em !important;white-space:nowrap !important;
+nav.tym-nav .nav-right a.btn{display:inline-block !important;width:auto !important;background:transparent !important;color:#121212 !important;
+  padding:clamp(10px,2.4vw,13px) clamp(14px,3.4vw,26px) !important;border-radius:0 !important;font-weight:700 !important;
+  font-size:clamp(12px,2.9vw,15px) !important;text-decoration:none !important;border:1px solid #121212 !important;cursor:pointer !important;
+  transition:background .15s,color .15s !important;font-family:var(--tym-font) !important;letter-spacing:.01em !important;white-space:nowrap !important;
   flex-shrink:0 !important;line-height:1.2 !important;box-shadow:none !important;margin:0 !important}
-nav.tym-nav .nav-right a.btn:hover{background:var(--tym-accent-strong) !important;transform:translateY(-1px)}
+nav.tym-nav .nav-right a.btn:hover{background:#121212 !important;color:#fff !important;transform:none}
 nav.tym-nav .cta-short{display:none}
 nav.tym-nav .nav-toggle{display:none;background:transparent;border:none;padding:8px;cursor:pointer;width:42px;height:42px;
   flex-direction:column;justify-content:center;align-items:center;gap:5px;border-radius:8px;margin:0}
 nav.tym-nav .nav-toggle:hover{background:rgba(255,255,255,.08)}
-nav.tym-nav .nav-toggle span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .15s}
+nav.tym-nav .nav-toggle span{display:block;width:22px;height:2px;background:#121212;border-radius:0;transition:transform .25s,opacity .15s}
 nav.tym-nav .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 nav.tym-nav .nav-toggle.open span:nth-child(2){opacity:0}
 nav.tym-nav .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 @media (max-width:900px){
-  nav.tym-nav ul.nav-menu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(11,13,16,.97);
-    -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);flex-direction:column;
-    padding:8px 24px 20px;gap:0;border-bottom:1px solid var(--tym-border);box-shadow:0 20px 40px rgba(0,0,0,.4);justify-content:flex-start}
+  nav.tym-nav ul.nav-menu{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;
+    flex-direction:column;
+    padding:8px 24px 20px;gap:0;border-bottom:1px solid rgba(18,18,18,.12);box-shadow:0 16px 32px rgba(18,18,18,.08);justify-content:flex-start}
   nav.tym-nav ul.nav-menu.open{display:flex}
   nav.tym-nav ul.nav-menu li{width:100%}
-  nav.tym-nav ul.nav-menu a{display:block;padding:16px 0;border-bottom:1px solid rgba(35,42,52,.5);font-size:17px;color:#fff}
+  nav.tym-nav ul.nav-menu a{display:block;padding:16px 0;border-bottom:1px solid rgba(18,18,18,.12);font-size:17px;color:#121212}
   nav.tym-nav ul.nav-menu li:last-child a{border-bottom:none}
   nav.tym-nav ul.nav-menu li.nav-mobile-cta{display:block}
-  nav.tym-nav ul.nav-menu li.nav-mobile-cta a{color:var(--tym-accent-strong);font-weight:700}
+  nav.tym-nav ul.nav-menu li.nav-mobile-cta a{color:#121212;font-weight:700;border:1px solid #121212;display:inline-block;margin:12px 0;padding:12px 16px}
   nav.tym-nav .nav-toggle{display:flex}
 }
 @media (max-width:480px){
@@ -65,7 +78,7 @@ nav.tym-nav .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate
   nav.tym-nav .cta-short{display:inline}
 }
 /* YourTech tool page: solid, not sticky; header button hidden on phones (menu has the CTA) */
-nav.tym-nav.tym-nav--tool{position:relative !important;background:rgba(11,13,16,.97)}
+nav.tym-nav.tym-nav--tool{position:relative !important;background:#fff}
 @media (max-width:480px){
   nav.tym-nav.tym-nav--tool > .wrap{padding:8px 14px !important}
   nav.tym-nav.tym-nav--tool .nav-toggle{width:38px;height:38px}
@@ -73,7 +86,7 @@ nav.tym-nav.tym-nav--tool{position:relative !important;background:rgba(11,13,16,
 }
 
 /* ---- Canonical footer ---- */
-footer.tym-footer{background:var(--tym-bg);color:var(--tym-text-muted);border-top:1px solid var(--tym-border);font-family:var(--tym-font);
+footer.tym-footer{background:#F3F3F3;color:rgba(18,18,18,.75);border-top:1px solid rgba(18,18,18,.12);font-family:var(--tym-font);
   font-size:14px;line-height:1.55;padding:56px 0 28px;margin:0;text-align:left;-webkit-font-smoothing:antialiased}
 footer.tym-footer *{box-sizing:border-box;margin:0;padding:0}
 footer.tym-footer .tym-footer-wrap{max-width:var(--tym-max);margin:0 auto;padding:0 clamp(18px,5vw,24px)}
@@ -87,8 +100,9 @@ footer.tym-footer .tym-footer-ctas .tym-btn{font-size:14px;padding:11px 18px}
 footer.tym-footer .tym-footer-heading{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tym-text);margin-bottom:14px}
 footer.tym-footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
 footer.tym-footer ul a{color:var(--tym-text-muted);text-decoration:none}
-footer.tym-footer a:not(.tym-btn):hover{color:var(--tym-accent-strong)}
-footer.tym-footer a.tym-btn{color:#fff}
+footer.tym-footer a:not(.tym-btn):hover{color:#103747}
+footer.tym-footer a.tym-btn{color:#121212}
+footer.tym-footer a.tym-btn:hover{background:#121212;color:#fff}
 footer.tym-footer a.tym-btn-ghost{color:var(--tym-text)}
 footer.tym-footer .tym-footer-bottom{margin-top:44px;padding-top:22px;border-top:1px solid var(--tym-border);font-size:13px;color:var(--tym-text-muted)}
 @media (max-width:800px){footer.tym-footer .tym-footer-grid{grid-template-columns:1fr 1fr;gap:32px}footer.tym-footer .tym-footer-col1{grid-column:1/-1}}
@@ -97,15 +111,15 @@ footer.tym-footer .tym-footer-bottom{margin-top:44px;padding-top:22px;border-top
 
 /* ---- Post-end CTA box (/learn posts) ---- */
 .tym-post-cta{padding:clamp(40px,6vw,64px) clamp(18px,5vw,24px) clamp(56px,8vw,88px)}
-.tym-post-cta-box{max-width:680px;margin:0 auto;background:linear-gradient(180deg,#14181d,#181d24);border:1px solid var(--tym-border-strong);
-  border-radius:16px;padding:clamp(24px,5vw,40px);font-family:var(--tym-font);box-shadow:0 0 0 1px rgba(37,99,235,.08),0 24px 60px rgba(0,0,0,.35)}
-.tym-post-cta-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tym-accent-strong);margin:0 0 10px}
+.tym-post-cta-box{max-width:680px;margin:0 auto;background:#fff;border:1px solid rgba(18,18,18,.12);
+  border-radius:0;padding:clamp(24px,5vw,40px);font-family:var(--tym-font);box-shadow:none}
+.tym-post-cta-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7D6232;margin:0 0 10px}
 .tym-post-cta-box h2{font-family:var(--tym-font);font-size:clamp(24px,4vw,30px);line-height:1.15;letter-spacing:-.02em;font-weight:700;color:var(--tym-text);margin:0 0 12px}
 .tym-post-cta-box p{font-size:16px;line-height:1.6;color:var(--tym-text-soft);margin:0 0 22px}
 .tym-post-cta-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
 .tym-post-cta-actions .tym-btn{color:#fff}
 .tym-post-cta-link{color:var(--tym-accent-strong);font-weight:600;font-size:15px;text-decoration:none}
-.tym-post-cta-link:hover{color:#fff;text-decoration:underline}
+.tym-post-cta-link:hover{color:#103747;text-decoration:underline}
 @media (max-width:480px){.tym-post-cta-actions .tym-btn{width:100%;text-align:center}}
 
 /* ---- SmartHome Brothers logo (nav + footer) ---- */

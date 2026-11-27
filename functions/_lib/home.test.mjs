@@ -96,6 +96,11 @@ test('events accept the four names and store without echoing secrets', async () 
     body: JSON.stringify({ name: 'nope' })
   }), {});
   assert.equal(bad.status, 400);
+  const viewed = await handleEvent(new Request('https://tymhomes.com/api/event', {
+    method: 'POST',
+    body: JSON.stringify({ name: 'demo_viewed', variant: 'b', path: '/layout-beta/' })
+  }), {});
+  assert.equal(viewed.status, 202);
 });
 
 test('checkout metadata carries the homepage variant only when it is a or b', async () => {
