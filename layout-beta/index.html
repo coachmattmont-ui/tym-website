@@ -84,6 +84,7 @@ h1,h2,h3{font-family:Oswald,sans-serif;font-weight:400;letter-spacing:.01em}
 .right-head .search{flex:1;width:auto;min-width:0}
 .right-body{display:flex;flex-direction:column;min-height:0;flex:1}
 .right-selected{padding:8px 12px 0;max-height:46%;overflow:auto;flex-shrink:0}
+body.guide-edit .right-selected{max-height:none}
 .aside-scroll{flex:1;min-height:0;overflow:auto;padding:12px 14px 8px}
 @media (max-width:1180px){
   #colRight{position:absolute;top:0;right:0;bottom:0;width:min(280px,88vw);box-shadow:-12px 0 30px rgba(0,0,0,.16)}
@@ -337,9 +338,14 @@ body.locked #roomGuide{display:none !important}
 .dh-saved{margin:8px 0 0;color:#103747;font-weight:700;font-size:13px}
 .dh-saved[hidden]{display:none !important}
 .dh-saved::before{content:"\2713  "}
-#roomGuide .guide-actions{margin-top:10px}
-#roomGuide #guideExit{border:1px solid #121212;background:#fff;color:#121212;font-weight:700;padding:7px 12px;border-radius:0;cursor:pointer}
-.pal.guide-hot{outline:2px solid #00ACEC;outline-offset:1px;background:#F3F3F3}
+#guideList{margin:8px 0 0;color:rgba(18,18,18,.75);font-size:13px;line-height:1.4}
+#guideList[hidden]{display:none !important}
+#roomGuide.is-done #guideBody{font-family:Oswald,sans-serif;font-size:22px;line-height:1.15}
+#roomGuide .guide-actions{display:flex;gap:8px;margin-top:10px}
+#roomGuide #guideExit,#roomGuide #guideNext{border:1px solid #121212;background:#fff;color:#121212;font-weight:700;padding:7px 12px;border-radius:0;cursor:pointer}
+#roomGuide #guideNext{background:#103747;color:#fff;border-color:#103747}
+#guideNext[hidden]{display:none !important}
+.pal.guide-hot,#selBox button.guide-hot,#selBox .rotlbl.guide-hot{outline:2px solid #00ACEC;outline-offset:1px;background:#F3F3F3}
 @media (max-width:780px){
   #roomGuide{align-self:stretch;width:auto;margin:0 12px 12px;max-height:min(420px,52vh)}
   #guideCollapse{display:inline-flex;align-items:center;justify-content:center}
@@ -663,10 +669,12 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   <div class="dh-body">
     <div class="dh-dots" id="guideDots" role="img" aria-label="Guide progress"></div>
     <p id="guideBody"></p>
+    <p id="guideList" hidden></p>
     <button type="button" id="guideRoom" hidden>Kitchen instead</button>
     <div class="dh-anim" id="guideAnim" aria-hidden="true"></div>
     <p class="dh-saved" id="guideSaved" hidden></p>
     <div class="guide-actions">
+      <button type="button" id="guideNext" hidden>Next</button>
       <button type="button" id="guideExit">Not now</button>
     </div>
   </div>
@@ -1853,6 +1861,11 @@ function draw(){
       ri.onchange=()=>setRot(ri.value);
     }
     btnDel.onclick=()=>deleteSelection();
+    if(typeof GUIDE_STEPS!=='undefined' && guideStep>=0 && GUIDE_STEPS[guideStep] && GUIDE_STEPS[guideStep].id==='edit'){
+      ['btnRot15','btnSzStep','btnDel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add('guide-hot'); });
+      const angle=document.querySelector('#selBox .rotlbl');
+      if(angle) angle.classList.add('guide-hot');
+    }
   }
   updateTools();
 }
@@ -2343,6 +2356,12 @@ document.getElementById('menuDownload').onclick=()=>{ closeMenu(); saveProjectFi
 document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
 document.getElementById('menuGuide').onclick=()=>{ closeMenu(); reopenGuide(); };
 document.getElementById('guideExit').onclick=()=>closeGuide('dismissed');
+document.getElementById('guideNext').onclick=()=>{
+  if(guideStep<0) return;
+  if(guideAwaitNext){ guideAwaitNext=false; showGuideStep(guideStep+1); return; }
+  const step=GUIDE_STEPS[guideStep];
+  if(step && step.id==='edit') showGuideStep(guideStep+1);
+};
 document.getElementById('guideClose').onclick=()=>closeGuide('dismissed');
 document.getElementById('guideRoom').onclick=()=>guideSwitchRoom();
 document.getElementById('guideCollapse').onclick=()=>{
@@ -3158,21 +3177,25 @@ const GUIDE_STEPS=[
     text:room=>"Hey, need some help getting started? Let's pull a speaker into your "+room+"."},
   {id:'tv', type:'tv', accept:['tv'], group:'Video / Control', chip:'TV', anim:'tv',
     text:()=>"Awesome. Okay, next let's drag a TV in."},
+  {id:'edit', type:'', accept:[], group:'', chip:'', anim:'',
+    text:()=>"Now that the TV is in the layout, you can rotate, resize, or delete it from the side panel."},
   {id:'soundbar', type:'lcr', accept:['lcr','stereo','single'], group:'Audio', chip:'Soundbar', anim:'soundbar',
-    text:()=>"Nice. Let's drag in a soundbar, or a couple more speakers."},
+    text:()=>"Drag a soundbar onto the floor plan."},
   {id:'touch', type:'touch', accept:['touch','voice'], group:'Video / Control', chip:'Touchscreen', anim:'touch',
-    text:()=>"Good. Next, drag in a touchscreen. A Josh remote works too."},
+    text:()=>"Drag a touchscreen onto the floor plan."},
   {id:'wifi', type:'wap', accept:['wap'], group:'Network', chip:'Wi-Fi', anim:'wifi',
-    text:()=>"Last one. Let's drop a Wi-Fi access point on the plan."},
+    text:()=>"Drag a Wi-Fi access point onto the floor plan."},
   {id:'done', type:'', accept:[], group:'', chip:'', anim:'',
-    text:()=>guideDoneText()}
+    text:()=>"You've got it, now do your next room."}
 ];
 let guideStep=-1;
 let guideRoomPick='';
 let guidePlaced=[];
 let guideTimer=0;
 let guideBusy=false;
+let guideAwaitNext=false;
 let guideStarted=false;
+let guideRightWas=null;
 function guideStore(){
   try{ return JSON.parse(localStorage.getItem('yt-layout-guide')||'{}'); }catch(e){ return {}; }
 }
@@ -3225,8 +3248,8 @@ function guideList(items){
   if(items.length===1) return items[0];
   return items.slice(0,-1).join(', ')+', and '+items[items.length-1];
 }
-function guideDoneText(){
-  return 'Room complete. '+guideRoomName()+' has '+guideList(guidePlaced)+'.';
+function guideDoneList(){
+  return guideRoomName()+' has '+guideList(guidePlaced)+'.';
 }
 function guidePlacedName(step, type){
   if(step.id==='speaker') return 'a speaker';
@@ -3260,11 +3283,19 @@ function guideAnimHtml(step){
 function paintGuide(){
   const step=GUIDE_STEPS[guideStep];
   if(!step) return;
+  const card=document.getElementById('roomGuide');
   const body=document.getElementById('guideBody');
+  const listEl=document.getElementById('guideList');
   const dots=document.getElementById('guideDots');
   const anim=document.getElementById('guideAnim');
   const roomBtn=document.getElementById('guideRoom');
-  if(body) body.textContent=step.text(guideRoomName());
+  const nextBtn=document.getElementById('guideNext');
+  if(card) card.classList.toggle('is-done', step.id==='done');
+  if(body) body.textContent=step.id==='done' ? "You've got it, now do your next room." : step.text(guideRoomName());
+  if(listEl){
+    listEl.hidden=step.id!=='done';
+    if(step.id==='done') listEl.textContent=guideDoneList();
+  }
   if(dots){
     dots.innerHTML=GUIDE_STEPS.map((s,i)=>'<i class="'+(i<guideStep?'is-done':i===guideStep?'is-on':'')+'"></i>').join('');
     dots.setAttribute('aria-label','Step '+(guideStep+1)+' of '+GUIDE_STEPS.length);
@@ -3277,9 +3308,28 @@ function paintGuide(){
     roomBtn.hidden=step.id!=='speaker';
     if(step.id==='speaker') roomBtn.textContent=guideRoomLinkText();
   }
+  if(nextBtn) nextBtn.hidden=!(step.id==='edit' || guideAwaitNext);
 }
 function highlightGuide(step){
-  document.querySelectorAll('.pal.guide-hot').forEach(el=>el.classList.remove('guide-hot'));
+  document.querySelectorAll('.guide-hot').forEach(el=>el.classList.remove('guide-hot'));
+  if(step && step.id==='edit'){
+    hideTierPop();
+    if(guideRightWas===null) guideRightWas=rightOpen;
+    setRight(true);
+    const tv=[...devs].reverse().find(d=>d.type==='tv');
+    if(tv) select(tv);
+    ['btnRot15','btnSzStep','btnDel'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add('guide-hot'); });
+    const angle=document.querySelector('#selBox .rotlbl');
+    if(angle) angle.classList.add('guide-hot');
+    const del=document.getElementById('btnDel');
+    const scroller=document.querySelector('#colRight .right-selected');
+    if(del && scroller){
+      const extra=del.getBoundingClientRect().bottom-scroller.getBoundingClientRect().bottom;
+      if(extra>0) scroller.scrollTop+=extra+8;
+    }
+    return;
+  }
+  if(guideRightWas!==null){ setRight(guideRightWas); guideRightWas=null; }
   if(!step || !step.type) return;
   if(step.group && !openGroups.has(step.group)) openGroups.add(step.group);
   renderPalette();
@@ -3295,14 +3345,19 @@ function showGuideStep(index, opts){
   if(!card || !step) return;
   clearTimeout(guideTimer);
   guideBusy=false;
+  guideAwaitNext=!!(opts && opts.awaitNext);
   guideStep=index;
   card.hidden=false;
   card.classList.remove('is-collapsed');
   const collapse=document.getElementById('guideCollapse');
   if(collapse){ collapse.setAttribute('aria-expanded','true'); collapse.setAttribute('aria-label','Collapse guide'); collapse.textContent='−'; }
   document.body.classList.add('guide-open');
+  document.body.classList.toggle('guide-edit', step.id==='edit');
   const saved=document.getElementById('guideSaved');
-  if(saved) saved.hidden=true;
+  if(saved){
+    saved.hidden=!guideAwaitNext;
+    if(guideAwaitNext) saved.textContent='TV saved';
+  }
   paintGuide();
   highlightGuide(step);
   if(!opts.resume){
@@ -3320,6 +3375,8 @@ function showGuideStep(index, opts){
 function closeGuide(status){
   clearTimeout(guideTimer);
   guideBusy=false;
+  guideAwaitNext=false;
+  if(guideRightWas!==null){ setRight(guideRightWas); guideRightWas=null; }
   const card=document.getElementById('roomGuide');
   const step=GUIDE_STEPS[guideStep]||GUIDE_STEPS[0];
   const rec=guideRecord();
@@ -3334,22 +3391,29 @@ function closeGuide(status){
   }
   if(card){ card.hidden=true; card.classList.remove('is-collapsed'); }
   document.body.classList.remove('guide-open');
+  document.body.classList.remove('guide-edit');
   guideStep=-1;
   highlightGuide(null);
 }
 function guideNoteDrop(d){
-  if(guideBusy || guideStep<0 || !d) return;
+  if(guideBusy || guideAwaitNext || guideStep<0 || !d) return;
   const step=GUIDE_STEPS[guideStep];
   if(!step || !step.accept || step.accept.indexOf(d.type)<0) return;
-  guideBusy=true;
   if(modalEl) modalEl.style.display='none';
   assign(d, guideRoomName(), true);
   guidePlaced.push(guidePlacedName(step, d.type));
+  const saved=document.getElementById('guideSaved');
+  if(saved){ saved.hidden=false; saved.textContent=guideSavedText(step, d.type); }
+  if(step.id==='tv'){
+    guideAwaitNext=true;
+    guideSetObject({status:'progress', step:'tv', awaitNext:true, room:guideRoomPick, placed:guidePlaced.slice()});
+    paintGuide();
+    return;
+  }
+  guideBusy=true;
   const nextIndex=guideStep+1;
   const next=GUIDE_STEPS[nextIndex];
   if(next) guideSetObject({status:'progress', step:next.id, room:guideRoomPick, placed:guidePlaced.slice()});
-  const saved=document.getElementById('guideSaved');
-  if(saved){ saved.hidden=false; saved.textContent=guideSavedText(step, d.type); }
   guideTimer=setTimeout(()=>{ if(next) showGuideStep(nextIndex); else closeGuide('completed'); }, 800);
 }
 function maybeOfferGuide(){
@@ -3360,7 +3424,7 @@ function maybeOfferGuide(){
     guidePlaced=(rec.placed||[]).slice();
     guideRoomPick=rec.room||'';
     const idx=GUIDE_STEPS.findIndex(s=>s.id===rec.step);
-    showGuideStep(idx<0?0:idx, {resume:true});
+    showGuideStep(idx<0?0:idx, {resume:true, awaitNext:!!rec.awaitNext});
     return;
   }
   guidePlaced=[];
@@ -3375,6 +3439,7 @@ function reopenGuide(){
   }
   guidePlaced=[];
   guideRoomPick='';
+  guideAwaitNext=false;
   guideStarted=false;
   showGuideStep(0);
 }
