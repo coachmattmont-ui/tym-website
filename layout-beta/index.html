@@ -1439,7 +1439,6 @@ function audioLines(){
     const n=Math.ceil(map[room]/RULES.AMP_SPEAKER_MAX);
     if(!n) return;
     lines.push({key:'Sonos-Amp', qty:n, room, label:'Sonos Amp'});
-    lines.push({key:'SAN-WSSCAM1-B2', qty:n, room, label:'Amp mount'});
   });
   return lines;
 }
