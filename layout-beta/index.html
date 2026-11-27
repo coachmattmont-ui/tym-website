@@ -295,19 +295,31 @@ body.locked #buyScreen[hidden]{display:none !important}
 .sale-stats strong{display:block;font-family:Oswald,sans-serif;font-weight:400;font-size:28px;color:#fff}
 .sale-stats span{color:#C2A476;font-size:13px}
 .sale-trust img{width:100%;max-height:220px;object-fit:cover}
-.demo{background:#F3F3F3;border:1px solid rgba(18,18,18,.12);padding:12px}
-.demo-stage{position:relative;background:#fff;border:1px solid #121212}
-.demo-stage svg{display:block;width:100%;height:auto}
-.demo-dev{position:absolute;width:64px;height:32px;opacity:0;transform:translate(-50%,-50%) scale(.45);transform-origin:center}
+.demo{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(18,18,18,.15);padding:0}
+.demo-stage{position:relative;background:#fff}
+.demo-stage .plan-svg{display:block;width:100%;height:auto}
+.demo-dev{position:absolute;width:36px;height:28px;opacity:0;transform:translate(-50%,-50%) scale(.6);transform-origin:center;z-index:2}
 .demo-dev svg{display:block;width:100%;height:100%;overflow:visible}
-.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:opacity .22s ease, transform .28s cubic-bezier(.2,1.6,.3,1)}
-.demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:10px;line-height:1.2;white-space:nowrap;background:#fff;color:#121212;border:1px solid rgba(18,18,18,.2);padding:1px 4px;opacity:0}
+.demo-dev .fov{position:absolute;left:50%;top:50%;width:64px;height:64px;transform:translate(-10%,-50%);z-index:-1;opacity:0}
+.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:opacity .12s linear, transform .18s cubic-bezier(.2,1.45,.35,1)}
+.demo-dev.on .fov{opacity:1}
+.demo-tag{position:absolute;left:50%;top:calc(100% + 1px);transform:translateX(-50%);font-style:normal;font-size:9px;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.86);color:#fff;border-radius:6px;padding:2px 5px;opacity:0;letter-spacing:.02em}
 .demo-dev.on .demo-tag{opacity:1}
-.demo-dev.wide{width:78px}
-.demo-lines{list-style:none;margin:10px 0 0;padding:0;min-height:132px}
-.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
-.demo-total{display:flex;justify-content:space-between;margin:8px 0 0;font-size:14px}
-.demo-total b{font-family:Oswald,sans-serif;font-weight:400;font-size:22px;color:#103747}
+.demo-dev.wide{width:52px}
+.demo.is-reset .demo-dev{opacity:0;transition:opacity .35s ease}
+.demo-bill{padding:8px 10px 10px;border-top:1px solid rgba(18,18,18,.08);background:rgba(255,255,255,.94)}
+.demo-bill .side-kicker{color:rgba(18,18,18,.62);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.demo-lines{list-style:none;margin:6px 0 0;padding:0;max-height:148px;overflow:auto}
+.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
+.demo-lines li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.demo-lines li.flash{animation:demoFlash .45s ease}
+@keyframes demoFlash{from{background:#F3F3F3}to{background:transparent}}
+.demo-total{display:flex;justify-content:space-between;align-items:baseline;margin:0}
+.demo-total b{font-size:18px;letter-spacing:-.02em;font-weight:700;color:#121212}
+@media (max-width:899px){
+  .demo-bill{order:2}
+  .demo-stage{order:1}
+}
 @media (min-width:900px){
   .sale-side{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;align-items:start}
   .sale-trust{grid-template-columns:220px 1fr;align-items:center}
@@ -315,7 +327,9 @@ body.locked #buyScreen[hidden]{display:none !important}
 }
 @media (prefers-reduced-motion:reduce){
   .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .demo-dev .fov{opacity:1}
   .demo-tag{opacity:1}
+  .demo-lines li.flash{animation:none}
 }
 #roomGuide{position:fixed;left:16px;bottom:16px;z-index:35;width:min(380px,calc(100% - 32px));background:#fff;border:1px solid #121212;padding:16px 16px 14px;box-shadow:0 12px 32px rgba(18,18,18,.12)}
 #roomGuide[hidden]{display:none !important}
@@ -407,34 +421,84 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
         </ul>
       </div>
       <div class="sale-side">
-        <div class="demo" id="saleDemo" aria-label="Demo of a great room with devices placed on the plan">
+        <div class="demo" id="saleDemo" aria-label="Demo of devices placed on a floor plan">
           <div class="demo-stage">
-            <svg viewBox="0 0 400 260" role="img" aria-label="Great room floor plan with a couch, coffee table, window, and door">
-              <rect x="8" y="8" width="384" height="244" fill="#f7f4ee"/>
-              <rect x="8" y="8" width="384" height="244" fill="none" stroke="#121212" stroke-width="10"/>
-              <rect x="18" y="18" width="364" height="224" fill="none" stroke="#121212" stroke-width="1.2"/>
-              <path d="M150 8 H250" stroke="#f7f4ee" stroke-width="10"/>
-              <path d="M154 11 H246 M154 15 H246" stroke="#00ACEC" stroke-width="1.2"/>
-              <path d="M292 242 H352" stroke="#f7f4ee" stroke-width="12"/>
-              <path d="M292 236 A 28 28 0 0 0 320 208" fill="none" stroke="#121212" stroke-width="1"/>
-              <g fill="#fff" stroke="#103747" stroke-width="1.5">
-                <rect x="78" y="186" width="148" height="36" rx="2"/>
-                <rect x="62" y="178" width="22" height="50" rx="4"/>
-                <rect x="220" y="178" width="22" height="50" rx="4"/>
-                <rect x="88" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
-                <rect x="132" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
-                <rect x="176" y="208" width="40" height="12" rx="2" fill="#e7eef0"/>
+            <svg class="plan-svg" viewBox="0 0 720 460" role="img" aria-label="Invented floor plan with an entry, great room, kitchen, and bedroom">
+              <rect width="720" height="460" fill="#fff"/>
+              <g fill="#111">
+                <rect x="28" y="18" width="460" height="6"/>
+                <rect x="640" y="18" width="52" height="6"/>
+                <rect x="28" y="436" width="62" height="6"/>
+                <rect x="150" y="436" width="542" height="6"/>
+                <rect x="28" y="18" width="6" height="40"/>
+                <rect x="28" y="110" width="6" height="220"/>
+                <rect x="28" y="400" width="6" height="42"/>
+                <rect x="686" y="18" width="6" height="250"/>
+                <rect x="686" y="320" width="6" height="122"/>
+                <rect x="28" y="268" width="150" height="5"/>
+                <rect x="210" y="268" width="268" height="5"/>
+                <rect x="478" y="18" width="5" height="150"/>
+                <rect x="478" y="210" width="5" height="226"/>
+                <rect x="478" y="168" width="214" height="5"/>
+                <rect x="196" y="273" width="5" height="169"/>
               </g>
-              <rect x="108" y="118" width="88" height="36" fill="none" stroke="#7D6232" stroke-width="1.6"/>
+              <g fill="none" stroke="#111" stroke-width="1">
+                <path d="M178 268 A 26 26 0 0 1 204 294"/>
+                <path d="M478 188 A 22 22 0 0 0 500 168"/>
+                <path d="M90 430 A 30 30 0 0 0 120 400"/>
+                <path d="M686 270 A 22 22 0 0 0 664 292"/>
+              </g>
+              <g stroke="#111" stroke-width="1" fill="none">
+                <path d="M488 18 V28 M488 36 V46 M640 18 V28 M640 36 V46"/>
+                <path d="M492 24 H636 M492 32 H636"/>
+                <path d="M28 58 H38 M46 58 H56 M28 110 H38 M46 110 H56"/>
+                <path d="M34 62 V106 M42 62 V106"/>
+                <path d="M28 330 H38 M46 330 H56 M28 400 H38 M46 400 H56"/>
+                <path d="M34 334 V396 M42 334 V396"/>
+              </g>
+              <g fill="none" stroke="#c8c8c8" stroke-width="1">
+                <rect x="118" y="78" width="18" height="52"/>
+                <rect x="278" y="78" width="18" height="52"/>
+                <rect x="134" y="86" width="146" height="36"/>
+                <path d="M140 96 H274 M140 108 H274"/>
+                <rect x="166" y="150" width="80" height="36"/>
+                <rect x="520" y="48" width="120" height="78"/>
+                <path d="M520 70 H640"/>
+                <rect x="280" y="320" width="110" height="70"/>
+                <rect x="530" y="250" width="70" height="100"/>
+                <circle cx="542" cy="268" r="6"/><circle cx="588" cy="268" r="6"/>
+                <circle cx="542" cy="340" r="6"/><circle cx="588" cy="340" r="6"/>
+              </g>
+              <g fill="none" stroke="#111" stroke-width=".8">
+                <path d="M40 8 V18 M250 8 V18"/>
+                <path d="M40 12 H250"/>
+                <path d="M40 9 V15 M250 9 V15"/>
+                <text x="145" y="10" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="9">15'-0"</text>
+                <path d="M16 30 H28 M16 250 H28"/>
+                <path d="M20 30 V250"/>
+                <path d="M17 30 H23 M17 250 H23"/>
+                <text x="14" y="146" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="9" transform="rotate(-90 14 146)">12'-0"</text>
+              </g>
+              <g font-family="Helvetica" font-weight="700" font-size="9" fill="#fff">
+                <rect x="300" y="200" width="78" height="16" rx="2" fill="#1e88e5"/><text x="339" y="211" text-anchor="middle">GREAT ROOM</text>
+                <rect x="540" y="70" width="70" height="16" rx="2" fill="#1e88e5"/><text x="575" y="81" text-anchor="middle">BEDROOM</text>
+                <rect x="78" y="300" width="52" height="16" rx="2" fill="#1e88e5"/><text x="104" y="311" text-anchor="middle">ENTRY</text>
+                <rect x="560" y="250" width="64" height="16" rx="2" fill="#1e88e5"/><text x="592" y="261" text-anchor="middle">KITCHEN</text>
+              </g>
             </svg>
-            <span class="demo-dev sp-l" style="left:12%;top:78%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev sp-r" style="left:66%;top:78%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.4" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev wide tv" style="left:50%;top:13%"><svg viewBox="-40 -10 80 20"><rect x="-36" y="-3" width="72" height="6" fill="#121212"/><rect x="-34" y="-1.4" width="68" height="2.6" fill="#00ACEC"/></svg><em class="demo-tag">TV</em></span>
-            <span class="demo-dev wide bar" style="left:50%;top:20%"><svg viewBox="-36 -8 72 16"><rect x="-30" y="-2.4" width="60" height="4.8" rx="1" fill="#7ed321" stroke="#2e6b0a" stroke-width="1.2"/></svg><em class="demo-tag">Soundbar</em></span>
-            <span class="demo-dev touch" style="left:84%;top:72%"><svg viewBox="-18 -14 36 28"><rect x="-12" y="-8" width="24" height="16" rx="1.6" fill="#3fb6b0" stroke="#14605c" stroke-width="1.6"/></svg><em class="demo-tag">Touchscreen</em></span>
+            <span class="demo-dev sp-l" style="left:12%;top:22%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev sp-r" style="left:46%;top:22%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev wide tv" style="left:30%;top:7%"><svg viewBox="-22 -10 44 20"><rect x="-18" y="-3.5" width="36" height="7" fill="#f5a623" stroke="#8a5200" stroke-width="1.5"/></svg><em class="demo-tag">TV</em></span>
+            <span class="demo-dev wide bar" style="left:30%;top:13%"><svg viewBox="-22 -10 44 20"><rect x="-16" y="-3.2" width="32" height="6.4" fill="#7ed321" stroke="#2e6b0a" stroke-width="1.5"/></svg><em class="demo-tag">Soundbar</em></span>
+            <span class="demo-dev touch" style="left:18%;top:74%"><svg viewBox="-16 -12 32 24"><rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="#3fb6b0" stroke="#14605c" stroke-width="1.5"/></svg><em class="demo-tag">Touchscreen</em></span>
+            <span class="demo-dev ap" style="left:36%;top:40%"><svg viewBox="-16 -16 32 32"><circle r="10" fill="#fff" stroke="#e94ca8" stroke-width="2" stroke-dasharray="1.6 2.1"/><circle r="3.2" fill="#e94ca8"/></svg><em class="demo-tag">Wi-Fi</em></span>
+            <span class="demo-dev wide kp" style="left:10%;top:88%"><svg viewBox="-18 -10 36 20"><rect x="-12" y="-3.2" width="24" height="6.4" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/></svg><em class="demo-tag">Keypad</em></span>
+            <span class="demo-dev cam" style="left:84%;top:64%"><svg class="fov" viewBox="-64 -28 72 56"><path d="M4 0 L-56 -22 L-56 22 Z" fill="rgba(224,32,32,.28)"/></svg><svg viewBox="-16 -14 36 28"><rect x="-12" y="-7" width="16" height="14" rx="2" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/><path d="M4 -4 L12 -8 V8 L4 4 Z" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/></svg><em class="demo-tag">Camera</em></span>
           </div>
-          <ol class="demo-lines" id="demoLines"></ol>
-          <p class="demo-total"><span>List total</span><b id="demoTotal">$0</b></p>
+          <div class="demo-bill">
+            <p class="demo-total"><span class="side-kicker">Package total</span><b id="demoTotal">$0</b></p>
+            <ol class="demo-lines" id="demoLines"></ol>
+          </div>
         </div>
         <div class="buy-card">
           <p class="sale-kicker">One payment</p>
@@ -3224,7 +3288,10 @@ function startSaleDemo(){
     {key:'PG-6', sel:'.sp-r'},
     {key:'K65XR50', sel:'.tv'},
     {key:'SONOS-ARC-2-BL', sel:'.bar'},
-    {key:'', name:'Touchscreen', sel:'.touch', tbd:true}
+    {key:'', name:'Touchscreen', sel:'.touch', tbd:true},
+    {key:'AP6', sel:'.ap'},
+    {key:'C4-KD120', sel:'.kp'},
+    {key:'UVC-G6-Pro-Turret-W', sel:'.cam'}
   ];
   const items=specs.map(spec=>{
     if(spec.tbd) return {name:spec.name, sel:spec.sel, cents:null};
@@ -3241,25 +3308,42 @@ function startSaleDemo(){
     return frac==='00' ? '$'+dollars : '$'+dollars+'.'+frac;
   };
   let step=0;
+  let shownCents=0;
   let timers=[];
-  function render(){
+  let tick=0;
+  function render(animate){
     const shown=items.slice(0, step);
     const cents=shown.reduce((sum,it)=>sum+(it.cents||0),0);
     dots.forEach((dot,i)=>dot.classList.toggle('on', i<step));
-    if(lines) lines.innerHTML=shown.map(it=>'<li><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
-    if(totalEl) totalEl.textContent=money(cents);
+    if(lines) lines.innerHTML=shown.map((it,i)=>'<li'+(i===shown.length-1?' class="flash"':'')+'><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
+    if(totalEl){
+      if(!animate || shownCents===cents){ totalEl.textContent=money(cents); shownCents=cents; }
+      else {
+        const from=shownCents, to=cents, start=performance.now();
+        cancelAnimationFrame(tick);
+        const frame=now=>{
+          const t=Math.min(1,(now-start)/260);
+          shownCents=Math.round(from+(to-from)*t);
+          totalEl.textContent=money(shownCents);
+          if(t<1) tick=requestAnimationFrame(frame);
+        };
+        tick=requestAnimationFrame(frame);
+      }
+    }
   }
   function arm(){
     timers.forEach(clearTimeout);
     timers=[];
+    root.classList.remove('is-reset');
     const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduced || !items.length){ step=items.length; render(); return; }
+    if(reduced || !items.length){ step=items.length; render(false); return; }
     step=0;
-    render();
+    render(false);
     items.forEach((_,i)=>{
-      timers.push(setTimeout(()=>{ step=i+1; render(); }, 1600*(i+1)));
+      timers.push(setTimeout(()=>{ step=i+1; render(true); }, 1200*(i+1)));
     });
-    timers.push(setTimeout(arm, 1600*items.length + 2000));
+    timers.push(setTimeout(()=>{ root.classList.add('is-reset'); }, 1200*items.length + 2000));
+    timers.push(setTimeout(arm, 1200*items.length + 2400));
   }
   arm();
   const track=()=>{ if(window.tymTrack) window.tymTrack('demo_viewed'); };
