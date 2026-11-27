@@ -9,6 +9,13 @@
 .demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.92);color:#fff;border-radius:6px;padding:3px 7px;opacity:0;letter-spacing:.01em}
 .demo-dev.on .demo-tag{opacity:1}
 .demo-dev.wide{width:116px;height:44px}
+.demo-dev .josh-mark{display:none}
+.demo-dev.is-josh .c4-mark{display:none}
+.demo-dev.is-josh .josh-mark{display:block}
+.demo-dev.pulse{animation:demoPulse .55s ease}
+@keyframes demoPulse{0%{transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(1.16)}100%{transform:translate(-50%,-50%) scale(1)}}
+.demo-prompt{position:absolute;top:10px;left:10px;z-index:5;height:28px;max-width:calc(100% - 108px);margin:0;padding:0 10px;display:flex;align-items:center;background:#fff;border:1px solid #121212;box-sizing:border-box;font-family:Lato,sans-serif;font-size:13px;font-weight:700;color:#121212;opacity:0;pointer-events:none;white-space:nowrap;overflow:hidden}
+.demo-prompt.on{opacity:1}
 .demo.is-reset .demo-dev{opacity:0}
 .demo-total{position:absolute;top:8px;right:8px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;margin:0;padding:5px 8px 6px;background:rgba(255,255,255,.94);border:1px solid rgba(18,18,18,.16);box-sizing:border-box}
 .demo-total span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(18,18,18,.62);line-height:1}
@@ -28,5 +35,6 @@
   .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
   .demo-dev .fov{opacity:1}
   .demo-tag{opacity:1}
+  .demo-dev.pulse{animation:none}
   .demo-latest.is-swap .demo-latest-name,.demo-latest.is-swap .demo-latest-price{animation:none}
 }
