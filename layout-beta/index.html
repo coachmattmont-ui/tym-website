@@ -565,7 +565,8 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <button type="button" id="menuOpen">Open</button>
       <button type="button" id="menuUpload">Upload floor plan</button>
       <button type="button" id="menuAddFloor">Add floor</button>
-      <button type="button" id="menuDownload">Download project file</button>
+      <button type="button" id="menuDownloadPdf">Download PDF</button>
+      <button type="button" id="menuDownload">Save project file (re-open later)</button>
       <button type="button" id="menuClose">Close project</button>
       <button type="button" id="menuGuide">Show guide</button>
       <button type="button" id="menuOut" hidden>Log out</button>
@@ -1150,6 +1151,252 @@ async function saveProjectFile(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download=(name.replace(/[^\w\-]+/g,'_')||'layout')+'.ytlayout.json'; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+}
+function pdfSafe(s){
+  return String(s==null?'':s).replace(/[^\x20-\x7E]/g, '');
+}
+function planIconBoxAt(d, k){
+  const sc=scOf(d), rot=rotOf(d)*Math.PI/180, c=Math.cos(rot), s=Math.sin(rot);
+  const wide=barWidthFor(d);
+  const hw=d.type==='stereo'||d.type==='single'?R:Math.max(18, wide/2+2);
+  const hh=d.type==='stereo'||d.type==='single'?R:13;
+  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+  pts(d).forEach(([x,y])=>{
+    [[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].forEach(([lx,ly])=>{
+      const px=(lx*sc*c - ly*sc*s + x)*k;
+      const py=(lx*sc*s + ly*sc*c + y)*k;
+      minX=Math.min(minX,px); minY=Math.min(minY,py);
+      maxX=Math.max(maxX,px); maxY=Math.max(maxY,py);
+    });
+  });
+  return {minX,minY,maxX,maxY};
+}
+function paintDevicesOnPlan(ctx, pageNumber, k){
+  const list=devs.filter(d=>(d.page||1)===pageNumber && !d.auto);
+  list.forEach(d=>{
+    const P=pts(d), sc=scOf(d), rot=rotOf(d)*Math.PI/180;
+    if(P.length>1){
+      ctx.save();
+      ctx.strokeStyle='#1e88e5';
+      ctx.setLineDash([5*k, 4*k]);
+      ctx.lineWidth=Math.max(1.2, 2*k);
+      ctx.beginPath();
+      ctx.moveTo(P[0][0]*k, P[0][1]*k);
+      ctx.lineTo(P[1][0]*k, P[1][1]*k);
+      ctx.stroke();
+      ctx.restore();
+    }
+    P.forEach(([x,y])=>{
+      ctx.save();
+      ctx.translate(x*k, y*k);
+      ctx.rotate(rot);
+      ctx.scale(k*sc, k*sc);
+      ctx.lineWidth=1.5;
+      if(d.type==='stereo' || d.type==='single'){
+        ctx.beginPath();
+        ctx.arc(0,0,R,0,Math.PI*2);
+        ctx.fillStyle='#1e88e5';
+        ctx.fill();
+        ctx.strokeStyle='#0d47a1';
+        if(d.type==='single') ctx.setLineDash([3,2]);
+        ctx.stroke();
+      } else if(d.type==='tv' || d.type==='lcr'){
+        const wide=barWidthFor(d);
+        ctx.fillStyle=d.type==='tv'?'#f5a623':'#7ed321';
+        ctx.strokeStyle=d.type==='tv'?'#8a5200':'#2e6b0a';
+        ctx.fillRect(-wide/2,-3.5,wide,7);
+        ctx.strokeRect(-wide/2,-3.5,wide,7);
+      } else {
+        ctx.fillStyle='#103747';
+        ctx.fillRect(-16,-8,32,16);
+        ctx.fillStyle='#fff';
+        ctx.font='bold 5px Helvetica, Arial, sans-serif';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(pdfSafe((lineLabel(d)||d.type).split(' ')[0]).slice(0,10), 0, 0);
+      }
+      ctx.restore();
+    });
+  });
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.font='bold '+(11*Math.max(k,0.7))+'px Helvetica, Arial, sans-serif';
+  list.forEach(d=>{
+    const box=planIconBoxAt(d, k);
+    const label=pdfSafe(d.room||'Unassigned');
+    if(!label) return;
+    const tw=ctx.measureText(label).width;
+    const cx=(box.minX+box.maxX)/2;
+    const y=box.minY-10;
+    const h=14*Math.max(k,0.75);
+    ctx.fillStyle='rgba(16,55,71,0.92)';
+    ctx.fillRect(cx-tw/2-5, y-h, tw+10, h);
+    ctx.fillStyle='#fff';
+    ctx.fillText(label, cx, y-h/2);
+  });
+}
+async function renderPlanCanvas(pageNumber){
+  const pdfPage=await pdfDoc.getPage(pageNumber);
+  const full=pdfPage.getViewport({scale:1.5});
+  const cap=Math.min(1, 1400/Math.max(full.width, full.height, 1));
+  const vp=pdfPage.getViewport({scale:1.5*cap});
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1, Math.floor(vp.width));
+  canvas.height=Math.max(1, Math.floor(vp.height));
+  const ctx=canvas.getContext('2d');
+  await pdfPage.render({canvasContext:ctx, viewport:vp}).promise;
+  paintDevicesOnPlan(ctx, pageNumber, cap);
+  const url=canvas.toDataURL('image/jpeg', 0.84);
+  const bin=atob(url.split(',')[1]);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return bytes;
+}
+let clientPdfBusy=false;
+async function downloadClientPdf(){
+  if(clientPdfBusy) return;
+  if(typeof PDFLib==='undefined'){ showModal('<b>PDF tools are still loading.</b><br><br>Try again in a moment.', [['OK']]); return; }
+  clientPdfBusy=true;
+  const btn=document.getElementById('menuDownloadPdf');
+  if(btn) btn.disabled=true;
+  try{
+    repriceLoadedDevices();
+    const name=(projName&&projName.value.trim())||projectName||'Untitled project';
+    projectName=name;
+    const model=currentQuote();
+    const {PDFDocument, StandardFonts, rgb}=PDFLib;
+    const doc=await PDFDocument.create();
+    const font=await doc.embedFont(StandardFonts.Helvetica);
+    const bold=await doc.embedFont(StandardFonts.HelveticaBold);
+    const navy=rgb(16/255,55/255,71/255);
+    const ink=rgb(0.07,0.07,0.07);
+    const muted=rgb(0.35,0.35,0.36);
+    const amber=rgb(0.49,0.38,0.2);
+    const W=612,H=792,M=40;
+    let page, y;
+    function addPage(){
+      page=doc.addPage([W,H]);
+      y=H-28;
+      page.drawRectangle({x:0,y:H-8,width:W,height:8,color:navy});
+    }
+    function need(h){ if(y-h<48) addPage(); }
+    function draw(str,x,yy,size,face,color){ page.drawText(pdfSafe(str).slice(0,180),{x,y:yy,size,font:face,color:color||ink}); }
+    function wrap(str,size,face,maxW){
+      const words=pdfSafe(str).split(/\s+/).filter(Boolean);
+      const lines=[]; let cur='';
+      words.forEach(word=>{
+        const next=cur?cur+' '+word:word;
+        if(face.widthOfTextAtSize(next,size)<=maxW) cur=next;
+        else { if(cur) lines.push(cur); cur=word; }
+      });
+      if(cur) lines.push(cur);
+      return lines.length?lines:[''];
+    }
+    const dateText=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    if(pdfDoc){
+      for(let n=1;n<=numPages;n++){
+        addPage();
+        page.drawRectangle({x:0,y:H-64,width:W,height:64,color:navy});
+        draw('SmartHome Brothers', M, H-30, 16, bold, rgb(1,1,1));
+        draw(name, M, H-50, 11, font, rgb(0.85,0.93,0.96));
+        const floor=pageNames[String(n)]||('Floor '+n);
+        const stamp=pdfSafe(floor+' | '+dateText);
+        draw(stamp, W-M-font.widthOfTextAtSize(stamp, 10), H-30, 10, font, rgb(1,1,1));
+        y=H-84;
+        let bytes;
+        try{ bytes=await renderPlanCanvas(n); }
+        catch(e){ bytes=null; }
+        if(bytes){
+          const img=await doc.embedJpg(bytes);
+          const maxW=W-M*2, maxH=y-56;
+          const fit=Math.min(maxW/img.width, maxH/img.height);
+          const dw=img.width*fit, dh=img.height*fit;
+          page.drawImage(img,{x:M+(maxW-dw)/2,y:y-dh,width:dw,height:dh});
+          y-=dh+16;
+        } else {
+          draw('This floor plan page could not be drawn.', M, y, 11, font, muted);
+          y-=20;
+        }
+        draw('Devices are shown on the plan. Prices are on the following pages.', M, 36, 9, font, muted);
+      }
+    } else {
+      addPage();
+      page.drawRectangle({x:0,y:H-64,width:W,height:64,color:navy});
+      draw('SmartHome Brothers', M, H-30, 16, bold, rgb(1,1,1));
+      draw(name, M, H-50, 11, font, rgb(0.85,0.93,0.96));
+      y=H-96;
+      draw('No floor plan is uploaded yet.', M, y, 12, font, muted);
+      y-=24;
+    }
+    addPage();
+    page.drawRectangle({x:0,y:H-64,width:W,height:64,color:navy});
+    draw('SmartHome Brothers', M, H-30, 16, bold, rgb(1,1,1));
+    draw('Device list', M, H-50, 11, font, rgb(0.85,0.93,0.96));
+    y=H-88;
+    draw(name, M, y, 16, bold); y-=18;
+    draw(dateText+'. List prices only. This is an estimate for planning, not an invoice.', M, y, 9, font, muted); y-=20;
+    function headerRow(){
+      need(18);
+      draw('Item', M, y, 9, bold, muted);
+      draw('Qty', 360, y, 9, bold, muted);
+      draw('List price', 410, y, 9, bold, muted);
+      draw('Line total', 500, y, 9, bold, muted);
+      y-=6;
+      page.drawLine({start:{x:M,y},end:{x:W-M,y},thickness:0.6,color:rgb(0.82,0.82,0.84)});
+      y-=14;
+    }
+    function paintLines(lines){
+      headerRow();
+      lines.forEach(line=>{
+        const nameLines=wrap(line.name,10,font,290);
+        need(nameLines.length*13+4);
+        nameLines.forEach((part,i)=>draw(part, M, y-i*13, 10, font));
+        const price=line.tbd?'price TBD':YTQuote.money(line.unit);
+        const total=line.tbd?'price TBD':YTQuote.money(line.total);
+        const color=line.tbd?amber:ink;
+        draw(String(line.qty), 360, y, 10, font);
+        draw(price, 410, y, 10, font, color);
+        draw(total, 500, y, 10, bold, color);
+        y-=nameLines.length*13+6;
+      });
+    }
+    model.floors.forEach(floor=>{
+      if(floor.name){ need(20); draw(floor.name, M, y, 11, bold, navy); y-=16; }
+      floor.rooms.forEach(room=>{
+        need(18); draw(room.name, M, y, 13, bold); y-=16;
+        if(room.lines.length) paintLines(room.lines);
+        else { need(14); draw('No priced items in this room.', M, y, 10, font, muted); y-=16; }
+        need(16); draw('Room subtotal  '+YTQuote.money(room.subtotal), 340, y, 10, bold); y-=18;
+      });
+    });
+    if(model.wholeHome.lines.length){
+      need(20); draw('Whole home', M, y, 13, bold); y-=16;
+      paintLines(model.wholeHome.lines);
+      need(16); draw('Whole home subtotal  '+YTQuote.money(model.wholeHome.subtotal), 320, y, 10, bold); y-=18;
+    }
+    need(40);
+    page.drawRectangle({x:M,y:y-28,width:W-M*2,height:36,color:navy});
+    draw('Project total', M+12, y-14, 13, bold, rgb(1,1,1));
+    draw(YTQuote.money(model.total), 470, y-16, 16, bold, rgb(1,1,1));
+    y-=48;
+    if(model.tbdCount){
+      wrap('Items marked price TBD are shown for planning and are not included in the total.', 10, font, W-M*2).forEach(part=>{
+        need(14); draw(part, M, y, 10, font, muted); y-=13;
+      });
+    }
+    const bytes=await doc.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=(name.replace(/[^\w\-]+/g,'_')||'layout')+'.pdf';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+    if(window.tymTrack) window.tymTrack('pdf_download', {path:'/layout-beta/'});
+    ph('pdf_download', {});
+  } finally {
+    clientPdfBusy=false;
+    if(btn) btn.disabled=false;
+  }
 }
 async function openProjectFile(file){
   const st=JSON.parse(await file.text());
@@ -2398,6 +2645,7 @@ document.getElementById('menuUpload').onclick=()=>{ closeMenu(); pdf.dataset.int
 document.getElementById('btnUploadPlan').onclick=()=>{ pdf.dataset.intent=''; pdf.click(); };
 document.getElementById('menuAddFloor').onclick=()=>{ closeMenu(); pdf.dataset.intent=pdfDoc?'add':''; pdf.click(); };
 document.getElementById('menuDownload').onclick=()=>{ closeMenu(); saveProjectFile(); };
+document.getElementById('menuDownloadPdf').onclick=()=>{ closeMenu(); downloadClientPdf().catch(err=>showModal('<b>Could not build the PDF.</b><br><br>'+esc(err&&err.message?err.message:'Try again.'), [['OK']])); };
 document.getElementById('menuClose').onclick=()=>{ closeMenu(); newProject(); };
 document.getElementById('menuGuide').onclick=()=>{ closeMenu(); reopenGuide(); };
 document.getElementById('guideExit').onclick=()=>closeGuide('dismissed');
@@ -2717,7 +2965,7 @@ async function pushCloud(opts){
   paintProjectName();
   const layout=serializeProject();
   if(JSON.stringify(layout).length>1400000){
-    if(!opts.quiet) showModal('<b>Project is too large</b><br><br>This project is too large to save to your account. Use Download project file to keep a copy in this browser.', [['OK']]);
+    if(!opts.quiet) showModal('<b>Project is too large</b><br><br>This project is too large to save to your account. Use Save project file to keep a copy in this browser.', [['OK']]);
     return false;
   }
   const {error}=await sb.from('projects').update({name:projectName.slice(0,120), layout}).eq('id', cloudState.id);

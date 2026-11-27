@@ -10,7 +10,8 @@ const NAMES = new Set([
   'guide_step',
   'guide_completed',
   'guide_dismissed',
-  'guide_restart'
+  'guide_restart',
+  'pdf_download'
 ]);
 
 const takeEventAttempt = createAttemptLimiter({ limit: 40, windowMs: 15 * 60 * 1000 });
