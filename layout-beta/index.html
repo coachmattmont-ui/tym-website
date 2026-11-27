@@ -185,7 +185,11 @@ main.space-pan,main.space-pan #stage,main.space-pan #stage canvas,
 main.space-pan .devsvg .body,main.space-pan .devsvg .end,main.space-pan .devsvg .rot{cursor:grab}
 main.panning,main.panning #stage,main.panning #stage canvas,
 main.panning .devsvg .body,main.panning .devsvg .end,main.panning .devsvg .rot,main.panning .devsvg .sz{cursor:grabbing}
-#empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;pointer-events:none}
+#empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;pointer-events:none;text-align:center;padding:24px}
+#empty.empty-step{pointer-events:auto}
+#empty.empty-step h2{margin:0 0 8px;font-size:32px;color:#121212}
+#empty.empty-step p{margin:0 0 16px;color:rgba(18,18,18,.75)}
+#empty.empty-step button{pointer-events:auto;border:1px solid #103747;background:#103747;color:#fff;font-weight:700;padding:12px 18px;border-radius:0;cursor:pointer}
 #stage{position:relative;display:inline-block;margin:28px;border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
 #stage canvas{display:block;background:#fff;border-radius:8px}
 
@@ -259,9 +263,56 @@ body.viewonly select,body.viewonly #projName,body.viewonly #floorName,body.viewo
 body.locked{background:#fff}
 body.locked .beta-banner,body.locked .hdr,body.locked .app,body.locked #accessBanner{display:none !important}
 #buyScreen{display:none}
-body.locked #buyScreen{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 18px;background:#fff;color:#121212}
+body.locked #buyScreen{flex:1;display:block;overflow:auto;padding:0;background:#fff;color:#121212}
 body.locked #buyScreen[hidden]{display:none !important}
-.buy-card{width:min(440px,100%);background:#fff;border:1px solid rgba(18,18,18,.12);border-radius:0;padding:28px 26px}
+.sale-nav{display:flex;align-items:center;height:64px;padding:0 20px;border-bottom:1px solid rgba(18,18,18,.12)}
+.sale-nav img{height:34px;width:auto}
+.sale-wrap{max-width:1080px;margin:0 auto;padding:28px 20px 64px}
+.sale-top{display:flex;flex-direction:column;gap:28px}
+.sale-kicker{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7D6232}
+.sale-copy h1{margin:0 0 12px;font-size:clamp(36px,6vw,58px);line-height:1.05;color:#121212}
+.sale-copy .sub{margin:0 0 18px;font-size:17px;color:rgba(18,18,18,.75);max-width:36em}
+.sale-benefits{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.sale-benefits li{padding-left:14px;border-left:2px solid #103747;color:#121212}
+.sale-benefits b{display:block;font-family:Oswald,sans-serif;font-weight:400;font-size:20px}
+.sale-benefits span{color:rgba(18,18,18,.75);font-size:14px}
+.sale-side{display:flex;flex-direction:column;gap:16px}
+.buy-card{width:100%;background:#fff;border:1px solid rgba(18,18,18,.22);border-radius:0;padding:22px}
+.sale-block{margin-top:48px}
+.sale-block h2{margin:0 0 14px;font-size:clamp(28px,4vw,40px)}
+.sale-gets{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sale-gets li{background:#F3F3F3;padding:12px 14px;color:#121212}
+.sale-steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.sale-steps li{display:grid;grid-template-columns:36px 1fr;gap:10px}
+.sale-steps b{font-family:Oswald,sans-serif;font-weight:400;font-size:22px;color:#7D6232}
+.sale-faq details{border-bottom:1px solid rgba(18,18,18,.12);padding:12px 0}
+.sale-faq summary{cursor:pointer;font-family:Oswald,sans-serif;font-weight:400;font-size:20px}
+.sale-faq p{margin:8px 0 0;color:rgba(18,18,18,.75)}
+.sale-trust{display:grid;gap:18px;background:#103747;color:#fff;padding:28px 20px;margin-top:48px}
+.sale-trust h2{color:#fff;margin:0 0 8px}
+.sale-trust p{margin:0;color:rgba(255,255,255,.86)}
+.sale-stats{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sale-stats strong{display:block;font-family:Oswald,sans-serif;font-weight:400;font-size:28px;color:#fff}
+.sale-stats span{color:#C2A476;font-size:13px}
+.sale-trust img{width:100%;max-height:220px;object-fit:cover}
+.demo{background:#F3F3F3;border:1px solid rgba(18,18,18,.12);padding:12px}
+.demo-stage{position:relative;background:#fff;border:1px solid #121212}
+.demo-stage svg{display:block;width:100%;height:auto}
+.demo-dev{position:absolute;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background:#103747;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;opacity:0;transform:translateY(-14px);transition:opacity .35s,transform .35s}
+.demo-dev.on{opacity:1;transform:none}
+.demo-dev.tv{border-radius:2px;width:36px}
+.demo-lines{list-style:none;margin:10px 0 0;padding:0;min-height:92px}
+.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
+.demo-total{display:flex;justify-content:space-between;margin:8px 0 0;font-size:14px}
+.demo-total b{font-family:Oswald,sans-serif;font-weight:400;font-size:22px;color:#103747}
+@media (min-width:900px){
+  .sale-side{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;align-items:start}
+  .sale-trust{grid-template-columns:220px 1fr;align-items:center}
+  .sale-stats{grid-template-columns:repeat(4,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  .demo-dev{opacity:1;transform:none;transition:none}
+}
 .buy-card h1{font-size:28px;letter-spacing:.01em;margin:0 0 8px}
 .buy-card .buy-price{font-size:32px;font-weight:400;font-family:Oswald,sans-serif;margin:0 0 12px}
 .buy-card ul{margin:0 0 16px;padding-left:18px;color:rgba(18,18,18,.75);line-height:1.5}
@@ -329,33 +380,111 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 
 <div class="beta-banner">List prices can change. This project is saved to your account.</div>
 <div id="buyScreen">
-  <div class="buy-card">
-    <h1 id="buyTitle">Design your home on the floor plan</h1>
-    <p class="buy-price" id="buyPrice">$29.00</p>
-    <ul>
-      <li>One project, with every floor and page</li>
-      <li>30 days to place devices and edit the plan</li>
-      <li>The project stays saved, and you can still view it after that</li>
-      <li>Pay again when you want another 30 days of editing</li>
-    </ul>
-    <div id="buySignedOut">
-      <p>Sign in with your email. We will send you a link, then take you to payment.</p>
-      <input id="buyEmail" type="email" placeholder="Email" autocomplete="email">
-      <button type="button" id="buySend">Email me a link</button>
-      <p id="buyMsg"></p>
+  <div class="sale-nav"><a href="/" aria-label="SmartHome Brothers by TYM, home"><img src="/assets/smarthome-brothers-logo.svg" alt="SmartHome Brothers by TYM" width="142" height="40"></a></div>
+  <div class="sale-wrap">
+    <div class="sale-top">
+      <div class="sale-copy">
+        <p class="sale-kicker">Layout Tool</p>
+        <h1 id="buyTitle">Plan it on your floor plan.</h1>
+        <p class="sub">Place the devices on your drawing and watch the list total add up. One project, every floor, <span data-edit-days>30</span> days of editing.</p>
+        <ul class="sale-benefits">
+          <li><b>Your rooms</b><span>The plan is your house, not a sample package.</span></li>
+          <li><b>List price on every device</b><span>Each piece shows its catalog list price as you place it.</span></li>
+          <li><b>Keep the project</b><span>Edit for <span data-edit-days>30</span> days. After that it stays saved to view.</span></li>
+        </ul>
+      </div>
+      <div class="sale-side">
+        <div class="demo" id="saleDemo" aria-label="Demo of devices landing on a floor plan">
+          <div class="demo-stage">
+            <svg viewBox="0 0 360 230" role="img" aria-label="A simple four-room floor plan">
+              <rect x="6" y="6" width="348" height="218" fill="#fff" stroke="#121212" stroke-width="2"/>
+              <path d="M6 118 H354 M186 6 V230" fill="none" stroke="#121212" stroke-width="1.5"/>
+              <path d="M168 118 H204" stroke="#fff" stroke-width="8"/>
+              <text x="28" y="28" fill="#7D6232" font-family="Lato,sans-serif" font-size="11">LIVING</text>
+              <text x="206" y="28" fill="#7D6232" font-family="Lato,sans-serif" font-size="11">KITCHEN</text>
+              <text x="28" y="140" fill="#7D6232" font-family="Lato,sans-serif" font-size="11">BEDROOM</text>
+              <text x="206" y="140" fill="#7D6232" font-family="Lato,sans-serif" font-size="11">HALL</text>
+            </svg>
+            <span class="demo-dev sp" style="left:22%;top:42%">Sp</span>
+            <span class="demo-dev kp" style="left:72%;top:38%">Kp</span>
+            <span class="demo-dev cam" style="left:28%;top:72%">Ca</span>
+            <span class="demo-dev ap" style="left:78%;top:70%">Wi</span>
+            <span class="demo-dev tv" style="left:48%;top:46%">TV</span>
+          </div>
+          <ol class="demo-lines" id="demoLines"></ol>
+          <p class="demo-total"><span>List total</span><b id="demoTotal">$0</b></p>
+        </div>
+        <div class="buy-card">
+          <p class="sale-kicker">One payment</p>
+          <p class="buy-price" id="buyPrice">$29</p>
+          <p id="buyStatus"></p>
+          <div id="buySignedOut">
+            <label for="buyEmail">Email</label>
+            <input id="buyEmail" type="email" placeholder="Email" autocomplete="email">
+            <p id="buyMsg"></p>
+          </div>
+          <div id="buySignedIn" hidden>
+            <p id="buyWho"></p>
+          </div>
+          <button type="button" id="buyGo">Start My Layout · $29</button>
+          <button type="button" id="buySend" hidden>Email me a link</button>
+          <p id="buyConfigNote" hidden>Payments not configured. The Layout Tool stays locked until payments are connected.</p>
+          <p class="buy-code"><button type="button" class="buy-link" id="buyCodeLink">Have an access code?</button></p>
+          <div id="buyCodeBox" hidden>
+            <input id="buyCode" type="password" autocomplete="off" placeholder="Access code" aria-label="Access code">
+            <button type="button" id="buyCodeGo">Continue</button>
+            <p id="buyCodeMsg"></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="buySignedIn" hidden>
-      <p id="buyWho"></p>
-      <button type="button" id="buyGo">Continue to payment</button>
-    </div>
-    <p id="buyConfigNote" hidden>Payments not configured. The Layout Tool stays locked until payments are connected.</p>
-    <p class="buy-code"><button type="button" class="buy-link" id="buyCodeLink">Have an access code?</button></p>
-    <div id="buyCodeBox" hidden>
-      <input id="buyCode" type="password" autocomplete="off" placeholder="Access code" aria-label="Access code">
-      <button type="button" id="buyCodeGo">Continue</button>
-      <p id="buyCodeMsg"></p>
-    </div>
+    <section class="sale-block">
+      <h2>What you get for <span id="buyPriceInline">$29</span></h2>
+      <ul class="sale-gets">
+        <li>One project, every floor and page in that project.</li>
+        <li><span data-edit-days>30</span> days of editing.</li>
+        <li>The project stays saved, and you can still view it after that.</li>
+        <li>Pay again when you want another <span data-edit-days>30</span> days of editing.</li>
+      </ul>
+    </section>
+    <section class="sale-block">
+      <h2>How it works</h2>
+      <ol class="sale-steps">
+        <li><b>1</b><div><strong>Upload your plan</strong><p>A PDF of the floor plan you already have.</p></div></li>
+        <li><b>2</b><div><strong>Place your devices</strong><p>Speakers, screens, controls, cameras, and Wi-Fi.</p></div></li>
+        <li><b>3</b><div><strong>See your total</strong><p>List price for each device, added up as you go.</p></div></li>
+      </ol>
+    </section>
+    <section class="sale-block sale-faq">
+      <h2>Questions</h2>
+      <details>
+        <summary>Is there a refund?</summary>
+        <p>The site does not publish a refund for the $29 Layout Tool. The refund on the Custom Design page applies to that design fee only.</p>
+      </details>
+      <details>
+        <summary>What file types?</summary>
+        <p>A PDF floor plan. One file can include every floor.</p>
+      </details>
+      <details>
+        <summary>Do I have to talk to a salesperson?</summary>
+        <p>No. You upload the plan and place the devices yourself. A call is optional. If you want one, it is with a designer, not a pitch.</p>
+      </details>
+    </section>
   </div>
+  <section class="sale-trust">
+    <img src="/images/Brothers.webp" alt="Matt, Greg, and Brad of SmartHome Brothers" width="640" height="420" loading="lazy">
+    <div>
+      <p class="sale-kicker" style="color:#C2A476">Who you'll work with</p>
+      <h2>Matt, Greg, and Brad.</h2>
+      <p>Three brothers. Fifteen years installing this work, now planning it on the floor plan before the walls close.</p>
+      <ul class="sale-stats">
+        <li><strong>15+</strong><span>years installing</span></li>
+        <li><strong>All 50</strong><span>states designed in</span></li>
+        <li><strong>28M+</strong><span>YouTube views</span></li>
+        <li><strong>500+</strong><span>Smart Home Club members</span></li>
+      </ul>
+    </div>
+  </section>
 </div>
 <div id="accessBanner" hidden></div>
 <div id="quoteView" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
@@ -989,7 +1118,7 @@ function newProject(){
   pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false;
   pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
-  empty.style.display=''; empty.textContent='Upload a PDF floor plan to begin.';
+  promptFirstStep();
   pg.textContent=''; paintProjectName();
   hist=[]; hidx=-1; snapshot();
   updatePageLbl(); draw(); scheduleSave();
@@ -2554,7 +2683,8 @@ async function openCloudProject(id){
     empty.style.display='';
     empty.textContent=(data.pdf_path||(layout.pdf&&layout.pdf.name))
       ? 'The floor plan is not in your account yet. You can upload it again while editing is open.'
-      : 'Upload a PDF floor plan to begin.';
+      : '';
+    if(!(data.pdf_path||(layout.pdf&&layout.pdf.name))) promptFirstStep();
     updatePageLbl();
     draw();
   }
@@ -2897,7 +3027,8 @@ async function finishCheckoutReturn(sessionId, returnedId){
       openSignIn('Sign in with the same email to finish saving this project.');
       return;
     }
-    showModal('<b>Confirming your payment</b><br><br>This usually takes a few seconds.', [['Close']]);
+    const status=document.getElementById('buyStatus');
+    if(status) status.textContent='Confirming your payment.';
     let last=null;
     for(let i=0;i<6;i++){
       const res=await fetch('/api/checkout/confirm', {
@@ -2909,8 +3040,10 @@ async function finishCheckoutReturn(sessionId, returnedId){
       if(res.ok && last.editUntil){
         try{ sessionStorage.removeItem('yt-checkout-pending'); }catch(e){}
         if(location.search) history.replaceState({}, '', location.pathname);
+        if(status) status.textContent='';
+        modalEl.style.display='none';
         await openCloudProject(last.projectId||projectId);
-        showModal('<b>Payment received</b><br><br>This project is open. Editing stays available for 30 days.', [['OK']]);
+        if(!pdfDoc) promptFirstStep();
         return;
       }
       if(last && last.error && last.error!=='unpaid') break;
@@ -2936,8 +3069,9 @@ function showBuyLanding(){
   const price=document.getElementById('buyPrice');
   if(price) price.textContent=formatCents(payConfig.priceCents||2900);
   const days=payConfig.editDays||30;
-  const list=document.querySelector('#buyScreen ul');
-  if(list) list.innerHTML='<li>One project, with every floor and page</li><li>'+days+' days to place devices and edit the plan</li><li>The project stays saved, and you can still view it after that</li><li>Pay again when you want another '+days+' days of editing</li>';
+  document.querySelectorAll('[data-edit-days]').forEach(el=>{ el.textContent=String(days); });
+  const inline=document.getElementById('buyPriceInline');
+  if(inline) inline.textContent=layoutPriceLabel();
   const note=document.getElementById('buyConfigNote');
   const ready=!!(payConfig.paymentsConfigured && payConfig.authConfigured && sb);
   if(note) note.hidden=ready;
@@ -2959,7 +3093,73 @@ async function paintBuyAccount(){
   const who=document.getElementById('buyWho');
   if(who) who.textContent=email?('Signed in as '+email+'.'):'';
   const go=document.getElementById('buyGo');
-  if(go) go.textContent='Continue to payment, '+formatCents(payConfig.priceCents||2900);
+  if(go) go.textContent='Start My Layout · '+layoutPriceLabel();
+  const price=document.getElementById('buyPrice');
+  if(price) price.textContent=layoutPriceLabel();
+}
+function layoutPriceLabel(){
+  const cents=payConfig.priceCents||2900;
+  if(cents%100===0) return '$'+(cents/100);
+  return formatCents(cents);
+}
+function startSaleDemo(){
+  const root=document.getElementById('saleDemo');
+  if(!root || root.dataset.ready) return;
+  root.dataset.ready='1';
+  const specs=[
+    {key:'PG-6', name:'In-ceiling speaker', sel:'.sp'},
+    {key:'C4-KD120', name:'Keypad dimmer', sel:'.kp'},
+    {key:'UVC-G6-Dome', name:'Dome camera', sel:'.cam'},
+    {key:'U7-Pro', name:'Wi-Fi access point', sel:'.ap'},
+    {key:'K65XR30M2', name:'65 inch TV', sel:'.tv'}
+  ];
+  const items=specs.map(spec=>{
+    const it=CATALOG.items&&CATALOG.items[spec.key];
+    return it?{name:spec.name, sel:spec.sel, cents:Math.round(Number(it.list)*100)}:null;
+  }).filter(Boolean);
+  const lines=document.getElementById('demoLines');
+  const totalEl=document.getElementById('demoTotal');
+  const dots=items.map(it=>root.querySelector(it.sel)).filter(Boolean);
+  const money=cents=>{
+    const dollars=Math.floor(cents/100);
+    const frac=String(cents%100).padStart(2,'0');
+    return frac==='00' ? '$'+dollars : '$'+dollars+'.'+frac;
+  };
+  let step=0;
+  function render(){
+    const shown=items.slice(0, step);
+    const cents=shown.reduce((sum,it)=>sum+it.cents,0);
+    dots.forEach((dot,i)=>dot.classList.toggle('on', i<step));
+    if(lines) lines.innerHTML=shown.map(it=>'<li><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
+    if(totalEl) totalEl.textContent=money(cents);
+  }
+  const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced || !items.length){
+    step=items.length;
+    render();
+  } else {
+    render();
+    setInterval(()=>{
+      step=step>items.length ? 0 : step+1;
+      if(step>items.length) step=0;
+      render();
+    }, 1400);
+  }
+  const track=()=>{ if(window.tymTrack) window.tymTrack('demo_viewed'); };
+  if('IntersectionObserver' in window){
+    const watch=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){ track(); watch.disconnect(); }
+    }, {threshold:0.35});
+    watch.observe(root);
+  } else track();
+}
+function promptFirstStep(){
+  if(!empty) return;
+  empty.style.display='';
+  empty.classList.add('empty-step');
+  empty.innerHTML='<div><h2>Upload your floor plan</h2><p>A PDF. One file can include every floor.</p><button type="button" id="emptyUpload">Upload your floor plan</button></div>';
+  const button=document.getElementById('emptyUpload');
+  if(button) button.onclick=()=>{ const file=document.getElementById('pdf'); if(file) file.click(); };
 }
 async function enterAccountProjects(preferId){
   if(!sb){ showBuyLanding(); return; }
@@ -3011,8 +3211,7 @@ function beginLocalTest(editUntil, source){
   pageNames={}; controlPlatform=''; audioSystem='amps'; matrixDismissed=false; controlPrompted=false; hifi=false;
   pdfDoc=null; pdfBuf=null; pdfName=''; pdfRemoteSig=''; pageNum=1; numPages=1; baseW=0; baseH=0; zoom=1;
   stage.querySelectorAll('canvas').forEach(x=>x.remove());
-  empty.style.display='';
-  empty.textContent='Upload a PDF floor plan to begin.';
+  promptFirstStep();
   accessStamp='';
   hist=[]; hidx=-1; snapshot();
   updatePageLbl(); draw();
@@ -3136,7 +3335,22 @@ async function bootAccount(){
     if(msg) msg.textContent=error?(error.message||'Could not send the link.'):'Check your email for a sign-in link, then open it on this device.';
   };
   const buyGo=document.getElementById('buyGo');
-  if(buyGo) buyGo.onclick=()=>{ try{ sessionStorage.removeItem('yt-buy-started'); }catch(e){} sendCheckout(); };
+  if(buyGo) buyGo.onclick=async()=>{
+    const signed=document.getElementById('buySignedIn');
+    if(signed && !signed.hidden){
+      try{ sessionStorage.removeItem('yt-buy-started'); }catch(e){}
+      sendCheckout();
+      return;
+    }
+    if(!sb || !payConfig.authConfigured){ showBuyLanding(); return; }
+    const email=(document.getElementById('buyEmail').value||'').trim();
+    const msg=document.getElementById('buyMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(msg) msg.textContent='Enter a valid email.'; return; }
+    if(msg) msg.textContent='Sending the link.';
+    const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo:accountReturnUrl()}});
+    if(msg) msg.textContent=error?(error.message||'Could not send the link.'):'Check your email for a sign-in link, then open it on this device.';
+  };
+  startSaleDemo();
   const buyCodeLink=document.getElementById('buyCodeLink');
   const buyCodeBox=document.getElementById('buyCodeBox');
   if(buyCodeLink && buyCodeBox) buyCodeLink.onclick=()=>{ buyCodeBox.hidden=!buyCodeBox.hidden; if(!buyCodeBox.hidden){ const el=document.getElementById('buyCode'); if(el) el.focus(); } };

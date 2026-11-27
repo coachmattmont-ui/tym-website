@@ -13,7 +13,8 @@ create table if not exists public.events (
       'hero_cta_click',
       'secondary_link_click',
       'instant_quote_completed',
-      'layout_checkout_started'
+      'layout_checkout_started',
+      'demo_viewed'
     )
   ),
   constraint events_variant check (variant is null or variant in ('a', 'b')),
@@ -35,7 +36,8 @@ create policy events_insert_only
       'hero_cta_click',
       'secondary_link_click',
       'instant_quote_completed',
-      'layout_checkout_started'
+      'layout_checkout_started',
+      'demo_viewed'
     )
     and (variant is null or variant in ('a', 'b'))
   );
