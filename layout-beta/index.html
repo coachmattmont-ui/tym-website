@@ -298,21 +298,28 @@ body.locked #buyScreen[hidden]{display:none !important}
 .demo{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(18,18,18,.15);padding:0}
 .demo-stage{position:relative;background:#fff}
 .demo-stage .plan-svg{display:block;width:100%;height:auto}
-.demo-dev{position:absolute;width:36px;height:28px;opacity:0;transform:translate(-50%,-50%) scale(.6);transform-origin:center;z-index:2}
+.demo-dev{position:absolute;width:72px;height:56px;opacity:0;transform:translate(-50%,-50%) scale(.6);transform-origin:center;z-index:2}
 .demo-dev svg{display:block;width:100%;height:100%;overflow:visible}
-.demo-dev .fov{position:absolute;left:50%;top:50%;width:64px;height:64px;transform:translate(-10%,-50%);z-index:-1;opacity:0}
-.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:opacity .12s linear, transform .18s cubic-bezier(.2,1.45,.35,1)}
+.demo-dev .fov{position:absolute;left:50%;top:50%;width:78px;height:64px;transform:translate(-72%,-50%);z-index:-1;opacity:0}
+.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform .18s cubic-bezier(.2,1.45,.35,1)}
 .demo-dev.on .fov{opacity:1}
-.demo-tag{position:absolute;left:50%;top:calc(100% + 1px);transform:translateX(-50%);font-style:normal;font-size:9px;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.86);color:#fff;border-radius:6px;padding:2px 5px;opacity:0;letter-spacing:.02em}
+.demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.92);color:#fff;border-radius:6px;padding:3px 7px;opacity:0;letter-spacing:.01em}
 .demo-dev.on .demo-tag{opacity:1}
-.demo-dev.wide{width:52px}
-.demo.is-reset .demo-dev{opacity:0;transition:opacity .35s ease}
+.demo-dev.wide{width:116px;height:44px}
+.demo.is-reset .demo-dev{opacity:0}
 .demo-bill{padding:8px 10px 10px;border-top:1px solid rgba(18,18,18,.08);background:rgba(255,255,255,.94)}
 .demo-bill .side-kicker{color:rgba(18,18,18,.62);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-.demo-lines{list-style:none;margin:6px 0 0;padding:0;max-height:148px;overflow:auto}
-.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
+.demo-count{margin:4px 0 0;font-size:11px;color:rgba(18,18,18,.62);letter-spacing:.04em}
+.demo-lines{list-style:none;margin:4px 0 0;padding:0;max-height:96px;overflow:auto}
+.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
 .demo-lines li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .demo-lines li.flash{animation:demoFlash .45s ease}
+@media (max-width:899px){
+  .demo-dev{width:48px;height:40px}
+  .demo-dev.wide{width:76px;height:32px}
+  .demo-tag{font-size:11px}
+  .sp-r .demo-tag,.touch .demo-tag{left:100%;top:50%;transform:translateY(-50%)}
+}
 @keyframes demoFlash{from{background:#F3F3F3}to{background:transparent}}
 .demo-total{display:flex;justify-content:space-between;align-items:baseline;margin:0}
 .demo-total b{font-size:18px;letter-spacing:-.02em;font-weight:700;color:#121212}
@@ -423,80 +430,125 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
       <div class="sale-side">
         <div class="demo" id="saleDemo" aria-label="Demo of devices placed on a floor plan">
           <div class="demo-stage">
-            <svg class="plan-svg" viewBox="0 0 720 460" role="img" aria-label="Invented floor plan with an entry, great room, kitchen, and bedroom">
-              <rect width="720" height="460" fill="#fff"/>
+            <svg class="plan-svg" viewBox="0 0 760 520" role="img" aria-label="Invented floor plan with an entry, great room, kitchen, bedroom, closet, and bath">
+              <rect width="760" height="520" fill="#fff"/>
               <g fill="#111">
-                <rect x="28" y="18" width="460" height="6"/>
-                <rect x="640" y="18" width="52" height="6"/>
-                <rect x="28" y="436" width="62" height="6"/>
-                <rect x="150" y="436" width="542" height="6"/>
-                <rect x="28" y="18" width="6" height="40"/>
-                <rect x="28" y="110" width="6" height="220"/>
-                <rect x="28" y="400" width="6" height="42"/>
-                <rect x="686" y="18" width="6" height="250"/>
-                <rect x="686" y="320" width="6" height="122"/>
-                <rect x="28" y="268" width="150" height="5"/>
-                <rect x="210" y="268" width="268" height="5"/>
-                <rect x="478" y="18" width="5" height="150"/>
-                <rect x="478" y="210" width="5" height="226"/>
-                <rect x="478" y="168" width="214" height="5"/>
-                <rect x="196" y="273" width="5" height="169"/>
+                <rect x="48" y="40" width="102" height="4"/>
+                <rect x="270" y="40" width="290" height="4"/>
+                <rect x="660" y="40" width="64" height="4"/>
+                <rect x="48" y="480" width="42" height="4"/>
+                <rect x="150" y="480" width="190" height="4"/>
+                <rect x="450" y="480" width="274" height="4"/>
+                <rect x="48" y="40" width="4" height="50"/>
+                <rect x="48" y="170" width="4" height="314"/>
+                <rect x="720" y="40" width="4" height="260"/>
+                <rect x="720" y="350" width="4" height="20"/>
+                <rect x="720" y="450" width="4" height="34"/>
+                <rect x="48" y="292" width="112" height="4"/>
+                <rect x="210" y="292" width="250" height="4"/>
+                <rect x="470" y="292" width="254" height="4"/>
+                <rect x="470" y="40" width="4" height="150"/>
+                <rect x="470" y="240" width="4" height="80"/>
+                <rect x="470" y="380" width="4" height="104"/>
+                <rect x="230" y="296" width="4" height="64"/>
+                <rect x="230" y="410" width="4" height="74"/>
               </g>
-              <g fill="none" stroke="#111" stroke-width="1">
-                <path d="M178 268 A 26 26 0 0 1 204 294"/>
-                <path d="M478 188 A 22 22 0 0 0 500 168"/>
-                <path d="M90 430 A 30 30 0 0 0 120 400"/>
-                <path d="M686 270 A 22 22 0 0 0 664 292"/>
+              <g fill="none" stroke="#111" stroke-width="1.15">
+                <path d="M160 292 A 24 24 0 0 0 184 316"/>
+                <path d="M470 220 A 20 20 0 0 0 490 200"/>
+                <path d="M90 480 A 28 28 0 0 0 118 452"/>
+                <path d="M720 320 A 20 20 0 0 0 700 340"/>
+                <path d="M360 292 A 22 22 0 0 1 382 314"/>
+                <rect x="486" y="200" width="96" height="84"/>
+                <path d="M500 292 A 16 16 0 0 0 516 276"/>
+                <path d="M498 242 H568"/>
+                <rect x="598" y="200" width="114" height="84"/>
+                <path d="M598 230 A 16 16 0 0 1 582 246"/>
               </g>
               <g stroke="#111" stroke-width="1" fill="none">
-                <path d="M488 18 V28 M488 36 V46 M640 18 V28 M640 36 V46"/>
-                <path d="M492 24 H636 M492 32 H636"/>
-                <path d="M28 58 H38 M46 58 H56 M28 110 H38 M46 110 H56"/>
-                <path d="M34 62 V106 M42 62 V106"/>
-                <path d="M28 330 H38 M46 330 H56 M28 400 H38 M46 400 H56"/>
-                <path d="M34 334 V396 M42 334 V396"/>
+                <path d="M150 40 V50 M150 58 V68 M270 40 V50 M270 58 V68"/>
+                <path d="M154 46 H266 M154 54 H266"/>
+                <path d="M560 40 V50 M560 58 V68 M660 40 V50 M660 58 V68"/>
+                <path d="M564 46 H656 M564 54 H656"/>
+                <path d="M48 90 H58 M66 90 H76 M48 170 H58 M66 170 H76"/>
+                <path d="M54 94 V166 M62 94 V166"/>
+                <path d="M340 480 V470 M340 462 V452 M450 480 V470 M450 462 V452"/>
+                <path d="M344 474 H446 M344 466 H446"/>
+                <path d="M720 370 H710 M702 370 H692 M720 450 H710 M702 450 H692"/>
+                <path d="M714 374 V446 M706 374 V446"/>
               </g>
-              <g fill="none" stroke="#c8c8c8" stroke-width="1">
-                <rect x="118" y="78" width="18" height="52"/>
-                <rect x="278" y="78" width="18" height="52"/>
-                <rect x="134" y="86" width="146" height="36"/>
-                <path d="M140 96 H274 M140 108 H274"/>
-                <rect x="166" y="150" width="80" height="36"/>
-                <rect x="520" y="48" width="120" height="78"/>
-                <path d="M520 70 H640"/>
-                <rect x="280" y="320" width="110" height="70"/>
-                <rect x="530" y="250" width="70" height="100"/>
-                <circle cx="542" cy="268" r="6"/><circle cx="588" cy="268" r="6"/>
-                <circle cx="542" cy="340" r="6"/><circle cx="588" cy="340" r="6"/>
+              <g fill="none" stroke="#c4c4c4" stroke-width="1.1">
+                <rect x="108" y="92" width="16" height="48"/>
+                <rect x="250" y="92" width="16" height="48"/>
+                <rect x="122" y="100" width="130" height="32"/>
+                <path d="M128 110 H246 M128 120 H246"/>
+                <rect x="150" y="168" width="72" height="32"/>
+                <rect x="520" y="62" width="120" height="78"/>
+                <path d="M520 86 H640"/>
+                <rect x="292" y="350" width="120" height="72"/>
+                <rect x="278" y="368" width="14" height="22"/>
+                <rect x="278" y="404" width="14" height="22"/>
+                <rect x="412" y="368" width="14" height="22"/>
+                <rect x="412" y="404" width="14" height="22"/>
+                <rect x="318" y="336" width="22" height="14"/>
+                <rect x="364" y="336" width="22" height="14"/>
+                <rect x="318" y="422" width="22" height="14"/>
+                <rect x="364" y="422" width="22" height="14"/>
+                <path d="M500 310 H700 V348 H500 Z"/>
+                <ellipse cx="560" cy="329" rx="16" ry="10"/>
+                <rect x="630" y="316" width="36" height="24"/>
+                <circle cx="640" cy="328" r="3"/><circle cx="656" cy="328" r="3"/>
+                <rect x="612" y="214" width="64" height="26"/>
+                <ellipse cx="690" cy="248" rx="9" ry="14"/>
+                <circle cx="640" cy="268" r="8"/>
               </g>
               <g fill="none" stroke="#111" stroke-width=".8">
-                <path d="M40 8 V18 M250 8 V18"/>
-                <path d="M40 12 H250"/>
-                <path d="M40 9 V15 M250 9 V15"/>
-                <text x="145" y="10" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="9">15'-0"</text>
-                <path d="M16 30 H28 M16 250 H28"/>
-                <path d="M20 30 V250"/>
-                <path d="M17 30 H23 M17 250 H23"/>
-                <text x="14" y="146" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="9" transform="rotate(-90 14 146)">12'-0"</text>
+                <path d="M48 18 V40 M470 18 V40"/>
+                <path d="M48 24 H470"/>
+                <path d="M48 20 V28 M470 20 V28"/>
+                <text x="259" y="20" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">16'-0"</text>
+                <path d="M470 18 V40 M724 18 V40"/>
+                <path d="M470 24 H724"/>
+                <path d="M470 20 V28 M724 20 V28"/>
+                <text x="597" y="20" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">9'-0"</text>
+                <path d="M28 40 H48 M28 292 H48"/>
+                <path d="M34 40 V292"/>
+                <path d="M30 40 H38 M30 292 H38"/>
+                <text x="26" y="170" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 26 170)">12'-0"</text>
+                <path d="M28 292 H48 M28 484 H48"/>
+                <path d="M34 292 V484"/>
+                <path d="M30 292 H38 M30 484 H38"/>
+                <text x="26" y="392" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 26 392)">8'-0"</text>
+                <path d="M230 498 V484 M470 498 V484"/>
+                <path d="M230 492 H470"/>
+                <path d="M230 488 V496 M470 488 V496"/>
+                <text x="350" y="508" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">10'-6"</text>
+                <path d="M736 292 H720 M736 484 H720"/>
+                <path d="M730 292 V484"/>
+                <path d="M726 292 H734 M726 484 H734"/>
+                <text x="734" y="392" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 734 392)">8'-0"</text>
               </g>
-              <g font-family="Helvetica" font-weight="700" font-size="9" fill="#fff">
-                <rect x="300" y="200" width="78" height="16" rx="2" fill="#1e88e5"/><text x="339" y="211" text-anchor="middle">GREAT ROOM</text>
-                <rect x="540" y="70" width="70" height="16" rx="2" fill="#1e88e5"/><text x="575" y="81" text-anchor="middle">BEDROOM</text>
-                <rect x="78" y="300" width="52" height="16" rx="2" fill="#1e88e5"/><text x="104" y="311" text-anchor="middle">ENTRY</text>
-                <rect x="560" y="250" width="64" height="16" rx="2" fill="#1e88e5"/><text x="592" y="261" text-anchor="middle">KITCHEN</text>
+              <g font-family="Helvetica" font-weight="700" font-size="14" fill="#fff">
+                <rect x="300" y="214" width="118" height="24" rx="2" fill="#1e88e5"/><text x="359" y="231" text-anchor="middle">GREAT ROOM</text>
+                <rect x="548" y="78" width="92" height="24" rx="2" fill="#1e88e5"/><text x="594" y="95" text-anchor="middle">BEDROOM</text>
+                <rect x="70" y="304" width="62" height="24" rx="2" fill="#1e88e5"/><text x="101" y="321" text-anchor="middle">ENTRY</text>
+                <rect x="520" y="400" width="84" height="24" rx="2" fill="#1e88e5"/><text x="562" y="417" text-anchor="middle">KITCHEN</text>
+                <rect x="500" y="228" width="70" height="22" rx="2" fill="#1e88e5"/><text x="535" y="244" text-anchor="middle" font-size="12">CLOSET</text>
+                <rect x="640" y="214" width="52" height="22" rx="2" fill="#1e88e5"/><text x="666" y="230" text-anchor="middle" font-size="12">BATH</text>
               </g>
             </svg>
-            <span class="demo-dev sp-l" style="left:12%;top:22%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev sp-r" style="left:46%;top:22%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev wide tv" style="left:30%;top:7%"><svg viewBox="-22 -10 44 20"><rect x="-18" y="-3.5" width="36" height="7" fill="#f5a623" stroke="#8a5200" stroke-width="1.5"/></svg><em class="demo-tag">TV</em></span>
-            <span class="demo-dev wide bar" style="left:30%;top:13%"><svg viewBox="-22 -10 44 20"><rect x="-16" y="-3.2" width="32" height="6.4" fill="#7ed321" stroke="#2e6b0a" stroke-width="1.5"/></svg><em class="demo-tag">Soundbar</em></span>
-            <span class="demo-dev touch" style="left:18%;top:74%"><svg viewBox="-16 -12 32 24"><rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="#3fb6b0" stroke="#14605c" stroke-width="1.5"/></svg><em class="demo-tag">Touchscreen</em></span>
-            <span class="demo-dev ap" style="left:36%;top:40%"><svg viewBox="-16 -16 32 32"><circle r="10" fill="#fff" stroke="#e94ca8" stroke-width="2" stroke-dasharray="1.6 2.1"/><circle r="3.2" fill="#e94ca8"/></svg><em class="demo-tag">Wi-Fi</em></span>
-            <span class="demo-dev wide kp" style="left:10%;top:88%"><svg viewBox="-18 -10 36 20"><rect x="-12" y="-3.2" width="24" height="6.4" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/></svg><em class="demo-tag">Keypad</em></span>
-            <span class="demo-dev cam" style="left:84%;top:64%"><svg class="fov" viewBox="-64 -28 72 56"><path d="M4 0 L-56 -22 L-56 22 Z" fill="rgba(224,32,32,.28)"/></svg><svg viewBox="-16 -14 36 28"><rect x="-12" y="-7" width="16" height="14" rx="2" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/><path d="M4 -4 L12 -8 V8 L4 4 Z" fill="#e02020" stroke="#7a0000" stroke-width="1.5"/></svg><em class="demo-tag">Camera</em></span>
+            <span class="demo-dev sp-l" style="left:12%;top:24%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev sp-r" style="left:38%;top:24%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
+            <span class="demo-dev wide tv" style="left:24%;top:11%"><svg viewBox="-40 -14 80 28"><rect x="-34" y="-7" width="68" height="14" fill="#f5a623" stroke="#8a5200" stroke-width="2"/></svg><em class="demo-tag">TV</em></span>
+            <span class="demo-dev wide bar" style="left:24%;top:17%"><svg viewBox="-40 -14 80 28"><rect x="-32" y="-6" width="64" height="12" fill="#7ed321" stroke="#2e6b0a" stroke-width="2"/></svg><em class="demo-tag">Soundbar</em></span>
+            <span class="demo-dev touch" style="left:18%;top:74%"><svg viewBox="-18 -14 36 28"><rect x="-14" y="-9" width="28" height="18" rx="2" fill="#3fb6b0" stroke="#14605c" stroke-width="1.8"/></svg><em class="demo-tag">Touchscreen</em></span>
+            <span class="demo-dev ap" style="left:32%;top:42%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#fff" stroke="#e94ca8" stroke-width="2.2" stroke-dasharray="1.8 2.2"/><circle r="3.6" fill="#e94ca8"/></svg><em class="demo-tag">Wi-Fi</em></span>
+            <span class="demo-dev wide kp" style="left:12%;top:90%"><svg viewBox="-22 -12 44 24"><rect x="-16" y="-5" width="32" height="10" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/></svg><em class="demo-tag">Keypad</em></span>
+            <span class="demo-dev cam" style="left:86%;top:68%"><svg class="fov" viewBox="-48 -24 52 48"><path d="M2 0 L-40 -16 L-40 16 Z" fill="rgba(224,32,32,.35)"/></svg><svg viewBox="-18 -16 40 32"><rect x="-14" y="-9" width="20" height="18" rx="2" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/><path d="M6 -6 L16 -11 V11 L6 6 Z" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/></svg><em class="demo-tag">Camera</em></span>
           </div>
           <div class="demo-bill">
             <p class="demo-total"><span class="side-kicker">Package total</span><b id="demoTotal">$0</b></p>
+            <p class="demo-count" id="demoCount"></p>
             <ol class="demo-lines" id="demoLines"></ol>
           </div>
         </div>
@@ -3300,52 +3352,92 @@ function startSaleDemo(){
   }).filter(Boolean);
   const lines=document.getElementById('demoLines');
   const totalEl=document.getElementById('demoTotal');
+  const countEl=document.getElementById('demoCount');
   const dots=items.map(it=>root.querySelector(it.sel)).filter(Boolean);
   const money=cents=>{
     if(cents==null) return 'TBD';
-    const dollars=Math.floor(cents/100);
-    const frac=String(Math.abs(cents%100)).padStart(2,'0');
-    return frac==='00' ? '$'+dollars : '$'+dollars+'.'+frac;
+    const safe=Math.max(0, Math.round(Number(cents)||0));
+    const dollars=Math.floor(safe/100);
+    const frac=String(safe%100).padStart(2,'0');
+    const body='$'+dollars.toLocaleString();
+    return frac==='00' ? body : body+'.'+frac;
   };
-  let step=0;
-  let shownCents=0;
-  let timers=[];
-  let tick=0;
-  function render(animate){
-    const shown=items.slice(0, step);
-    const cents=shown.reduce((sum,it)=>sum+(it.cents||0),0);
-    dots.forEach((dot,i)=>dot.classList.toggle('on', i<step));
-    if(lines) lines.innerHTML=shown.map((it,i)=>'<li'+(i===shown.length-1?' class="flash"':'')+'><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
-    if(totalEl){
-      if(!animate || shownCents===cents){ totalEl.textContent=money(cents); shownCents=cents; }
-      else {
-        const from=shownCents, to=cents, start=performance.now();
-        cancelAnimationFrame(tick);
-        const frame=now=>{
-          const t=Math.min(1,(now-start)/260);
-          shownCents=Math.round(from+(to-from)*t);
-          totalEl.textContent=money(shownCents);
-          if(t<1) tick=requestAnimationFrame(frame);
-        };
-        tick=requestAnimationFrame(frame);
-      }
+  const sumTo=n=>{
+    let total=0;
+    const cap=Math.max(0, Math.min(items.length, n));
+    for(let i=0;i<cap;i++) total+=items[i].cents||0;
+    return total;
+  };
+  const STEP=1000, TICK=280, HOLD=4000, FADE=500;
+  const LAND=STEP*items.length;
+  const CYCLE=LAND+HOLD+FADE;
+  function paint(elapsed){
+    const span=Math.max(1, CYCLE);
+    const t=((elapsed%span)+span)%span;
+    const fading=t>=LAND+HOLD;
+    let step=0;
+    let into=0;
+    if(!fading){
+      step=Math.max(0, Math.min(items.length, Math.floor(t/STEP)));
+      into=t-step*STEP;
+      if(step>0 && step<items.length && into===0){ step-=1; into=STEP; }
     }
+    const prev=sumTo(Math.max(0, step-1));
+    const next=sumTo(step);
+    const u=step===0 ? 1 : Math.max(0, Math.min(1, into/TICK));
+    const raw=prev+(next-prev)*u;
+    const lo=Math.min(prev, next);
+    const hi=Math.max(prev, next);
+    const display=Math.round(Math.max(lo, Math.min(hi, raw)));
+    root.classList.toggle('is-reset', fading);
+    dots.forEach((dot,i)=>dot.classList.toggle('on', !fading && i<step));
+    const shown=items.slice(0, step);
+    if(countEl) countEl.textContent=shown.length ? shown.length+(shown.length===1?' item':' items') : '';
+    if(lines){
+      lines.innerHTML=shown.map((it,i)=>'<li'+(i===shown.length-1?' class="flash"':'')+'><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
+      lines.scrollTop=lines.scrollHeight;
+    }
+    if(totalEl) totalEl.textContent=money(fading ? 0 : display);
   }
-  function arm(){
-    timers.forEach(clearTimeout);
-    timers=[];
-    root.classList.remove('is-reset');
-    const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduced || !items.length){ step=items.length; render(false); return; }
-    step=0;
-    render(false);
-    items.forEach((_,i)=>{
-      timers.push(setTimeout(()=>{ step=i+1; render(true); }, 1200*(i+1)));
-    });
-    timers.push(setTimeout(()=>{ root.classList.add('is-reset'); }, 1200*items.length + 2000));
-    timers.push(setTimeout(arm, 1200*items.length + 2400));
+  const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced || !items.length){
+    paint(LAND+HOLD-1);
+  } else {
+    let timers=[];
+    let raf=0;
+    let last=0;
+    const show=elapsed=>{
+      let safe=Number.isFinite(elapsed) ? elapsed : last;
+      if(safe<0) safe=0;
+      if(safe<last) safe=last;
+      last=safe;
+      paint(safe);
+    };
+    const kick=()=>{
+      timers.forEach(clearTimeout);
+      if(raf) cancelAnimationFrame(raf);
+      timers=[];
+      last=0;
+      paint(0);
+      const marks=[];
+      for(let i=1;i<=items.length;i++){ marks.push(STEP*i); marks.push(STEP*i+TICK); }
+      marks.push(LAND+Math.min(500, HOLD-1));
+      marks.push(LAND+HOLD-1);
+      marks.forEach(at=>timers.push(setTimeout(()=>show(at), at)));
+      timers.push(setTimeout(kick, CYCLE));
+      let prev=null;
+      const origin=performance.now();
+      const loop=now=>{
+        if(prev===null) prev=now;
+        const delta=now-prev;
+        prev=now;
+        if(Number.isFinite(delta) && delta>=0 && delta<2000) show((now-origin));
+        raf=requestAnimationFrame(loop);
+      };
+      raf=requestAnimationFrame(loop);
+    };
+    kick();
   }
-  arm();
   const track=()=>{ if(window.tymTrack) window.tymTrack('demo_viewed'); };
   if('IntersectionObserver' in window){
     const watch=new IntersectionObserver(entries=>{
