@@ -154,7 +154,20 @@ test('both homepage files keep the public price and the required lines', () => {
   assert.match(a, /Get My Free Instant Quote/);
   assert.match(a, /Got your number\? Put it on your floor plan/);
   assert.match(a, /href="\/layout\/"/);
+  for (const html of [a, b]) {
+    assert.match(html, /\/assets\/site\.css\?v=/);
+    assert.match(html, /\/assets\/home\.css\?v=/);
+    assert.match(html, /\/assets\/hp\.js\?v=/);
+  }
   const tool = fs.readFileSync(new URL('../../layout-beta/index.html', import.meta.url), 'utf8');
   assert.match(tool, /<title>Layout Tool \| SmartHome Brothers<\/title>/);
   assert.equal(tool.includes('Layout Tool — Beta'), false);
+  assert.match(b, /\/assets\/sale-demo\.css\?v=/);
+  assert.match(b, /\/assets\/sale-demo\.js\?v=/);
+  assert.match(tool, /\/assets\/sale-demo\.css\?v=/);
+  assert.match(tool, /\/assets\/sale-demo\.js\?v=/);
+  assert.match(tool, /\/assets\/hp\.js\?v=/);
+  const headers = fs.readFileSync(new URL('../../_headers', import.meta.url), 'utf8');
+  assert.match(headers, /\/assets\/\*\.css[\s\S]*max-age=60/);
+  assert.match(headers, /\/assets\/\*\.js[\s\S]*max-age=60/);
 });
