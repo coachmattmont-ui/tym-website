@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sale-demo.css">
 <script src="/assets/hp.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -295,48 +296,10 @@ body.locked #buyScreen[hidden]{display:none !important}
 .sale-stats strong{display:block;font-family:Oswald,sans-serif;font-weight:400;font-size:28px;color:#fff}
 .sale-stats span{color:#C2A476;font-size:13px}
 .sale-trust img{width:100%;max-height:220px;object-fit:cover}
-.demo{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(18,18,18,.15);padding:0}
-.demo-stage{position:relative;background:#fff}
-.demo-stage .plan-svg{display:block;width:100%;height:auto}
-.demo-dev{position:absolute;width:72px;height:56px;opacity:0;transform:translate(-50%,-50%) scale(.6);transform-origin:center;z-index:2}
-.demo-dev svg{display:block;width:100%;height:100%;overflow:visible}
-.demo-dev .fov{position:absolute;left:50%;top:50%;width:78px;height:64px;transform:translate(-72%,-50%);z-index:-1;opacity:0}
-.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform .18s cubic-bezier(.2,1.45,.35,1)}
-.demo-dev.on .fov{opacity:1}
-.demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.92);color:#fff;border-radius:6px;padding:3px 7px;opacity:0;letter-spacing:.01em}
-.demo-dev.on .demo-tag{opacity:1}
-.demo-dev.wide{width:116px;height:44px}
-.demo.is-reset .demo-dev{opacity:0}
-.demo-bill{padding:8px 10px 10px;border-top:1px solid rgba(18,18,18,.08);background:rgba(255,255,255,.94)}
-.demo-bill .side-kicker{color:rgba(18,18,18,.62);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-.demo-count{margin:4px 0 0;font-size:11px;color:rgba(18,18,18,.62);letter-spacing:.04em}
-.demo-lines{list-style:none;margin:4px 0 0;padding:0;max-height:96px;overflow:auto}
-.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
-.demo-lines li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.demo-lines li.flash{animation:demoFlash .45s ease}
-@media (max-width:899px){
-  .demo-dev{width:48px;height:40px}
-  .demo-dev.wide{width:76px;height:32px}
-  .demo-tag{font-size:11px}
-  .sp-r .demo-tag,.touch .demo-tag{left:100%;top:50%;transform:translateY(-50%)}
-}
-@keyframes demoFlash{from{background:#F3F3F3}to{background:transparent}}
-.demo-total{display:flex;justify-content:space-between;align-items:baseline;margin:0}
-.demo-total b{font-size:18px;letter-spacing:-.02em;font-weight:700;color:#121212}
-@media (max-width:899px){
-  .demo-bill{order:2}
-  .demo-stage{order:1}
-}
 @media (min-width:900px){
   .sale-side{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;align-items:start}
   .sale-trust{grid-template-columns:220px 1fr;align-items:center}
   .sale-stats{grid-template-columns:repeat(4,1fr)}
-}
-@media (prefers-reduced-motion:reduce){
-  .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
-  .demo-dev .fov{opacity:1}
-  .demo-tag{opacity:1}
-  .demo-lines li.flash{animation:none}
 }
 #roomGuide{position:fixed;left:16px;bottom:16px;z-index:35;width:min(380px,calc(100% - 32px));background:#fff;border:1px solid #121212;padding:16px 16px 14px;box-shadow:0 12px 32px rgba(18,18,18,.12)}
 #roomGuide[hidden]{display:none !important}
@@ -428,130 +391,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
         </ul>
       </div>
       <div class="sale-side">
-        <div class="demo" id="saleDemo" aria-label="Demo of devices placed on a floor plan">
-          <div class="demo-stage">
-            <svg class="plan-svg" viewBox="0 0 760 520" role="img" aria-label="Invented floor plan with an entry, great room, kitchen, bedroom, closet, and bath">
-              <rect width="760" height="520" fill="#fff"/>
-              <g fill="#111">
-                <rect x="48" y="40" width="102" height="4"/>
-                <rect x="270" y="40" width="290" height="4"/>
-                <rect x="660" y="40" width="64" height="4"/>
-                <rect x="48" y="480" width="42" height="4"/>
-                <rect x="150" y="480" width="190" height="4"/>
-                <rect x="450" y="480" width="274" height="4"/>
-                <rect x="48" y="40" width="4" height="50"/>
-                <rect x="48" y="170" width="4" height="314"/>
-                <rect x="720" y="40" width="4" height="260"/>
-                <rect x="720" y="350" width="4" height="20"/>
-                <rect x="720" y="450" width="4" height="34"/>
-                <rect x="48" y="292" width="112" height="4"/>
-                <rect x="210" y="292" width="250" height="4"/>
-                <rect x="470" y="292" width="254" height="4"/>
-                <rect x="470" y="40" width="4" height="150"/>
-                <rect x="470" y="240" width="4" height="80"/>
-                <rect x="470" y="380" width="4" height="104"/>
-                <rect x="230" y="296" width="4" height="64"/>
-                <rect x="230" y="410" width="4" height="74"/>
-              </g>
-              <g fill="none" stroke="#111" stroke-width="1.15">
-                <path d="M160 292 A 24 24 0 0 0 184 316"/>
-                <path d="M470 220 A 20 20 0 0 0 490 200"/>
-                <path d="M90 480 A 28 28 0 0 0 118 452"/>
-                <path d="M720 320 A 20 20 0 0 0 700 340"/>
-                <path d="M360 292 A 22 22 0 0 1 382 314"/>
-                <rect x="486" y="200" width="96" height="84"/>
-                <path d="M500 292 A 16 16 0 0 0 516 276"/>
-                <path d="M498 242 H568"/>
-                <rect x="598" y="200" width="114" height="84"/>
-                <path d="M598 230 A 16 16 0 0 1 582 246"/>
-              </g>
-              <g stroke="#111" stroke-width="1" fill="none">
-                <path d="M150 40 V50 M150 58 V68 M270 40 V50 M270 58 V68"/>
-                <path d="M154 46 H266 M154 54 H266"/>
-                <path d="M560 40 V50 M560 58 V68 M660 40 V50 M660 58 V68"/>
-                <path d="M564 46 H656 M564 54 H656"/>
-                <path d="M48 90 H58 M66 90 H76 M48 170 H58 M66 170 H76"/>
-                <path d="M54 94 V166 M62 94 V166"/>
-                <path d="M340 480 V470 M340 462 V452 M450 480 V470 M450 462 V452"/>
-                <path d="M344 474 H446 M344 466 H446"/>
-                <path d="M720 370 H710 M702 370 H692 M720 450 H710 M702 450 H692"/>
-                <path d="M714 374 V446 M706 374 V446"/>
-              </g>
-              <g fill="none" stroke="#c4c4c4" stroke-width="1.1">
-                <rect x="108" y="92" width="16" height="48"/>
-                <rect x="250" y="92" width="16" height="48"/>
-                <rect x="122" y="100" width="130" height="32"/>
-                <path d="M128 110 H246 M128 120 H246"/>
-                <rect x="150" y="168" width="72" height="32"/>
-                <rect x="520" y="62" width="120" height="78"/>
-                <path d="M520 86 H640"/>
-                <rect x="292" y="350" width="120" height="72"/>
-                <rect x="278" y="368" width="14" height="22"/>
-                <rect x="278" y="404" width="14" height="22"/>
-                <rect x="412" y="368" width="14" height="22"/>
-                <rect x="412" y="404" width="14" height="22"/>
-                <rect x="318" y="336" width="22" height="14"/>
-                <rect x="364" y="336" width="22" height="14"/>
-                <rect x="318" y="422" width="22" height="14"/>
-                <rect x="364" y="422" width="22" height="14"/>
-                <path d="M500 310 H700 V348 H500 Z"/>
-                <ellipse cx="560" cy="329" rx="16" ry="10"/>
-                <rect x="630" y="316" width="36" height="24"/>
-                <circle cx="640" cy="328" r="3"/><circle cx="656" cy="328" r="3"/>
-                <rect x="612" y="214" width="64" height="26"/>
-                <ellipse cx="690" cy="248" rx="9" ry="14"/>
-                <circle cx="640" cy="268" r="8"/>
-              </g>
-              <g fill="none" stroke="#111" stroke-width=".8">
-                <path d="M48 18 V40 M470 18 V40"/>
-                <path d="M48 24 H470"/>
-                <path d="M48 20 V28 M470 20 V28"/>
-                <text x="259" y="20" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">16'-0"</text>
-                <path d="M470 18 V40 M724 18 V40"/>
-                <path d="M470 24 H724"/>
-                <path d="M470 20 V28 M724 20 V28"/>
-                <text x="597" y="20" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">9'-0"</text>
-                <path d="M28 40 H48 M28 292 H48"/>
-                <path d="M34 40 V292"/>
-                <path d="M30 40 H38 M30 292 H38"/>
-                <text x="26" y="170" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 26 170)">12'-0"</text>
-                <path d="M28 292 H48 M28 484 H48"/>
-                <path d="M34 292 V484"/>
-                <path d="M30 292 H38 M30 484 H38"/>
-                <text x="26" y="392" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 26 392)">8'-0"</text>
-                <path d="M230 498 V484 M470 498 V484"/>
-                <path d="M230 492 H470"/>
-                <path d="M230 488 V496 M470 488 V496"/>
-                <text x="350" y="508" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11">10'-6"</text>
-                <path d="M736 292 H720 M736 484 H720"/>
-                <path d="M730 292 V484"/>
-                <path d="M726 292 H734 M726 484 H734"/>
-                <text x="734" y="392" text-anchor="middle" fill="#111" font-family="Helvetica" font-size="11" transform="rotate(-90 734 392)">8'-0"</text>
-              </g>
-              <g font-family="Helvetica" font-weight="700" font-size="14" fill="#fff">
-                <rect x="300" y="214" width="118" height="24" rx="2" fill="#1e88e5"/><text x="359" y="231" text-anchor="middle">GREAT ROOM</text>
-                <rect x="548" y="78" width="92" height="24" rx="2" fill="#1e88e5"/><text x="594" y="95" text-anchor="middle">BEDROOM</text>
-                <rect x="70" y="304" width="62" height="24" rx="2" fill="#1e88e5"/><text x="101" y="321" text-anchor="middle">ENTRY</text>
-                <rect x="520" y="400" width="84" height="24" rx="2" fill="#1e88e5"/><text x="562" y="417" text-anchor="middle">KITCHEN</text>
-                <rect x="500" y="228" width="70" height="22" rx="2" fill="#1e88e5"/><text x="535" y="244" text-anchor="middle" font-size="12">CLOSET</text>
-                <rect x="640" y="214" width="52" height="22" rx="2" fill="#1e88e5"/><text x="666" y="230" text-anchor="middle" font-size="12">BATH</text>
-              </g>
-            </svg>
-            <span class="demo-dev sp-l" style="left:12%;top:24%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev sp-r" style="left:38%;top:24%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#1e88e5" stroke="#0d47a1" stroke-width="1.6"/><text y="1.2" font-size="3.3" text-anchor="middle" fill="#fff" font-family="Helvetica" font-weight="bold">SPEAKER</text></svg><em class="demo-tag">Speaker</em></span>
-            <span class="demo-dev wide tv" style="left:24%;top:11%"><svg viewBox="-40 -14 80 28"><rect x="-34" y="-7" width="68" height="14" fill="#f5a623" stroke="#8a5200" stroke-width="2"/></svg><em class="demo-tag">TV</em></span>
-            <span class="demo-dev wide bar" style="left:24%;top:17%"><svg viewBox="-40 -14 80 28"><rect x="-32" y="-6" width="64" height="12" fill="#7ed321" stroke="#2e6b0a" stroke-width="2"/></svg><em class="demo-tag">Soundbar</em></span>
-            <span class="demo-dev touch" style="left:18%;top:74%"><svg viewBox="-18 -14 36 28"><rect x="-14" y="-9" width="28" height="18" rx="2" fill="#3fb6b0" stroke="#14605c" stroke-width="1.8"/></svg><em class="demo-tag">Touchscreen</em></span>
-            <span class="demo-dev ap" style="left:32%;top:42%"><svg viewBox="-16 -16 32 32"><circle r="11" fill="#fff" stroke="#e94ca8" stroke-width="2.2" stroke-dasharray="1.8 2.2"/><circle r="3.6" fill="#e94ca8"/></svg><em class="demo-tag">Wi-Fi</em></span>
-            <span class="demo-dev wide kp" style="left:12%;top:90%"><svg viewBox="-22 -12 44 24"><rect x="-16" y="-5" width="32" height="10" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/></svg><em class="demo-tag">Keypad</em></span>
-            <span class="demo-dev cam" style="left:86%;top:68%"><svg class="fov" viewBox="-48 -24 52 48"><path d="M2 0 L-40 -16 L-40 16 Z" fill="rgba(224,32,32,.35)"/></svg><svg viewBox="-18 -16 40 32"><rect x="-14" y="-9" width="20" height="18" rx="2" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/><path d="M6 -6 L16 -11 V11 L6 6 Z" fill="#e02020" stroke="#7a0000" stroke-width="1.8"/></svg><em class="demo-tag">Camera</em></span>
-          </div>
-          <div class="demo-bill">
-            <p class="demo-total"><span class="side-kicker">Package total</span><b id="demoTotal">$0</b></p>
-            <p class="demo-count" id="demoCount"></p>
-            <ol class="demo-lines" id="demoLines"></ol>
-          </div>
-        </div>
+        <div class="demo" id="saleDemo" aria-label="Demo of devices placed on a floor plan"></div>
         <div class="buy-card">
           <p class="sale-kicker">One payment</p>
           <p class="buy-price" id="buyPrice">$29</p>
@@ -806,6 +646,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 </div>
 <script src="yt-access.js"></script>
 <script src="quote-model.js"></script>
+<script src="/assets/sale-demo.js"></script>
 <script>
 /* Client-safe catalog: list prices only. Generated by build_layout_catalog.py. List prices swept 2026-11-26 from portal MSRP, including TruAudio in-ceiling speakers. UniFi and Control4 lighting items added the same day; edited by hand. */
 const CATALOG={"meta":{"safe":true,"note":"Client catalog: list prices only. No dealer cost. List prices swept 2026-11-26 from portal MSRP, including TruAudio in-ceiling speakers."},"items":{"Sonos-Amp":{"key":"Sonos-Amp","sku":"Sonos-Amp","name":"Sonos Amp","brand":"Sonos","cat":"audio","list":799},"Sonos-Port":{"key":"Sonos-Port","sku":"Sonos-Port","name":"Sonos Port","brand":"Sonos","cat":"audio","list":499},"SONOS-ARC-2-BL":{"key":"SONOS-ARC-2-BL","sku":"SONOS-ARC-2-BL","name":"Sonos Arc Ultra soundbar","brand":"Sonos","cat":"audio","list":1099},"SONOS-SUB-M-BL":{"key":"SONOS-SUB-M-BL","sku":"SONOS-SUB-M-WH","name":"Sonos Sub Mini","brand":"Sonos","cat":"audio","list":499},"SONOS-ERA-100-BL":{"key":"SONOS-ERA-100-BL","sku":"SONOS-ERA-100-BL","name":"Sonos Era 100 (wireless surround)","brand":"Sonos","cat":"audio","list":219},"SONOS-ARC-2-WM":{"key":"SONOS-ARC-2-WM","sku":"SONOS-ARC-2-WM","name":"Sonos Arc Ultra wall mount set","brand":"Sonos","cat":"mount","list":79},"SAN-WSSCAM1-B2":{"key":"SAN-WSSCAM1-B2","sku":"SAN-WSSCAM1-B2","name":"Sanus slim wall mount for Sonos Amp","brand":"Sanus","cat":"mount","list":65.99},"SP-6":{"key":"SP-6","sku":"SP-6","name":"TruAudio Shadow 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":123.98},"PG-6":{"key":"PG-6","sku":"PG-6","name":"TruAudio Phantom 6.5\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":275.5},"PG-8":{"key":"PG-8","sku":"PG-8","name":"TruAudio Phantom 8\" in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":348.0},"RC-6":{"key":"RC-6","sku":"RC-6","name":"TruAudio speaker ring (pre-construction bracket) 6.5\"","brand":"TruAudio","cat":"accessory","list":34},"RC-879":{"key":"RC-879","sku":"RC-879","name":"TruAudio speaker ring (pre-construction bracket) 8\"","brand":"TruAudio","cat":"accessory","list":34},"GHT-66P":{"key":"GHT-66P","sku":"GHT-66P","name":"TruAudio Ghost HT in-wall LCR speaker","brand":"TruAudio","cat":"speaker","list":826.5},"GHT-SUR-P":{"key":"GHT-SUR-P","sku":"GHT-SUR-P","name":"TruAudio Ghost HT in-wall surround speaker","brand":"TruAudio","cat":"speaker","list":652.5},"DFS-10BK":{"key":"DFS-10BK","sku":"DFS-10BK","name":"TruAudio 10\" powered down-firing subwoofer","brand":"TruAudio","cat":"speaker","list":1334},"RW-G66":{"key":"RW-G66","sku":"RW-G66","name":"TruAudio rough-in ring for Ghost HT LCR","brand":"TruAudio","cat":"accessory","list":65},"RW-GSUR":{"key":"RW-GSUR","sku":"RW-GSUR","name":"TruAudio rough-in ring for Ghost HT surround","brand":"TruAudio","cat":"accessory","list":63},"OP6-BK":{"key":"OP6-BK","sku":"OP6-BK","name":"TruAudio 6.5\" outdoor speaker (black)","brand":"TruAudio","cat":"speaker","list":580},"SM-RBX-14-WH":{"key":"SM-RBX-14-WH","sku":"SM-RBX-14-WH","name":"Strong VersaBox recessed box (behind TV, houses Sonos Amp)","brand":"Strong","cat":"mount","list":139.98},"SM-RBX-14-BKT":{"key":"SM-RBX-14-BKT","sku":"SM-RBX-14-BKT","name":"VersaBox pre-construction bracket","brand":"Strong","cat":"accessory","list":27.98},"CHF-MTM1U":{"key":"CHF-MTM1U","sku":"CHF-MTM1U","name":"Chief Fusion tilt TV mount 32-65\"","brand":"Chief","cat":"mount","list":279},"CHF-LTM1U":{"key":"CHF-LTM1U","sku":"CHF-LTM1U","name":"Chief Fusion tilt TV mount 42-86\"","brand":"Chief","cat":"mount","list":438},"CHF-XTM1U":{"key":"CHF-XTM1U","sku":"CHF-XTM1U","name":"Chief Fusion tilt TV mount 55-100\"","brand":"Chief","cat":"mount","list":519},"SAN-VMPL50A-B1":{"key":"SAN-VMPL50A-B1","sku":"SAN-VMPL50A-B1","name":"Sanus tilting TV wall mount","brand":"Sanus","cat":"mount","list":189.99},"SM-PROJ-XL-BLK":{"key":"SM-PROJ-XL-BLK","sku":"SM-PROJ-XL-BLK","name":"Strong projector ceiling mount","brand":"Strong","cat":"mount","list":325.98},"B6-4K2-1":{"key":"B6-4K2-1","sku":"B6-4K2-1","name":"Binary 4K HDMI cable 1 m","brand":"Binary","cat":"cable","list":23.98},"B6-4K2-2":{"key":"B6-4K2-2","sku":"B6-4K2-2","name":"Binary 4K HDMI cable 2 m","brand":"Binary","cat":"cable","list":33.98},"B6A-4K2-10":{"key":"B6A-4K2-10","sku":"1E-B6AF328","name":"ADI PRO active 4K HDMI 32.8 ft","brand":"Binary","cat":"cable","list":147.98},"B6-XLR-3FM-2FT":{"key":"B6-XLR-3FM-2FT","sku":"B6-XLR-3FM-2FT","name":"Binary XLR patch cable","brand":"Binary","cat":"cable","list":17.99},"SR-SHELF-FIXED-4U":{"key":"SR-SHELF-FIXED-4U","sku":"SR-SHELF-FIXED-4U","name":"Strong rack shelf 4U","brand":"Strong","cat":"rack","list":149.98},"SR-SHELF-FIXED-2U":{"key":"SR-SHELF-FIXED-2U","sku":"SR-SHELF-FIXED-2U","name":"Strong rack shelf 2U","brand":"Strong","cat":"rack","list":109.98},"SR-CS-RACK-21U":{"key":"SR-CS-RACK-21U","sku":"SR-CS-RACK-21U","name":"Strong 21U equipment rack","brand":"Strong","cat":"rack","list":599.98},"WB-150-IPW-1B-2":{"key":"WB-150-IPW-1B-2","sku":"WB-150-IPW-1B-2","name":"WattBox IP power outlet (OvrC)","brand":"WattBox","cat":"power","list":268.79},"WB-700CH-IPV-12":{"key":"WB-700CH-IPV-12","sku":"WB-700CH-IPV-12","name":"WattBox IP power conditioner, 12 outlets (OvrC)","brand":"WattBox","cat":"power","list":1241.99},"NST-162-500-WH":{"key":"NST-162-500-WH","sku":"NST-162-500-WH","name":"Wirepath 16/2 speaker wire, 500 ft","brand":"Wirepath","cat":"cable","list":277.08},"YA-RX-V6A":{"key":"YA-RX-V6A","sku":"YA-RX-V6A","name":"Yamaha 7.2-ch AV receiver (RX-V6A)","brand":"Yamaha","cat":"av","list":849.95},"YA-RX-A4A":{"key":"YA-RX-A4A","sku":"YA-RX-A4A","name":"Yamaha AVENTAGE 7.2-ch AV receiver (RX-A4A)","brand":"Yamaha","cat":"av","list":1599.95},"VPLXW5000ES":{"key":"VPLXW5000ES","sku":"VPLXW5000ES","name":"Sony VPL-XW5000ES 4K laser projector (2,000 lm)","brand":"Sony","cat":"projector","list":5999.99},"VPLXW5100ES":{"key":"VPLXW5100ES","sku":"VPLXW5100ES","name":"Sony VPL-XW5100ES 4K laser projector (2,200 lm)","brand":"Sony","cat":"projector","list":9999.99},"V11HA47020MB":{"key":"V11HA47020MB","sku":"V11HA47020MB","name":"Epson Pro Cinema LS12000 4K laser projector (2,700 lm)","brand":"Epson","cat":"projector","list":4999},"DF-SL-92-UAW":{"key":"DF-SL-92-UAW","sku":"DF-SL-92-UAW","name":"Dragonfly 92\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":3168.99},"DF-SL-100-UAW":{"key":"DF-SL-100-UAW","sku":"DF-SL-100-UAW","name":"Dragonfly 100\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1816.29},"DF-SL-106-UAW":{"key":"DF-SL-106-UAW","sku":"DF-SL-106-UAW","name":"Dragonfly 106\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":1925.91},"DF-TB-110-UAW":{"key":"DF-TB-110-UAW","sku":"DF-TB-110-UAW","name":"Dragonfly 110\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4308.99},"Aetherion Max":{"key":"Aetherion Max","sku":"Aetherion Max","name":"AWOL Vision Aetherion Max 4K triple-laser UST projector (3,300 lm)","brand":"AWOL Vision","cat":"projector","list":3999},"Aetherion Pro":{"key":"Aetherion Pro","sku":"Aetherion Pro","name":"AWOL Vision Aetherion Pro 4K triple-laser UST projector (2,600 lm)","brand":"AWOL Vision","cat":"projector","list":2999},"ALR-F220C Pro":{"key":"ALR-F220C Pro","sku":"ALR-F220C Pro","name":"AWOL Vision 120\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":2999},"ALR-F230C Pro":{"key":"ALR-F230C Pro","sku":"ALR-F230C Pro","name":"AWOL Vision 130\" ALR floor-rise motorized screen (new gen)","brand":"AWOL Vision","cat":"screen","list":3799},"AS-S120":{"key":"AS-S120","sku":"AS-S120","name":"AWOL Smart Station cabinet 120\"","brand":"AWOL Vision","cat":"cabinet","list":749},"AS-S130":{"key":"AS-S130","sku":"AS-S130","name":"AWOL Smart Station cabinet 130\"","brand":"AWOL Vision","cat":"cabinet","list":849},"TB-412":{"key":"TB-412","sku":"TB-412","name":"AWOL ThunderBeat 4.1.2 surround system","brand":"AWOL Vision","cat":"audio","list":1199},"LUT-PD-6WCL-WH":{"key":"LUT-PD-6WCL-WH","sku":"LUT-PD-6WCL-WH","name":"Lutron Caseta smart dimmer","brand":"Lutron","cat":"lighting","list":79.3},"LUT-P-PKG1W-WH":{"key":"LUT-P-PKG1W-WH","sku":"LUT-P-PKG1W-WH","name":"Lutron Caseta dimmer + Pico 3-way kit","brand":"Lutron","cat":"lighting","list":96.3},"LUT-L-BDGPRO2-WH":{"key":"LUT-L-BDGPRO2-WH","sku":"LUT-L-BDGPRO2-WH","name":"Lutron Caseta Smart Bridge PRO","brand":"Lutron","cat":"lighting","list":180},"LUT-PD-REP-WH":{"key":"LUT-PD-REP-WH","sku":"LUT-PD-REP-WH","name":"Lutron Caseta wireless repeater","brand":"Lutron","cat":"lighting","list":110},"RRD-PRO":{"key":"RRD-PRO","sku":"RRD-PRO","name":"Lutron Select smart dimmer (Maestro PRO LED+, neutral optional)","brand":"Lutron","cat":"lighting","list":219.5},"PJ2-WALL-WH-L01":{"key":"PJ2-WALL-WH-L01","sku":"PJ2-WALL-WH-L01","name":"Lutron Pico remote + wall-mount kit (3-way / multi-location)","brand":"Lutron","cat":"lighting","list":39.95},"RR-SEL-REP2":{"key":"RR-SEL-REP2","sku":"RR-SEL-REP2","name":"Lutron Select main repeater","brand":"Lutron","cat":"lighting","list":384},"L-REPPRO":{"key":"L-REPPRO","sku":"L-REPPRO","name":"Lutron wireless repeater (Select / RA3)","brand":"Lutron","cat":"lighting","list":252},"RR-PROC3-KIT1":{"key":"RR-PROC3-KIT1","sku":"RR-PROC3-KIT1","name":"Lutron RadioRA 3 processor kit (with PoE injector)","brand":"Lutron","cat":"lighting","list":548.64},"ROUTE10":{"key":"ROUTE10","sku":"ROUTE10","name":"Alta Labs Route10 router","brand":"Alta Labs","cat":"network","list":318.99},"AP6":{"key":"AP6","sku":"AP6","name":"Alta Labs AP6 Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":120.25},"AP6-PRO-OUTDOOR":{"key":"AP6-PRO-OUTDOOR","sku":"AP6-PRO-OUTDOOR","name":"Alta Labs outdoor Wi-Fi 6 access point","brand":"Alta Labs","cat":"network","list":284.81},"S8-POE":{"key":"S8-POE","sku":"S8-POE","name":"Alta Labs 8-port PoE switch","brand":"Alta Labs","cat":"network","list":164.56},"S16-POE":{"key":"S16-POE","sku":"S16-POE","name":"Alta Labs 16-port PoE switch","brand":"Alta Labs","cat":"network","list":436.71},"S24-POE":{"key":"S24-POE","sku":"S24-POE","name":"Alta Labs 24-port PoE switch","brand":"Alta Labs","cat":"network","list":588.61},"S48-APOE":{"key":"S48-APOE","sku":"S48-APOE","name":"Alta Labs 48-port PoE+ switch","brand":"Alta Labs","cat":"network","list":1125.32},"0E-CAT6RGN":{"key":"0E-CAT6RGN","sku":"0E-CAT6RGN","name":"Cat6 network cable (1,000 ft reel)","brand":"ADI PRO","cat":"cable","list":359.98},"K43XR30M2":{"key":"K43XR30M2","sku":"K43XR30M2","name":"Sony BRAVIA 43\" 4K TV (K43XR30M2)","brand":"Sony","cat":"tv","list":638.27},"K50S30":{"key":"K50S30","sku":"K50S30","name":"Sony BRAVIA 50\" 4K TV (K50S30)","brand":"Sony","cat":"tv","list":698.04},"K55XR30M2":{"key":"K55XR30M2","sku":"K55XR30M2","name":"Sony BRAVIA 55\" 4K TV (K55XR30M2)","brand":"Sony","cat":"tv","list":851.02},"K65XR30M2":{"key":"K65XR30M2","sku":"K65XR30M2","name":"Sony BRAVIA 65\" 4K TV (K65XR30M2)","brand":"Sony","cat":"tv","list":899.99},"K65XR50":{"key":"K65XR50","sku":"K65XR50","name":"Sony BRAVIA 65\" 4K TV (K65XR50)","brand":"Sony","cat":"tv","list":1499.99},"K75XR30M2":{"key":"K75XR30M2","sku":"K75XR30M2","name":"Sony BRAVIA 75\" 4K TV (K75XR30M2)","brand":"Sony","cat":"tv","list":1246.53},"K75XR50":{"key":"K75XR50","sku":"K75XR50","name":"Sony BRAVIA 75\" 4K TV (K75XR50)","brand":"Sony","cat":"tv","list":2040.82},"K85XR50":{"key":"K85XR50","sku":"K85XR50","name":"Sony BRAVIA 85\" 4K TV (K85XR50)","brand":"Sony","cat":"tv","list":2485.88},"K98XR50":{"key":"K98XR50","sku":"K98XR50","name":"Sony BRAVIA 98\" 4K TV (K98XR50)","brand":"Sony","cat":"tv","list":4744.19},"K100XR30M2":{"key":"K100XR30M2","sku":"K100XR30M2","name":"Sony BRAVIA 100\" 4K TV (K100XR30M2)","brand":"Sony","cat":"tv","list":2685.05},"J-ON-100":{"key":"J-ON-100","sku":"J-ON-100","name":"Josh One processor","brand":"Josh.ai","cat":"control","list":1000},"J-CR-BLK-100":{"key":"J-CR-BLK-100","sku":"J-CR-BLK-100","name":"Josh Core processor","brand":"Josh.ai","cat":"control","list":3500},"J-WHT-100":{"key":"J-WHT-100","sku":"J-WHT-100","name":"Josh Micro (room voice endpoint)","brand":"Josh.ai","cat":"control","list":899},"J-EDG-1":{"key":"J-EDG-1","sku":"J-EDG-1","name":"Josh Edge remote","brand":"Josh.ai","cat":"control","list":599},"AVA-RM-RX2-US-AL":{"key":"AVA-RM-RX2-US-AL","sku":"AVA-RM-RX2-US-AL","name":"Josh AVA Cinema remote","brand":"Josh.ai","cat":"control","list":1299},"J-ACC-MNT-CR-S":{"key":"J-ACC-MNT-CR-S","sku":"J-ACC-MNT-CR-S","name":"Josh Core 1U rack mount","brand":"Josh.ai","cat":"control","list":248},"J-SFT-ON1:Y":{"key":"J-SFT-ON1:Y","sku":"J-SFT-ON1","name":"Josh One software plan, year 1","brand":"Josh.ai","cat":"control","list":220},"J-SFT-ON1:5Y":{"key":"J-SFT-ON1:5Y","sku":"J-SFT-ON1","name":"Josh One software plan, 5 years","brand":"Josh.ai","cat":"control","list":1100},"J-SFT-CR1:Y":{"key":"J-SFT-CR1:Y","sku":"J-SFT-CR1","name":"Josh Core software plan, year 1","brand":"Josh.ai","cat":"control","list":720},"J-SFT-CR1:5Y":{"key":"J-SFT-CR1:5Y","sku":"J-SFT-CR1","name":"Josh Core software plan, 5 years","brand":"Josh.ai","cat":"control","list":3600},"AC-MAX-24":{"key":"AC-MAX-24","sku":"AC-MAX-24","name":"AVPro 24x24 audio matrix","brand":"AVPro Edge","cat":"audio","list":3017},"TS-PAMP8-125-V2":{"key":"TS-PAMP8-125-V2","sku":"TS-PAMP8-125-V2","name":"Triad 8-zone power amplifier (16 ch x 125 W)","brand":"Triad","cat":"audio","list":2498.99},"C4-CORE-LITE-RSK":{"key":"C4-CORE-LITE-RSK","sku":"C4-CORE-LITE-RSK","name":"Control4 CORE lite + SR260 remote bundle","brand":"Control4","cat":"control","list":936.35},"PH-APPLETV":{"key":"PH-APPLETV","sku":"PH-APPLETV","name":"Apple TV 4K","brand":"Apple","cat":"source","list":149},"PH-SUBCABLE":{"key":"PH-SUBCABLE","sku":"B5-SUB-4","name":"Binary B5 subwoofer cable 4 m","brand":"","cat":"cable","list":39.99},"PH-SALAMANDER":{"key":"PH-SALAMANDER","sku":"PH-SALAMANDER","name":"Salamander cabinet for AWOL UST (C2/AWOL/245CH/BK)","brand":"Salamander","cat":"cabinet","list":3799},"PH-DF120-AT":{"key":"PH-DF120-AT","sku":"PH-DF120-AT","name":"Dragonfly 120\" fixed acoustically-transparent screen","brand":"Dragonfly","cat":"screen","list":4181.82},"PH-C4-LIC":{"key":"PH-C4-LIC","sku":"PH-C4-LIC","name":"Control4 licenses / drivers","brand":"","cat":"control","list":571.43},"PH-STARK-ALLOW":{"key":"PH-STARK-ALLOW","sku":"PH-STARK-ALLOW","name":"Custom-design scope allowance (premium lighting, shades, security, premium AV)","brand":"","cat":"allowance","list":0},"PH-SHADE":{"key":"PH-SHADE","sku":"PH-SHADE","name":"Motorized window shade (estimate)","brand":"Lutron","cat":"shades","list":850},"PH-ECHODOT":{"key":"PH-ECHODOT","sku":"PH-ECHODOT","name":"Alexa smart speaker (Echo Dot)","brand":"Amazon","cat":"voice","list":50},"WB-300VB-IP-5":{"key":"WB-300VB-IP-5","sku":"WB-300VB-IP-5","name":"WattBox IP power conditioner, VersaBox, 5 outlets (OvrC)","brand":"WattBox","cat":"power","list":647.7},"WB-300-IP-3":{"key":"WB-300-IP-3","sku":"WB-300-IP-3","name":"WattBox IP power conditioner, compact, 3 outlets (OvrC)","brand":"WattBox","cat":"power","list":492.18},"WB-UPS-OL-1500-8":{"key":"WB-UPS-OL-1500-8","sku":"WB-UPS-OL-1500-8","name":"WattBox online double-conversion UPS, 1500VA","brand":"WattBox","cat":"power","list":1989.99},"SR-CUSTOM-27U-24IN":{"key":"SR-CUSTOM-27U-24IN","sku":"SR-CUSTOM-27U-24IN","name":"Strong Custom Series 27U floor rack, 24\" depth","brand":"Strong","cat":"rack","list":739.98},"SR-FS-SYSTEM-DC-27U":{"key":"SR-FS-SYSTEM-DC-27U","sku":"SR-FS-SYSTEM-DC-27U","name":"Strong FS Series 27U rack system with DC fans, 24\" depth","brand":"Strong","cat":"rack","list":1699.98},"SR-CUST-DOOR-27U-GLS":{"key":"SR-CUST-DOOR-27U-GLS","sku":"SR-CUST-DOOR-27U-GLS","name":"Strong Custom Series 27U glass rack door","brand":"Strong","cat":"rack","list":679.98},"SONOS-SUB-4-BL":{"key":"SONOS-SUB-4-BL","sku":"SONOS-SUB-4-WH","name":"Sonos Sub 4 subwoofer","brand":"Sonos","cat":"audio","list":899},"UVC-G6-Turret-W":{"key":"UVC-G6-Turret-W","sku":"UVC-G6-Turret-W","name":"UniFi Protect G6 Turret camera (4K PoE)","brand":"Ubiquiti","cat":"camera","list":199},"UVC-G6-Bullet-W":{"key":"UVC-G6-Bullet-W","sku":"UVC-G6-Bullet-W","name":"UniFi Protect G6 Bullet camera (4K PoE)","brand":"Ubiquiti","cat":"camera","list":199},"UVC-G6-Pro-Turret-W":{"key":"UVC-G6-Pro-Turret-W","sku":"UVC-G6-Pro-Turret-W","name":"UniFi Protect G6 Pro Turret camera","brand":"Ubiquiti","cat":"camera","list":479},"UVC-G6-Pro-Bullet-W":{"key":"UVC-G6-Pro-Bullet-W","sku":"UVC-G6-Pro-Bullet-W","name":"UniFi Protect G6 Pro Bullet camera","brand":"Ubiquiti","cat":"camera","list":479},"UVC-G6-PTZ-W":{"key":"UVC-G6-PTZ-W","sku":"UVC-G6-PTZ-W","name":"UniFi Protect G6 PTZ camera","brand":"Ubiquiti","cat":"camera","list":399},"UVC-G6-180-W":{"key":"UVC-G6-180-W","sku":"UVC-G6-180-W","name":"UniFi Protect G6 180 camera","brand":"Ubiquiti","cat":"camera","list":299},"UVC-G6-INS-W-US":{"key":"UVC-G6-INS-W-US","sku":"UVC-G6-INS-W-US","name":"UniFi Protect G6 Instant Wi-Fi camera","brand":"Ubiquiti","cat":"camera","list":179},"UP-FloodLight":{"key":"UP-FloodLight","sku":"UP-FloodLight","name":"UniFi Protect floodlight","brand":"Ubiquiti","cat":"camera","list":99},"UVC-Doorbell-Lite-W":{"key":"UVC-Doorbell-Lite-W","sku":"UVC-Doorbell-Lite-W","name":"UniFi Protect Doorbell Lite","brand":"Ubiquiti","cat":"doorbell","list":99},"UVC-G6-Entry":{"key":"UVC-G6-Entry","sku":"UVC-G6-Entry","name":"UniFi G6 Entry PoE+ video doorbell","brand":"Ubiquiti","cat":"doorbell","list":249},"UP-Chime-US":{"key":"UP-Chime-US","sku":"UP-Chime-US","name":"UniFi Protect Smart Wi-Fi Chime","brand":"Ubiquiti","cat":"doorbell","list":59},"UNVR-Pro":{"key":"UNVR-Pro","sku":"UNVR-Pro","name":"UniFi Protect UNVR Pro network video recorder","brand":"Ubiquiti","cat":"nvr","list":499},"UNVR-G2-Pro":{"key":"UNVR-G2-Pro","sku":"UNVR-G2-Pro","name":"UniFi Protect UNVR G2 Pro network video recorder","brand":"Ubiquiti","cat":"nvr","list":999},"AI-Key-US":{"key":"AI-Key-US","sku":"AI-Key-US","name":"UniFi Protect AI Key","brand":"Ubiquiti","cat":"nvr","list":799},"UDM-Pro":{"key":"UDM-Pro","sku":"UDM-Pro","name":"UniFi Dream Machine Pro gateway","brand":"Ubiquiti","cat":"network","list":379},"USW-Pro-Max-48-PoE":{"key":"USW-Pro-Max-48-PoE","sku":"USW-Pro-Max-48-PoE","name":"UniFi Switch Pro Max 48 PoE","brand":"Ubiquiti","cat":"network","list":1299},"USW-Pro-Max-16-PoE":{"key":"USW-Pro-Max-16-PoE","sku":"USW-Pro-Max-16-PoE","name":"UniFi Switch Pro Max 16 PoE","brand":"Ubiquiti","cat":"network","list":399},"USW-Pro-24-POE":{"key":"USW-Pro-24-POE","sku":"USW-Pro-24-POE","name":"UniFi Switch Pro 24 PoE","brand":"Ubiquiti","cat":"network","list":699},"UPS-Tower-US":{"key":"UPS-Tower-US","sku":"UPS-Tower-US","name":"UniFi UPS Tower","brand":"Ubiquiti","cat":"power","list":159},"PDP-6":{"key":"PDP-6","sku":"PDP-6","name":"TruAudio Phantom 6.5\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":304.5,"added":"soundvision_msrp"},"PDP-8":{"key":"PDP-8","sku":"PDP-8","name":"TruAudio Phantom 8\" dual-voice-coil in-ceiling speaker","brand":"TruAudio","cat":"speaker","list":362.5,"added":"soundvision_msrp"},"CI-PRO-P3-LCR":{"key":"CI-PRO-P3-LCR","sku":"330-10006813","name":"Paradigm CI Pro P3-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":1749.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-IW":{"key":"CI-PRO-P65-IW","sku":"340-10006822","name":"Paradigm CI Pro P65-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":449.99,"added":"paradigm_anthem_msrp"},"CI-PRO-P65-R":{"key":"CI-PRO-P65-R","sku":"336-10006818","name":"Paradigm CI Pro P65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":349.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E5-LCR":{"key":"CI-ELITE-E5-LCR","sku":"342-10006824","name":"Paradigm CI Elite E5-LCR v2 in-wall LCR","brand":"Paradigm","cat":"speaker","list":3249.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E80-IW":{"key":"CI-ELITE-E80-IW","sku":"347-10006829","name":"Paradigm CI Elite E80-IW v2 in-wall speaker","brand":"Paradigm","cat":"speaker","list":799.99,"added":"paradigm_anthem_msrp"},"CI-ELITE-E65-R":{"key":"CI-ELITE-E65-R","sku":"346-10006828","name":"Paradigm CI Elite E65-R v2 in-ceiling speaker","brand":"Paradigm","cat":"speaker","list":549.99,"added":"paradigm_anthem_msrp"},"DEF-S12":{"key":"DEF-S12","sku":"1375-10006863","name":"Paradigm Defiance S12 subwoofer","brand":"Paradigm","cat":"speaker","list":1599.99,"added":"paradigm_anthem_msrp"},"DCS-208IW3":{"key":"DCS-208IW3","sku":"312-10006793","name":"Paradigm DCS-208IW3 in-wall subwoofer","brand":"Paradigm","cat":"speaker","list":679.99,"added":"paradigm_anthem_msrp"},"AVM-70-8K":{"key":"AVM-70-8K","sku":"318-10006799","name":"Anthem AVM 70 8K AV processor (pre-pro)","brand":"Anthem","cat":"av","list":3999.99,"added":"paradigm_anthem_msrp"},"MCA-525":{"key":"MCA-525","sku":"295-10006351","name":"Anthem MCA 525 Gen 2 5-channel amplifier","brand":"Anthem","cat":"av","list":3799.99,"added":"paradigm_anthem_msrp"},"UCG-Ultra":{"key":"UCG-Ultra","sku":"UCG-Ultra","name":"UniFi Cloud Gateway Ultra","brand":"Ubiquiti","cat":"network","list":129},"UCG-Max":{"key":"UCG-Max","sku":"UCG-Max","name":"UniFi Cloud Gateway Max","brand":"Ubiquiti","cat":"network","list":199},"UDM-SE":{"key":"UDM-SE","sku":"UDM-SE","name":"UniFi Dream Machine Special Edition","brand":"Ubiquiti","cat":"network","list":499},"UDM-Pro-Max":{"key":"UDM-Pro-Max","sku":"UDM-Pro-Max","name":"UniFi Dream Machine Pro Max","brand":"Ubiquiti","cat":"network","list":599},"U7-Lite":{"key":"U7-Lite","sku":"U7-Lite","name":"UniFi U7 Lite access point","brand":"Ubiquiti","cat":"network","list":99},"U7-Pro":{"key":"U7-Pro","sku":"U7-Pro","name":"UniFi U7 Pro access point","brand":"Ubiquiti","cat":"network","list":189},"U7-Pro-Wall":{"key":"U7-Pro-Wall","sku":"U7-Pro-Wall","name":"UniFi U7 Pro Wall access point","brand":"Ubiquiti","cat":"network","list":199},"U7-IW":{"key":"U7-IW","sku":"U7-IW","name":"UniFi U7 In-Wall access point","brand":"Ubiquiti","cat":"network","list":149},"U7-Outdoor":{"key":"U7-Outdoor","sku":"U7-Outdoor","name":"UniFi U7 Outdoor access point","brand":"Ubiquiti","cat":"network","list":199},"U7-Pro-Max":{"key":"U7-Pro-Max","sku":"U7-Pro-Max","name":"UniFi U7 Pro Max access point","brand":"Ubiquiti","cat":"network","list":279},"USW-Lite-8-PoE":{"key":"USW-Lite-8-PoE","sku":"USW-Lite-8-PoE","name":"UniFi Switch Lite 8 PoE","brand":"Ubiquiti","cat":"network","list":109},"USW-Lite-16-PoE":{"key":"USW-Lite-16-PoE","sku":"USW-Lite-16-PoE","name":"UniFi Switch Lite 16 PoE","brand":"Ubiquiti","cat":"network","list":199},"USW-Pro-Max-24-PoE":{"key":"USW-Pro-Max-24-PoE","sku":"USW-Pro-Max-24-PoE","name":"UniFi Switch Pro Max 24 PoE","brand":"Ubiquiti","cat":"network","list":799},"USW-Flex-Mini":{"key":"USW-Flex-Mini","sku":"USW-Flex-Mini","name":"UniFi Switch Flex Mini","brand":"Ubiquiti","cat":"network","list":29},"UVC-G6-Dome":{"key":"UVC-G6-Dome","sku":"UVC-G6-Dome","name":"UniFi Protect G6 Dome camera","brand":"Ubiquiti","cat":"camera","list":279},"UVC-G6-Pro-Dome":{"key":"UVC-G6-Pro-Dome","sku":"UVC-G6-Pro-Dome","name":"UniFi Protect G6 Pro Dome camera","brand":"Ubiquiti","cat":"camera","list":499},"UVC-AI-Pro":{"key":"UVC-AI-Pro","sku":"UVC-AI-Pro","name":"UniFi Protect AI Pro camera","brand":"Ubiquiti","cat":"camera","list":499},"UNVR":{"key":"UNVR","sku":"UNVR","name":"UniFi Protect UNVR network video recorder","brand":"Ubiquiti","cat":"nvr","list":299},"UNVR-Instant":{"key":"UNVR-Instant","sku":"UNVR-Instant","name":"UniFi Protect UNVR Instant","brand":"Ubiquiti","cat":"nvr","list":199},"UP-Viewport":{"key":"UP-Viewport","sku":"UP-Viewport","name":"UniFi Protect Viewport","brand":"Ubiquiti","cat":"nvr","list":199},"C4-DIN-2PAN":{"key":"C4-DIN-2PAN","sku":"C4-DIN-2PAN","name":"Control4 2-slot DIN panel","brand":"Control4","cat":"lighting","list":708.99},"C4-DIN-5PAN":{"key":"C4-DIN-5PAN","sku":"C4-DIN-5PAN","name":"Control4 5-slot DIN panel","brand":"Control4","cat":"lighting","list":1044.99},"C4-DIN-BPS48":{"key":"C4-DIN-BPS48","sku":"C4-DIN-BPS48","name":"Control4 DIN bus power supply","brand":"Control4","cat":"lighting","list":214.99},"C4-DIN-BEG-V2":{"key":"C4-DIN-BEG-V2","sku":"C4-DIN-BEG-V2","name":"Control4 DIN bus Ethernet gateway","brand":"Control4","cat":"lighting","list":356.99},"C4-DIN-8APD-E":{"key":"C4-DIN-8APD-E","sku":"C4-DIN-8APD-E","name":"Control4 8-channel adaptive phase dimmer","brand":"Control4","cat":"lighting","list":1784.99},"C4-DIN-8FPD-E":{"key":"C4-DIN-8FPD-E","sku":"C4-DIN-8FPD-E","name":"Control4 8-channel forward phase dimmer","brand":"Control4","cat":"lighting","list":1343.99},"C4-DIN-8RELSW-E":{"key":"C4-DIN-8RELSW-E","sku":"C4-DIN-8RELSW-E","name":"Control4 8-channel relay switch","brand":"Control4","cat":"lighting","list":1184.99},"C4-DIN-8TV-V3":{"key":"C4-DIN-8TV-V3","sku":"C4-DIN-8TV-V3","name":"Control4 8-channel 0-10V dimmer","brand":"Control4","cat":"lighting","list":1252.99},"C4-DIN-ESMOUNT-KIT":{"key":"C4-DIN-ESMOUNT-KIT","sku":"C4-DIN-ESMOUNT-KIT","name":"Control4 DIN enclosure mount kit","brand":"Control4","cat":"lighting","list":450.99},"C4-DIN-SC":{"key":"C4-DIN-SC","sku":"C4-DIN-SC","name":"Control4 DIN side cover","brand":"Control4","cat":"lighting","list":99.99},"C4-DIN-SF":{"key":"C4-DIN-SF","sku":"C4-DIN-SF","name":"Control4 DIN side filler","brand":"Control4","cat":"lighting","list":18.99},"C4-KC120277":{"key":"C4-KC120277","sku":"C4-KC120277","name":"Control4 configurable keypad, 120/277V (colors WH, SW, LA, IV, BI, BR, BL, MB, AU)","brand":"Control4","cat":"lighting","list":272.99},"C4-KD120":{"key":"C4-KD120","sku":"C4-KD120","name":"Control4 keypad dimmer, 120V","brand":"Control4","cat":"lighting","list":340.99},"C4-KD277":{"key":"C4-KD277","sku":"C4-KD277","name":"Control4 keypad dimmer, 277V","brand":"Control4","cat":"lighting","list":340.99},"C4-KCB":{"key":"C4-KCB","sku":"C4-KCB","name":"Control4 keypad button","brand":"Control4","cat":"lighting","list":266.99},"C4-KA":{"key":"C4-KA","sku":"C4-KA","name":"Control4 auxiliary keypad","brand":"Control4","cat":"lighting","list":55.99},"C4-L-KC":{"key":"C4-L-KC","sku":"C4-L-KC","name":"Control4 Lux keypad","brand":"Control4","cat":"lighting","list":350},"C4-L-KA":{"key":"C4-L-KA","sku":"C4-L-KA","name":"Control4 Lux auxiliary keypad","brand":"Control4","cat":"lighting","list":100},"C4-KPTK1-M-B":{"key":"C4-KPTK1-M-B","sku":"C4-KPTK1-M-B","name":"Control4 keypad button kit, matte black","brand":"Control4","cat":"lighting","list":39.99},"C4-CORE1":{"key":"C4-CORE1","sku":"C4-CORE1","name":"Control4 CORE 1 controller","brand":"Control4","cat":"control","list":1062.75},"C4-CORE3":{"key":"C4-CORE3","sku":"C4-CORE3","name":"Control4 CORE 3 controller","brand":"Control4","cat":"control","list":1979.82},"C4-CORE5":{"key":"C4-CORE5","sku":"C4-CORE5","name":"Control4 CORE 5 controller","brand":"Control4","cat":"control","list":4160.15},"C4-CORE1-WM":{"key":"C4-CORE1-WM","sku":"C4-CORE1-WM","name":"Control4 CORE 1 wall mount","brand":"Control4","cat":"control","list":41.99},"C4-CORE3-WM":{"key":"C4-CORE3-WM","sku":"C4-CORE3-WM","name":"Control4 CORE 3 wall mount","brand":"Control4","cat":"control","list":41.99},"C4-CORE1-RMK":{"key":"C4-CORE1-RMK","sku":"C4-CORE1-RMK","name":"Control4 CORE 1 rack mount kit","brand":"Control4","cat":"control","list":120.99}}};
@@ -3332,119 +3173,7 @@ function reopenGuide(){
   showGuideStep(0);
 }
 function startSaleDemo(){
-  const root=document.getElementById('saleDemo');
-  if(!root || root.dataset.ready) return;
-  root.dataset.ready='1';
-  const specs=[
-    {key:'PG-6', sel:'.sp-l'},
-    {key:'PG-6', sel:'.sp-r'},
-    {key:'K65XR50', sel:'.tv'},
-    {key:'SONOS-ARC-2-BL', sel:'.bar'},
-    {key:'', name:'Touchscreen', sel:'.touch', tbd:true},
-    {key:'AP6', sel:'.ap'},
-    {key:'C4-KD120', sel:'.kp'},
-    {key:'UVC-G6-Pro-Turret-W', sel:'.cam'}
-  ];
-  const items=specs.map(spec=>{
-    if(spec.tbd) return {name:spec.name, sel:spec.sel, cents:null};
-    const it=CATALOG.items&&CATALOG.items[spec.key];
-    return it?{name:it.name, sel:spec.sel, cents:Math.round(Number(it.list)*100)}:null;
-  }).filter(Boolean);
-  const lines=document.getElementById('demoLines');
-  const totalEl=document.getElementById('demoTotal');
-  const countEl=document.getElementById('demoCount');
-  const dots=items.map(it=>root.querySelector(it.sel)).filter(Boolean);
-  const money=cents=>{
-    if(cents==null) return 'TBD';
-    const safe=Math.max(0, Math.round(Number(cents)||0));
-    const dollars=Math.floor(safe/100);
-    const frac=String(safe%100).padStart(2,'0');
-    const body='$'+dollars.toLocaleString();
-    return frac==='00' ? body : body+'.'+frac;
-  };
-  const sumTo=n=>{
-    let total=0;
-    const cap=Math.max(0, Math.min(items.length, n));
-    for(let i=0;i<cap;i++) total+=items[i].cents||0;
-    return total;
-  };
-  const STEP=1000, TICK=280, HOLD=4000, FADE=500;
-  const LAND=STEP*items.length;
-  const CYCLE=LAND+HOLD+FADE;
-  function paint(elapsed){
-    const span=Math.max(1, CYCLE);
-    const t=((elapsed%span)+span)%span;
-    const fading=t>=LAND+HOLD;
-    let step=0;
-    let into=0;
-    if(!fading){
-      step=Math.max(0, Math.min(items.length, Math.floor(t/STEP)));
-      into=t-step*STEP;
-      if(step>0 && step<items.length && into===0){ step-=1; into=STEP; }
-    }
-    const prev=sumTo(Math.max(0, step-1));
-    const next=sumTo(step);
-    const u=step===0 ? 1 : Math.max(0, Math.min(1, into/TICK));
-    const raw=prev+(next-prev)*u;
-    const lo=Math.min(prev, next);
-    const hi=Math.max(prev, next);
-    const display=Math.round(Math.max(lo, Math.min(hi, raw)));
-    root.classList.toggle('is-reset', fading);
-    dots.forEach((dot,i)=>dot.classList.toggle('on', !fading && i<step));
-    const shown=items.slice(0, step);
-    if(countEl) countEl.textContent=shown.length ? shown.length+(shown.length===1?' item':' items') : '';
-    if(lines){
-      lines.innerHTML=shown.map((it,i)=>'<li'+(i===shown.length-1?' class="flash"':'')+'><span>'+it.name+'</span><span>'+money(it.cents)+'</span></li>').join('');
-      lines.scrollTop=lines.scrollHeight;
-    }
-    if(totalEl) totalEl.textContent=money(fading ? 0 : display);
-  }
-  const reduced=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced || !items.length){
-    paint(LAND+HOLD-1);
-  } else {
-    let timers=[];
-    let raf=0;
-    let last=0;
-    const show=elapsed=>{
-      let safe=Number.isFinite(elapsed) ? elapsed : last;
-      if(safe<0) safe=0;
-      if(safe<last) safe=last;
-      last=safe;
-      paint(safe);
-    };
-    const kick=()=>{
-      timers.forEach(clearTimeout);
-      if(raf) cancelAnimationFrame(raf);
-      timers=[];
-      last=0;
-      paint(0);
-      const marks=[];
-      for(let i=1;i<=items.length;i++){ marks.push(STEP*i); marks.push(STEP*i+TICK); }
-      marks.push(LAND+Math.min(500, HOLD-1));
-      marks.push(LAND+HOLD-1);
-      marks.forEach(at=>timers.push(setTimeout(()=>show(at), at)));
-      timers.push(setTimeout(kick, CYCLE));
-      let prev=null;
-      const origin=performance.now();
-      const loop=now=>{
-        if(prev===null) prev=now;
-        const delta=now-prev;
-        prev=now;
-        if(Number.isFinite(delta) && delta>=0 && delta<2000) show((now-origin));
-        raf=requestAnimationFrame(loop);
-      };
-      raf=requestAnimationFrame(loop);
-    };
-    kick();
-  }
-  const track=()=>{ if(window.tymTrack) window.tymTrack('demo_viewed'); };
-  if('IntersectionObserver' in window){
-    const watch=new IntersectionObserver(entries=>{
-      if(entries.some(entry=>entry.isIntersecting)){ track(); watch.disconnect(); }
-    }, {threshold:0.35});
-    watch.observe(root);
-  } else track();
+  if (window.tymStartSaleDemo) window.tymStartSaleDemo(document.getElementById('saleDemo'), {catalog: (typeof CATALOG !== 'undefined' ? CATALOG : null), source: 'layout'});
 }
 function promptFirstStep(){
   if(!empty) return;

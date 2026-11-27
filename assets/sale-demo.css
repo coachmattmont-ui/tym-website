@@ -1,0 +1,36 @@
+.demo{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(18,18,18,.15);padding:0;color:#121212}
+.demo-stage{position:relative;background:#fff}
+.demo-stage .plan-svg{display:block;width:100%;height:auto}
+.demo-dev{position:absolute;width:72px;height:56px;opacity:0;transform:translate(-50%,-50%) scale(.6);transform-origin:center;z-index:2}
+.demo-dev svg{display:block;width:100%;height:100%;overflow:visible}
+.demo-dev .fov{position:absolute;left:50%;top:50%;width:78px;height:64px;transform:translate(-72%,-50%);z-index:-1;opacity:0}
+.demo-dev.on{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform .18s cubic-bezier(.2,1.45,.35,1)}
+.demo-dev.on .fov{opacity:1}
+.demo-tag{position:absolute;left:50%;top:calc(100% + 2px);transform:translateX(-50%);font-style:normal;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;background:rgba(29,29,31,.92);color:#fff;border-radius:6px;padding:3px 7px;opacity:0;letter-spacing:.01em}
+.demo-dev.on .demo-tag{opacity:1}
+.demo-dev.wide{width:116px;height:44px}
+.demo.is-reset .demo-dev{opacity:0}
+.demo-bill{padding:8px 10px 10px;border-top:1px solid rgba(18,18,18,.08);background:rgba(255,255,255,.94)}
+.demo-bill .side-kicker{color:rgba(18,18,18,.62);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.demo-count{margin:4px 0 0;font-size:11px;color:rgba(18,18,18,.62);letter-spacing:.04em}
+.demo-lines{list-style:none;margin:4px 0 0;padding:0;max-height:96px;overflow:auto}
+.demo-lines li{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#121212;padding:3px 0;border-bottom:1px solid rgba(18,18,18,.08)}
+.demo-lines li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.demo-lines li.flash{animation:demoFlash .45s ease}
+@keyframes demoFlash{from{background:#F3F3F3}to{background:transparent}}
+.demo-total{display:flex;justify-content:space-between;align-items:baseline;margin:0}
+.demo-total b{font-size:18px;letter-spacing:-.02em;font-weight:700;color:#121212}
+@media (max-width:899px){
+  .demo-bill{order:2}
+  .demo-stage{order:1}
+  .demo-dev{width:48px;height:40px}
+  .demo-dev.wide{width:76px;height:32px}
+  .demo-tag{font-size:11px}
+  .sp-r .demo-tag,.touch .demo-tag{left:100%;top:50%;transform:translateY(-50%)}
+}
+@media (prefers-reduced-motion:reduce){
+  .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .demo-dev .fov{opacity:1}
+  .demo-tag{opacity:1}
+  .demo-lines li.flash{animation:none}
+}
