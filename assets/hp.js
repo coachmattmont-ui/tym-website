@@ -8,13 +8,18 @@
   function track(name, extra) {
     if (!name) return;
     var path = location.pathname || '/';
+    var source = '';
     if (typeof extra === 'string' && extra.charAt(0) === '/') path = extra.slice(0, 180);
-    else if (extra && typeof extra.path === 'string' && extra.path.charAt(0) === '/') path = extra.path.slice(0, 180);
-    var body = JSON.stringify({
-      name: name,
-      variant: variant(),
-      path: path
-    });
+    else if (extra && typeof extra === 'object') {
+      if (typeof extra.path === 'string' && extra.path.charAt(0) === '/') path = extra.path.slice(0, 180);
+      if (typeof extra.source === 'string' && /^[a-z0-9_-]{1,24}$/.test(extra.source)) source = extra.source;
+    }
+    if (source && path.indexOf('source=') === -1) {
+      path = (path + (path.indexOf('?') === -1 ? '?' : '&') + 'source=' + source).slice(0, 180);
+    }
+    var payload = { name: name, variant: variant(), path: path };
+    if (source) payload.source = source;
+    var body = JSON.stringify(payload);
     try {
       if (navigator.sendBeacon) {
         navigator.sendBeacon('/api/event', new Blob([body], { type: 'application/json' }));

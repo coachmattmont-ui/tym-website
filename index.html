@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Plan your smart home on your floor plan | SmartHome Brothers</title>
-<meta name="description" content="Plan your smart home on your own floor plan. One project, every floor, 30 days of editing. Or get a free Instant Quote first.">
+<meta name="description" content="Plan your smart home on your own floor plan. Upload, add items, customize, see pricing. Or get a free Instant Quote.">
 <link rel="canonical" href="/">
 <link rel="preload" as="image" href="/images/hero-house-dusk.webp" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/home.css">
+<link rel="stylesheet" href="/assets/sale-demo.css">
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -70,17 +71,19 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
 </nav>
 
 <main>
-<section class="hero">
+<section class="hero hero-b">
   <div class="hero-photo">
     <img src="/images/hero-house-dusk.webp" alt="A house at dusk, lit from the inside" width="1000" height="1000" fetchpriority="high">
     <div class="hero-shade" aria-hidden="true"></div>
   </div>
-  <div class="hero-copy">
-    <p class="kicker">Layout</p>
-    <h1>Plan your smart home on your own floor plan.</h1>
-    <a class="hp-btn" href="/layout/" data-hp="hero">Start My Layout · $29</a>
-    <p class="sub">One project, every floor, 30 days of editing.</p>
-    <a class="textlink" href="/qualify/" data-hp="secondary">Just want a ballpark first? Get a free Instant Quote</a>
+  <div class="hero-stage">
+    <div class="hero-copy">
+      <h1>Plan Your Smart Home</h1>
+      <p class="sub">Upload Plans, Add Devices, Customize, Instant Pricing</p>
+      <a class="hp-btn" href="/layout/" data-hp="hero">Start My Layout · $29</a>
+      <p class="hero-note">Just want a quick quote? Use our <a class="textlink" href="/qualify/" data-hp="secondary">Free Instant Quote tool</a>.</p>
+    </div>
+    <div class="hero-demo demo" id="homeDemo" data-demo-source="home"></div>
   </div>
 </section>
 
@@ -205,5 +208,7 @@ posthog.init('phc_w45yKU5rbde8jBYEEWEVSGPVE7FvDPGHprpaikmesaAr',{api_host:'https
   </div>
 </footer>
 <script src="/assets/hp.js"></script>
+<script src="/assets/sale-demo.js"></script>
+<script>tymStartSaleDemo(document.getElementById('homeDemo'), {source:'home'});</script>
 </body>
 </html>
