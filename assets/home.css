@@ -219,8 +219,7 @@ body.hp nav.tym-nav .nav-right a.btn:hover{
 .hero-b .hero-demo .demo-dev{width:44px;height:34px}
 .hero-b .hero-demo .demo-dev.wide{width:72px;height:28px}
 .hero-b .hero-demo .demo-tag{font-size:10px;padding:2px 5px}
-.hero-b .hero-demo .demo-lines{max-height:none}
-.hero-b .hero-demo .demo-total b{font-size:16px}
+.hero-b .hero-demo .demo-total b{font-size:15px}
 @media (min-width:860px){
   .hero-b .hero-stage{
     flex-direction:row;
