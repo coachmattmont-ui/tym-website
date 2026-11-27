@@ -13,11 +13,11 @@
 .demo-total{position:absolute;top:8px;right:8px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;margin:0;padding:5px 8px 6px;background:rgba(255,255,255,.94);border:1px solid rgba(18,18,18,.16);box-sizing:border-box}
 .demo-total span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(18,18,18,.62);line-height:1}
 .demo-total b{font-size:16px;letter-spacing:-.02em;font-weight:700;color:#121212;line-height:1.15}
-.demo-latest{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;height:28px;margin:0;padding:0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,.94);border:1px solid rgba(18,18,18,.16);box-sizing:border-box;font-size:12px;line-height:1;color:#121212;overflow:hidden}
-.demo-latest-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.demo-latest-price{flex:0 0 auto;font-weight:700}
-.demo-latest.is-swap{animation:demoSwap .28s ease}
-@keyframes demoSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.demo-latest{flex:0 0 36px;height:36px;margin:0;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F3F3F3;border-top:1px solid #121212;box-sizing:border-box;font-family:Lato,sans-serif;font-size:14px;line-height:1.2;color:#121212;overflow:hidden}
+.demo-latest-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400;color:#121212;opacity:1}
+.demo-latest-price{flex:0 0 auto;font-weight:700;color:#121212;opacity:1}
+.demo-latest.is-swap .demo-latest-name,.demo-latest.is-swap .demo-latest-price{animation:demoSwap .28s ease forwards}
+@keyframes demoSwap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (max-width:899px){
   .demo-dev{width:48px;height:40px}
   .demo-dev.wide{width:76px;height:32px}
@@ -28,5 +28,5 @@
   .demo-dev{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
   .demo-dev .fov{opacity:1}
   .demo-tag{opacity:1}
-  .demo-latest.is-swap{animation:none}
+  .demo-latest.is-swap .demo-latest-name,.demo-latest.is-swap .demo-latest-price{animation:none}
 }
